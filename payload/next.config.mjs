@@ -15,10 +15,12 @@ const nextConfig = {
       '.mjs': ['.mts', '.mjs'],
     }
 
-    // Ensure proper module resolution for path aliases
+    // Ensure proper module resolution for ALL payload config import patterns
     webpackConfig.resolve.alias = {
       ...webpackConfig.resolve.alias,
       '@payload-config': path.resolve(__dirname, 'src/payload.config.ts'),
+      '@/payload.config': path.resolve(__dirname, 'src/payload.config.ts'),
+      'payload.config': path.resolve(__dirname, 'src/payload.config.ts'),
     }
 
     return webpackConfig
