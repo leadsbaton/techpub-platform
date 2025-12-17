@@ -34,3 +34,69 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Feature-wise colocation
+
+frontend/
+├── app/
+│ ├── layout.tsx ← Root layout (HTML, fonts, global styles)
+│ ├── globals.css
+│ │
+│ ├── (public)/
+│ │ ├── layout.tsx ← Public layout (Header + Footer)
+│ │ ├── page.tsx ← Homepage
+│ │ ├── loading.tsx ← Loading UI for public pages
+│ │ ├── error.tsx ← Error boundary for public pages
+│ │ ├── not-found.tsx ← 404 page for public routes
+│ │ │
+│ │ ├── \_components/ ← Private folder (shared public components)
+│ │ │ ├── Header/
+│ │ │ │ ├── index.tsx
+│ │ │ │ └── Navigation.tsx
+│ │ │ ├── Footer/
+│ │ │ │ └── index.tsx
+│ │ │ └── HeroSection/
+│ │ │ └── index.tsx
+│ │ │
+│ │ ├── \_lib/ ← Private folder (utilities for public routes)
+│ │ │ └── api.ts ← API fetching utilities
+│ │ │
+│ │ ├── [contentType]/
+│ │ │ ├── page.tsx ← Content listing (/insights, /whitepapers)
+│ │ │ ├── loading.tsx ← Loading UI for this route
+│ │ │ ├── error.tsx ← Error boundary for this route
+│ │ │ │
+│ │ │ ├── \_components/ ← Components specific to content listing
+│ │ │ │ ├── ContentList.tsx
+│ │ │ │ ├── ContentGrid.tsx
+│ │ │ │ └── ContentCard.tsx
+│ │ │ │
+│ │ │ └── [slug]/
+│ │ │ ├── page.tsx ← Content detail page
+│ │ │ ├── loading.tsx ← Loading UI for detail page
+│ │ │ ├── error.tsx ← Error boundary for detail page
+│ │ │ │
+│ │ │ └── \_components/ ← Components specific to detail page
+│ │ │ ├── ContentDetail.tsx
+│ │ │ ├── RelatedContent.tsx
+│ │ │ └── ShareButtons.tsx
+│ │ │
+│ │ └── categories/
+│ │ ├── [categorySlug]/
+│ │ │ ├── page.tsx ← Category landing page
+│ │ │ ├── loading.tsx
+│ │ │ ├── error.tsx
+│ │ │ │
+│ │ │ └── \_components/ ← Category-specific components
+│ │ │ └── CategoryView.tsx
+│ │ │
+│ │ └── \_lib/ ← Category utilities
+│ │ └── utils.ts
+│ │
+│ └── api/ ← API routes (if needed)
+│ └── ...
+│
+└── components/ ← Only truly global/shared components
+└── ui/ ← Base UI primitives (Button, Card, etc.)
+├── Button.tsx
+└── Card.tsx
