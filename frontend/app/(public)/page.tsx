@@ -1,12 +1,18 @@
 import HeroSection from "./_components/HeroSection";
 
-const HomePage = () => {
+export const revalidate = 60;
+
+export default async function HomePage() {
   return (
     <div>
+      {/* Hero Section */}
       <HeroSection />
-      <h1>HomePage content</h1>
+
+      {/* TODO: Add sections for all content types */}
+      {/* - Latest Insights */}
+      {/* - Latest Whitepapers */}
+      {/* - Upcoming Webinars */}
+      {/* - Categories Overview */}
     </div>
   );
-};
-
-export default HomePage;
+}

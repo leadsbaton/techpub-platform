@@ -82,16 +82,16 @@ const Header = () => {
 
                 <ul className="menu dropdown-content p-2 bg-base-100 w-40 z-1">
                   <li>
-                    <a>View All</a>
+                    <Link href="/insights">View All</Link>
                   </li>
                   <li>
-                    <a>Finance</a>
+                    <Link href="/insights?category=finance">Finance</Link>
                   </li>
                   <li>
-                    <a>Marketing</a>
+                    <Link href="/insights?category=marketing">Marketing</Link>
                   </li>
                   <li>
-                    <a>Technology</a>
+                    <Link href="/insights?category=technology">Technology</Link>
                   </li>
                 </ul>
               </li>
