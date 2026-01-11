@@ -6,7 +6,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <HeroSection />
+      {/* <HeroSection /> */}
 
       {/* TODO: Add sections for all content types */}
       {/* - Latest Insights */}

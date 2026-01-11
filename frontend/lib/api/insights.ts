@@ -53,6 +53,8 @@ export async function getInsights(options?: {
   }
 
   const query = buildQuery(params);
+
+  console.log("query", query);
   const res = await fetch(`${API_URL}/api/insights?${query}`, {
     next: { revalidate: 60 }, // Revalidate every 60 seconds
   });

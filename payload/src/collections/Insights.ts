@@ -1,4 +1,5 @@
 import type { CollectionConfig, CollectionSlug } from 'payload'
+import payload from 'payload'
 
 export const Insights: CollectionConfig = {
   slug: 'insights',
