@@ -10,7 +10,11 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
-import { Insights } from './collections/Insights'
+import { Tags } from './collections/Tags'
+import { Authors } from './collections/Authors'
+import { Pages } from './collections/Pages'
+import { Subscribers } from './collections/Subscribers'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,14 +26,24 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Categories, Insights],
+  collections: [
+    Users,
+    Media,
+    Categories,
+    Tags,
+    Authors,
+    Posts,
+    Pages,
+    Subscribers,
+  ],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: process.env.MONGODB_URI || process.env.DATABASE_URI || '',
   }),
   sharp,
   plugins: [

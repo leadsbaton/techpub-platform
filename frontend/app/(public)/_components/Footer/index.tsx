@@ -1,70 +1,52 @@
-import Image from "next/image";
-import Link from "next/link";
+import Link from 'next/link'
 
-const Footer = () => {
+import { getSiteSettings } from '@/lib/api/cms'
+import { resolveLinkHref } from '@/lib/utils/formatting'
+
+const Footer = async () => {
+  const settings = await getSiteSettings()
+  const sections =
+    settings?.footerSections?.length
+      ? settings.footerSections
+      : [
+          {
+            title: 'Content',
+            links: [
+              { item: { label: 'Insights', type: 'custom', url: '/insights' } },
+              { item: { label: 'Whitepapers', type: 'custom', url: '/whitepapers' } },
+              { item: { label: 'Webinars', type: 'custom', url: '/webinars' } },
+            ],
+          },
+        ]
+
   return (
-    <div className="border-t border-base-300">
-      <div className="container mx-auto">
-        <footer className="footer sm:footer-horizontal text-base-content p-2 grid-cols-12">
-          <aside className="col-span-8">
-            <Image
-              src="/leads-baton-logo.png"
-              alt="LeadsBaton Logo"
-              width={92}
-              height={72}
-            />
-            <div className="flex gap-2">
-              <a
-                href="#"
-                className="text-base-content/60 hover:text-base-content transition-colors"
-                aria-label="Instagram"
-              >
-                <i className="ri-instagram-line text-2xl"></i>
-              </a>
-              <a
-                href="#"
-                className="text-base-content/60 hover:text-base-content transition-colors"
-                aria-label="LinkedIn"
-              >
-                <i className="ri-linkedin-box-fill text-2xl"></i>
-              </a>
-              <a
-                href="#"
-                className="text-base-content/60 hover:text-base-content transition-colors"
-                aria-label="X (Twitter)"
-              >
-                <i className="ri-twitter-x-line text-2xl"></i>
-              </a>
-            </div>
-          </aside>
-          <nav className="col-span-2">
-            <h6 className="footer-title">Learn more</h6>
-            <Link href="/insights" className="link link-hover">
-              Insights
-            </Link>
-            <Link href="/whitepapers" className="link link-hover">
-              White Papers
-            </Link>
-            <Link href="/webinars" className="link link-hover">
-              Webinars
-            </Link>
-          </nav>
-          <nav className="col-span-2">
-            <h6 className="footer-title">Support</h6>
-            <Link href="/contact" className="link link-hover">
-              Contact
-            </Link>
-            <Link href="/support" className="link link-hover">
-              Support
-            </Link>
-            <Link href="/legal" className="link link-hover">
-              Legal
-            </Link>
-          </nav>
-        </footer>
-      </div>
-    </div>
-  );
-};
+    <footer className="border-t border-slate-200 bg-slate-950 text-slate-200">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-[1.4fr_repeat(3,minmax(0,1fr))] md:px-6">
+        <div className="space-y-4">
+          <div className="text-2xl font-semibold tracking-tight">{settings?.siteName || 'TechPub'}</div>
+          <p className="max-w-md text-sm leading-7 text-slate-400">
+            {settings?.siteDescription || 'Editorial publishing stack powered by Next.js, Payload CMS, and MongoDB Atlas.'}
+          </p>
+          {settings?.contactEmail ? <p className="text-sm text-slate-400">{settings.contactEmail}</p> : null}
+        </div>
 
-export default Footer;
+        {sections.map((section) => (
+          <div key={section.title} className="space-y-4">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300">
+              {section.title}
+            </h2>
+            <div className="space-y-3">
+              {section.links?.map(({ item }) => (
+                <Link key={`${section.title}-${item.label}`} href={resolveLinkHref(item)} className="block text-sm text-slate-300 transition hover:text-white">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </footer>
+  )
+}
+
+export default Footer

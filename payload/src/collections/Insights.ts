@@ -1,5 +1,4 @@
 import type { CollectionConfig, CollectionSlug } from 'payload'
-import payload from 'payload'
 
 export const Insights: CollectionConfig = {
   slug: 'insights',
@@ -81,7 +80,7 @@ export const Insights: CollectionConfig = {
   ],
   hooks: {
     beforeValidate: [
-      async ({ data, operation }) => {
+      async ({ data }) => {
         // Auto-generate slug from title if not provided
         if (data?.title && !data?.slug) {
           data.slug = data.title

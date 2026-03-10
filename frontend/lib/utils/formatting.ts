@@ -1,72 +1,62 @@
-// Utility functions for formatting dates, text, etc.
+import type { Author, Category, LinkReference, Media, Post } from '@/lib/types/cms'
 
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  };
-  return date.toLocaleDateString("en-US", options);
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+
+export function formatDate(dateString?: string | null): string {
+  if (!dateString) {
+    return 'Unscheduled'
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(dateString))
 }
 
-export function formatDateShort(dateString: string): string {
-  const date = new Date(dateString);
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  return `${months[date.getMonth()]}, ${date.getDate()}`;
+export function getImageUrl(image?: Media | string | null): string {
+  if (!image) return 'https://picsum.photos/1280/720'
+  if (typeof image === 'string') return image.startsWith('/') ? `${API_URL}${image}` : image
+  if (image.url) return image.url.startsWith('/') ? `${API_URL}${image.url}` : image.url
+  if (image.filename) return `${API_URL}/media/${image.filename}`
+  return 'https://picsum.photos/1280/720'
 }
 
-export function getImageUrl(image: any): string {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+export function getCategoryName(category?: Category | string | null): string {
+  if (!category) return 'General'
+  return typeof category === 'string' ? category : category.name
+}
 
-  if (typeof image === "string") {
-    // If it's already a string, check if it's a relative URL
-    if (image.startsWith("/")) {
-      // Relative URL from Payload - make it absolute
-      return `${API_URL}${image}`;
-    }
-    // Already an absolute URL
-    return image;
-    ``;
+export function getAuthorNames(authors?: Array<Author | string> | null): string {
+  if (!authors?.length) return 'Editorial team'
+  return authors
+    .map((author) => (typeof author === 'string' ? author : author.name))
+    .join(', ')
+}
+
+export function getContentTypeLabel(type: Post['type']): string {
+  switch (type) {
+    case 'whitepaper':
+      return 'Whitepaper'
+    case 'webinar':
+      return 'Webinar'
+    case 'case-study':
+      return 'Case Study'
+    default:
+      return 'Insight'
   }
+}
 
-  if (image?.url) {
-    // Payload media objects have a url property (usually relative like /api/media/file/...)
-    const url = image.url;
-    if (url.startsWith("/")) {
-      // Relative URL - make it absolute
-      return `${API_URL}${url}`;
-    }
-    return url;
+export function resolveLinkHref(link?: LinkReference | null): string {
+  if (!link) return '#'
+  if (link.type === 'custom' && link.url) return link.url
+  if (link.type === 'page' && link.page && typeof link.page !== 'string') return `/${link.page.slug}`
+  if (link.type === 'post' && link.post && typeof link.post !== 'string') {
+    const base = `${link.post.type}s`.replace('case-studys', 'case-studies')
+    return `/${base}/${link.post.slug}`
   }
-
-  if (image?.sizes?.large?.url) {
-    // Check for responsive image sizes
-    const url = image.sizes.large.url;
-    if (url.startsWith("/")) {
-      return `${API_URL}${url}`;
-    }
-    return url;
+  if (link.type === 'category' && link.category && typeof link.category !== 'string') {
+    return `/categories/${link.category.slug}`
   }
-
-  if (image?.filename) {
-    // Fallback: construct URL from filename
-    return `${API_URL}/api/media/file/${image.filename}`;
-  }
-
-  // Fallback placeholder
-  return "https://picsum.photos/800/600";
+  return '#'
 }

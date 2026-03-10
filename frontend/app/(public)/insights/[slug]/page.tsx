@@ -1,121 +1,92 @@
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { getInsightBySlug, getInsights } from "@/lib/api/insights";
-import { formatDate, getImageUrl } from "@/lib/utils/formatting";
-import { InsightCard } from "../../_components/InsightCard";
+import Image from 'next/image'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
-export const revalidate = 60;
+import { PostCard } from '../../_components/PostCard'
+import { RichTextRenderer } from '../../_components/RichTextRenderer'
+import { getPostBySlug, getPosts } from '@/lib/api/cms'
+import {
+  formatDate,
+  getAuthorNames,
+  getCategoryName,
+  getContentTypeLabel,
+  getImageUrl,
+} from '@/lib/utils/formatting'
 
-export async function generateStaticParams() {
-  const data = await getInsights({ limit: 100 });
-  return data.docs.map((insight) => ({
-    slug: insight.slug,
-  }));
-}
+export const revalidate = 60
 
 export default async function InsightDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }) {
-  try {
-    const { slug } = await params;
-    const insight = await getInsightBySlug(slug);
+  const { slug } = await params
+  const post = await getPostBySlug(slug, 'insight')
 
-    if (!insight) {
-      notFound();
-    }
+  if (!post) {
+    notFound()
+  }
 
-    // Get related insights (same category, excluding current)
-    const categorySlug =
-      typeof insight.category === "string"
-        ? insight.category
-        : insight.category?.slug || "";
+  const related = await getPosts({
+    type: 'insight',
+    category: typeof post.primaryCategory === 'string' ? undefined : post.primaryCategory?.slug,
+    limit: 3,
+  })
 
-    const relatedData = await getInsights({
-      category: categorySlug,
-      limit: 3,
-    });
-    const relatedInsights = relatedData.docs.filter((i) => i.id !== insight.id);
+  return (
+    <article className="mx-auto max-w-5xl space-y-10 px-4 py-10 md:px-6">
+      <div className="space-y-5">
+        <Link href="/insights" className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+          {getContentTypeLabel(post.type)}
+        </Link>
+        <h1 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-6xl">{post.title}</h1>
+        <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+          <span>{getAuthorNames(post.authors)}</span>
+          <span>{formatDate(post.publishedAt)}</span>
+          <span>{getCategoryName(post.primaryCategory)}</span>
+        </div>
+      </div>
 
-    const imageUrl = getImageUrl(insight.featuredImage);
-    const category =
-      typeof insight.category === "string"
-        ? insight.category
-        : insight.category?.name || "Uncategorized";
+      <div className="relative aspect-[16/9] overflow-hidden rounded-[32px]">
+        <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+      </div>
 
-    return (
-      <article className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <div className="breadcrumbs text-sm mb-6">
-          <ul>
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/insights">Insights</Link>
-            </li>
-            <li>{insight.title}</li>
-          </ul>
+      <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="space-y-8">
+          <p className="text-xl leading-8 text-slate-600">{post.excerpt}</p>
+          <RichTextRenderer content={post.content} />
         </div>
 
-        {/* Featured Image */}
-        <div className="relative h-96 mb-8 rounded-lg overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={insight.title}
-            fill
-            className="object-cover"
-            unoptimized={imageUrl.includes("localhost")}
-          />
-          <div className="absolute bottom-4 left-4">
-            <div className="badge badge-primary badge-lg">
-              {category.toUpperCase()}
+        <aside className="space-y-6 rounded-[28px] border border-slate-200 bg-slate-50 p-6">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Details</p>
+            <div className="mt-4 space-y-3 text-sm text-slate-600">
+              <p>Type: {getContentTypeLabel(post.type)}</p>
+              <p>Category: {getCategoryName(post.primaryCategory)}</p>
+              {post.readingTime ? <p>Reading time: {post.readingTime} min</p> : null}
             </div>
           </div>
-        </div>
+          {post.externalUrl ? (
+            <a href={post.externalUrl} target="_blank" rel="noreferrer" className="inline-flex rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+              Open external resource
+            </a>
+          ) : null}
+        </aside>
+      </div>
 
-        {/* Content */}
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4">{insight.title}</h1>
-
-          <div className="flex items-center gap-4 mb-8 text-base-content/70">
-            <span>{formatDate(insight.publishedAt)}</span>
-            <span>•</span>
-            <span>{category}</span>
+      {related.docs.length > 1 ? (
+        <section className="space-y-6">
+          <h2 className="text-3xl font-semibold tracking-tight text-slate-950">Related insights</h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {related.docs
+              .filter((item) => item.id !== post.id)
+              .slice(0, 3)
+              .map((item) => (
+                <PostCard key={item.id} post={item} />
+              ))}
           </div>
-
-          <div className="prose prose-lg max-w-none mb-12">
-            <p className="text-xl text-base-content/80 mb-8">
-              {insight.excerpt}
-            </p>
-
-            {/* Rich text content - you'll need to render this properly based on your rich text format */}
-            {insight.content && (
-              <div className="rich-text-content">
-                {/* This will need a rich text renderer based on your Payload editor */}
-                <p>{JSON.stringify(insight.content)}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Related Insights */}
-          {relatedInsights.length > 0 && (
-            <section className="mt-16">
-              <h2 className="text-3xl font-bold mb-8">Related Insights</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {relatedInsights.map((related) => (
-                  <InsightCard key={related.id} insight={related} />
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      </article>
-    );
-  } catch (error) {
-    console.error("Error fetching insight:", error);
-    notFound();
-  }
+        </section>
+      ) : null}
+    </article>
+  )
 }

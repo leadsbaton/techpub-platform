@@ -1,77 +1,43 @@
-import { notFound } from "next/navigation";
-import {
-  getInsights,
-  getTrendingInsights,
-  getTopPicksByCategory,
-  getCategories,
-  getInsightsByCategory,
-} from "@/lib/api/insights";
-import { InsightGrid } from "../_components/InsightGrid";
-import { TrendingSection } from "../_components/TrendingSection";
-import { TopPicksSection } from "../_components/TopPicksSection";
-import { InsightsListingLayout } from "./_components/InsightsListingLayout";
+import { notFound } from 'next/navigation'
 
-export const revalidate = 60; // Revalidate every 60 seconds
+import { Pagination } from '../_components/Pagination'
+import { PostCard } from '../_components/PostCard'
+import { getPosts } from '@/lib/api/cms'
+
+export const revalidate = 60
 
 export default async function InsightsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams = await searchParams
+  const page = Number(resolvedSearchParams.page || 1)
+  const query = typeof resolvedSearchParams.q === 'string' ? resolvedSearchParams.q : undefined
 
-  const categoryParam =
-    typeof resolvedSearchParams.category === "string"
-      ? resolvedSearchParams.category
-      : undefined;
+  const data = await getPosts({
+    type: 'insight',
+    page,
+    limit: 9,
+    query,
+  }).catch(() => null)
 
-  console.log("category", categoryParam);
+  if (!data) notFound()
 
-  try {
-    if (categoryParam) {
-      const categoryData = await getInsightsByCategory(categoryParam, {
-        limit: 10,
-      });
-
-      console.log("categoryData", categoryData);
-
-      return (
-        <InsightsListingLayout
-          insights={categoryData.docs}
-          currentCategory={categoryParam}
-        />
-      );
-    }
-
-    const trendingInsightsData = await getInsights({
-      isTrending: true,
-      limit: 5,
-    });
-
-    const categories = await getCategories();
-
-    const topPicksPromises = categories.map(async (category) => {
-      const categorySlug =
-        typeof category === "string" ? category : category.slug;
-      const insights = await getTopPicksByCategory(categorySlug, 5);
-      return { category, insights };
-    });
-
-    const topPicksByCategory = await Promise.all(topPicksPromises);
-
-    return (
-      <div>
-        {trendingInsightsData.docs.length > 0 && (
-          <TrendingSection insights={trendingInsightsData.docs} />
-        )}
-
-        {topPicksByCategory.length > 0 && (
-          <TopPicksSection insightsByCategory={topPicksByCategory} />
-        )}
+  return (
+    <section className="mx-auto max-w-7xl space-y-8 px-4 py-10 md:px-6">
+      <div className="max-w-3xl space-y-4">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Insights</p>
+        <h1 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+          Editorial stories, blog articles, and campaign-led thought leadership.
+        </h1>
       </div>
-    );
-  } catch (error) {
-    console.error("Error fetching insights:", error);
-    notFound();
-  }
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {data.docs.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+      <Pagination basePath="/insights" currentPage={data.page} totalPages={data.totalPages} query={{ q: query }} />
+    </section>
+  )
 }

@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "3001",
-        pathname: "/api/media/**",
+        port: "5000",
+        pathname: "/**",
       },
     ],
     // Allow unoptimized images for localhost in development
