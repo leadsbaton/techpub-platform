@@ -26,6 +26,39 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-8 w-8">
+      <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M16.5 16.5 21 21" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="h-3.5 w-3.5">
+      <path d="M3 6.25 8 11l5-4.75" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function MenuIcon({ open }: { open: boolean }) {
+  if (open) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6">
+        <path d="M6 6 18 18M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6">
+      <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export function NavClient({ siteName, siteTagline, links, categories }: NavClientProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -37,28 +70,28 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[color:var(--surface)]/95 backdrop-blur">
-        <div className="site-container flex h-20 items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[color:var(--surface)]">
+        <div className="site-container flex h-[88px] items-center justify-between gap-4">
           <Link href="/" className="flex min-w-0 items-center gap-3">
             <Image
               src="/leads-baton-logo.png"
               alt={siteName}
-              width={54}
-              height={54}
-              className="h-12 w-auto shrink-0 object-contain"
+              width={72}
+              height={72}
+              className="h-14 w-auto shrink-0 object-contain"
               priority
             />
             <div className="hidden min-w-0 sm:block">
-              <div className="text-sm font-semibold tracking-tight text-[color:var(--text-strong)]">
+              <div className="text-[10px] font-semibold tracking-tight text-[color:var(--text-strong)]">
                 {siteName}
               </div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
+              <div className="text-[8px] uppercase tracking-[0.12em] text-[color:var(--text-muted)]">
                 {siteTagline || 'We Speak Your Language'}
               </div>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-10 lg:flex">
+          <nav className="hidden items-center gap-14 lg:flex">
             {links.map((link) => {
               const dropdownEnabled = dropdownTargets.has(link.href) && categoryLinks.length > 1
               const active = isActive(pathname, link.href)
@@ -79,19 +112,19 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
                     }}
                   >
                     <span>{link.label}</span>
-                    {dropdownEnabled ? <span className="text-xs">⌄</span> : null}
+                    {dropdownEnabled ? <ChevronDownIcon /> : null}
                   </Link>
 
                   {dropdownEnabled && openDropdown === link.href ? (
-                    <div className="absolute left-1/2 top-full mt-4 w-52 -translate-x-1/2 rounded-[20px] border border-[var(--border-subtle)] bg-white p-4 shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
-                      <div className="space-y-2">
+                    <div className="absolute left-1/2 top-full mt-4 w-48 -translate-x-1/2 bg-white p-3 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
+                      <div className="space-y-1">
                         {categoryLinks.map((category) => {
                           const href = category.slug ? `/categories/${category.slug}` : link.href
                           return (
                             <Link
                               key={`${link.href}-${category.id}`}
                               href={href}
-                              className="block rounded-xl px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] transition hover:bg-[var(--surface-muted)] hover:text-[color:var(--text-strong)]"
+                              className="block px-3 py-2 text-[15px] font-medium text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
                             >
                               {category.name}
                             </Link>
@@ -109,44 +142,46 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
             <Link
               href="/search"
               aria-label="Search"
-              className="grid h-11 w-11 place-items-center rounded-full text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
+              className="grid h-12 w-12 place-items-center rounded-full text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
             >
-              <span className="text-[26px] leading-none">⌕</span>
+              <SearchIcon />
             </Link>
+
             <button
               type="button"
               aria-label="Open menu"
-              className="grid h-11 w-11 place-items-center rounded-full border border-[var(--border-subtle)] text-[color:var(--text-strong)] lg:hidden"
+              className="grid h-12 w-12 place-items-center rounded-full border border-[var(--border-subtle)] text-[color:var(--text-strong)] lg:hidden"
               onClick={() => setMobileOpen((value) => !value)}
             >
-              <span className="text-lg">{mobileOpen ? '✕' : '☰'}</span>
+              <MenuIcon open={mobileOpen} />
             </button>
           </div>
         </div>
       </header>
 
       {mobileOpen ? (
-        <div className="fixed inset-x-0 top-20 z-40 border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
+        <div className="fixed inset-x-0 top-[88px] z-40 border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
           <div className="space-y-2">
             {links.map((link) => (
-              <div key={`mobile-${link.href}`} className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 py-3">
+              <div key={`mobile-${link.href}`} className="border-b border-[var(--border-subtle)] px-1 py-3 last:border-b-0">
                 <Link
                   href={link.href}
-                  className={`flex items-center justify-between text-base font-semibold ${isActive(pathname, link.href) ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'}`}
+                  className={`flex items-center justify-between text-[1.05rem] font-semibold ${isActive(pathname, link.href) ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'}`}
                   onClick={() => setMobileOpen(false)}
                 >
                   <span>{link.label}</span>
-                  {dropdownTargets.has(link.href) && categoryLinks.length > 1 ? <span className="text-sm">Browse</span> : null}
+                  {dropdownTargets.has(link.href) && categoryLinks.length > 1 ? <ChevronDownIcon /> : null}
                 </Link>
+
                 {dropdownTargets.has(link.href) && categoryLinks.length > 1 ? (
-                  <div className="mt-3 grid gap-2 border-t border-[var(--border-subtle)] pt-3">
+                  <div className="mt-3 grid gap-1 border-t border-[var(--border-subtle)] pt-3">
                     {categoryLinks.map((category) => {
                       const href = category.slug ? `/categories/${category.slug}` : link.href
                       return (
                         <Link
                           key={`mobile-${link.href}-${category.id}`}
                           href={href}
-                          className="rounded-xl px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] hover:bg-white"
+                          className="px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] hover:bg-[var(--surface-muted)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {category.name}

@@ -5,7 +5,7 @@ import { resolveLinkHref } from '@/lib/utils/formatting'
 const fallbackLinks = [
   { label: 'Home', href: '/' },
   { label: 'Insights', href: '/insights' },
-  { label: 'Whitepapers', href: '/whitepapers' },
+  { label: 'White Papers', href: '/whitepapers' },
   { label: 'Webinars', href: '/webinars' },
 ]
 

@@ -13,3 +13,685 @@ d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\s
     at RichTextRenderer (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:348:19) {
   digest: '445238065'
 }
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/_components/Header/index.tsx:1:1
+Module not found: Can't resolve './NavClient'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { [33mNavClient[39m } [36mfrom[39m [32m'./NavClient'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { getCategories[33m,[39m getSiteSettings } [36mfrom[39m [32m'@/lib/api/cms'[39m
+ [90m 3 |[39m [36mimport[39m { resolveLinkHref } [36mfrom[39m [32m'@/lib/utils/formatting'[39m
+ [90m 4 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/(public)/_components/Header/index.tsx
+    ./app/(public)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./app/(public)/layout.tsx:1:1
+Module not found: Can't resolve './_components/Footer'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m [33mFooter[39m [36mfrom[39m [32m"./_components/Footer"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m [33mHeader[39m [36mfrom[39m [32m"./_components/Header"[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[39m [33mPublicLayout[39m [33m=[39m ({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) [33m=>[39m {[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+

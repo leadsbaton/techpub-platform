@@ -265,3 +265,46 @@
  GET /api/globals/site-settings 200 in 71ms
  GET /api/categories?limit=6&depth=1&sort=name 200 in 77ms
  GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 92ms
+ GET /api/globals/site-settings 200 in 72ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 90ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 92ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 92ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 93ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 96ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22undefined%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 83ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 66ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 81ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 97ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 99ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 100ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22search%22%7D%7D 200 in 74ms
+ GET /api/globals/site-settings 200 in 74ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 95ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 96ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 97ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 97ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 98ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 91ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 79ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 68ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22search%22%7D%7D 200 in 75ms
+ GET /api/globals/site-settings 200 in 71ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 92ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 92ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 93ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 94ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 95ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 71ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22undefined%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 83ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 84ms
+ GET /api/globals/site-settings 200 in 76ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 123ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 124ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 125ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 127ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 128ms
+ ✓ Compiled in 1974ms (3690 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/login?redirect=%2Fadmin%2Fcollections%2Fcategories 200 in 1391ms
+ GET /admin/login?redirect=%2Fadmin%2Fcollections%2Fcategories 200 in 3977ms

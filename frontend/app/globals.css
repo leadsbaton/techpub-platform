@@ -62,8 +62,8 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--text-strong);
   transition: color 180ms ease;
 }
