@@ -1,0 +1,15 @@
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ TypeError: node.format?.includes is not a function
+    at renderTextNode (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:254:22)
+    at renderNode (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:340:20)
+    at <unknown> (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:245:23)
+    at Array.map (<anonymous>)
+    at renderChildren (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:244:22)
+    at renderNode (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:285:27)
+    at <unknown> (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:245:23)
+    at Array.map (<anonymous>)
+    at renderChildren (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:244:22)
+    at RichTextRenderer (d:\tuchmath\techpub-platform\techpub-platform\frontend\.next\dev\server\chunks\ssr\[root-of-the-server]__51cf1a88._.js:348:19) {
+  digest: '445238065'
+}

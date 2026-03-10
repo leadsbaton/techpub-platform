@@ -1,0 +1,183 @@
+
+> payload@1.0.0 dev
+> cross-env NODE_OPTIONS=--no-deprecation next dev -p 5000
+
+   ▲ Next.js 15.4.8
+   - Local:        http://localhost:5000
+   - Network:      http://192.168.29.48:5000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 1228ms (1077 modules)
+[14:12:40] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ HEAD /api/posts?limit=1 404 in 7160ms
+ ○ Compiling /admin/[[...segments]] ...
+ ✓ Compiled /admin/[[...segments]] in 4.7s (3675 modules)
+ HEAD /admin 200 in 8745ms
+ GET /api/posts?limit=1 200 in 111ms
+ GET /api/globals/site-settings 200 in 81ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 104ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 105ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 155ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 158ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 474ms
+ GET /api/posts?limit=1 200 in 387ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 485ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 538ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 1534ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 6640ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (1900 modules)
+ GET / 200 in 2587ms
+ GET / 200 in 45ms
+ ○ Compiling /admin/[[...segments]] ...
+ ✓ Compiled /admin/[[...segments]] in 683ms (2354 modules)
+ GET /admin 200 in 1990ms
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 557ms (2392 modules)
+ GET /api/users/me 200 in 1135ms
+ GET /admin/login 200 in 443ms
+ GET /admin/login 200 in 92ms
+ GET /api/globals/site-settings 200 in 91ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 125ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 127ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 128ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 130ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 930ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 74ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 71ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22undefined%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 77ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 65ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 80ms
+ GET /api/payload-preferences/nav 200 in 19ms
+[14:26:26] [31mERROR[39m: [36mThe email or password provided is incorrect.[39m
+    err: {
+      "type": "AuthenticationError",
+      "message": "The email or password provided is incorrect.",
+      "stack":
+          AuthenticationError: The email or password provided is incorrect.
+              at loginOperation (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/auth/operations/login.js:188:19)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async loginHandler (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/auth/endpoints/login.js:19:20)
+              at async handleEndpoints (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/utilities/handleEndpoints.js:191:26)
+              at async eval (webpack-internal:///(rsc)/./node_modules/@payloadcms/next/dist/routes/rest/index.js:30:20)
+              at async AppRouteRouteModule.do (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:5:38782)
+              at async AppRouteRouteModule.handle (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:5:45984)
+              at async responseGenerator (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:206:38)
+              at async AppRouteRouteModule.handleResponse (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:1:183692)
+              at async handleResponse (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:268:32)
+              at async handler (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:320:13)
+              at async doRender (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1592:34)
+              at async DevServer.renderToResponseWithComponentsImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1934:13)
+              at async DevServer.renderPageComponent (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:2400:24)
+              at async DevServer.renderToResponseImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:2440:32)
+              at async DevServer.pipeImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1035:25)
+              at async NextNodeServer.handleCatchallRenderRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\next-server.js:393:17)
+              at async DevServer.handleRequestImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:925:17)
+              at async d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\dev\next-dev-server.js:398:20
+              at async Span.traceAsyncFn (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\trace\trace.js:157:20)
+              at async DevServer.handleRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\dev\next-dev-server.js:394:24)
+              at async invokeRender (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:239:21)
+              at async handleRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:436:24)
+              at async requestHandlerImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:464:13)
+              at async Server.requestListener (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\start-server.js:218:13)
+      "data": null,
+      "isOperational": true,
+      "isPublic": true,
+      "status": 401,
+      "name": "AuthenticationError"
+    }
+ POST /api/users/login 401 in 330ms
+[14:26:36] [31mERROR[39m: [36mThe email or password provided is incorrect.[39m
+    err: {
+      "type": "AuthenticationError",
+      "message": "The email or password provided is incorrect.",
+      "stack":
+          AuthenticationError: The email or password provided is incorrect.
+              at checkLoginPermission (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/auth/operations/login.js:22:15)
+              at loginOperation (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/auth/operations/login.js:160:9)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async loginHandler (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/auth/endpoints/login.js:19:20)
+              at async handleEndpoints (file:///d:/tuchmath/techpub-platform/techpub-platform/payload/node_modules/payload/dist/utilities/handleEndpoints.js:191:26)
+              at async eval (webpack-internal:///(rsc)/./node_modules/@payloadcms/next/dist/routes/rest/index.js:30:20)
+              at async AppRouteRouteModule.do (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:5:38782)
+              at async AppRouteRouteModule.handle (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:5:45984)
+              at async responseGenerator (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:206:38)
+              at async AppRouteRouteModule.handleResponse (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:1:183692)
+              at async handleResponse (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:268:32)
+              at async handler (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&page=%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute&appPaths=&pagePath=private-next-app-dir%2F(payload)%2Fapi%2F%5B...slug%5D%2Froute.ts&appDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=d%3A%5Ctuchmath%5Ctechpub-platform%5Ctechpub-platform%5Cpayload&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:320:13)
+              at async doRender (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1592:34)
+              at async DevServer.renderToResponseWithComponentsImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1934:13)
+              at async DevServer.renderPageComponent (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:2400:24)
+              at async DevServer.renderToResponseImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:2440:32)
+              at async DevServer.pipeImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:1035:25)
+              at async NextNodeServer.handleCatchallRenderRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\next-server.js:393:17)
+              at async DevServer.handleRequestImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\base-server.js:925:17)
+              at async d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\dev\next-dev-server.js:398:20
+              at async Span.traceAsyncFn (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\trace\trace.js:157:20)
+              at async DevServer.handleRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\dev\next-dev-server.js:394:24)
+              at async invokeRender (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:239:21)
+              at async handleRequest (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:436:24)
+              at async requestHandlerImpl (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\router-server.js:464:13)
+              at async Server.requestListener (d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\server\lib\start-server.js:218:13)
+      "data": null,
+      "isOperational": true,
+      "isPublic": true,
+      "status": 401,
+      "name": "AuthenticationError"
+    }
+ POST /api/users/login 401 in 84ms
+ GET /admin/forgot 200 in 96ms
+[14:28:27] [32mINFO[39m: [36mThe following field is invalid: Name[39m
+ POST /api/users/forgot-password 400 in 245ms
+ GET /admin/login 200 in 93ms
+ POST /api/users/login 200 in 423ms
+ GET /admin 200 in 177ms
+ GET /admin/globals/site-settings 200 in 212ms
+ GET /api/payload-preferences/global-site-settings 200 in 128ms
+ POST /api/payload-preferences/global-site-settings 200 in 145ms
+ GET /admin/collections/subscribers 200 in 332ms
+ GET /admin/collections/users 200 in 274ms
+ GET /admin/collections/media 200 in 261ms
+ GET /admin/collections/users 200 in 301ms
+ GET /admin/collections/users/693320a451c9bf83c04e556c 200 in 217ms
+ GET /api/payload-preferences/collection-users 200 in 154ms
+ POST /api/payload-preferences/collection-users 200 in 142ms
+ GET /api/payload-preferences/collection-users-693320a451c9bf83c04e556c 200 in 164ms
+ POST /admin/collections/users/693320a451c9bf83c04e556c 200 in 279ms
+ POST /admin/collections/users/693320a451c9bf83c04e556c 200 in 212ms
+ PATCH /api/users/693320a451c9bf83c04e556c?depth=0&fallback-locale=null 200 in 417ms
+ POST /api/users/access/693320a451c9bf83c04e556c? 200 in 139ms
+ POST /api/users/access/693320a451c9bf83c04e556c? 200 in 120ms
+ POST /api/users/refresh-token 200 in 300ms
+ POST /admin/collections/users/693320a451c9bf83c04e556c 200 in 90ms
+ GET /admin/collections/categories 200 in 434ms
+ GET /admin/collections/media 200 in 2079ms
+ GET /admin/collections/media/create 200 in 143ms
+ GET /api/payload-preferences/collection-media 200 in 155ms
+ POST /api/payload-preferences/collection-media 200 in 134ms
+ GET /api/payload-preferences/undefined 200 in 129ms
+ POST /admin/collections/media/create 200 in 87ms
+ GET /admin/collections/categories 200 in 327ms
+ GET /admin/collections/categories/create 200 in 1191ms
+ GET /api/payload-preferences/collection-categories 200 in 170ms
+ POST /api/payload-preferences/collection-categories 200 in 159ms
+ POST /admin/collections/categories/create 200 in 729ms
+ POST /admin/collections/categories/create 200 in 691ms
+ POST /admin/collections/categories/create 200 in 173ms
+ POST /admin/collections/categories/create 200 in 96ms
+ POST /admin/collections/categories/create 200 in 90ms
+ POST /admin/collections/categories/create 200 in 590ms
+ POST /admin/collections/categories/create 200 in 961ms
+ POST /api/media?depth=0&fallback-locale=null 201 in 477ms
+ POST /api/media 200 in 166ms
+ GET /api/media/file/Screenshot_20260103_221259%20-%20Copy-720x480.jpg 200 in 105ms
+ POST /api/media 200 in 171ms
+ POST /admin/collections/categories/create 200 in 1522ms
+ POST /admin/collections/categories/create 200 in 94ms
+ GET /admin/collections/tags 200 in 735ms
+ GET /admin/collections/authors 200 in 735ms
+ GET /admin/collections/posts 200 in 1231ms
+ GET /admin/collections/pages 200 in 1052ms

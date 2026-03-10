@@ -69,9 +69,12 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    posts: Post;
     categories: Category;
-    insights: Insight;
+    tags: Tag;
+    authors: Author;
+    posts: Post;
+    pages: Page;
+    subscribers: Subscriber;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,9 +84,12 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    insights: InsightsSelect<false> | InsightsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -93,8 +99,12 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -128,6 +138,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  name: string;
+  role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -153,6 +165,8 @@ export interface User {
 export interface Media {
   id: string;
   alt: string;
+  caption?: string | null;
+  credit?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -164,32 +178,24 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
+  sizes?: {
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
     };
-    [k: string]: unknown;
-  } | null;
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -199,31 +205,192 @@ export interface Category {
   id: string;
   name: string;
   /**
-   * URL-friendly version of the name (e.g., "technology", "finance", "marketing")
+   * Auto-generated from the category name when left empty.
    */
   slug: string;
   description?: string | null;
+  featured?: boolean | null;
+  /**
+   * Hex value such as #0F172A
+   */
+  color?: string | null;
+  image?: (string | null) | Media;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "insights".
+ * via the `definition` "tags".
  */
-export interface Insight {
+export interface Tag {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: string;
+  name: string;
+  slug: string;
+  role?: string | null;
+  bio?: string | null;
+  avatar?: (string | null) | Media;
+  email?: string | null;
+  linkedUser?: (string | null) | User;
+  socialLinks?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
   id: string;
   title: string;
-  /**
-   * Auto-generated from title, or set manually
-   */
   slug: string;
-  /**
-   * Short description shown in listings
-   */
+  type: 'insight' | 'whitepaper' | 'webinar' | 'case-study';
+  status: 'draft' | 'published' | 'archived';
   excerpt: string;
+  featuredImage?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  featured?: boolean | null;
+  pinned?: boolean | null;
+  authors: (string | Author)[];
+  primaryCategory?: (string | null) | Category;
+  categories?: (string | Category)[] | null;
+  tags?: (string | Tag)[] | null;
   /**
-   * Full article content
+   * Estimated reading time in minutes.
    */
+  readingTime?: number | null;
+  publishedAt?: string | null;
+  videoUrl?: string | null;
+  /**
+   * Optional canonical or registration URL.
+   */
+  externalUrl?: string | null;
+  downloadAsset?: (string | null) | Media;
+  cta: {
+    primary: {
+      label: string;
+      type: 'custom' | 'page' | 'post' | 'category';
+      /**
+       * Examples: /contact, https://example.com
+       */
+      url?: string | null;
+      page?: (string | null) | Page;
+      post?: (string | null) | Post;
+      category?: (string | null) | Category;
+      newTab?: boolean | null;
+    };
+  };
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (string | Post)[] | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: string;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published';
+  template: 'standard' | 'landing' | 'contact' | 'legal';
+  hero: {
+    eyebrow?: string | null;
+    headline?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+    primaryAction: {
+      label: string;
+      type: 'custom' | 'page' | 'post' | 'category';
+      /**
+       * Examples: /contact, https://example.com
+       */
+      url?: string | null;
+      page?: (string | null) | Page;
+      post?: (string | null) | Post;
+      category?: (string | null) | Category;
+      newTab?: boolean | null;
+    };
+    secondaryAction: {
+      label: string;
+      type: 'custom' | 'page' | 'post' | 'category';
+      /**
+       * Examples: /contact, https://example.com
+       */
+      url?: string | null;
+      page?: (string | null) | Page;
+      post?: (string | null) | Post;
+      category?: (string | null) | Category;
+      newTab?: boolean | null;
+    };
+  };
+  summary?: string | null;
   content?: {
     root: {
       type: string;
@@ -239,17 +406,30 @@ export interface Insight {
     };
     [k: string]: unknown;
   } | null;
-  featuredImage: string | Media;
-  category: string | Category;
-  publishedAt: string;
-  /**
-   * Show in "JUST IN: INSIGHTS" trending section
-   */
-  isTrending?: boolean | null;
-  /**
-   * Show in "Top Picks" section
-   */
-  isTopPick?: boolean | null;
+  featuredPosts?: (string | Post)[] | null;
+  hideFromNavigation?: boolean | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: string;
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  status: 'subscribed' | 'unsubscribed';
+  source?: string | null;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -286,16 +466,28 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: string | Post;
-      } | null)
-    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
     | ({
-        relationTo: 'insights';
-        value: string | Insight;
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'authors';
+        value: string | Author;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: string | Subscriber;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -344,6 +536,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -367,6 +561,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  credit?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -378,17 +574,30 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
- */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  content?: T;
-  publishedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  sizes?:
+    | T
+    | {
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -398,23 +607,196 @@ export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  featured?: T;
+  color?: T;
+  image?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "insights_select".
+ * via the `definition` "tags_select".
  */
-export interface InsightsSelect<T extends boolean = true> {
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  role?: T;
+  bio?: T;
+  avatar?: T;
+  email?: T;
+  linkedUser?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  type?: T;
+  status?: T;
   excerpt?: T;
-  content?: T;
   featuredImage?: T;
-  category?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  featured?: T;
+  pinned?: T;
+  authors?: T;
+  primaryCategory?: T;
+  categories?: T;
+  tags?: T;
+  readingTime?: T;
   publishedAt?: T;
-  isTrending?: T;
-  isTopPick?: T;
+  videoUrl?: T;
+  externalUrl?: T;
+  downloadAsset?: T;
+  cta?:
+    | T
+    | {
+        primary?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              url?: T;
+              page?: T;
+              post?: T;
+              category?: T;
+              newTab?: T;
+            };
+      };
+  content?: T;
+  relatedPosts?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  template?: T;
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        headline?: T;
+        description?: T;
+        image?: T;
+        primaryAction?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              url?: T;
+              page?: T;
+              post?: T;
+              category?: T;
+              newTab?: T;
+            };
+        secondaryAction?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              url?: T;
+              page?: T;
+              post?: T;
+              category?: T;
+              newTab?: T;
+            };
+      };
+  summary?: T;
+  content?: T;
+  featuredPosts?: T;
+  hideFromNavigation?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  firstName?: T;
+  lastName?: T;
+  status?: T;
+  source?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -457,6 +839,160 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  siteName: string;
+  siteTagline?: string | null;
+  siteDescription?: string | null;
+  logo?: (string | null) | Media;
+  favicon?: (string | null) | Media;
+  defaultShareImage?: (string | null) | Media;
+  contactEmail?: string | null;
+  socialLinks?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  headerLinks?:
+    | {
+        item: {
+          label: string;
+          type: 'custom' | 'page' | 'post' | 'category';
+          /**
+           * Examples: /contact, https://example.com
+           */
+          url?: string | null;
+          page?: (string | null) | Page;
+          post?: (string | null) | Post;
+          category?: (string | null) | Category;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  footerSections?:
+    | {
+        title: string;
+        links?:
+          | {
+              item: {
+                label: string;
+                type: 'custom' | 'page' | 'post' | 'category';
+                /**
+                 * Examples: /contact, https://example.com
+                 */
+                url?: string | null;
+                page?: (string | null) | Page;
+                post?: (string | null) | Post;
+                category?: (string | null) | Category;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  newsletter?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    description?: string | null;
+    submitLabel?: string | null;
+  };
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    canonicalUrl?: string | null;
+    metaImage?: (string | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteTagline?: T;
+  siteDescription?: T;
+  logo?: T;
+  favicon?: T;
+  defaultShareImage?: T;
+  contactEmail?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  headerLinks?:
+    | T
+    | {
+        item?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              url?: T;
+              page?: T;
+              post?: T;
+              category?: T;
+              newTab?: T;
+            };
+        id?: T;
+      };
+  footerSections?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              item?:
+                | T
+                | {
+                    label?: T;
+                    type?: T;
+                    url?: T;
+                    page?: T;
+                    post?: T;
+                    category?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  newsletter?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        description?: T;
+        submitLabel?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        canonicalUrl?: T;
+        metaImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

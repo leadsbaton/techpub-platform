@@ -2,7 +2,6 @@
 @plugin "daisyui" {
   themes: light --default;
 }
-@import "remixicon/fonts/remixicon.css";
 
 :root {
   color-scheme: light;

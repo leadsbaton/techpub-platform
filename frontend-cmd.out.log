@@ -1,0 +1,26 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.7 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.29.48:3000
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'd:\\tuchmath\\techpub-platform\\techpub-platform\\frontend',
+  testMode: true
+}
+ ✓ Ready in 1044ms
+/*! 🌼 daisyUI 5.5.14 */
+ HEAD / 200 in 2.3s (compile: 1951ms, render: 336ms)
+ GET / 200 in 123ms (compile: 5ms, render: 119ms)
+ GET / 200 in 128ms (compile: 3ms, render: 124ms)
+ GET /insights 200 in 642ms (compile: 513ms, render: 129ms)
+ GET /insights 200 in 23ms (compile: 4ms, render: 19ms)
+ GET /whitepapers 200 in 1066ms (compile: 957ms, render: 110ms)
+ GET /insights/undefined 200 in 1025ms (compile: 810ms, render: 216ms)
+ GET /contact 200 in 128ms (compile: 11ms, render: 117ms)
+ GET /insights 200 in 29ms (compile: 4ms, render: 25ms)
+ GET / 200 in 37ms (compile: 4ms, render: 34ms)
+ GET /insights 200 in 35ms (compile: 4ms, render: 31ms)
