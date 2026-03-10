@@ -66,3 +66,32 @@ Error [ValidationError]: The following field is invalid: Hero > Secondary Action
   status: 400,
   [cause]: [Object]
 }
+ ⨯ ./node_modules/next/dist/client/components/metadata/metadata-boundary.js
+Error: 
+
+Caused by:
+    0: Failed to read source code from d:\tuchmath\techpub-platform\techpub-platform\payload\node_modules\next\dist\client\components\metadata\metadata-boundary.js
+    1: The system cannot find the file specified. (os error 2)
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/metadata/metadata-boundary.js
+ ⨯ ./src/app/(payload)/admin/importMap.js
+Attempted import error: 'CollectionCards' is not exported from '@payloadcms/next/rsc' (imported as 'CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1').
+
+Import trace for requested module:
+./src/app/(payload)/admin/importMap.js
+./src/app/(payload)/layout.tsx
+ ⨯ ./src/app/(payload)/admin/importMap.js
+Attempted import error: 'CollectionCards' is not exported from '@payloadcms/next/rsc' (imported as 'CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1').
+
+Import trace for requested module:
+./src/app/(payload)/admin/importMap.js
+./src/app/(payload)/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⨯ ./src/app/(payload)/admin/importMap.js
+Attempted import error: 'CollectionCards' is not exported from '@payloadcms/next/rsc' (imported as 'CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1').
+
+Import trace for requested module:
+./src/app/(payload)/admin/importMap.js
+./src/app/(payload)/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.

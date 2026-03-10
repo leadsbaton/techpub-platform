@@ -733,3 +733,17 @@ No new imports found, skipping writing import map
  GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 259ms
  GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 272ms
  GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 275ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 94ms
+ GET /api/globals/site-settings 200 in 117ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 291ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 294ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 325ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 690ms
+ ○ Compiling /_error ...
+ GET /admin/collections/pages?limit=10 500 in 15392ms
+ GET /admin/collections/pages?limit=10 500 in 31ms
+ GET /admin/collections/pages?limit=10 500 in 31ms
+ GET /admin/collections/pages?limit=10 500 in 34ms
+ GET /admin/collections/pages?limit=10 500 in 28ms
+ GET /_next/static/webpack/56ae376754d80398.webpack.hot-update.json 500 in 1977ms
+ GET /admin/collections/pages?limit=10 500 in 14ms
