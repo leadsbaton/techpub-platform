@@ -46,6 +46,7 @@ export const Pages: CollectionConfig = {
         { label: 'Standard', value: 'standard' },
         { label: 'Landing', value: 'landing' },
         { label: 'Contact', value: 'contact' },
+        { label: 'Support', value: 'support' },
         { label: 'Legal', value: 'legal' },
       ],
       required: true,

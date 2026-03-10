@@ -1,7 +1,29 @@
 import type { Payload } from 'payload'
 
+import type {
+  Author,
+  Category,
+  Page,
+  Post,
+  Subscriber,
+  Tag,
+} from '../payload-types'
+
 type SeededDoc = {
   id: string
+}
+
+type SeedCollection = 'categories' | 'authors' | 'tags' | 'posts' | 'pages'
+type RichTextSeed = NonNullable<Page['content']>
+type SeedCta = Post['cta']
+type SeedSubscriberData = Pick<Subscriber, 'email' | 'status'> & Partial<Subscriber>
+
+type SeedCollectionData = {
+  categories: Pick<Category, 'name' | 'slug'> & Partial<Category>
+  authors: Pick<Author, 'name' | 'slug'> & Partial<Author>
+  tags: Pick<Tag, 'name' | 'slug'> & Partial<Tag>
+  posts: Pick<Post, 'title' | 'slug' | 'type' | 'status' | 'excerpt' | 'authors' | 'cta' | 'content'> & Partial<Post>
+  pages: Pick<Page, 'title' | 'slug' | 'status' | 'template' | 'hero'> & Partial<Page>
 }
 
 type SeedCategory = {
@@ -100,7 +122,7 @@ const subscribers: SeedSubscriber[] = [
   },
 ]
 
-function richTextFromParagraphs(paragraphs: string[]) {
+function richTextFromParagraphs(paragraphs: string[]): RichTextSeed {
   return {
     root: {
       type: 'root',
@@ -127,10 +149,10 @@ function richTextFromParagraphs(paragraphs: string[]) {
         ],
       })),
     },
-  }
+  } as RichTextSeed
 }
 
-function buildPrimaryCta(type: 'insight' | 'whitepaper' | 'webinar') {
+function buildPrimaryCta(type: 'insight' | 'whitepaper' | 'webinar'): SeedCta {
   if (type === 'whitepaper') {
     return {
       primary: {
@@ -163,11 +185,19 @@ function buildPrimaryCta(type: 'insight' | 'whitepaper' | 'webinar') {
   }
 }
 
-async function upsertBySlug(
+function buildPageSeo(title: string, summary: string, slug: string) {
+  return {
+    metaTitle: `${title} | LeadsBaton`,
+    metaDescription: summary,
+    canonicalUrl: `https://www.leadsbaton.com/${slug}`,
+  }
+}
+
+async function upsertBySlug<K extends SeedCollection>(
   payload: Payload,
-  collection: 'categories' | 'authors' | 'tags' | 'posts' | 'pages',
+  collection: K,
   slug: string,
-  data: Record<string, unknown>,
+  data: SeedCollectionData[K],
 ): Promise<SeededDoc> {
   const existing = await payload.find({
     collection,
@@ -177,35 +207,125 @@ async function upsertBySlug(
   })
 
   if (existing.docs[0]) {
-    const updated = await payload.update({
-      collection,
-      id: existing.docs[0].id,
-      data,
-      draft: false,
-      depth: 0,
-    })
+    switch (collection) {
+      case 'categories': {
+        const updated = await payload.update({
+          collection: 'categories',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['categories'],
+          draft: false,
+          depth: 0,
+        })
 
-    return {
-      id: String(updated.id),
+        return { id: String(updated.id) }
+      }
+      case 'authors': {
+        const updated = await payload.update({
+          collection: 'authors',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['authors'],
+          draft: false,
+          depth: 0,
+        })
+
+        return { id: String(updated.id) }
+      }
+      case 'tags': {
+        const updated = await payload.update({
+          collection: 'tags',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['tags'],
+          draft: false,
+          depth: 0,
+        })
+
+        return { id: String(updated.id) }
+      }
+      case 'posts': {
+        const updated = await payload.update({
+          collection: 'posts',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['posts'],
+          draft: false,
+          depth: 0,
+        })
+
+        return { id: String(updated.id) }
+      }
+      case 'pages': {
+        const updated = await payload.update({
+          collection: 'pages',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['pages'],
+          draft: false,
+          depth: 0,
+        })
+
+        return { id: String(updated.id) }
+      }
     }
   }
 
-  const created = await payload.create({
-    collection,
-    data,
-    draft: false,
-    depth: 0,
-  })
+  switch (collection) {
+    case 'categories': {
+      const created = await payload.create({
+        collection: 'categories',
+        data: data as SeedCollectionData['categories'],
+        draft: false,
+        depth: 0,
+      })
 
-  return {
-    id: String(created.id),
+      return { id: String(created.id) }
+    }
+    case 'authors': {
+      const created = await payload.create({
+        collection: 'authors',
+        data: data as SeedCollectionData['authors'],
+        draft: false,
+        depth: 0,
+      })
+
+      return { id: String(created.id) }
+    }
+    case 'tags': {
+      const created = await payload.create({
+        collection: 'tags',
+        data: data as SeedCollectionData['tags'],
+        draft: false,
+        depth: 0,
+      })
+
+      return { id: String(created.id) }
+    }
+    case 'posts': {
+      const created = await payload.create({
+        collection: 'posts',
+        data: data as SeedCollectionData['posts'],
+        draft: false,
+        depth: 0,
+      })
+
+      return { id: String(created.id) }
+    }
+    case 'pages': {
+      const created = await payload.create({
+        collection: 'pages',
+        data: data as SeedCollectionData['pages'],
+        draft: false,
+        depth: 0,
+      })
+
+      return { id: String(created.id) }
+    }
   }
+
+  throw new Error(`Unsupported collection: ${String(collection)}`)
 }
 
 async function upsertSubscriber(
   payload: Payload,
   email: string,
-  data: Record<string, unknown>,
+  data: SeedSubscriberData,
 ): Promise<SeededDoc> {
   const existing = await payload.find({
     collection: 'subscribers',
@@ -238,6 +358,31 @@ async function upsertSubscriber(
   return {
     id: String(created.id),
   }
+}
+
+async function deletePagesBySlugs(payload: Payload, slugs: string[]) {
+  if (!slugs.length) return
+
+  const existing = await payload.find({
+    collection: 'pages',
+    where: {
+      slug: {
+        in: slugs,
+      },
+    },
+    limit: slugs.length,
+    depth: 0,
+  })
+
+  await Promise.all(
+    existing.docs.map((doc) =>
+      payload.delete({
+        collection: 'pages',
+        id: doc.id,
+        depth: 0,
+      }),
+    ),
+  )
 }
 
 export async function seedDemoContent(payload: Payload) {
@@ -456,21 +601,59 @@ export async function seedDemoContent(payload: Payload) {
       title: 'Contact',
       template: 'contact',
       status: 'published',
+      hideFromNavigation: true,
       summary: 'Get in touch with LeadsBaton for editorial, partnership, or support requests.',
+      hero: {
+        eyebrow: 'Contact Us',
+        headline: 'Let us know how we can help.',
+        description: 'Reach out for editorial partnerships, support requests, or questions about downloads and webinar registration.',
+        primaryAction: {
+          label: 'Email Support',
+          type: 'custom',
+          url: 'mailto:info@leadsbaton.com',
+          newTab: false,
+        },
+        secondaryAction: {
+          label: 'Browse Insights',
+          type: 'custom',
+          url: '/insights',
+          newTab: false,
+        },
+      },
       content: richTextFromParagraphs([
         'Contact our team for partnership requests, editorial questions, and support inquiries.',
         'We typically respond within one to two business days.',
+        'If your question is related to a webinar registration or white paper download, include the page title and the email address used so the support team can respond faster.',
       ]),
     },
     {
       slug: 'support',
       title: 'Support',
-      template: 'standard',
+      template: 'support',
       status: 'published',
+      hideFromNavigation: true,
       summary: 'Support resources for readers, subscribers, and webinar attendees.',
+      hero: {
+        eyebrow: 'Support',
+        headline: 'Get help with access, downloads, and webinar questions.',
+        description: 'Find the fastest route for content access issues, white paper downloads, subscriber changes, and webinar support.',
+        primaryAction: {
+          label: 'Contact Support',
+          type: 'custom',
+          url: '/contact',
+          newTab: false,
+        },
+        secondaryAction: {
+          label: 'Review Legal',
+          type: 'custom',
+          url: '/legal',
+          newTab: false,
+        },
+      },
       content: richTextFromParagraphs([
         'Support covers access issues, download problems, and webinar registration questions.',
         'For urgent issues, contact the support team directly via the site email address.',
+        'When reporting an issue, include the content title, your browser, and what happened so the team can reproduce the problem quickly.',
       ]),
     },
     {
@@ -478,9 +661,29 @@ export async function seedDemoContent(payload: Payload) {
       title: 'Legal',
       template: 'legal',
       status: 'published',
+      hideFromNavigation: true,
       summary: 'Legal and privacy information for LeadsBaton TechPub.',
+      hero: {
+        eyebrow: 'Legal',
+        headline: 'Privacy, terms, and content access policies.',
+        description: 'Review the legal and privacy information that governs subscriptions, content downloads, and webinar access.',
+        primaryAction: {
+          label: 'Contact Us',
+          type: 'custom',
+          url: '/contact',
+          newTab: false,
+        },
+        secondaryAction: {
+          label: 'Get Support',
+          type: 'custom',
+          url: '/support',
+          newTab: false,
+        },
+      },
       content: richTextFromParagraphs([
         'This page contains privacy, terms, and compliance information related to content access and lead capture forms.',
+        'Subscriber information is stored to manage newsletter preferences, content delivery, and reader support workflows.',
+        'Form submissions are used to process requested resources and respond to support or partnership inquiries.',
       ]),
     },
   ] as const
@@ -490,9 +693,12 @@ export async function seedDemoContent(payload: Payload) {
       upsertBySlug(payload, 'pages', page.slug, {
         ...page,
         featuredPosts: seededPosts.slice(0, 3).map((post) => post.id),
+        seo: buildPageSeo(page.title, page.summary, page.slug),
       }),
     ),
   )
+
+  await deletePagesBySlugs(payload, ['about', 'privacy-policy', 'terms-of-use', 'editorial-policy'])
 
   const seededSubscribers = await Promise.all(
     subscribers.map((subscriber) =>

@@ -359,7 +359,7 @@ export interface Page {
   title: string;
   slug: string;
   status: 'draft' | 'published';
-  template: 'standard' | 'landing' | 'contact' | 'legal';
+  template: 'standard' | 'landing' | 'contact' | 'support' | 'legal';
   hero: {
     eyebrow?: string | null;
     headline?: string | null;

@@ -60,7 +60,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
   }
 }
 
-type RichTextDocument = {
+export type RichTextDocument = {
   root?: {
     children?: LexicalNode[]
   }

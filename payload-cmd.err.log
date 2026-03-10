@@ -49,3 +49,20 @@ Error [ValidationError]: The following fields are invalid: Hero > Primary Action
   status: 400,
   [cause]: [Object]
 }
+Error [ValidationError]: The following field is invalid: Hero > Secondary Action > Label
+    at async upsertBySlug (src\utilities\seedDemo.ts:201:18)
+    at async seedDemoContent (src\utilities\seedDemo.ts:672:2)
+    at async POST (src\app\api\seed-demo\route.ts:21:17)
+  199 |   }
+  200 |
+> 201 |   const created = await payload.create({
+      |                  ^
+  202 |     collection,
+  203 |     data,
+  204 |     draft: false, {
+  data: [Object],
+  isOperational: true,
+  isPublic: true,
+  status: 400,
+  [cause]: [Object]
+}

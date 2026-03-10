@@ -475,3 +475,234 @@ No new imports found, skipping writing import map
  GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22marketing%22%7D%7D 200 in 311ms
  GET /admin/collections/subscribers 200 in 264ms
  GET /admin/collections/pages 200 in 253ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 300ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 80ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 72ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 85ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 315ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 342ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 306ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 328ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 298ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 351ms
+ GET /api/categories?limit=1&depth=1&where=%7B%22slug%22%3A%7B%22equals%22%3A%22marketing%22%7D%7D 200 in 92ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22marketing%22%7D%7D 200 in 326ms
+ ✓ Compiled in 961ms (2354 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?limit=10 200 in 3638ms
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 701ms (2392 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22marketing%22%7D%7D 200 in 3273ms
+ GET /admin/collections/pages?limit=10 200 in 1942ms
+ GET /api/categories?limit=1&depth=1&where=%7B%22slug%22%3A%7B%22equals%22%3A%22technology%22%7D%7D 200 in 73ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22technology%22%7D%7D 200 in 306ms
+ GET /api/categories?limit=1&depth=1&where=%7B%22slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 71ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 272ms
+ GET /api/globals/site-settings 200 in 65ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 78ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 254ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 255ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 611ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 619ms
+ GET /admin/collections/posts 200 in 338ms
+ GET /admin/collections/pages 200 in 262ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 70ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 261ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 271ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 273ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 607ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 314ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 327ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22devices-big-and-small-can-learn%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 246ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=3&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22marketing%22%7D%7D 200 in 270ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22trustworthy-ai-models-webinar%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 260ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 248ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 253ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 264ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 266ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 77ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 77ms
+ GET /api/globals/site-settings 200 in 71ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 81ms
+ GET /admin/collections/pages?limit=10 200 in 908ms
+ GET /api/users/me 200 in 132ms
+ GET /api/payload-preferences/nav 200 in 132ms
+ GET /admin/collections/subscribers 200 in 270ms
+ GET /admin/collections/posts 200 in 312ms
+ GET /admin/collections/authors 200 in 254ms
+ GET /admin/collections/categories 200 in 251ms
+ GET /admin/collections/media 200 in 278ms
+ GET /admin/collections/users 200 in 266ms
+ GET /admin/globals/site-settings 200 in 205ms
+ GET /api/payload-preferences/global-site-settings 200 in 126ms
+ GET /admin/collections/subscribers 200 in 260ms
+ GET /admin/collections/pages 200 in 261ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 260ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 263ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 278ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 280ms
+ GET /admin/collections/pages?limit=10 200 in 421ms
+ GET /api/users/me 200 in 131ms
+ GET /api/payload-preferences/nav 200 in 125ms
+ GET /admin/collections/pages/create 200 in 157ms
+ GET /api/payload-preferences/collection-pages 200 in 136ms
+ POST /api/payload-preferences/collection-pages 200 in 141ms
+ GET /api/globals/site-settings 200 in 78ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 96ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 97ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 85ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 239ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 256ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 257ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 258ms
+ GET /admin/collections/pages 200 in 261ms
+ GET /admin/collections/posts 200 in 320ms
+ GET /admin/collections/pages 200 in 257ms
+ GET /admin/collections/subscribers 200 in 272ms
+ GET /admin/collections/pages 200 in 247ms
+ GET /admin/collections/pages?limit=10 200 in 443ms
+ GET /api/users/me 200 in 144ms
+ GET /api/payload-preferences/nav 200 in 152ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 240ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 260ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 263ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 265ms
+ GET /admin/collections/pages?limit=10 200 in 454ms
+ GET /api/users/me 200 in 131ms
+ GET /api/payload-preferences/nav 200 in 141ms
+ GET /admin/collections/subscribers 200 in 266ms
+ GET /admin/collections/pages 200 in 257ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22trustworthy-ai-models-webinar%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 250ms
+ GET /api/posts?depth=2&limit=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22bridging-the-gap-ai-existing-systems%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 252ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 288ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 322ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 323ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 325ms
+ GET /admin/collections/pages?limit=10 200 in 442ms
+ GET /api/users/me 200 in 127ms
+ GET /api/payload-preferences/nav 200 in 139ms
+ GET /admin/collections/subscribers 200 in 251ms
+ GET /admin/collections/pages 200 in 268ms
+ GET /admin/collections/pages?limit=10 200 in 480ms
+ GET /api/users/me 200 in 136ms
+ GET /api/payload-preferences/nav 200 in 126ms
+ GET /api/globals/site-settings 200 in 76ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 91ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 93ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 70ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 65ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 249ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 234ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 238ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 253ms
+ GET /admin/collections/subscribers 200 in 263ms
+ GET /admin/collections/pages 200 in 269ms
+ GET /admin/collections/pages?limit=10 200 in 445ms
+ GET /api/users/me 200 in 224ms
+ GET /api/payload-preferences/nav 200 in 201ms
+ GET /admin/collections/pages?limit=10 200 in 499ms
+ GET /admin/collections/pages?limit=10 200 in 501ms
+ GET /admin/collections/pages?limit=10 200 in 561ms
+ GET /admin/collections/pages?limit=10 200 in 530ms
+ GET /api/payload-preferences/nav 200 in 452ms
+ GET /api/users/me 200 in 632ms
+ GET /admin/collections/pages?limit=10 200 in 634ms
+ GET /api/users/me 200 in 131ms
+ GET /api/payload-preferences/nav 200 in 122ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 341ms
+ GET /api/health 404 in 11ms
+ ○ Compiling /api/seed-demo ...
+ ✓ Compiled /api/seed-demo in 808ms (2409 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?limit=10 200 in 2240ms
+ POST /api/seed-demo 500 in 5235ms
+ ✓ Compiled in 772ms (2354 modules)
+ ○ Compiling /api/seed-demo ...
+ ✓ Compiled /api/seed-demo in 645ms (2374 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?limit=10 200 in 3451ms
+ POST /api/seed-demo 500 in 5897ms
+ ✓ Compiled in 694ms (2374 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?limit=10 200 in 3017ms
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 590ms (2392 modules)
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 1264ms
+ GET /api/globals/site-settings 200 in 1326ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 1440ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 1488ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 1773ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 1786ms
+ ○ Compiling /api/seed-demo ...
+ ✓ Compiled /api/seed-demo in 613ms (2409 modules)
+ POST /api/seed-demo 200 in 3490ms
+ GET /api/globals/site-settings 200 in 90ms
+ GET /api/pages?limit=20&sort=slug 200 in 379ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 302ms
+ GET /api/globals/site-settings 200 in 71ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 97ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 328ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22editorial-policy%22%7D%7D 200 in 317ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22terms-of-use%22%7D%7D 200 in 301ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 310ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 321ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 337ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22privacy-policy%22%7D%7D 200 in 302ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22about%22%7D%7D 200 in 322ms
+ GET /admin/collections/pages/69b01558e53cd05c1b8f74de 200 in 636ms
+ GET /api/payload-preferences/collection-pages 200 in 129ms
+ POST /api/posts 200 in 131ms
+ GET /admin/collections/pages?limit=10 200 in 351ms
+ GET /admin/collections/pages/69b01557e53cd05c1b8f74d4 200 in 217ms
+ POST /api/posts 200 in 143ms
+ ✓ Compiled in 963ms (2392 modules)
+ ○ Compiling /api/seed-demo ...
+ ✓ Compiled /api/seed-demo in 683ms (2374 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages/69b01557e53cd05c1b8f74d4 200 in 2117ms
+ POST /api/seed-demo 200 in 6033ms
+ ✓ Compiled /api/[...slug] in 478ms (2409 modules)
+ GET /api/pages?limit=20&sort=slug 200 in 1367ms
+ GET /api/globals/site-settings 200 in 84ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 100ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 292ms
+ GET /admin/collections/pages 200 in 534ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 237ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 246ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 249ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 254ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22support%22%7D%7D 200 in 299ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22legal%22%7D%7D 200 in 308ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 243ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 250ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 275ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 278ms
+ GET /api/categories?limit=1&depth=1&where=%7B%22slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 77ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22primaryCategory.slug%22%3A%7B%22equals%22%3A%22finance%22%7D%7D 200 in 310ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22search%22%7D%7D 200 in 326ms
+ GET /admin/collections/subscribers 200 in 263ms
+ ✓ Compiled in 1002ms (2354 modules)
+ GET /admin/collections/pages 200 in 1074ms
+ GET /admin/collections/pages/69b01557e53cd05c1b8f74d4 200 in 224ms
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 536ms (2392 modules)
+ POST /api/posts 200 in 1325ms
+ GET /api/globals/site-settings 200 in 80ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 99ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 241ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 244ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 218ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 235ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 316ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 253ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 255ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 266ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 269ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22privacy-policy%22%7D%7D 200 in 356ms

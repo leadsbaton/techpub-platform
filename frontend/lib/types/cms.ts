@@ -1,3 +1,5 @@
+import type { RichTextDocument } from '@/app/(public)/_components/RichTextRenderer'
+
 export interface PayloadListResponse<T> {
   docs: T[]
   totalDocs: number
@@ -96,7 +98,7 @@ export interface Post {
   type: 'insight' | 'whitepaper' | 'webinar' | 'case-study'
   status: 'draft' | 'published' | 'archived'
   excerpt: string
-  content?: unknown
+  content?: RichTextDocument | null
   featuredImage?: Media | string | null
   featured?: boolean
   pinned?: boolean
@@ -116,9 +118,9 @@ export interface PageDoc {
   title: string
   slug: string
   status: 'draft' | 'published'
-  template: 'standard' | 'landing' | 'contact' | 'legal'
+  template: 'standard' | 'landing' | 'contact' | 'legal' | 'support'
   summary?: string | null
-  content?: unknown
+  content?: RichTextDocument | null
   featuredPosts?: Array<Post | string> | null
   hero?: {
     eyebrow?: string | null
