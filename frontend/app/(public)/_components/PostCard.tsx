@@ -10,11 +10,19 @@ import {
   getImageUrl,
 } from '@/lib/utils/formatting'
 
+const categoryColors: Record<string, string> = {
+  technology: 'var(--category-tech)',
+  finance: 'var(--category-finance)',
+  marketing: 'var(--category-marketing)',
+}
+
 export function PostCard({ post }: { post: Post }) {
   const href = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const categoryName = getCategoryName(post.primaryCategory)
+  const categoryColor = categoryColors[categoryName.toLowerCase()] || 'var(--category-tech)'
 
   return (
-    <article className="group overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition-transform duration-200 hover:-translate-y-1">
+    <article className="group panel-card overflow-hidden rounded-[28px] transition-transform duration-200 hover:-translate-y-1">
       <Link href={href} className="block">
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
@@ -26,17 +34,19 @@ export function PostCard({ post }: { post: Post }) {
         </div>
       </Link>
       <div className="space-y-4 p-6">
-        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
           <span>{getContentTypeLabel(post.type)}</span>
-          <span>{getCategoryName(post.primaryCategory)}</span>
+          <span className="category-pill" style={{ backgroundColor: categoryColor }}>
+            {categoryName}
+          </span>
         </div>
         <div className="space-y-3">
-          <Link href={href} className="block text-2xl font-semibold tracking-tight text-slate-950">
+          <Link href={href} className="block text-2xl font-semibold tracking-tight text-[color:var(--text-strong)]">
             {post.title}
           </Link>
-          <p className="text-sm leading-6 text-slate-600">{post.excerpt}</p>
+          <p className="text-sm leading-6 text-[color:var(--text-soft)]">{post.excerpt}</p>
         </div>
-        <div className="flex items-center justify-between gap-4 text-sm text-slate-500">
+        <div className="flex items-center justify-between gap-4 text-sm text-[color:var(--text-muted)]">
           <span>{getAuthorNames(post.authors)}</span>
           <span>{formatDate(post.publishedAt)}</span>
         </div>

@@ -5,23 +5,89 @@
 
 :root {
   color-scheme: light;
+  --page-bg: #f4f4f2;
+  --surface: #f7f7f5;
+  --surface-muted: #efefec;
+  --surface-strong: #ffffff;
+  --text-strong: #131313;
+  --text-soft: #343434;
+  --text-muted: #7a7a7a;
+  --border-subtle: rgba(19, 19, 19, 0.1);
+  --accent-red: #ff2a1f;
+  --accent-red-dark: #e41e14;
+  --category-tech: #1238d6;
+  --category-finance: #ff2a1f;
+  --category-marketing: #12a639;
+  --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
 }
 
 html {
-  background:
-    radial-gradient(circle at top left, rgba(251, 191, 36, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 24%),
-    linear-gradient(180deg, #fcfbf7 0%, #f8fafc 52%, #f8fafc 100%);
+  background: var(--page-bg);
 }
 
 body {
   min-height: 100vh;
-  color: #0f172a;
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  background: var(--page-bg);
+  color: var(--text-strong);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 a {
   text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.site-container {
+  width: min(1200px, calc(100vw - 32px));
+  margin-inline: auto;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.section-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  transition: color 180ms ease;
+}
+
+.nav-link:hover,
+.nav-link-active {
+  color: var(--accent-red);
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+}
+
+.panel-card {
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-soft);
 }
 
 .prose {
@@ -53,4 +119,10 @@ a {
   border-left: 3px solid #f59e0b;
   padding-left: 1rem;
   color: #475569;
+}
+
+@media (max-width: 640px) {
+  .site-container {
+    width: min(1200px, calc(100vw - 24px));
+  }
 }

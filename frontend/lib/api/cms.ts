@@ -39,6 +39,9 @@ function buildQuery(params: Record<string, unknown>) {
 async function fetchPayload<T>(endpoint: string, revalidate = 60): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
     next: { revalidate },
+    headers: {
+      Accept: 'application/json',
+    },
   })
 
   if (!response.ok) {
@@ -166,4 +169,25 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
   })
   const data = await fetchPayload<PayloadListResponse<PageDoc>>(`/api/pages?${query}`, 300)
   return data.docs[0] ?? null
+}
+
+export async function getHomePageData() {
+  const [settings, featuredPosts, insights, whitepapers, webinars, categories] =
+    await Promise.all([
+      getSiteSettings(),
+      getPosts({ featured: true, limit: 1 }),
+      getPosts({ type: 'insight', limit: 7 }),
+      getPosts({ type: 'whitepaper', limit: 6 }),
+      getPosts({ type: 'webinar', limit: 4 }),
+      getCategories(6),
+    ])
+
+  return {
+    settings,
+    heroPost: featuredPosts.docs[0] || insights.docs[0] || whitepapers.docs[0] || webinars.docs[0] || null,
+    insights: insights.docs,
+    whitepapers: whitepapers.docs,
+    webinars: webinars.docs,
+    categories,
+  }
 }
