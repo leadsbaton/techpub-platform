@@ -747,3 +747,30 @@ No new imports found, skipping writing import map
  GET /admin/collections/pages?limit=10 500 in 28ms
  GET /_next/static/webpack/56ae376754d80398.webpack.hot-update.json 500 in 1977ms
  GET /admin/collections/pages?limit=10 500 in 14ms
+ GET /_next/static/webpack/56ae376754d80398.webpack.hot-update.json 500 in 1735ms
+ GET /_next/static/webpack/56ae376754d80398.webpack.hot-update.json 500 in 28ms
+ GET /admin/collections/pages?limit=10 500 in 86ms
+ GET /admin/collections/pages?limit=10 500 in 26ms
+ ✓ Compiled /_not-found in 949ms (2556 modules)
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?limit=10 200 in 2811ms
+ ○ Compiling /api/[...slug] ...
+ ✓ Compiled /api/[...slug] in 1464ms (2594 modules)
+ GET /api/users/me 200 in 2244ms
+ GET /api/payload-preferences/nav 200 in 2042ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 518ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 244ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 554ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 252ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 626ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 278ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 559ms
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fpages 500 in 271ms
+ GET /api/globals/site-settings 200 in 1253ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 1314ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 1435ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 1465ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 1478ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 1770ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 315ms

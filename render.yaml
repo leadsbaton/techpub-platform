@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: techpub-payload
+    runtime: node
+    rootDir: payload
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PAYLOAD_SECRET
+        sync: false
+      - key: DATABASE_URI
+        sync: false

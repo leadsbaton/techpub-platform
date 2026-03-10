@@ -538,3 +538,5 @@ Creating turbopack project {
  GET / 200 in 65ms (compile: 3ms, render: 62ms)
  GET /contact 200 in 37ms (compile: 9ms, render: 28ms)
  GET /contact 200 in 123ms (compile: 9ms, render: 114ms)
+ GET / 200 in 67ms (compile: 3ms, render: 64ms)
+ GET /insights 200 in 304ms (compile: 199ms, render: 105ms)
