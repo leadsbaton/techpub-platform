@@ -4,7 +4,7 @@ type LexicalNode = {
   type?: string
   tag?: string
   text?: string
-  format?: string
+  format?: string | number
   url?: string
   children?: LexicalNode[]
 }
@@ -19,9 +19,15 @@ function renderChildren(children?: LexicalNode[]) {
 
 function renderTextNode(node: LexicalNode) {
   let content: React.ReactNode = node.text ?? ''
+  const format = node.format
 
-  if (node.format?.includes('bold')) content = <strong>{content}</strong>
-  if (node.format?.includes('italic')) content = <em>{content}</em>
+  const hasBold =
+    typeof format === 'string' ? format.includes('bold') : typeof format === 'number' ? (format & 1) !== 0 : false
+  const hasItalic =
+    typeof format === 'string' ? format.includes('italic') : typeof format === 'number' ? (format & 2) !== 0 : false
+
+  if (hasBold) content = <strong>{content}</strong>
+  if (hasItalic) content = <em>{content}</em>
 
   return content
 }
