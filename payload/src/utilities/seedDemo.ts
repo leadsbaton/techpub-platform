@@ -1,5 +1,9 @@
 import type { Payload } from 'payload'
 
+type SeededDoc = {
+  id: string
+}
+
 type SeedCategory = {
   name: string
   slug: string
@@ -18,6 +22,15 @@ type SeedTag = {
   name: string
   slug: string
   description: string
+}
+
+type SeedSubscriber = {
+  email: string
+  firstName: string
+  lastName: string
+  status: 'subscribed' | 'unsubscribed'
+  source: string
+  notes: string
 }
 
 const categories: SeedCategory[] = [
@@ -68,6 +81,25 @@ const tags: SeedTag[] = [
   { name: 'Cloud', slug: 'cloud', description: 'Cloud platforms, infrastructure, and modernization.' },
 ]
 
+const subscribers: SeedSubscriber[] = [
+  {
+    email: 'reader@leadsbaton-demo.com',
+    firstName: 'Demo',
+    lastName: 'Reader',
+    status: 'subscribed',
+    source: 'seed-demo',
+    notes: 'Starter subscriber record for UI and admin verification.',
+  },
+  {
+    email: 'marketing@leadsbaton-demo.com',
+    firstName: 'Marketing',
+    lastName: 'Lead',
+    status: 'subscribed',
+    source: 'seed-demo',
+    notes: 'Starter subscriber record for newsletter verification.',
+  },
+]
+
 function richTextFromParagraphs(paragraphs: string[]) {
   return {
     root: {
@@ -98,12 +130,45 @@ function richTextFromParagraphs(paragraphs: string[]) {
   }
 }
 
-async function upsertBySlug<T extends { id: string }>(
+function buildPrimaryCta(type: 'insight' | 'whitepaper' | 'webinar') {
+  if (type === 'whitepaper') {
+    return {
+      primary: {
+        label: 'Download Now',
+        type: 'custom',
+        url: '/whitepapers',
+        newTab: false,
+      },
+    }
+  }
+
+  if (type === 'webinar') {
+    return {
+      primary: {
+        label: 'Register Now',
+        type: 'custom',
+        url: '/webinars',
+        newTab: false,
+      },
+    }
+  }
+
+  return {
+    primary: {
+      label: 'Read More',
+      type: 'custom',
+      url: '/insights',
+      newTab: false,
+    },
+  }
+}
+
+async function upsertBySlug(
   payload: Payload,
   collection: 'categories' | 'authors' | 'tags' | 'posts' | 'pages',
   slug: string,
   data: Record<string, unknown>,
-): Promise<T> {
+): Promise<SeededDoc> {
   const existing = await payload.find({
     collection,
     where: { slug: { equals: slug } },
@@ -112,25 +177,73 @@ async function upsertBySlug<T extends { id: string }>(
   })
 
   if (existing.docs[0]) {
-    return payload.update({
+    const updated = await payload.update({
       collection,
       id: existing.docs[0].id,
       data,
+      draft: false,
       depth: 0,
-    }) as Promise<T>
+    })
+
+    return {
+      id: String(updated.id),
+    }
   }
 
-  return payload.create({
+  const created = await payload.create({
     collection,
     data,
+    draft: false,
     depth: 0,
-  }) as Promise<T>
+  })
+
+  return {
+    id: String(created.id),
+  }
+}
+
+async function upsertSubscriber(
+  payload: Payload,
+  email: string,
+  data: Record<string, unknown>,
+): Promise<SeededDoc> {
+  const existing = await payload.find({
+    collection: 'subscribers',
+    where: { email: { equals: email } },
+    limit: 1,
+    depth: 0,
+  })
+
+  if (existing.docs[0]) {
+    const updated = await payload.update({
+      collection: 'subscribers',
+      id: existing.docs[0].id,
+      data,
+      draft: false,
+      depth: 0,
+    })
+
+    return {
+      id: String(updated.id),
+    }
+  }
+
+  const created = await payload.create({
+    collection: 'subscribers',
+    data,
+    draft: false,
+    depth: 0,
+  })
+
+  return {
+    id: String(created.id),
+  }
 }
 
 export async function seedDemoContent(payload: Payload) {
   const seededCategories = await Promise.all(
     categories.map((category) =>
-      upsertBySlug<{ id: string }>(payload, 'categories', category.slug, {
+      upsertBySlug(payload, 'categories', category.slug, {
         ...category,
         featured: true,
         seo: {
@@ -143,7 +256,7 @@ export async function seedDemoContent(payload: Payload) {
 
   const seededAuthors = await Promise.all(
     authors.map((author) =>
-      upsertBySlug<{ id: string }>(payload, 'authors', author.slug, {
+      upsertBySlug(payload, 'authors', author.slug, {
         ...author,
         email: `${author.slug}@example.com`,
       }),
@@ -152,7 +265,7 @@ export async function seedDemoContent(payload: Payload) {
 
   const seededTags = await Promise.all(
     tags.map((tag) =>
-      upsertBySlug<{ id: string }>(payload, 'tags', tag.slug, {
+      upsertBySlug(payload, 'tags', tag.slug, {
         ...tag,
       }),
     ),
@@ -324,10 +437,11 @@ export async function seedDemoContent(payload: Payload) {
 
   const seededPosts = await Promise.all(
     demoPosts.map((post) =>
-      upsertBySlug<{ id: string }>(payload, 'posts', post.slug, {
+      upsertBySlug(payload, 'posts', post.slug, {
         ...post,
         status: 'published',
         categories: post.primaryCategory ? [post.primaryCategory] : [],
+        cta: buildPrimaryCta(post.type),
         seo: {
           metaTitle: `${post.title} | LeadsBaton`,
           metaDescription: post.excerpt,
@@ -373,10 +487,16 @@ export async function seedDemoContent(payload: Payload) {
 
   await Promise.all(
     pages.map((page) =>
-      upsertBySlug<{ id: string }>(payload, 'pages', page.slug, {
+      upsertBySlug(payload, 'pages', page.slug, {
         ...page,
         featuredPosts: seededPosts.slice(0, 3).map((post) => post.id),
       }),
+    ),
+  )
+
+  const seededSubscribers = await Promise.all(
+    subscribers.map((subscriber) =>
+      upsertSubscriber(payload, subscriber.email, subscriber),
     ),
   )
 
@@ -435,5 +555,6 @@ export async function seedDemoContent(payload: Payload) {
     tags: seededTags.length,
     posts: seededPosts.length,
     pages: pages.length,
+    subscribers: seededSubscribers.length,
   }
 }

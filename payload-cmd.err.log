@@ -1,0 +1,51 @@
+Error [ValidationError]: The following field is invalid: Cta > Primary CTA > Label
+    at async upsertBySlug (src\utilities\seedDemo.ts:160:18)
+    at async seedDemoContent (src\utilities\seedDemo.ts:405:22)
+    at async POST (src\app\api\seed-demo\route.ts:21:17)
+  158 |   }
+  159 |
+> 160 |   const created = await payload.create({
+      |                  ^
+  161 |     collection,
+  162 |     data,
+  163 |     draft: false, {
+  data: [Object],
+  isOperational: true,
+  isPublic: true,
+  status: 400,
+  [cause]: [Object]
+}
+Error [ValidationError]: The following field is invalid: Cta > Primary CTA > Label
+    at async upsertBySlug (src\utilities\seedDemo.ts:160:18)
+    at async seedDemoContent (src\utilities\seedDemo.ts:405:22)
+    at async POST (src\app\api\seed-demo\route.ts:21:17)
+  158 |   }
+  159 |
+> 160 |   const created = await payload.create({
+      |                  ^
+  161 |     collection,
+  162 |     data,
+  163 |     draft: false, {
+  data: [Object],
+  isOperational: true,
+  isPublic: true,
+  status: 400,
+  [cause]: [Object]
+}
+Error [ValidationError]: The following fields are invalid: Hero > Primary Action > Label, Hero > Secondary Action > Label
+    at async upsertBySlug (src\utilities\seedDemo.ts:193:18)
+    at async seedDemoContent (src\utilities\seedDemo.ts:488:2)
+    at async POST (src\app\api\seed-demo\route.ts:21:17)
+  191 |   }
+  192 |
+> 193 |   const created = await payload.create({
+      |                  ^
+  194 |     collection,
+  195 |     data,
+  196 |     draft: false, {
+  data: [Object],
+  isOperational: true,
+  isPublic: true,
+  status: 400,
+  [cause]: [Object]
+}

@@ -2,32 +2,32 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { getSiteSettings } from '@/lib/api/cms'
+import type { SiteSettings } from '@/lib/types/cms'
 import { resolveLinkHref } from '@/lib/utils/formatting'
+
+const fallbackSections: NonNullable<SiteSettings['footerSections']> = [
+  {
+    title: 'Learn more',
+    links: [
+      { item: { label: 'Insights', type: 'custom', url: '/insights', newTab: false } },
+      { item: { label: 'White Papers', type: 'custom', url: '/whitepapers', newTab: false } },
+      { item: { label: 'Webinars', type: 'custom', url: '/webinars', newTab: false } },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { item: { label: 'Contact', type: 'custom', url: '/contact', newTab: false } },
+      { item: { label: 'Support', type: 'custom', url: '/support', newTab: false } },
+      { item: { label: 'Legal', type: 'custom', url: '/legal', newTab: false } },
+    ],
+  },
+]
 
 const Footer = async () => {
   const settings = await getSiteSettings()
   const socialLinks = settings?.socialLinks ?? []
-  const sections =
-    settings?.footerSections?.length
-      ? settings.footerSections
-      : [
-          {
-            title: 'Learn more',
-            links: [
-              { item: { label: 'Insights', type: 'custom', url: '/insights' } },
-              { item: { label: 'White Papers', type: 'custom', url: '/whitepapers' } },
-              { item: { label: 'Webinars', type: 'custom', url: '/webinars' } },
-            ],
-          },
-          {
-            title: 'Support',
-            links: [
-              { item: { label: 'Contact', type: 'custom', url: '/contact' } },
-              { item: { label: 'Support', type: 'custom', url: '/support' } },
-              { item: { label: 'Legal', type: 'custom', url: '/legal' } },
-            ],
-          },
-        ]
+  const sections = settings?.footerSections?.length ? settings.footerSections : fallbackSections
 
   return (
     <footer className="mt-20 border-t border-[var(--border-subtle)] bg-[var(--surface)]">
