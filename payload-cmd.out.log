@@ -774,3 +774,11 @@ No new imports found, skipping writing import map
  GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 1478ms
  GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 1770ms
  GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 315ms
+ GET /api/globals/site-settings 200 in 797ms
+ GET /api/categories?limit=6&depth=1&sort=name 200 in 1105ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=9&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 1330ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=1&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22featured%22%3A%7B%22equals%22%3Atrue%7D%7D 200 in 220ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=7&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22insight%22%7D%7D 200 in 253ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=4&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22webinar%22%7D%7D 200 in 258ms
+ GET /api/posts?depth=2&sort=-publishedAt&limit=6&page=1&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22type%22%3A%7B%22equals%22%3A%22whitepaper%22%7D%7D 200 in 576ms
+ GET /api/pages?limit=1&depth=2&where=%7B%22status%22%3A%7B%22equals%22%3A%22published%22%7D%2C%22slug%22%3A%7B%22equals%22%3A%22contact%22%7D%7D 200 in 285ms
