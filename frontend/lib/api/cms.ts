@@ -38,6 +38,7 @@ function buildQuery(params: Record<string, unknown>) {
 
 async function fetchPayload<T>(endpoint: string, revalidate = 60): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
+    cache: 'no-store',
     next: { revalidate },
     headers: {
       Accept: 'application/json',
@@ -49,6 +50,20 @@ async function fetchPayload<T>(endpoint: string, revalidate = 60): Promise<T> {
   }
 
   return response.json()
+}
+
+function emptyListResponse<T>(limit = 0, page = 1): PayloadListResponse<T> {
+  return {
+    docs: [],
+    totalDocs: 0,
+    limit,
+    totalPages: 1,
+    page,
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevPage: null,
+    nextPage: null,
+  }
 }
 
 function publishedWhere() {
@@ -91,7 +106,11 @@ export async function getPosts(
     where,
   })
 
-  return fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+  try {
+    return await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+  } catch {
+    return emptyListResponse<Post>(filters.limit ?? 9, filters.page ?? 1)
+  }
 }
 
 export async function getPostBySlug(
@@ -106,56 +125,84 @@ export async function getPostBySlug(
   if (type) where.type = { equals: type }
 
   const query = buildQuery({ depth: 2, limit: 1, where })
-  const data = await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
-  return data.docs[0] ?? null
+  try {
+    const data = await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getCategories(limit = 12): Promise<Category[]> {
   const query = buildQuery({ limit, depth: 1, sort: 'name' })
-  const data = await fetchPayload<PayloadListResponse<Category>>(
-    `/api/categories?${query}`,
-    300,
-  )
-  return data.docs
+  try {
+    const data = await fetchPayload<PayloadListResponse<Category>>(
+      `/api/categories?${query}`,
+      300,
+    )
+    return data.docs
+  } catch {
+    return []
+  }
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
   const query = buildQuery({ limit: 1, depth: 1, where: { slug: { equals: slug } } })
-  const data = await fetchPayload<PayloadListResponse<Category>>(
-    `/api/categories?${query}`,
-    300,
-  )
-  return data.docs[0] ?? null
+  try {
+    const data = await fetchPayload<PayloadListResponse<Category>>(
+      `/api/categories?${query}`,
+      300,
+    )
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getTags(limit = 30): Promise<Tag[]> {
   const query = buildQuery({ limit, depth: 1, sort: 'name' })
-  const data = await fetchPayload<PayloadListResponse<Tag>>(`/api/tags?${query}`, 300)
-  return data.docs
+  try {
+    const data = await fetchPayload<PayloadListResponse<Tag>>(`/api/tags?${query}`, 300)
+    return data.docs
+  } catch {
+    return []
+  }
 }
 
 export async function getTagBySlug(slug: string): Promise<Tag | null> {
   const query = buildQuery({ limit: 1, depth: 1, where: { slug: { equals: slug } } })
-  const data = await fetchPayload<PayloadListResponse<Tag>>(`/api/tags?${query}`, 300)
-  return data.docs[0] ?? null
+  try {
+    const data = await fetchPayload<PayloadListResponse<Tag>>(`/api/tags?${query}`, 300)
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getAuthors(limit = 24): Promise<Author[]> {
   const query = buildQuery({ limit, depth: 1, sort: 'name' })
-  const data = await fetchPayload<PayloadListResponse<Author>>(
-    `/api/authors?${query}`,
-    300,
-  )
-  return data.docs
+  try {
+    const data = await fetchPayload<PayloadListResponse<Author>>(
+      `/api/authors?${query}`,
+      300,
+    )
+    return data.docs
+  } catch {
+    return []
+  }
 }
 
 export async function getAuthorBySlug(slug: string): Promise<Author | null> {
   const query = buildQuery({ limit: 1, depth: 1, where: { slug: { equals: slug } } })
-  const data = await fetchPayload<PayloadListResponse<Author>>(
-    `/api/authors?${query}`,
-    300,
-  )
-  return data.docs[0] ?? null
+  try {
+    const data = await fetchPayload<PayloadListResponse<Author>>(
+      `/api/authors?${query}`,
+      300,
+    )
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
@@ -167,8 +214,12 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
       slug: { equals: slug },
     },
   })
-  const data = await fetchPayload<PayloadListResponse<PageDoc>>(`/api/pages?${query}`, 300)
-  return data.docs[0] ?? null
+  try {
+    const data = await fetchPayload<PayloadListResponse<PageDoc>>(`/api/pages?${query}`, 300)
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getHomePageData() {

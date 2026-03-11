@@ -13,7 +13,7 @@ import {
   getImageUrl,
 } from '@/lib/utils/formatting'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function InsightDetailPage({
   params,

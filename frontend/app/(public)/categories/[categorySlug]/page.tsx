@@ -4,7 +4,7 @@ import { Pagination } from '../../_components/Pagination'
 import { PostCard } from '../../_components/PostCard'
 import { getCategoryBySlug, getPosts } from '@/lib/api/cms'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function CategoryPage({
   params,

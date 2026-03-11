@@ -7,7 +7,7 @@ import { HomeSectionHeader } from './_components/HomeSectionHeader'
 import { RankedSidebar } from './_components/RankedSidebar'
 import { getHomePageData } from '@/lib/api/cms'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Home',
