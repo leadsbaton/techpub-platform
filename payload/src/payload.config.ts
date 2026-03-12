@@ -18,6 +18,9 @@ import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'
+const payloadURL = process.env.PAYLOAD_PUBLIC_URL || `http://localhost:${process.env.PORT || '5000'}`
+const allowedOrigins = Array.from(new Set([frontendURL, payloadURL]))
 
 export default buildConfig({
   admin: {
@@ -41,6 +44,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   collections: [
     Users,
     Media,

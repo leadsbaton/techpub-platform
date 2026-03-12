@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 export function BrandLogo() {
@@ -9,25 +10,15 @@ export function BrandLogo() {
         gap: '0.75rem',
       }}
     >
-      <div
-        style={{
-          alignItems: 'center',
-          background: 'linear-gradient(135deg, #0f172a, #2563eb)',
-          borderRadius: '0.9rem',
-          color: '#fff',
-          display: 'inline-flex',
-          fontSize: '1rem',
-          fontWeight: 700,
-          height: '2.5rem',
-          justifyContent: 'center',
-          letterSpacing: '0.08em',
-          width: '2.5rem',
-        }}
-      >
-        TP
-      </div>
+      <Image
+        alt="LeadsBaton"
+        src="/leads-baton-logo.png"
+        width={48}
+        height={48}
+        style={{ display: 'block', height: '3rem', objectFit: 'contain', width: '3rem' }}
+      />
       <div style={{ lineHeight: 1.1 }}>
-        <div style={{ color: '#0f172a', fontSize: '1rem', fontWeight: 700 }}>TechPub CMS</div>
+        <div style={{ color: '#0f172a', fontSize: '1rem', fontWeight: 700 }}>LeadsBaton CMS</div>
         <div style={{ color: '#475569', fontSize: '0.8rem' }}>Editorial control panel</div>
       </div>
     </div>

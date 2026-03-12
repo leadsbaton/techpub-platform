@@ -303,6 +303,9 @@ export interface Post {
    * Estimated reading time in minutes.
    */
   readingTime?: number | null;
+  /**
+   * Required for published content. Defaults to now when you publish.
+   */
   publishedAt?: string | null;
   videoUrl?: string | null;
   /**
@@ -340,6 +343,8 @@ export interface Post {
     [k: string]: unknown;
   };
   relatedPosts?: (string | Post)[] | null;
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -719,6 +724,8 @@ export interface PostsSelect<T extends boolean = true> {
       };
   content?: T;
   relatedPosts?: T;
+  createdBy?: T;
+  updatedBy?: T;
   seo?:
     | T
     | {

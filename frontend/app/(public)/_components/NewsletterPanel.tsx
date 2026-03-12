@@ -1,4 +1,5 @@
 import type { SiteSettings } from '@/lib/types/cms'
+import { NewsletterForm } from './NewsletterForm'
 
 export function NewsletterPanel({ settings }: { settings: SiteSettings | null }) {
   if (!settings?.newsletter?.enabled) return null
@@ -15,12 +16,7 @@ export function NewsletterPanel({ settings }: { settings: SiteSettings | null })
             <p className="max-w-2xl text-slate-300">{settings.newsletter.description}</p>
           ) : null}
         </div>
-        <form className="flex w-full max-w-xl flex-col gap-3 md:flex-row">
-          <input type="email" placeholder="Work email" className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-slate-400" />
-          <button type="submit" className="rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950">
-            {settings.newsletter.submitLabel || 'Subscribe'}
-          </button>
-        </form>
+        <NewsletterForm submitLabel={settings.newsletter.submitLabel || 'Subscribe'} />
       </div>
     </section>
   )
