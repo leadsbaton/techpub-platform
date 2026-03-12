@@ -38,8 +38,9 @@ function buildQuery(params: Record<string, unknown>) {
 
 async function fetchPayload<T>(endpoint: string, revalidate = 60): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
-    cache: 'no-store',
-    next: { revalidate },
+    ...(revalidate > 0
+      ? { next: { revalidate } }
+      : { cache: 'no-store' as const }),
     headers: {
       Accept: 'application/json',
     },
