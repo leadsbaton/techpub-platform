@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import type { Payload } from 'payload'
 
 import type {
@@ -20,7 +22,7 @@ type SeedSubscriberData = Pick<Subscriber, 'email' | 'status'> & Partial<Subscri
 
 type StoredPostData = Omit<Post, 'id' | 'updatedAt' | 'createdAt' | 'deletedAt' | 'sizes'>
 
-type DemoSeedPost = Omit<SeedPostData, 'cta' | 'status'>
+type DemoSeedPost = Omit<SeedPostData, 'cta'>
 
 type SeedPostData = {
   title: string
@@ -33,6 +35,7 @@ type SeedPostData = {
   primaryCategory: string
   authors: string[]
   contentType?: string
+  featuredImage: string
   featured?: boolean
   pinned?: boolean
   readingTime?: number
@@ -40,6 +43,8 @@ type SeedPostData = {
   tags?: string[]
   externalUrl?: string
   videoUrl?: string
+  gallery?: StoredPostData['gallery']
+  relatedPosts?: string[]
   seo?: Post['seo']
 }
 type SeedCollectionData = {
@@ -114,6 +119,14 @@ type SeedSubscriber = {
   notes: string
 }
 
+type SeedMediaAsset = {
+  key: string
+  alt: string
+  caption: string
+  credit: string
+  filePath: string
+}
+
 const categories: SeedCategory[] = [
   {
     name: 'Technology',
@@ -160,6 +173,30 @@ const tags: SeedTag[] = [
   { name: 'AI', slug: 'ai', description: 'Artificial intelligence, models, and enterprise adoption.' },
   { name: 'Analytics', slug: 'analytics', description: 'Measurement, dashboards, BI, and reporting.' },
   { name: 'Cloud', slug: 'cloud', description: 'Cloud platforms, infrastructure, and modernization.' },
+]
+
+const mediaAssets: SeedMediaAsset[] = [
+  {
+    key: 'dashboard-wide',
+    alt: 'Wide newsroom dashboard preview',
+    caption: 'Wide editorial interface preview used in hero layouts.',
+    credit: 'LeadsBaton Studio',
+    filePath: path.resolve(process.cwd(), '../media/Screenshot_20260103_221259 - Copy-1440x900.jpg'),
+  },
+  {
+    key: 'dashboard-card',
+    alt: 'Editorial card layout preview',
+    caption: 'Card-sized editorial image used for listing views.',
+    credit: 'LeadsBaton Studio',
+    filePath: path.resolve(process.cwd(), '../media/Screenshot_20260103_221259 - Copy-720x480.jpg'),
+  },
+  {
+    key: 'dashboard-source',
+    alt: 'Source dashboard screenshot',
+    caption: 'Original dashboard image for supporting galleries.',
+    credit: 'LeadsBaton Studio',
+    filePath: path.resolve(process.cwd(), '../media/Screenshot_20260103_221259 - Copy.jpg'),
+  },
 ]
 
 const subscribers: SeedSubscriber[] = [
@@ -413,6 +450,58 @@ async function upsertBySlug<K extends SeedCollection>(
   throw new Error(`Unsupported collection: ${String(collection)}`)
 }
 
+async function upsertMediaByFilePath(
+  payload: Payload,
+  asset: SeedMediaAsset,
+): Promise<SeededDoc> {
+  const filename = path.basename(asset.filePath)
+
+  if (!fs.existsSync(asset.filePath)) {
+    throw new Error(`Missing media seed file: ${asset.filePath}`)
+  }
+
+  const existing = await payload.find({
+    collection: 'media',
+    where: {
+      filename: {
+        equals: filename,
+      },
+    },
+    limit: 1,
+    depth: 0,
+  })
+
+  if (existing.docs[0]) {
+    const updated = await payload.update({
+      collection: 'media',
+      id: existing.docs[0].id,
+      data: {
+        alt: asset.alt,
+        caption: asset.caption,
+        credit: asset.credit,
+      },
+      depth: 0,
+      draft: false,
+    })
+
+    return { id: String(updated.id) }
+  }
+
+  const created = await payload.create({
+    collection: 'media',
+    data: {
+      alt: asset.alt,
+      caption: asset.caption,
+      credit: asset.credit,
+    },
+    filePath: asset.filePath,
+    depth: 0,
+    draft: false,
+  })
+
+  return { id: String(created.id) }
+}
+
 async function upsertSubscriber(
   payload: Payload,
   email: string,
@@ -449,6 +538,31 @@ async function upsertSubscriber(
   return {
     id: String(created.id),
   }
+}
+
+async function deletePostsBySlugs(payload: Payload, slugs: string[]) {
+  if (!slugs.length) return
+
+  const existing = await payload.find({
+    collection: 'posts',
+    where: {
+      slug: {
+        in: slugs,
+      },
+    },
+    limit: slugs.length,
+    depth: 0,
+  })
+
+  await Promise.all(
+    existing.docs.map((doc) =>
+      payload.delete({
+        collection: 'posts',
+        id: doc.id,
+        depth: 0,
+      }),
+    ),
+  )
 }
 
 async function deletePagesBySlugs(payload: Payload, slugs: string[]) {
@@ -525,160 +639,204 @@ export async function seedDemoContent(payload: Payload) {
     oracle: ensureSeededId('author:oracle', seededAuthors[1]?.id),
     autodesk: ensureSeededId('author:autodesk', seededAuthors[2]?.id),
   }
-  const tagIds = seededTags.map((tag) => tag.id)
+  const tagIdBySlug = Object.fromEntries(tags.map((tag, index) => [tag.slug, seededTags[index]?.id]).filter((entry) => Boolean(entry[1]))) as Record<string, string>
+  const pickTags = (...slugs: string[]) => slugs.map((slug) => ensureSeededId(`tag:${slug}`, tagIdBySlug[slug]))
+
+  const seededMedia = await Promise.all(mediaAssets.map((asset) => upsertMediaByFilePath(payload, asset)))
+  const mediaIdByKey = Object.fromEntries(
+    mediaAssets.map((asset, index) => [asset.key, seededMedia[index]?.id]).filter((entry) => Boolean(entry[1])),
+  ) as Record<string, string>
+  const mediaId = (key: string) => ensureSeededId(`media:${key}`, mediaIdByKey[key])
+
+  const oldDemoPostSlugs = [
+    'devices-big-and-small-can-learn',
+    'what-is-causing-ai-hallucinations-with-analytics',
+    'cloud-for-transforming-bottlenecks-into-breakthroughs',
+    'factory-layout-designers-upgrade-guide',
+    'smarter-hvac-application-guide',
+    'navigating-global-trade-insights',
+    'bridging-the-gap-ai-existing-systems',
+    'data-architecture-for-2026',
+    'trustworthy-ai-models-webinar',
+    'ai-governance-playbook-2026',
+    'modern-finance-stack-observability',
+    'marketing-ops-pipeline-quality-benchmarks',
+    'executive-ai-budgeting-checklist',
+    'customer-data-platform-buyers-guide',
+    'revenue-attribution-in-privacy-first-growth',
+    'workflow-automation-roundtable',
+    'data-contracts-live-webinar',
+    'brand-measurement-qa-session',
+  ]
+
+  await deletePostsBySlugs(payload, oldDemoPostSlugs)
 
   const demoPosts: DemoSeedPost[] = [
     {
-      slug: 'devices-big-and-small-can-learn',
-      title: 'Devices Big and Small Can Learn What We Need Them to Learn',
+      slug: 'ai-governance-playbook-2026',
+      title: 'AI Governance Playbook for 2026',
       type: 'insight',
-      excerpt: 'How organizations are using connected systems, analytics, and governance to create more adaptive digital experiences.',
+      status: 'published',
+      excerpt: 'A field-tested governance model for teams shipping AI features without losing reviewability, compliance, or speed.',
       primaryCategory: categoryId('technology'),
-      authors: [authorIds.editorial],
+      authors: [authorIds.editorial, authorIds.oracle],
+      featuredImage: mediaId('dashboard-wide'),
       featured: true,
-      readingTime: 6,
-      publishedAt: '2025-12-24T08:00:00.000Z',
-      tags: tagIds,
-      content: richTextFromParagraphs([
-        'Organizations are redesigning workflows around connected devices, data feedback loops, and AI-assisted decision-making.',
-        'The biggest gains come from pairing modern tooling with clear governance, operational alignment, and measurable business outcomes.',
-      ]),
-    },
-    {
-      slug: 'what-is-causing-ai-hallucinations-with-analytics',
-      title: 'What Is Causing AI Hallucinations With Analytics?',
-      type: 'insight',
-      excerpt: 'A practical look at why analytical systems drift from reality and how live enterprise data changes the outcome.',
-      primaryCategory: categoryId('finance'),
-      authors: [authorIds.oracle],
-      featured: false,
-      readingTime: 7,
-      publishedAt: '2025-09-30T08:00:00.000Z',
-      tags: tagIds,
-      content: richTextFromParagraphs([
-        'AI hallucinations in analytics occur when models generate confident but fabricated answers because they lack access to trusted live data.',
-        'Teams reduce risk by grounding prompts in governed systems, auditable sources, and workflow-aware business rules.',
-      ]),
-    },
-    {
-      slug: 'cloud-for-transforming-bottlenecks-into-breakthroughs',
-      title: 'Cloud For Transforming Bottlenecks Into Breakthroughs',
-      type: 'insight',
-      excerpt: 'Why cloud-first modernization is helping teams move faster across analytics, data operations, and customer delivery.',
-      primaryCategory: categoryId('marketing'),
-      authors: [authorIds.editorial],
-      featured: false,
-      readingTime: 5,
-      publishedAt: '2025-11-24T08:00:00.000Z',
-      tags: tagIds,
-      content: richTextFromParagraphs([
-        'Cloud operating models help reduce bottlenecks in cross-functional teams by making infrastructure, data, and reporting easier to share.',
-        'The result is better iteration speed, clearer measurement, and stronger coordination between product, sales, and marketing teams.',
-      ]),
-    },
-    {
-      slug: 'factory-layout-designers-upgrade-guide',
-      title: 'Top Reasons Factory Layout Designers Upgrade From AutoCAD To The Product Design & Manufacturing Collection',
-      type: 'whitepaper',
-      excerpt: 'A practical resource for industrial teams modernizing workflows, design collaboration, and manufacturing planning.',
-      primaryCategory: categoryId('technology'),
-      authors: [authorIds.autodesk],
-      featured: false,
-      readingTime: 8,
-      publishedAt: '2025-09-30T08:00:00.000Z',
-      tags: tagIds,
-      externalUrl: '/whitepapers/factory-layout-designers-upgrade-guide',
-      content: richTextFromParagraphs([
-        'Manufacturing teams are consolidating toolchains to shorten review cycles, reduce rework, and improve handoff quality.',
-        'This guide outlines where unified collections improve layout design, design collaboration, and production readiness.',
-      ]),
-    },
-    {
-      slug: 'smarter-hvac-application-guide',
-      title: 'Get The Application Guide: Controls And Communication In Commercial Buildings',
-      type: 'whitepaper',
-      excerpt: 'A white paper on control systems, communications, and smarter building operations.',
-      primaryCategory: categoryId('finance'),
-      authors: [authorIds.oracle],
-      featured: false,
-      readingTime: 8,
-      publishedAt: '2025-09-30T08:00:00.000Z',
-      tags: tagIds,
-      externalUrl: '/whitepapers/smarter-hvac-application-guide',
-      content: richTextFromParagraphs([
-        'Modern building operations depend on visibility across devices, controls, and communication layers.',
-        'This guide explains the operating model behind resilient commercial building infrastructure and better decision-making.',
-      ]),
-    },
-    {
-      slug: 'navigating-global-trade-insights',
-      title: 'Navigating Global Trade: 3 Insights For Leaders',
-      type: 'whitepaper',
-      excerpt: 'A resource for operations, finance, and HR leaders navigating fast-changing trade and supply chain pressures.',
-      primaryCategory: categoryId('marketing'),
-      authors: [authorIds.oracle],
-      featured: false,
+      pinned: true,
       readingTime: 9,
-      publishedAt: '2025-09-30T08:00:00.000Z',
-      tags: tagIds,
-      externalUrl: '/whitepapers/navigating-global-trade-insights',
+      publishedAt: '2026-01-15T08:00:00.000Z',
+      tags: pickTags('ai', 'analytics', 'cloud'),
+      gallery: [
+        { image: mediaId('dashboard-card'), caption: 'Editorial listing layout preview' },
+        { image: mediaId('dashboard-source'), caption: 'Source dashboard capture' },
+      ],
       content: richTextFromParagraphs([
-        'Leaders are being forced to rethink planning models as regulation, logistics, and customer expectations continue to shift.',
-        'This report highlights three strategic lenses to help teams adapt with greater operational confidence.',
+        'Governance becomes practical when product, legal, analytics, and platform teams agree on approval boundaries before launch.',
+        'The strongest operating models pair workflow checkpoints with observable datasets, model review notes, and rollback plans.',
       ]),
     },
     {
-      slug: 'bridging-the-gap-ai-existing-systems',
-      title: 'Bridging the Gap: Integrating AI into Existing Systems and Workflows',
-      type: 'webinar',
-      excerpt: 'A webinar on integrating AI into legacy systems, workflow design, and organizational adoption.',
-      primaryCategory: categoryId('technology'),
-      authors: [authorIds.editorial],
-      featured: false,
-      readingTime: 4,
-      publishedAt: '2025-12-10T08:00:00.000Z',
-      videoUrl: 'https://example.com/webinars/bridging-the-gap',
-      externalUrl: '/webinars/bridging-the-gap-ai-existing-systems',
-      tags: tagIds,
-      content: richTextFromParagraphs([
-        'This session explores where AI creates practical value in existing systems, and where adoption typically fails.',
-        'Topics include governance, workflow design, trust, and how to align AI initiatives with operational teams.',
-      ]),
-    },
-    {
-      slug: 'data-architecture-for-2026',
-      title: "What's Ahead in Data Architecture for 2026",
-      type: 'webinar',
-      excerpt: 'Upcoming webinar covering data architecture priorities, platform choices, and scale readiness.',
-      primaryCategory: categoryId('technology'),
+      slug: 'modern-finance-stack-observability',
+      title: 'Modern Finance Stack Observability',
+      type: 'insight',
+      status: 'published',
+      excerpt: 'Finance leaders are moving past spreadsheet-only reporting toward governed operating views that catch cost anomalies early.',
+      primaryCategory: categoryId('finance'),
       authors: [authorIds.oracle],
-      featured: false,
-      readingTime: 4,
-      publishedAt: '2025-12-04T08:00:00.000Z',
-      videoUrl: 'https://example.com/webinars/data-architecture-2026',
-      externalUrl: '/webinars/data-architecture-for-2026',
-      tags: tagIds,
+      featuredImage: mediaId('dashboard-card'),
+      readingTime: 7,
+      publishedAt: '2026-01-08T08:00:00.000Z',
+      tags: pickTags('analytics', 'cloud'),
       content: richTextFromParagraphs([
-        'Teams planning for 2026 are balancing modernization with cost control, compliance, and delivery speed.',
-        'This webinar outlines the architectures and operating patterns leaders should evaluate next.',
+        'Observability in finance is not only about dashboards. It is about trustworthy definitions, reconciled systems, and fast exception handling.',
+        'Teams with clear ownership around metric pipelines can close faster and make forecast conversations more reliable.',
       ]),
     },
     {
-      slug: 'trustworthy-ai-models-webinar',
-      title: 'Explainability and Interpretability: Building Trustworthy AI Models',
-      type: 'webinar',
-      excerpt: 'A webinar focused on explainability, trust, and operational accountability in AI systems.',
+      slug: 'marketing-ops-pipeline-quality-benchmarks',
+      title: 'Marketing Ops Pipeline Quality Benchmarks',
+      type: 'insight',
+      status: 'draft',
+      excerpt: 'An in-progress benchmark piece comparing campaign pipeline quality, routing speed, and content conversion integrity.',
       primaryCategory: categoryId('marketing'),
       authors: [authorIds.editorial],
-      featured: false,
-      readingTime: 4,
-      publishedAt: '2025-07-09T08:00:00.000Z',
-      videoUrl: 'https://example.com/webinars/trustworthy-ai-models',
-      externalUrl: '/webinars/trustworthy-ai-models-webinar',
-      tags: tagIds,
+      featuredImage: mediaId('dashboard-source'),
+      readingTime: 6,
+      tags: pickTags('analytics'),
       content: richTextFromParagraphs([
-        'Trust in AI systems depends on transparency, explainability, and operational safeguards that make outputs reviewable.',
-        'This session covers the organizational and technical patterns behind responsible deployment.',
+        'Pipeline quality is shaped by lead capture design, scoring logic, taxonomy discipline, and human review loops.',
+        'This draft article is meant to validate the hidden-from-public workflow in Payload and the frontend published-only queries.',
+      ]),
+    },
+    {
+      slug: 'executive-ai-budgeting-checklist',
+      title: 'Executive AI Budgeting Checklist',
+      type: 'whitepaper',
+      status: 'published',
+      excerpt: 'A downloadable planning guide for CIOs and finance teams evaluating AI infrastructure, staffing, and governance costs.',
+      primaryCategory: categoryId('finance'),
+      authors: [authorIds.oracle, authorIds.editorial],
+      featuredImage: mediaId('dashboard-wide'),
+      featured: true,
+      readingTime: 10,
+      publishedAt: '2026-02-02T08:00:00.000Z',
+      tags: pickTags('ai', 'cloud'),
+      externalUrl: 'https://example.com/downloads/executive-ai-budgeting-checklist',
+      content: richTextFromParagraphs([
+        'Budgeting for AI programs requires a model that covers platform operations, training data quality, change management, and regulatory review.',
+        'This resource gives executive teams a structured approach to funding staged adoption instead of one-time experimentation.',
+      ]),
+    },
+    {
+      slug: 'customer-data-platform-buyers-guide',
+      title: "Customer Data Platform Buyer's Guide",
+      type: 'whitepaper',
+      status: 'draft',
+      excerpt: 'Draft buying framework for teams evaluating CDP fit, activation complexity, and integration overhead.',
+      primaryCategory: categoryId('marketing'),
+      authors: [authorIds.editorial],
+      featuredImage: mediaId('dashboard-card'),
+      readingTime: 8,
+      tags: pickTags('cloud', 'analytics'),
+      externalUrl: 'https://example.com/downloads/customer-data-platform-buyers-guide',
+      content: richTextFromParagraphs([
+        'Buying guides should clarify the operating tradeoffs between identity resolution, activation latency, privacy controls, and connector depth.',
+        'This draft white paper exists to validate draft filtering, preview, and category assignment in the CMS.',
+      ]),
+    },
+    {
+      slug: 'revenue-attribution-in-privacy-first-growth',
+      title: 'Revenue Attribution in Privacy-First Growth',
+      type: 'whitepaper',
+      status: 'archived',
+      excerpt: 'An older attribution guide retained in CMS history but removed from public discovery after strategy changes.',
+      primaryCategory: categoryId('technology'),
+      authors: [authorIds.oracle],
+      featuredImage: mediaId('dashboard-source'),
+      readingTime: 11,
+      publishedAt: '2025-08-14T08:00:00.000Z',
+      tags: pickTags('analytics', 'ai'),
+      externalUrl: 'https://example.com/downloads/revenue-attribution-in-privacy-first-growth',
+      content: richTextFromParagraphs([
+        'Archived resources still matter in the CMS because they preserve editorial history, but they should not continue appearing in live category feeds.',
+        'This document is intentionally archived to verify that the frontend only surfaces published entries.',
+      ]),
+    },
+    {
+      slug: 'workflow-automation-roundtable',
+      title: 'Workflow Automation Roundtable',
+      type: 'webinar',
+      status: 'published',
+      excerpt: 'A recorded roundtable on workflow automation, approval routing, and cross-team operational visibility.',
+      primaryCategory: categoryId('technology'),
+      authors: [authorIds.editorial, authorIds.autodesk],
+      featuredImage: mediaId('dashboard-wide'),
+      featured: true,
+      readingTime: 5,
+      publishedAt: '2026-02-10T14:00:00.000Z',
+      tags: pickTags('ai', 'cloud'),
+      videoUrl: 'https://example.com/webinars/workflow-automation-roundtable',
+      externalUrl: 'https://example.com/register/workflow-automation-roundtable',
+      content: richTextFromParagraphs([
+        'Roundtable sessions are useful for surfacing how workflow automation changes approval paths, reporting expectations, and ownership models.',
+        'This published webinar should appear across the homepage and webinar listings after reseeding.',
+      ]),
+    },
+    {
+      slug: 'data-contracts-live-webinar',
+      title: 'Data Contracts Live Webinar',
+      type: 'webinar',
+      status: 'draft',
+      excerpt: 'A draft webinar landing page for a live session about contracts, schema ownership, and analytics reliability.',
+      primaryCategory: categoryId('finance'),
+      authors: [authorIds.oracle],
+      featuredImage: mediaId('dashboard-card'),
+      readingTime: 4,
+      tags: pickTags('analytics', 'cloud'),
+      videoUrl: 'https://example.com/webinars/data-contracts-live',
+      externalUrl: 'https://example.com/register/data-contracts-live-webinar',
+      content: richTextFromParagraphs([
+        'Data contract programs reduce surprise breakage by documenting expectations between producing and consuming teams.',
+        'This draft webinar page is useful for validating pre-publish review in the CMS.',
+      ]),
+    },
+    {
+      slug: 'brand-measurement-qa-session',
+      title: 'Brand Measurement Q&A Session',
+      type: 'webinar',
+      status: 'archived',
+      excerpt: 'Archived follow-up session covering brand lift, pipeline measurement, and campaign reporting alignment.',
+      primaryCategory: categoryId('marketing'),
+      authors: [authorIds.editorial],
+      featuredImage: mediaId('dashboard-source'),
+      readingTime: 4,
+      publishedAt: '2025-06-19T10:30:00.000Z',
+      tags: pickTags('analytics'),
+      videoUrl: 'https://example.com/webinars/brand-measurement-qa-session',
+      externalUrl: 'https://example.com/register/brand-measurement-qa-session',
+      content: richTextFromParagraphs([
+        'Archived webinar entries help test long-term CMS retention without cluttering the public site or current campaign navigation.',
+        'This one remains in the admin but should stay out of public webinar queries because its status is archived.',
       ]),
     },
   ]
@@ -688,7 +846,6 @@ export async function seedDemoContent(payload: Payload) {
       const postData = {
         ...post,
         contentType: contentTypeId(post.type),
-        status: 'published',
         cta: buildPrimaryCta(post.type),
         seo: {
           metaTitle: `${post.title} | LeadsBaton`,
@@ -699,6 +856,47 @@ export async function seedDemoContent(payload: Payload) {
       return upsertBySlug(payload, 'posts', post.slug, postData)
     }),
   )
+
+  const seededPostIdBySlug = Object.fromEntries(
+    demoPosts.map((post, index) => [post.slug, seededPosts[index]?.id]).filter((entry) => Boolean(entry[1])),
+  ) as Record<string, string>
+
+  await Promise.all([
+    payload.update({
+      collection: 'posts',
+      id: ensureSeededId('post:ai-governance-playbook-2026', seededPostIdBySlug['ai-governance-playbook-2026']),
+      data: {
+        relatedPosts: [
+          ensureSeededId('post:modern-finance-stack-observability', seededPostIdBySlug['modern-finance-stack-observability']),
+          ensureSeededId('post:workflow-automation-roundtable', seededPostIdBySlug['workflow-automation-roundtable']),
+        ],
+      },
+      depth: 0,
+      draft: false,
+    }),
+    payload.update({
+      collection: 'posts',
+      id: ensureSeededId('post:executive-ai-budgeting-checklist', seededPostIdBySlug['executive-ai-budgeting-checklist']),
+      data: {
+        relatedPosts: [
+          ensureSeededId('post:modern-finance-stack-observability', seededPostIdBySlug['modern-finance-stack-observability']),
+        ],
+      },
+      depth: 0,
+      draft: false,
+    }),
+    payload.update({
+      collection: 'posts',
+      id: ensureSeededId('post:workflow-automation-roundtable', seededPostIdBySlug['workflow-automation-roundtable']),
+      data: {
+        relatedPosts: [
+          ensureSeededId('post:data-contracts-live-webinar', seededPostIdBySlug['data-contracts-live-webinar']),
+        ],
+      },
+      depth: 0,
+      draft: false,
+    }),
+  ])
 
   const pages = [
     {
