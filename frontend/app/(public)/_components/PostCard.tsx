@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
+import { getPostHref } from '@/lib/utils/contentTypes'
 import {
   formatDate,
   getAuthorNames,
@@ -17,7 +18,7 @@ const categoryColors: Record<string, string> = {
 }
 
 export function PostCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`
+  const href = getPostHref(post)
   const categoryName = getCategoryName(post.primaryCategory)
   const categoryColor = categoryColors[categoryName.toLowerCase()] || 'var(--category-tech)'
 

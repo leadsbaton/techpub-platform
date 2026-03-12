@@ -1,5 +1,3 @@
-import type { RichTextDocument } from '@/app/(public)/_components/RichTextRenderer'
-
 export interface PayloadListResponse<T> {
   docs: T[]
   totalDocs: number
@@ -12,6 +10,8 @@ export interface PayloadListResponse<T> {
   nextPage: number | null
 }
 
+import type { RichTextDocument } from '@/app/(public)/_components/RichTextRenderer'
+
 export interface Media {
   id: string
   url?: string | null
@@ -19,6 +19,7 @@ export interface Media {
   filename?: string | null
   width?: number | null
   height?: number | null
+  mimeType?: string | null
 }
 
 export interface Category {
@@ -100,6 +101,16 @@ export interface SiteSettings {
   }
 }
 
+export interface PostCtaGroup {
+  primary?: LinkReference | null
+}
+
+export interface PostGalleryItem {
+  id?: string
+  image: Media | string
+  caption?: string | null
+}
+
 export interface Post {
   id: string
   title: string
@@ -108,17 +119,21 @@ export interface Post {
   status: 'draft' | 'published' | 'archived'
   excerpt: string
   content?: RichTextDocument | null
+  contentType?: ContentType | string | null
   featuredImage?: Media | string | null
+  downloadAsset?: Media | string | null
+  gallery?: PostGalleryItem[] | null
   featured?: boolean
   pinned?: boolean
   authors?: Array<Author | string> | null
   primaryCategory?: Category | string | null
-  categories?: Array<Category | string> | null
   tags?: Array<Tag | string> | null
+  relatedPosts?: Array<Post | string> | null
   readingTime?: number | null
   publishedAt?: string | null
   videoUrl?: string | null
   externalUrl?: string | null
+  cta?: PostCtaGroup | null
   seo?: Seo | null
 }
 

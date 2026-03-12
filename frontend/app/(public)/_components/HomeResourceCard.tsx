@@ -2,10 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
+import { getPostHref } from '@/lib/utils/contentTypes'
 import { formatDate, getAuthorNames, getImageUrl } from '@/lib/utils/formatting'
 
 export function HomeResourceCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`
+  const href = getPostHref(post)
 
   return (
     <article className="space-y-4">

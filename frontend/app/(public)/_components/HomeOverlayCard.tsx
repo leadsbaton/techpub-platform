@@ -2,10 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
+import { getPostHref } from '@/lib/utils/contentTypes'
 import { formatDate, getImageUrl } from '@/lib/utils/formatting'
 
 export function HomeOverlayCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`
+  const href = getPostHref(post)
 
   return (
     <Link href={href} className="group block overflow-hidden rounded-[12px]">

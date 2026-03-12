@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
+import { getPostHref } from '@/lib/utils/contentTypes'
 import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
 
 const heroCopyByCategory: Record<string, string> = {
@@ -30,7 +31,7 @@ export function HeroFeature({
 }) {
   const categoryName = getCategoryName(post.primaryCategory).toLowerCase()
   const heroTitle = heroCopyByCategory[categoryName] || getCategoryName(post.primaryCategory)
-  const heroHref = `/${post.type}s/${post.slug}`
+  const heroHref = getPostHref(post)
   const heroImage = getHeroImageFromCategory(categories, post)
 
   return (

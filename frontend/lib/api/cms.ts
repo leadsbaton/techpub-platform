@@ -111,7 +111,7 @@ export async function getPosts(
   }
 
   const query = buildQuery({
-    depth: 2,
+    depth: 3,
     sort: '-publishedAt',
     limit: filters.limit ?? 9,
     page: filters.page ?? 1,
@@ -136,7 +136,7 @@ export async function getPostBySlug(
 
   if (type) where.type = { equals: type }
 
-  const query = buildQuery({ depth: 2, limit: 1, where })
+  const query = buildQuery({ depth: 3, limit: 1, where })
   try {
     const data = await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
     return data.docs[0] ?? null
@@ -155,7 +155,7 @@ export async function getPreviewPostBySlug(
     type: { equals: type },
   }
 
-  const query = buildQuery({ depth: 2, limit: 1, where })
+  const query = buildQuery({ depth: 3, limit: 1, where })
   try {
     const data = await fetchPayloadWithOptions<PayloadListResponse<Post>>(
       `/api/posts?${query}`,
@@ -264,7 +264,7 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
 }
 
 export async function getHomePageData() {
-  const [settings, featuredPosts, insights, whitepapers, webinars, categories] =
+  const [settings, featuredPosts, insights, whitepapers, webinars, categories, contentTypes] =
     await Promise.all([
       getSiteSettings(),
       getPosts({ featured: true, limit: 1 }),
@@ -272,6 +272,7 @@ export async function getHomePageData() {
       getPosts({ type: 'whitepaper', limit: 6 }),
       getPosts({ type: 'webinar', limit: 4 }),
       getCategories(6),
+      getContentTypes(6),
     ])
 
   return {
@@ -281,6 +282,7 @@ export async function getHomePageData() {
     whitepapers: whitepapers.docs,
     webinars: webinars.docs,
     categories,
+    contentTypes,
   }
 }
 
@@ -289,5 +291,24 @@ export async function getContentTypeById(id: string): Promise<ContentType | null
     return await fetchPayload<ContentType>("/api/content-types/" + id, 300)
   } catch {
     return null
+  }
+}
+
+export async function getContentTypes(limit = 12): Promise<ContentType[]> {
+  const query = buildQuery({
+    limit,
+    depth: 0,
+    sort: 'sortOrder',
+    where: { active: { equals: true } },
+  })
+
+  try {
+    const data = await fetchPayload<PayloadListResponse<ContentType>>(
+      `/api/content-types?${query}`,
+      300,
+    )
+    return data.docs
+  } catch {
+    return []
   }
 }

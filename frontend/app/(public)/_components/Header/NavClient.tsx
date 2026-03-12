@@ -3,13 +3,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import type { Category } from '@/lib/types/cms'
+import { getCategoryFilterHref, normalizeRouteBase } from '@/lib/utils/contentTypes'
 
 type NavLink = {
   label: string
   href: string
+  dropdownEnabled?: boolean
 }
 
 type NavClientProps = {
@@ -18,8 +20,6 @@ type NavClientProps = {
   links: NavLink[]
   categories: Category[]
 }
-
-const dropdownTargets = new Set(['/insights', '/whitepapers'])
 
 function isActive(pathname: string, href: string) {
   if (href === '/') return pathname === '/'
@@ -64,9 +64,13 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
-  const categoryLinks = categories.length
-    ? [{ id: 'all', name: 'View All', slug: '' }, ...categories.map((category) => ({ id: category.id, name: category.name, slug: category.slug }))]
-    : []
+  const categoryLinks = useMemo(
+    () => [
+      { id: 'all', name: 'View All', slug: '' },
+      ...categories.map((category) => ({ id: category.id, name: category.name, slug: category.slug })),
+    ],
+    [categories],
+  )
 
   return (
     <>
@@ -91,20 +95,21 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-14 lg:flex">
+          <nav className="hidden items-center gap-12 lg:flex">
             {links.map((link) => {
-              const dropdownEnabled = dropdownTargets.has(link.href) && categoryLinks.length > 1
-              const active = isActive(pathname, link.href)
+              const normalizedHref = normalizeRouteBase(link.href)
+              const dropdownEnabled = Boolean(link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1)
+              const active = isActive(pathname, normalizedHref)
 
               return (
                 <div
-                  key={`${link.label}-${link.href}`}
-                  className="relative"
-                  onMouseEnter={() => dropdownEnabled && setOpenDropdown(link.href)}
+                  key={`${link.label}-${normalizedHref}`}
+                  className="relative -mb-4 pb-4"
+                  onMouseEnter={() => dropdownEnabled && setOpenDropdown(normalizedHref)}
                   onMouseLeave={() => dropdownEnabled && setOpenDropdown(null)}
                 >
                   <Link
-                    href={link.href}
+                    href={normalizedHref}
                     className={`nav-link ${active ? 'nav-link-active' : ''}`}
                     onClick={() => {
                       setMobileOpen(false)
@@ -115,21 +120,20 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
                     {dropdownEnabled ? <ChevronDownIcon /> : null}
                   </Link>
 
-                  {dropdownEnabled && openDropdown === link.href ? (
-                    <div className="absolute left-1/2 top-full mt-4 w-48 -translate-x-1/2 bg-white p-3 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
-                      <div className="space-y-1">
-                        {categoryLinks.map((category) => {
-                          const href = category.slug ? `/categories/${category.slug}` : link.href
-                          return (
+                  {dropdownEnabled && openDropdown === normalizedHref ? (
+                    <div className="absolute left-1/2 top-full z-30 w-56 -translate-x-1/2 pt-2">
+                      <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
+                        <div className="space-y-1">
+                          {categoryLinks.map((category) => (
                             <Link
-                              key={`${link.href}-${category.id}`}
-                              href={href}
-                              className="block px-3 py-2 text-[15px] font-medium text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
+                              key={`${normalizedHref}-${category.id}`}
+                              href={getCategoryFilterHref(normalizedHref, category.slug)}
+                              className="block rounded-xl px-3 py-2 text-[15px] font-medium text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
                             >
                               {category.name}
                             </Link>
-                          )
-                        })}
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ) : null}
@@ -160,38 +164,41 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
       </header>
 
       {mobileOpen ? (
-        <div className="fixed inset-x-0 top-[88px] z-40 border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
+        <div className="fixed inset-x-0 top-[88px] z-40 max-h-[calc(100vh-88px)] overflow-y-auto border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
           <div className="space-y-2">
-            {links.map((link) => (
-              <div key={`mobile-${link.href}`} className="border-b border-[var(--border-subtle)] px-1 py-3 last:border-b-0">
-                <Link
-                  href={link.href}
-                  className={`flex items-center justify-between text-[1.05rem] font-semibold ${isActive(pathname, link.href) ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'}`}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <span>{link.label}</span>
-                  {dropdownTargets.has(link.href) && categoryLinks.length > 1 ? <ChevronDownIcon /> : null}
-                </Link>
+            {links.map((link) => {
+              const normalizedHref = normalizeRouteBase(link.href)
+              const dropdownEnabled = Boolean(link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1)
+              const active = isActive(pathname, normalizedHref)
 
-                {dropdownTargets.has(link.href) && categoryLinks.length > 1 ? (
-                  <div className="mt-3 grid gap-1 border-t border-[var(--border-subtle)] pt-3">
-                    {categoryLinks.map((category) => {
-                      const href = category.slug ? `/categories/${category.slug}` : link.href
-                      return (
+              return (
+                <div key={`mobile-${normalizedHref}`} className="border-b border-[var(--border-subtle)] px-1 py-3 last:border-b-0">
+                  <Link
+                    href={normalizedHref}
+                    className={`flex items-center justify-between text-[1.05rem] font-semibold ${active ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span>{link.label}</span>
+                    {dropdownEnabled ? <ChevronDownIcon /> : null}
+                  </Link>
+
+                  {dropdownEnabled ? (
+                    <div className="mt-3 grid gap-1 border-t border-[var(--border-subtle)] pt-3">
+                      {categoryLinks.map((category) => (
                         <Link
-                          key={`mobile-${link.href}-${category.id}`}
-                          href={href}
-                          className="px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] hover:bg-[var(--surface-muted)]"
+                          key={`mobile-${normalizedHref}-${category.id}`}
+                          href={getCategoryFilterHref(normalizedHref, category.slug)}
+                          className="rounded-xl px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] hover:bg-[var(--surface-muted)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {category.name}
                         </Link>
-                      )
-                    })}
-                  </div>
-                ) : null}
-              </div>
-            ))}
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )
+            })}
           </div>
         </div>
       ) : null}

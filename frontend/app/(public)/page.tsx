@@ -6,6 +6,7 @@ import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeSectionHeader } from './_components/HomeSectionHeader'
 import { RankedSidebar } from './_components/RankedSidebar'
 import { getHomePageData } from '@/lib/api/cms'
+import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,8 +16,24 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const { heroPost, insights, whitepapers, webinars, categories } = await getHomePageData()
-  const rankedItems = [...whitepapers, ...insights]
+  const { heroPost, insights, whitepapers, webinars, categories, contentTypes } =
+    await getHomePageData()
+
+  const postsByType = {
+    insight: insights,
+    whitepaper: whitepapers,
+    webinar: webinars,
+  }
+
+  const contentSections = contentTypes
+    .map((contentType) => ({
+      contentType,
+      config: getContentTypeConfigByType(contentType.key, contentTypes),
+      posts: postsByType[contentType.key],
+    }))
+    .filter((section) => section.posts.length > 0)
+
+  const rankedItems = [...whitepapers, ...insights, ...webinars]
     .filter((item, index, all) => all.findIndex((candidate) => candidate.id === item.id) === index)
     .slice(0, 6)
 
@@ -26,35 +43,35 @@ export default async function HomePage() {
         {heroPost ? <HeroFeature post={heroPost} categories={categories} /> : null}
       </section>
 
-      <section className="site-container mt-12 space-y-8">
-        <HomeSectionHeader title="Insights" href="/insights" />
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {insights.slice(0, 3).map((post) => (
-              <HomeOverlayCard key={post.id} post={post} />
-            ))}
-          </div>
-          <RankedSidebar title="Favorite" accent="People's" items={rankedItems} />
-        </div>
-      </section>
+      {contentSections.map((section) => {
+        const cards =
+          section.contentType.key === 'whitepaper'
+            ? section.posts.slice(0, 3).map((post) => <HomeResourceCard key={post.id} post={post} />)
+            : section.posts.slice(0, 3).map((post) => <HomeOverlayCard key={post.id} post={post} />)
 
-      <section className="site-container mt-14 space-y-8">
-        <HomeSectionHeader title="White Papers" href="/whitepapers" />
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {whitepapers.slice(0, 3).map((post) => (
-            <HomeResourceCard key={post.id} post={post} />
-          ))}
-        </div>
-      </section>
+        return (
+          <section key={section.contentType.id} className="site-container mt-14 space-y-8">
+            <HomeSectionHeader title={section.config.pluralLabel} href={section.config.routeBase} actionLabel="View All" />
 
-      <section className="site-container mt-14 space-y-8">
-        <HomeSectionHeader title="Webinars" href="/webinars" />
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {webinars.slice(0, 3).map((post) => (
-            <HomeOverlayCard key={post.id} post={post} />
-          ))}
-        </div>
-      </section>
+            {section.contentType.key === 'insight' ? (
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]">
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">{cards}</div>
+                <RankedSidebar title="Favorite" accent="People's" items={rankedItems} />
+              </div>
+            ) : (
+              <div
+                className={
+                  section.contentType.key === 'whitepaper'
+                    ? 'grid gap-8 md:grid-cols-2 xl:grid-cols-3'
+                    : 'grid gap-6 md:grid-cols-2 xl:grid-cols-3'
+                }
+              >
+                {cards}
+              </div>
+            )}
+          </section>
+        )
+      })}
     </div>
   )
 }
