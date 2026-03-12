@@ -100,6 +100,11 @@ export const Posts: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'content-types',
                   required: true,
+                  filterOptions: {
+                    active: {
+                      equals: true,
+                    },
+                  },
                   admin: {
                     description:
                       'Controls the public section and route. Seeded options are Insight, White Paper, and Webinar.',
@@ -314,6 +319,23 @@ export const Posts: CollectionConfig = {
               hasMany: true,
               admin: {
                 description: 'Optional related content suggestions shown near this post.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Preview',
+          fields: [
+            {
+              name: 'postLivePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostLivePreviewFrame',
+                    exportName: 'PostLivePreviewFrame',
+                  },
+                },
               },
             },
           ],

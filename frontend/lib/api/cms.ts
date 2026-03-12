@@ -1,6 +1,7 @@
 import type {
   Author,
   Category,
+  ContentType,
   PageDoc,
   PayloadListResponse,
   Post,
@@ -280,5 +281,13 @@ export async function getHomePageData() {
     whitepapers: whitepapers.docs,
     webinars: webinars.docs,
     categories,
+  }
+}
+
+export async function getContentTypeById(id: string): Promise<ContentType | null> {
+  try {
+    return await fetchPayload<ContentType>("/api/content-types/" + id, 300)
+  } catch {
+    return null
   }
 }

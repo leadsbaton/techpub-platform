@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RichTextRenderer } from '@/app/(public)/_components/RichTextRenderer'
-import { getPreviewPostBySlug } from '@/lib/api/cms'
+import { getContentTypeById, getPreviewPostBySlug } from '@/lib/api/cms'
 import type { Post } from '@/lib/types/cms'
 import {
   formatDate,
@@ -22,22 +22,25 @@ const typeMap: Record<string, Post['type']> = {
 export default async function PreviewPostPage({
   searchParams,
 }: {
-  searchParams: Promise<{ slug?: string; token?: string; type?: string; title?: string; excerpt?: string; status?: string }>
+  searchParams: Promise<{ slug?: string; token?: string; type?: string; title?: string; excerpt?: string; status?: string; contentTypeId?: string }>
 }) {
-  const { slug, token, type, title, excerpt, status } = await searchParams
+  const { slug, token, type, title, excerpt, status, contentTypeId } = await searchParams
 
-  if (!type || !typeMap[type]) {
+  const typeFromQuery = type ? typeMap[type] : null
+  const contentType = !typeFromQuery && contentTypeId ? await getContentTypeById(contentTypeId) : null
+  const resolvedType = typeFromQuery ?? contentType?.key ?? null
+
+  if (!resolvedType) {
     notFound()
   }
 
-  const post = slug ? await getPreviewPostBySlug(slug, typeMap[type], token) : null
-
+  const post = slug ? await getPreviewPostBySlug(slug, resolvedType, token) : null
   if (!post) {
     return (
       <article className="mx-auto max-w-5xl space-y-10 px-4 py-10 md:px-6">
         <div className="space-y-5">
-          <Link href={`/${type}s`} className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-            {getContentTypeLabel(typeMap[type])}
+          <Link href={`/${resolvedType}s`} className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            {contentType?.label || getContentTypeLabel(resolvedType)}
           </Link>
           <h1 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-6xl">
             {title || 'Untitled post'}
@@ -56,12 +59,12 @@ export default async function PreviewPostPage({
               {excerpt || 'Add an excerpt in Payload to preview the summary shown on the public post page.'}
             </p>
             <div className="rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-6 text-slate-600">
-              Save the document once to load the full frontend preview with rich text, image, and relationships.
+              Save the document once to load rich text, media, and relationship content in the full frontend preview.
             </div>
           </div>
 
           <aside className="space-y-3 rounded-[28px] border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600">
-            <p>Type: {getContentTypeLabel(typeMap[type])}</p>
+            <p>Type: {contentType?.label || getContentTypeLabel(resolvedType)}</p>
             <p>Status: {status || 'draft'}</p>
             <p>Slug: {slug || 'auto-generated after save'}</p>
           </aside>

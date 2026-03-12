@@ -26,6 +26,19 @@ function slugify(value?: string) {
     .replace(/(^-|-$)/g, '')
 }
 
+function getRelationId(value: unknown): string | undefined {
+  if (typeof value === 'string') {
+    return value
+  }
+
+  if (value && typeof value === 'object' && 'id' in value) {
+    const id = (value as { id?: unknown }).id
+    return typeof id === 'string' ? id : undefined
+  }
+
+  return undefined
+}
+
 function getTypeKey(fields: Record<string, FormFieldState>) {
   const syncedType = readValue<string>(fields, 'type')
   if (syncedType) {
@@ -37,7 +50,7 @@ function getTypeKey(fields: Record<string, FormFieldState>) {
     return String((contentType as { key?: unknown }).key || 'insight')
   }
 
-  return 'insight'
+  return undefined
 }
 
 export const PostLivePreviewFrame: UIFieldClientComponent = () => {
@@ -48,10 +61,12 @@ export const PostLivePreviewFrame: UIFieldClientComponent = () => {
   const status = readValue<string>(fields, 'status') || 'draft'
   const slug = readValue<string>(fields, 'slug') || slugify(title)
   const type = getTypeKey(fields)
+  const contentTypeId = getRelationId(readValue<unknown>(fields, 'contentType'))
 
   const params = new URLSearchParams()
   if (slug) params.set('slug', slug)
   if (type) params.set('type', type)
+  if (contentTypeId) params.set('contentTypeId', contentTypeId)
   if (title) params.set('title', title)
   if (excerpt) params.set('excerpt', excerpt)
   if (status) params.set('status', status)
@@ -77,9 +92,9 @@ export const PostLivePreviewFrame: UIFieldClientComponent = () => {
         }}
       >
         <div>
-          <div style={{ color: '#0f172a', fontSize: '0.95rem', fontWeight: 700 }}>Live Preview</div>
+          <div style={{ color: '#0f172a', fontSize: '0.95rem', fontWeight: 700 }}>Post Preview</div>
           <div style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '0.2rem' }}>
-            Same frontend preview shell used for the post page.
+            Uses the same frontend preview route as the public post page.
           </div>
         </div>
         <a
@@ -107,7 +122,7 @@ export const PostLivePreviewFrame: UIFieldClientComponent = () => {
           background: '#fff',
           border: 0,
           display: 'block',
-          height: '720px',
+          height: '820px',
           width: '100%',
         }}
       />

@@ -46,6 +46,15 @@ export interface Author {
   avatar?: Media | string | null
 }
 
+export interface ContentType {
+  id: string
+  label: string
+  key: 'insight' | 'whitepaper' | 'webinar'
+  routeBase: string
+  active?: boolean | null
+  sortOrder?: number | null
+}
+
 export interface Seo {
   metaTitle?: string | null
   metaDescription?: string | null
