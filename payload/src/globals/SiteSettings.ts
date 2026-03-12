@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { isAdmin } from '../access/cmsAccess'
 import { linkField } from '../fields/link'
 import { seoFields } from '../fields/seo'
 
@@ -7,6 +8,7 @@ export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   access: {
     read: () => true,
+    update: isAdmin,
   },
   fields: [
     {

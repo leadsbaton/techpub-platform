@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { isAdmin, isAdminOrPublished } from '../access/cmsAccess'
 import { linkField } from '../fields/link'
 import { seoFields } from '../fields/seo'
 import { slugHook } from '../fields/slug'
@@ -11,7 +12,10 @@ export const Posts: CollectionConfig = {
     defaultColumns: ['title', 'type', 'status', 'publishedAt'],
   },
   access: {
-    read: () => true,
+    create: isAdmin,
+    delete: isAdmin,
+    read: isAdminOrPublished,
+    update: isAdmin,
   },
   fields: [
     {

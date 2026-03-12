@@ -1,10 +1,18 @@
 import type { CollectionConfig } from 'payload'
 
+import { isAdmin } from '../access/cmsAccess'
+
 export const Subscribers: CollectionConfig = {
   slug: 'subscribers',
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'status', 'source', 'updatedAt'],
+  },
+  access: {
+    create: isAdmin,
+    delete: isAdmin,
+    read: isAdmin,
+    update: isAdmin,
   },
   fields: [
     {

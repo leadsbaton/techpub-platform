@@ -2,6 +2,8 @@ import type { CollectionConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { isAdmin } from '../access/cmsAccess'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -12,6 +14,9 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isAdmin,
+    delete: isAdmin,
+    update: isAdmin,
   },
   fields: [
     {

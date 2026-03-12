@@ -1,11 +1,19 @@
 import type { CollectionConfig } from 'payload'
 
+import { canBootstrapFirstAdmin, isAdmin } from '../access/cmsAccess'
+
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'name',
   },
   auth: true,
+  access: {
+    create: canBootstrapFirstAdmin,
+    delete: isAdmin,
+    read: isAdmin,
+    update: isAdmin,
+  },
   fields: [
     {
       name: 'name',

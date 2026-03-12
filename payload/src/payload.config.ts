@@ -21,6 +21,21 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
+    components: {
+      graphics: {
+        Icon: {
+          exportName: 'BrandIcon',
+          path: './components/admin/BrandIcon',
+        },
+        Logo: {
+          exportName: 'BrandLogo',
+          path: './components/admin/BrandLogo',
+        },
+      },
+    },
+    meta: {
+      titleSuffix: '- TechPub CMS',
+    },
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),

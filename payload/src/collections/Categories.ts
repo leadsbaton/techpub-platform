@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { isAdmin } from '../access/cmsAccess'
 import { seoFields } from '../fields/seo'
 import { slugHook } from '../fields/slug'
 
@@ -11,6 +12,9 @@ export const Categories: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isAdmin,
+    delete: isAdmin,
+    update: isAdmin,
   },
   fields: [
     {
