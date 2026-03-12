@@ -8,7 +8,7 @@ import { Pagination } from '../_components/Pagination'
 import { PostCard } from '../_components/PostCard'
 import { RichTextRenderer } from '../_components/RichTextRenderer'
 import {
-  getCategories,
+  getCategoriesForType,
   getContentTypes,
   getPageBySlug,
   getPosts,
@@ -123,15 +123,7 @@ function PageHero({ pageDoc }: { pageDoc: PageDoc }) {
   )
 }
 
-function InfoPanel({
-  title,
-  children,
-  className = '',
-}: {
-  title: string
-  children: ReactNode
-  className?: string
-}) {
+function InfoPanel({ title, children, className = '' }: { title: string; children: ReactNode; className?: string }) {
   return (
     <div className={`rounded-[28px] bg-white p-6 shadow-[var(--shadow-soft)] ${className}`}>
       <h2 className="text-2xl font-semibold tracking-tight text-[color:var(--text-strong)]">{title}</h2>
@@ -297,7 +289,7 @@ export default async function Page({
   if (config) {
     const [data, categories] = await Promise.all([
       getPosts({ type: config.key, page, limit: 9, query: q, category }),
-      getCategories(12),
+      getCategoriesForType(config.key, 12),
     ])
 
     return (
@@ -308,7 +300,7 @@ export default async function Page({
             {config.pluralLabel}
           </h1>
           <p className="text-base leading-7 text-[color:var(--text-soft)]">
-            Search published content and filter by the main categories used in the public navigation.
+            Search published content and filter by the categories that currently exist inside this section.
           </p>
         </div>
 
@@ -341,6 +333,9 @@ export default async function Page({
 
         {data.docs.length ? (
           <>
+            <div className="text-sm text-[color:var(--text-muted)]">
+              Showing {data.docs.length} item{data.docs.length === 1 ? '' : 's'} on this page.
+            </div>
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {data.docs.map((post) => (
                 <PostCard key={post.id} post={post} />
@@ -357,7 +352,7 @@ export default async function Page({
           <div className="rounded-[28px] border border-[var(--border-subtle)] bg-white p-10 text-center shadow-[var(--shadow-soft)]">
             <h2 className="text-2xl font-semibold tracking-tight text-[color:var(--text-strong)]">No published items found</h2>
             <p className="mt-3 text-[color:var(--text-soft)]">
-              Try a different keyword or reset the category filter to view all content.
+              Try a different keyword or reset the category filter to view all content in this section.
             </p>
           </div>
         )}

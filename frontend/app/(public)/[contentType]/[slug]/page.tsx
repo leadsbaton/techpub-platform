@@ -22,13 +22,36 @@ export default async function Page({
     notFound()
   }
 
-  const relatedFeed = await getPosts({ type: config.key, limit: 7 })
+  const explicitRelated =
+    post.relatedPosts
+      ?.filter((item): item is Exclude<typeof item, string> => Boolean(item && typeof item !== 'string'))
+      ?.filter((item) => item.id !== post.id) ?? []
+
+  const primaryCategorySlug =
+    post.primaryCategory && typeof post.primaryCategory !== 'string'
+      ? post.primaryCategory.slug
+      : undefined
+
+  const relatedFeed = explicitRelated.length
+    ? explicitRelated
+    : (
+        await getPosts({
+          type: config.key,
+          category: primaryCategorySlug,
+          limit: 7,
+        })
+      ).docs
+
+  const fallbackFeed =
+    relatedFeed.length > 1
+      ? relatedFeed
+      : (await getPosts({ type: config.key, limit: 7 })).docs
 
   return (
     <ContentDetailView
       post={post}
       contentTypes={contentTypes}
-      railItems={relatedFeed.docs}
+      railItems={fallbackFeed}
     />
   )
 }

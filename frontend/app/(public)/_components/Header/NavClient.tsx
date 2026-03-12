@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import type { Category } from '@/lib/types/cms'
 import { getCategoryFilterHref, normalizeRouteBase } from '@/lib/utils/contentTypes'
@@ -12,13 +12,13 @@ type NavLink = {
   label: string
   href: string
   dropdownEnabled?: boolean
+  categories?: Category[]
 }
 
 type NavClientProps = {
   siteName: string
   siteTagline?: string | null
   links: NavLink[]
-  categories: Category[]
 }
 
 function isActive(pathname: string, href: string) {
@@ -59,18 +59,10 @@ function MenuIcon({ open }: { open: boolean }) {
   )
 }
 
-export function NavClient({ siteName, siteTagline, links, categories }: NavClientProps) {
+export function NavClient({ siteName, siteTagline, links }: NavClientProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-
-  const categoryLinks = useMemo(
-    () => [
-      { id: 'all', name: 'View All', slug: '' },
-      ...categories.map((category) => ({ id: category.id, name: category.name, slug: category.slug })),
-    ],
-    [categories],
-  )
 
   return (
     <>
@@ -98,7 +90,17 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
           <nav className="hidden items-center gap-12 lg:flex">
             {links.map((link) => {
               const normalizedHref = normalizeRouteBase(link.href)
-              const dropdownEnabled = Boolean(link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1)
+              const categoryLinks = [
+                { id: 'all', name: 'View All', slug: '' },
+                ...((link.categories ?? []).map((category) => ({
+                  id: category.id,
+                  name: category.name,
+                  slug: category.slug,
+                }))),
+              ]
+              const dropdownEnabled = Boolean(
+                link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1,
+              )
               const active = isActive(pathname, normalizedHref)
 
               return (
@@ -168,7 +170,17 @@ export function NavClient({ siteName, siteTagline, links, categories }: NavClien
           <div className="space-y-2">
             {links.map((link) => {
               const normalizedHref = normalizeRouteBase(link.href)
-              const dropdownEnabled = Boolean(link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1)
+              const categoryLinks = [
+                { id: 'all', name: 'View All', slug: '' },
+                ...((link.categories ?? []).map((category) => ({
+                  id: category.id,
+                  name: category.name,
+                  slug: category.slug,
+                }))),
+              ]
+              const dropdownEnabled = Boolean(
+                link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1,
+              )
               const active = isActive(pathname, normalizedHref)
 
               return (

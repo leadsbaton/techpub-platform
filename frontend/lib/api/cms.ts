@@ -10,6 +10,7 @@ import type {
 } from '@/lib/types/cms'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const LIVE_REVALIDATE = 0
 
 type PostFilters = {
   type?: Post['type']
@@ -22,16 +23,33 @@ type PostFilters = {
   query?: string
 }
 
+function appendQueryParam(query: URLSearchParams, key: string, value: unknown): void {
+  if (value === undefined || value === null || value === '') {
+    return
+  }
+
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      appendQueryParam(query, `${key}[${index}]`, item)
+    })
+    return
+  }
+
+  if (typeof value === 'object') {
+    Object.entries(value).forEach(([childKey, childValue]) => {
+      appendQueryParam(query, `${key}[${childKey}]`, childValue)
+    })
+    return
+  }
+
+  query.append(key, String(value))
+}
+
 function buildQuery(params: Record<string, unknown>) {
   const query = new URLSearchParams()
 
   for (const [key, value] of Object.entries(params)) {
-    if (value === undefined || value === null || value === '') continue
-    if (key === 'where' && typeof value === 'object') {
-      query.append(key, JSON.stringify(value))
-      continue
-    }
-    query.append(key, String(value))
+    appendQueryParam(query, key, value)
   }
 
   return query.toString()
@@ -84,6 +102,14 @@ function publishedWhere() {
   }
 }
 
+function getPrimaryCategoryDoc(post: Post): Category | null {
+  if (!post.primaryCategory || typeof post.primaryCategory === 'string') {
+    return null
+  }
+
+  return post.primaryCategory
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     return await fetchPayload<SiteSettings>('/api/globals/site-settings', 300)
@@ -119,7 +145,7 @@ export async function getPosts(
   })
 
   try {
-    return await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+    return await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`, LIVE_REVALIDATE)
   } catch {
     return emptyListResponse<Post>(filters.limit ?? 9, filters.page ?? 1)
   }
@@ -138,7 +164,10 @@ export async function getPostBySlug(
 
   const query = buildQuery({ depth: 3, limit: 1, where })
   try {
-    const data = await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+    const data = await fetchPayload<PayloadListResponse<Post>>(
+      `/api/posts?${query}`,
+      LIVE_REVALIDATE,
+    )
     return data.docs[0] ?? null
   } catch {
     return null
@@ -185,6 +214,35 @@ export async function getCategories(limit = 12): Promise<Category[]> {
   } catch {
     return []
   }
+}
+
+export async function getCategoriesForType(
+  type: Post['type'],
+  limit = 12,
+): Promise<Category[]> {
+  const categoryMap = new Map<string, Category>()
+  let page = 1
+
+  while (page <= 5 && categoryMap.size < limit) {
+    const posts = await getPosts({ type, page, limit: 24 })
+
+    posts.docs.forEach((post) => {
+      const category = getPrimaryCategoryDoc(post)
+      if (category && !categoryMap.has(category.slug)) {
+        categoryMap.set(category.slug, category)
+      }
+    })
+
+    if (!posts.hasNextPage) {
+      break
+    }
+
+    page += 1
+  }
+
+  return Array.from(categoryMap.values())
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, limit)
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
@@ -264,31 +322,45 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
 }
 
 export async function getHomePageData() {
-  const [settings, featuredPosts, insights, whitepapers, webinars, categories, contentTypes] =
+  const [settings, featuredPosts, insights, whitepapers, webinars, contentTypes] =
     await Promise.all([
       getSiteSettings(),
       getPosts({ featured: true, limit: 1 }),
       getPosts({ type: 'insight', limit: 7 }),
       getPosts({ type: 'whitepaper', limit: 6 }),
       getPosts({ type: 'webinar', limit: 4 }),
-      getCategories(6),
       getContentTypes(6),
     ])
 
+  const [insightCategories, whitepaperCategories, webinarCategories] = await Promise.all([
+    getCategoriesForType('insight', 6),
+    getCategoriesForType('whitepaper', 6),
+    getCategoriesForType('webinar', 6),
+  ])
+
   return {
     settings,
-    heroPost: featuredPosts.docs[0] || insights.docs[0] || whitepapers.docs[0] || webinars.docs[0] || null,
+    heroPost:
+      featuredPosts.docs[0] ||
+      insights.docs[0] ||
+      whitepapers.docs[0] ||
+      webinars.docs[0] ||
+      null,
     insights: insights.docs,
     whitepapers: whitepapers.docs,
     webinars: webinars.docs,
-    categories,
     contentTypes,
+    categoriesByType: {
+      insight: insightCategories,
+      whitepaper: whitepaperCategories,
+      webinar: webinarCategories,
+    },
   }
 }
 
 export async function getContentTypeById(id: string): Promise<ContentType | null> {
   try {
-    return await fetchPayload<ContentType>("/api/content-types/" + id, 300)
+    return await fetchPayload<ContentType>(`/api/content-types/${id}`, 300)
   } catch {
     return null
   }
