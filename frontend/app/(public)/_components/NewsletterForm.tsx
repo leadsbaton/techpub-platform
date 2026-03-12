@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.onrender.com' : 'http://localhost:5000')
 
 export function NewsletterForm({ submitLabel }: { submitLabel: string }) {
   const [email, setEmail] = useState('')

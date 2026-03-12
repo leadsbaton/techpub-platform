@@ -7,7 +7,7 @@ import { slugHook } from '../fields/slug'
 import { resolvePostPath } from '../lib/contentLinks'
 import type { Post as PostDocument } from '../payload-types'
 
-const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'
+const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
 type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
 type PostFormData = Partial<PostDocument> & {
   contentType?: string | { id?: string; key?: PostTypeKey } | null

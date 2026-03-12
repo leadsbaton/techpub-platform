@@ -4,7 +4,7 @@ import { useFormFields } from '@payloadcms/ui'
 import type { UIFieldClientComponent } from 'payload'
 import React from 'react'
 
-const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'
+const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
 
 type FormFieldState = {
   value?: unknown
