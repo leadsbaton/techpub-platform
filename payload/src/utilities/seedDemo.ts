@@ -18,6 +18,30 @@ type RichTextSeed = NonNullable<Page['content']>
 type SeedCta = Post['cta']
 type SeedSubscriberData = Pick<Subscriber, 'email' | 'status'> & Partial<Subscriber>
 
+type StoredPostData = Omit<Post, 'id' | 'updatedAt' | 'createdAt' | 'deletedAt' | 'sizes'>
+
+type DemoSeedPost = Omit<SeedPostData, 'cta' | 'status'>
+
+type SeedPostData = {
+  title: string
+  slug: string
+  type: 'insight' | 'whitepaper' | 'webinar'
+  status: 'draft' | 'published' | 'archived'
+  excerpt: string
+  content: RichTextSeed
+  cta: SeedCta
+  primaryCategory: string
+  authors: string[]
+  contentType?: string
+  featured?: boolean
+  pinned?: boolean
+  readingTime?: number
+  publishedAt?: string
+  tags?: string[]
+  externalUrl?: string
+  videoUrl?: string
+  seo?: Post['seo']
+}
 type SeedCollectionData = {
   'content-types': {
     label: string
@@ -29,10 +53,7 @@ type SeedCollectionData = {
   categories: Pick<Category, 'name' | 'slug'> & Partial<Category>
   authors: Pick<Author, 'name' | 'slug'> & Partial<Author>
   tags: Pick<Tag, 'name' | 'slug'> & Partial<Tag>
-  posts: (Pick<Post, 'title' | 'slug' | 'type' | 'status' | 'excerpt' | 'authors' | 'cta' | 'content'> &
-    Partial<Post>) & {
-      contentType?: string
-    }
+  posts: SeedPostData
   pages: Pick<Page, 'title' | 'slug' | 'status' | 'template' | 'hero'> & Partial<Page>
 }
 
@@ -223,6 +244,14 @@ function buildPrimaryCta(type: 'insight' | 'whitepaper' | 'webinar'): SeedCta {
   }
 }
 
+function ensureSeededId(label: string, value: string | undefined) {
+  if (!value) {
+    throw new Error(`Missing seeded ${label} id`)
+  }
+
+  return value
+}
+
 function buildPageSeo(title: string, summary: string, slug: string) {
   return {
     metaTitle: `${title} | LeadsBaton`,
@@ -297,7 +326,7 @@ async function upsertBySlug<K extends SeedCollection>(
         const updated = await payload.update({
           collection: 'posts',
           id: existing.docs[0].id,
-          data: data as SeedCollectionData['posts'],
+          data: data as unknown as StoredPostData,
           draft: false,
           depth: 0,
         })
@@ -362,7 +391,7 @@ async function upsertBySlug<K extends SeedCollection>(
     case 'posts': {
       const created = await payload.create({
         collection: 'posts',
-        data: data as SeedCollectionData['posts'],
+        data: data as unknown as StoredPostData,
         draft: false,
         depth: 0,
       })
@@ -487,24 +516,25 @@ export async function seedDemoContent(payload: Payload) {
     ),
   )
 
-  const categoryId = (slug: string) => seededCategories.find((item, index) => categories[index].slug === slug)?.id
+  const categoryId = (slug: string) =>
+    ensureSeededId(`category:${slug}`, seededCategories.find((item, index) => categories[index].slug === slug)?.id)
   const contentTypeId = (key: SeedContentType['key']) =>
-    seededContentTypes.find((item, index) => contentTypes[index].key === key)?.id
+    ensureSeededId(`content-type:${key}`, seededContentTypes.find((item, index) => contentTypes[index].key === key)?.id)
   const authorIds = {
-    editorial: seededAuthors[0]?.id,
-    oracle: seededAuthors[1]?.id,
-    autodesk: seededAuthors[2]?.id,
+    editorial: ensureSeededId('author:editorial', seededAuthors[0]?.id),
+    oracle: ensureSeededId('author:oracle', seededAuthors[1]?.id),
+    autodesk: ensureSeededId('author:autodesk', seededAuthors[2]?.id),
   }
   const tagIds = seededTags.map((tag) => tag.id)
 
-  const demoPosts = [
+  const demoPosts: DemoSeedPost[] = [
     {
       slug: 'devices-big-and-small-can-learn',
       title: 'Devices Big and Small Can Learn What We Need Them to Learn',
       type: 'insight',
       excerpt: 'How organizations are using connected systems, analytics, and governance to create more adaptive digital experiences.',
       primaryCategory: categoryId('technology'),
-      authors: [authorIds.editorial].filter(Boolean),
+      authors: [authorIds.editorial],
       featured: true,
       readingTime: 6,
       publishedAt: '2025-12-24T08:00:00.000Z',
@@ -520,7 +550,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'insight',
       excerpt: 'A practical look at why analytical systems drift from reality and how live enterprise data changes the outcome.',
       primaryCategory: categoryId('finance'),
-      authors: [authorIds.oracle].filter(Boolean),
+      authors: [authorIds.oracle],
       featured: false,
       readingTime: 7,
       publishedAt: '2025-09-30T08:00:00.000Z',
@@ -536,7 +566,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'insight',
       excerpt: 'Why cloud-first modernization is helping teams move faster across analytics, data operations, and customer delivery.',
       primaryCategory: categoryId('marketing'),
-      authors: [authorIds.editorial].filter(Boolean),
+      authors: [authorIds.editorial],
       featured: false,
       readingTime: 5,
       publishedAt: '2025-11-24T08:00:00.000Z',
@@ -552,7 +582,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'whitepaper',
       excerpt: 'A practical resource for industrial teams modernizing workflows, design collaboration, and manufacturing planning.',
       primaryCategory: categoryId('technology'),
-      authors: [authorIds.autodesk].filter(Boolean),
+      authors: [authorIds.autodesk],
       featured: false,
       readingTime: 8,
       publishedAt: '2025-09-30T08:00:00.000Z',
@@ -569,7 +599,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'whitepaper',
       excerpt: 'A white paper on control systems, communications, and smarter building operations.',
       primaryCategory: categoryId('finance'),
-      authors: [authorIds.oracle].filter(Boolean),
+      authors: [authorIds.oracle],
       featured: false,
       readingTime: 8,
       publishedAt: '2025-09-30T08:00:00.000Z',
@@ -586,7 +616,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'whitepaper',
       excerpt: 'A resource for operations, finance, and HR leaders navigating fast-changing trade and supply chain pressures.',
       primaryCategory: categoryId('marketing'),
-      authors: [authorIds.oracle].filter(Boolean),
+      authors: [authorIds.oracle],
       featured: false,
       readingTime: 9,
       publishedAt: '2025-09-30T08:00:00.000Z',
@@ -603,7 +633,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'webinar',
       excerpt: 'A webinar on integrating AI into legacy systems, workflow design, and organizational adoption.',
       primaryCategory: categoryId('technology'),
-      authors: [authorIds.editorial].filter(Boolean),
+      authors: [authorIds.editorial],
       featured: false,
       readingTime: 4,
       publishedAt: '2025-12-10T08:00:00.000Z',
@@ -621,7 +651,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'webinar',
       excerpt: 'Upcoming webinar covering data architecture priorities, platform choices, and scale readiness.',
       primaryCategory: categoryId('technology'),
-      authors: [authorIds.oracle].filter(Boolean),
+      authors: [authorIds.oracle],
       featured: false,
       readingTime: 4,
       publishedAt: '2025-12-04T08:00:00.000Z',
@@ -639,7 +669,7 @@ export async function seedDemoContent(payload: Payload) {
       type: 'webinar',
       excerpt: 'A webinar focused on explainability, trust, and operational accountability in AI systems.',
       primaryCategory: categoryId('marketing'),
-      authors: [authorIds.editorial].filter(Boolean),
+      authors: [authorIds.editorial],
       featured: false,
       readingTime: 4,
       publishedAt: '2025-07-09T08:00:00.000Z',
@@ -651,11 +681,11 @@ export async function seedDemoContent(payload: Payload) {
         'This session covers the organizational and technical patterns behind responsible deployment.',
       ]),
     },
-  ] as const
+  ]
 
   const seededPosts = await Promise.all(
-    demoPosts.map((post) =>
-      upsertBySlug(payload, 'posts', post.slug, {
+    demoPosts.map((post) => {
+      const postData = {
         ...post,
         contentType: contentTypeId(post.type),
         status: 'published',
@@ -664,8 +694,10 @@ export async function seedDemoContent(payload: Payload) {
           metaTitle: `${post.title} | LeadsBaton`,
           metaDescription: post.excerpt,
         },
-      }),
-    ),
+      } as unknown as SeedCollectionData['posts']
+
+      return upsertBySlug(payload, 'posts', post.slug, postData)
+    }),
   )
 
   const pages = [
