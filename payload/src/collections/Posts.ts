@@ -8,7 +8,11 @@ import { resolvePostPath } from '../lib/contentLinks'
 import type { Post as PostDocument } from '../payload-types'
 
 const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'
-type PostFormData = Partial<PostDocument>
+type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
+type PostFormData = Partial<PostDocument> & {
+  contentType?: string | { id?: string; key?: PostTypeKey } | null
+  type?: PostTypeKey
+}
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -19,9 +23,17 @@ export const Posts: CollectionConfig = {
       url: ({ data }) => {
         const slug = typeof data.slug === 'string' ? data.slug : null
         const type = typeof data.type === 'string' ? data.type : null
-        return slug && type
-          ? `${frontendURL}/preview/post?slug=${encodeURIComponent(slug)}&type=${encodeURIComponent(type)}`
-          : frontendURL
+        const title = typeof data.title === 'string' ? data.title : ''
+        const excerpt = typeof data.excerpt === 'string' ? data.excerpt : ''
+        const status = typeof data.status === 'string' ? data.status : 'draft'
+        const route = `${frontendURL}/preview/post`
+        const params = new URLSearchParams()
+        if (slug) params.set('slug', slug)
+        if (type) params.set('type', type)
+        if (title) params.set('title', title)
+        if (excerpt) params.set('excerpt', excerpt)
+        if (status) params.set('status', status)
+        return params.toString() ? `${route}?${params.toString()}` : route
       },
     },
     preview: (doc) => {
@@ -46,18 +58,6 @@ export const Posts: CollectionConfig = {
         {
           label: 'Essentials',
           fields: [
-            {
-              name: 'editorPreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    exportName: 'PostDraftPreview',
-                    path: './components/admin/PostDraftPreview',
-                  },
-                },
-              },
-            },
             {
               type: 'row',
               fields: [
@@ -96,19 +96,13 @@ export const Posts: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'type',
-                  type: 'select',
+                  name: 'contentType',
+                  type: 'relationship',
+                  relationTo: 'content-types',
                   required: true,
-                  defaultValue: 'insight',
-                  options: [
-                    { label: 'Insight', value: 'insight' },
-                    { label: 'Whitepaper', value: 'whitepaper' },
-                    { label: 'Webinar', value: 'webinar' },
-                    { label: 'Case Study', value: 'case-study' },
-                  ],
                   admin: {
                     description:
-                      'Controls the public section and route. Insight -> /insights, Whitepaper -> /whitepapers, Webinar -> /webinars, Case Study -> /case-studies.',
+                      'Controls the public section and route. Seeded options are Insight, White Paper, and Webinar.',
                     width: '50%',
                   },
                 },
@@ -129,6 +123,13 @@ export const Posts: CollectionConfig = {
                   },
                 },
               ],
+            },
+            {
+              name: 'type',
+              type: 'text',
+              admin: {
+                hidden: true,
+              },
             },
             {
               type: 'row',
@@ -301,15 +302,6 @@ export const Posts: CollectionConfig = {
               ],
             },
             {
-              name: 'categories',
-              type: 'relationship',
-              relationTo: 'categories',
-              hasMany: true,
-              admin: {
-                description: 'Optional secondary categories. Primary category is automatically included.',
-              },
-            },
-            {
               name: 'tags',
               type: 'relationship',
               relationTo: 'tags',
@@ -371,23 +363,27 @@ export const Posts: CollectionConfig = {
           nextData.updatedBy = req.user.id
         }
 
-        if (nextData.status === 'published' && !nextData.publishedAt) {
-          nextData.publishedAt = new Date().toISOString()
-        }
+        const contentTypeValue = nextData.contentType
+        const contentTypeId =
+          typeof contentTypeValue === 'string'
+            ? contentTypeValue
+            : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
+              ? contentTypeValue.id
+              : null
 
-        if (nextData.primaryCategory) {
-          const categories = Array.isArray(nextData.categories) ? [...nextData.categories] : []
-          const hasPrimary = categories.some((item) => {
-            if (typeof item === 'string') {
-              return item === nextData.primaryCategory
-            }
-
-            return item?.id === nextData.primaryCategory
+        if (contentTypeId) {
+          const contentTypeDoc = await req.payload.findByID({
+            collection: 'content-types',
+            id: contentTypeId,
+            depth: 0,
+            overrideAccess: true,
           })
 
-          if (!hasPrimary) {
-            nextData.categories = [nextData.primaryCategory, ...categories]
-          }
+          nextData.type = contentTypeDoc.key as PostTypeKey
+        }
+
+        if (nextData.status === 'published' && !nextData.publishedAt) {
+          nextData.publishedAt = new Date().toISOString()
         }
 
         if (nextData.slug && typeof nextData.slug === 'string') {

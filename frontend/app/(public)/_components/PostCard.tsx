@@ -17,7 +17,7 @@ const categoryColors: Record<string, string> = {
 }
 
 export function PostCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const href = `/${post.type}s/${post.slug}`
   const categoryName = getCategoryName(post.primaryCategory)
   const categoryColor = categoryColors[categoryName.toLowerCase()] || 'var(--category-tech)'
 

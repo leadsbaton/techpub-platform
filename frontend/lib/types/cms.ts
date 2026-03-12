@@ -95,7 +95,7 @@ export interface Post {
   id: string
   title: string
   slug: string
-  type: 'insight' | 'whitepaper' | 'webinar' | 'case-study'
+  type: 'insight' | 'whitepaper' | 'webinar'
   status: 'draft' | 'published' | 'archived'
   excerpt: string
   content?: RichTextDocument | null

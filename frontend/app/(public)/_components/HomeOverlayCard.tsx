@@ -5,7 +5,7 @@ import type { Post } from '@/lib/types/cms'
 import { formatDate, getImageUrl } from '@/lib/utils/formatting'
 
 export function HomeOverlayCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const href = `/${post.type}s/${post.slug}`
 
   return (
     <Link href={href} className="group block overflow-hidden rounded-[12px]">

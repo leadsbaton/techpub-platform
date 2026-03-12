@@ -13,18 +13,56 @@ type SeededDoc = {
   id: string
 }
 
-type SeedCollection = 'categories' | 'authors' | 'tags' | 'posts' | 'pages'
+type SeedCollection = 'content-types' | 'categories' | 'authors' | 'tags' | 'posts' | 'pages'
 type RichTextSeed = NonNullable<Page['content']>
 type SeedCta = Post['cta']
 type SeedSubscriberData = Pick<Subscriber, 'email' | 'status'> & Partial<Subscriber>
 
 type SeedCollectionData = {
+  'content-types': {
+    label: string
+    key: 'insight' | 'whitepaper' | 'webinar'
+    routeBase: string
+    active?: boolean | null
+    sortOrder?: number | null
+  }
   categories: Pick<Category, 'name' | 'slug'> & Partial<Category>
   authors: Pick<Author, 'name' | 'slug'> & Partial<Author>
   tags: Pick<Tag, 'name' | 'slug'> & Partial<Tag>
-  posts: Pick<Post, 'title' | 'slug' | 'type' | 'status' | 'excerpt' | 'authors' | 'cta' | 'content'> & Partial<Post>
+  posts: (Pick<Post, 'title' | 'slug' | 'type' | 'status' | 'excerpt' | 'authors' | 'cta' | 'content'> &
+    Partial<Post>) & {
+      contentType?: string
+    }
   pages: Pick<Page, 'title' | 'slug' | 'status' | 'template' | 'hero'> & Partial<Page>
 }
+
+type SeedContentType = {
+  label: string
+  key: 'insight' | 'whitepaper' | 'webinar'
+  routeBase: string
+  sortOrder: number
+}
+
+const contentTypes: SeedContentType[] = [
+  {
+    label: 'Insight',
+    key: 'insight',
+    routeBase: '/insights',
+    sortOrder: 1,
+  },
+  {
+    label: 'White Paper',
+    key: 'whitepaper',
+    routeBase: '/whitepapers',
+    sortOrder: 2,
+  },
+  {
+    label: 'Webinar',
+    key: 'webinar',
+    routeBase: '/webinars',
+    sortOrder: 3,
+  },
+]
 
 type SeedCategory = {
   name: string
@@ -201,13 +239,27 @@ async function upsertBySlug<K extends SeedCollection>(
 ): Promise<SeededDoc> {
   const existing = await payload.find({
     collection,
-    where: { slug: { equals: slug } },
+    where:
+      collection === 'content-types'
+        ? { key: { equals: slug } }
+        : { slug: { equals: slug } },
     limit: 1,
     depth: 0,
   })
 
   if (existing.docs[0]) {
     switch (collection) {
+      case 'content-types': {
+        const updated = await payload.update({
+          collection: 'content-types',
+          id: existing.docs[0].id,
+          data: data as SeedCollectionData['content-types'],
+          draft: false,
+          depth: 0,
+        })
+
+        return { id: String(updated.id) }
+      }
       case 'categories': {
         const updated = await payload.update({
           collection: 'categories',
@@ -267,6 +319,16 @@ async function upsertBySlug<K extends SeedCollection>(
   }
 
   switch (collection) {
+    case 'content-types': {
+      const created = await payload.create({
+        collection: 'content-types',
+        data: data as SeedCollectionData['content-types'],
+        draft: false,
+        depth: 0,
+      })
+
+      return { id: String(created.id) }
+    }
     case 'categories': {
       const created = await payload.create({
         collection: 'categories',
@@ -386,6 +448,15 @@ async function deletePagesBySlugs(payload: Payload, slugs: string[]) {
 }
 
 export async function seedDemoContent(payload: Payload) {
+  const seededContentTypes = await Promise.all(
+    contentTypes.map((contentType) =>
+      upsertBySlug(payload, 'content-types', contentType.key, {
+        ...contentType,
+        active: true,
+      }),
+    ),
+  )
+
   const seededCategories = await Promise.all(
     categories.map((category) =>
       upsertBySlug(payload, 'categories', category.slug, {
@@ -417,6 +488,8 @@ export async function seedDemoContent(payload: Payload) {
   )
 
   const categoryId = (slug: string) => seededCategories.find((item, index) => categories[index].slug === slug)?.id
+  const contentTypeId = (key: SeedContentType['key']) =>
+    seededContentTypes.find((item, index) => contentTypes[index].key === key)?.id
   const authorIds = {
     editorial: seededAuthors[0]?.id,
     oracle: seededAuthors[1]?.id,
@@ -584,8 +657,8 @@ export async function seedDemoContent(payload: Payload) {
     demoPosts.map((post) =>
       upsertBySlug(payload, 'posts', post.slug, {
         ...post,
+        contentType: contentTypeId(post.type),
         status: 'published',
-        categories: post.primaryCategory ? [post.primaryCategory] : [],
         cta: buildPrimaryCta(post.type),
         seo: {
           metaTitle: `${post.title} | LeadsBaton`,
@@ -756,6 +829,7 @@ export async function seedDemoContent(payload: Payload) {
   })
 
   return {
+    contentTypes: seededContentTypes.length,
     categories: seededCategories.length,
     authors: seededAuthors.length,
     tags: seededTags.length,

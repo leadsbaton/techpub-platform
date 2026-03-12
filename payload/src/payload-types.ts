@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'content-types': ContentType;
     categories: Category;
     tags: Tag;
     authors: Author;
@@ -84,6 +85,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'content-types': ContentTypesSelect<false> | ContentTypesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
@@ -199,6 +201,26 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-types".
+ */
+export interface ContentType {
+  id: string;
+  label: string;
+  /**
+   * Stable value used internally by frontend filters and post routing.
+   */
+  key: string;
+  /**
+   * Public route base such as /insights, /whitepapers, or /webinars.
+   */
+  routeBase: string;
+  active?: boolean | null;
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -293,13 +315,14 @@ export interface Post {
    */
   slug: string;
   /**
-   * Controls the public section and route. Insight -> /insights, Whitepaper -> /whitepapers, Webinar -> /webinars, Case Study -> /case-studies.
+   * Controls the public section and route. Seeded options are Insight, White Paper, and Webinar.
    */
-  type: 'insight' | 'whitepaper' | 'webinar' | 'case-study';
+  contentType: string | ContentType;
   /**
    * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
    */
   status: 'draft' | 'published' | 'archived';
+  type?: string | null;
   authors: (string | Author)[];
   /**
    * Main taxonomy used in UI filters like Finance, Marketing, and Technology.
@@ -353,10 +376,6 @@ export interface Post {
    * Required for published content. Defaults to now when you publish.
    */
   publishedAt?: string | null;
-  /**
-   * Optional secondary categories. Primary category is automatically included.
-   */
-  categories?: (string | Category)[] | null;
   tags?: (string | Tag)[] | null;
   /**
    * Optional related content suggestions shown near this post.
@@ -504,6 +523,10 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'content-types';
+        value: string | ContentType;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: string | Category;
       } | null)
@@ -639,6 +662,19 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-types_select".
+ */
+export interface ContentTypesSelect<T extends boolean = true> {
+  label?: T;
+  key?: T;
+  routeBase?: T;
+  active?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
@@ -719,8 +755,9 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   readingTime?: T;
   slug?: T;
-  type?: T;
+  contentType?: T;
   status?: T;
+  type?: T;
   authors?: T;
   primaryCategory?: T;
   excerpt?: T;
@@ -739,7 +776,6 @@ export interface PostsSelect<T extends boolean = true> {
   featured?: T;
   pinned?: T;
   publishedAt?: T;
-  categories?: T;
   tags?: T;
   relatedPosts?: T;
   cta?:

@@ -11,7 +11,7 @@ import {
 } from '@/lib/utils/formatting'
 
 export function FeaturedPost({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const href = `/${post.type}s/${post.slug}`
 
   return (
     <section className="grid gap-8 rounded-[36px] bg-slate-950 px-6 py-6 text-white md:grid-cols-[1.15fr_0.85fr] md:px-8 md:py-8">
@@ -35,7 +35,7 @@ export function FeaturedPost({ post }: { post: Post }) {
           <Link href={href} className="rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-200">
             Read article
           </Link>
-          <Link href={`/${post.type}s`.replace('/case-studys', '/case-studies')} className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+          <Link href={`/${post.type}s`} className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
             Explore {getContentTypeLabel(post.type)}s
           </Link>
         </div>

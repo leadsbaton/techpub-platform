@@ -1,6 +1,6 @@
 type PostLike = {
   slug?: string | null
-  type?: 'insight' | 'whitepaper' | 'webinar' | 'case-study' | string | null
+  type?: 'insight' | 'whitepaper' | 'webinar' | string | null
 }
 
 export function resolvePostPath(post: PostLike): string | null {
@@ -8,6 +8,6 @@ export function resolvePostPath(post: PostLike): string | null {
     return null
   }
 
-  const typeSegment = post.type === 'case-study' ? 'case-studies' : `${post.type}s`
+  const typeSegment = `${post.type}s`
   return `/${typeSegment}/${post.slug}`
 }

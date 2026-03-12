@@ -17,35 +17,56 @@ const typeMap: Record<string, Post['type']> = {
   insight: 'insight',
   whitepaper: 'whitepaper',
   webinar: 'webinar',
-  'case-study': 'case-study',
 }
 
 export default async function PreviewPostPage({
   searchParams,
 }: {
-  searchParams: Promise<{ slug?: string; token?: string; type?: string }>
+  searchParams: Promise<{ slug?: string; token?: string; type?: string; title?: string; excerpt?: string; status?: string }>
 }) {
-  const { slug, token, type } = await searchParams
+  const { slug, token, type, title, excerpt, status } = await searchParams
 
-  if (!slug || !type || !typeMap[type]) {
+  if (!type || !typeMap[type]) {
     notFound()
   }
 
-  const post = await getPreviewPostBySlug(slug, typeMap[type], token)
+  const post = slug ? await getPreviewPostBySlug(slug, typeMap[type], token) : null
 
   if (!post) {
     return (
-      <section className="mx-auto max-w-5xl space-y-6 px-4 py-10 md:px-6">
-        <div className="rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Preview unavailable</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
-            Save the post first to load the preview
+      <article className="mx-auto max-w-5xl space-y-10 px-4 py-10 md:px-6">
+        <div className="space-y-5">
+          <Link href={`/${type}s`} className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            {getContentTypeLabel(typeMap[type])}
+          </Link>
+          <h1 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-6xl">
+            {title || 'Untitled post'}
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-            The preview route needs a saved slug and type. After the document is saved, this window will render the same public UI shell used by the live site.
-          </p>
+          <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+            <span>Draft preview</span>
+            <span>{status || 'draft'}</span>
+          </div>
         </div>
-      </section>
+
+        <div className="relative aspect-[16/9] overflow-hidden rounded-[32px] bg-slate-200" />
+
+        <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="space-y-8">
+            <p className="text-xl leading-8 text-slate-600">
+              {excerpt || 'Add an excerpt in Payload to preview the summary shown on the public post page.'}
+            </p>
+            <div className="rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-6 text-slate-600">
+              Save the document once to load the full frontend preview with rich text, image, and relationships.
+            </div>
+          </div>
+
+          <aside className="space-y-3 rounded-[28px] border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600">
+            <p>Type: {getContentTypeLabel(typeMap[type])}</p>
+            <p>Status: {status || 'draft'}</p>
+            <p>Slug: {slug || 'auto-generated after save'}</p>
+          </aside>
+        </div>
+      </article>
     )
   }
 
@@ -53,7 +74,7 @@ export default async function PreviewPostPage({
     <article className="mx-auto max-w-5xl space-y-10 px-4 py-10 md:px-6">
       <div className="space-y-5">
         <Link
-          href={`/${post.type === 'case-study' ? 'case-studies' : `${post.type}s`}`}
+          href={`/${post.type}s`}
           className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500"
         >
           {getContentTypeLabel(post.type)}

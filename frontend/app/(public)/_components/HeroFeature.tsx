@@ -30,7 +30,7 @@ export function HeroFeature({
 }) {
   const categoryName = getCategoryName(post.primaryCategory).toLowerCase()
   const heroTitle = heroCopyByCategory[categoryName] || getCategoryName(post.primaryCategory)
-  const heroHref = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const heroHref = `/${post.type}s/${post.slug}`
   const heroImage = getHeroImageFromCategory(categories, post)
 
   return (

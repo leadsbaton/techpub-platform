@@ -21,7 +21,7 @@ export function RankedSidebar({
 
       <div className="space-y-1">
         {items.map((item, index) => {
-          const href = `/${item.type}s/${item.slug}`.replace('/case-studys/', '/case-studies/')
+          const href = `/${item.type}s/${item.slug}`
 
           return (
             <Link

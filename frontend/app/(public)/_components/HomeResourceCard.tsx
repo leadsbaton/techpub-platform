@@ -5,7 +5,7 @@ import type { Post } from '@/lib/types/cms'
 import { formatDate, getAuthorNames, getImageUrl } from '@/lib/utils/formatting'
 
 export function HomeResourceCard({ post }: { post: Post }) {
-  const href = `/${post.type}s/${post.slug}`.replace('/case-studys/', '/case-studies/')
+  const href = `/${post.type}s/${post.slug}`
 
   return (
     <article className="space-y-4">

@@ -16,7 +16,6 @@ const typeMap = {
   insights: 'insight',
   whitepapers: 'whitepaper',
   webinars: 'webinar',
-  'case-studies': 'case-study',
 } as const
 
 export default async function Page({

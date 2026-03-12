@@ -60,8 +60,6 @@ export function getContentTypeLabel(type: Post['type']): string {
       return 'Whitepaper'
     case 'webinar':
       return 'Webinar'
-    case 'case-study':
-      return 'Case Study'
     default:
       return 'Insight'
   }
@@ -72,7 +70,7 @@ export function resolveLinkHref(link?: LinkReference | null): string {
   if (link.type === 'custom' && link.url) return link.url
   if (link.type === 'page' && link.page && typeof link.page !== 'string') return `/${link.page.slug}`
   if (link.type === 'post' && link.post && typeof link.post !== 'string') {
-    const base = `${link.post.type}s`.replace('case-studys', 'case-studies')
+    const base = `${link.post.type}s`
     return `/${base}/${link.post.slug}`
   }
   if (link.type === 'category' && link.category && typeof link.category !== 'string') {

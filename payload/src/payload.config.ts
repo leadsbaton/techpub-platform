@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
+import { ContentTypes } from './collections/ContentTypes'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { Authors } from './collections/Authors'
@@ -49,6 +50,7 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    ContentTypes,
     Categories,
     Tags,
     Authors,
