@@ -280,53 +280,35 @@ export interface Author {
  */
 export interface Post {
   id: string;
+  /**
+   * Public headline shown in cards, SEO, and the post detail page.
+   */
   title: string;
-  slug: string;
-  type: 'insight' | 'whitepaper' | 'webinar' | 'case-study';
-  status: 'draft' | 'published' | 'archived';
-  excerpt: string;
-  featuredImage?: (string | null) | Media;
-  gallery?:
-    | {
-        image: string | Media;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  featured?: boolean | null;
-  pinned?: boolean | null;
-  authors: (string | Author)[];
-  primaryCategory?: (string | null) | Category;
-  categories?: (string | Category)[] | null;
-  tags?: (string | Tag)[] | null;
   /**
    * Estimated reading time in minutes.
    */
   readingTime?: number | null;
   /**
-   * Required for published content. Defaults to now when you publish.
+   * Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.
    */
-  publishedAt?: string | null;
-  videoUrl?: string | null;
+  slug: string;
   /**
-   * Optional canonical or registration URL.
+   * Controls the public section and route. Insight -> /insights, Whitepaper -> /whitepapers, Webinar -> /webinars, Case Study -> /case-studies.
    */
-  externalUrl?: string | null;
-  downloadAsset?: (string | null) | Media;
-  cta: {
-    primary: {
-      label: string;
-      type: 'custom' | 'page' | 'post' | 'category';
-      /**
-       * Examples: /contact, https://example.com
-       */
-      url?: string | null;
-      page?: (string | null) | Page;
-      post?: (string | null) | Post;
-      category?: (string | null) | Category;
-      newTab?: boolean | null;
-    };
-  };
+  type: 'insight' | 'whitepaper' | 'webinar' | 'case-study';
+  /**
+   * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
+   */
+  status: 'draft' | 'published' | 'archived';
+  authors: (string | Author)[];
+  /**
+   * Main taxonomy used in UI filters like Finance, Marketing, and Technology.
+   */
+  primaryCategory: string | Category;
+  /**
+   * Short summary used on listing pages and hero cards.
+   */
+  excerpt: string;
   content: {
     root: {
       type: string;
@@ -342,9 +324,58 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  /**
+   * Main card and detail-page image.
+   */
+  featuredImage: string | Media;
+  /**
+   * Optional downloadable asset for whitepaper entries.
+   */
+  downloadAsset?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional event stream, replay, or registration video URL for webinar pages.
+   */
+  videoUrl?: string | null;
+  /**
+   * Optional canonical, download, or registration URL.
+   */
+  externalUrl?: string | null;
+  featured?: boolean | null;
+  pinned?: boolean | null;
+  /**
+   * Required for published content. Defaults to now when you publish.
+   */
+  publishedAt?: string | null;
+  /**
+   * Optional secondary categories. Primary category is automatically included.
+   */
+  categories?: (string | Category)[] | null;
+  tags?: (string | Tag)[] | null;
+  /**
+   * Optional related content suggestions shown near this post.
+   */
   relatedPosts?: (string | Post)[] | null;
-  createdBy?: (string | null) | User;
-  updatedBy?: (string | null) | User;
+  cta: {
+    primary: {
+      label: string;
+      type: 'custom' | 'page' | 'post' | 'category';
+      /**
+       * Examples: /contact, https://example.com
+       */
+      url?: string | null;
+      page?: (string | null) | Page;
+      post?: (string | null) | Post;
+      category?: (string | null) | Category;
+      newTab?: boolean | null;
+    };
+  };
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -352,6 +383,8 @@ export interface Post {
     metaImage?: (string | null) | Media;
     noIndex?: boolean | null;
   };
+  createdBy?: (string | null) | User;
+  updatedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -684,11 +717,16 @@ export interface AuthorsSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  readingTime?: T;
   slug?: T;
   type?: T;
   status?: T;
+  authors?: T;
+  primaryCategory?: T;
   excerpt?: T;
+  content?: T;
   featuredImage?: T;
+  downloadAsset?: T;
   gallery?:
     | T
     | {
@@ -696,17 +734,14 @@ export interface PostsSelect<T extends boolean = true> {
         caption?: T;
         id?: T;
       };
-  featured?: T;
-  pinned?: T;
-  authors?: T;
-  primaryCategory?: T;
-  categories?: T;
-  tags?: T;
-  readingTime?: T;
-  publishedAt?: T;
   videoUrl?: T;
   externalUrl?: T;
-  downloadAsset?: T;
+  featured?: T;
+  pinned?: T;
+  publishedAt?: T;
+  categories?: T;
+  tags?: T;
+  relatedPosts?: T;
   cta?:
     | T
     | {
@@ -722,10 +757,6 @@ export interface PostsSelect<T extends boolean = true> {
               newTab?: T;
             };
       };
-  content?: T;
-  relatedPosts?: T;
-  createdBy?: T;
-  updatedBy?: T;
   seo?:
     | T
     | {
@@ -735,6 +766,8 @@ export interface PostsSelect<T extends boolean = true> {
         metaImage?: T;
         noIndex?: T;
       };
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }

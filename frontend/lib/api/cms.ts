@@ -37,12 +37,22 @@ function buildQuery(params: Record<string, unknown>) {
 }
 
 async function fetchPayload<T>(endpoint: string, revalidate = 60): Promise<T> {
+  return fetchPayloadWithOptions<T>(endpoint, revalidate)
+}
+
+async function fetchPayloadWithOptions<T>(
+  endpoint: string,
+  revalidate = 60,
+  init?: RequestInit,
+): Promise<T> {
   const response = await fetch(`${API_URL}${endpoint}`, {
+    ...init,
     ...(revalidate > 0
       ? { next: { revalidate } }
       : { cache: 'no-store' as const }),
     headers: {
       Accept: 'application/json',
+      ...(init?.headers || {}),
     },
   })
 
@@ -128,6 +138,35 @@ export async function getPostBySlug(
   const query = buildQuery({ depth: 2, limit: 1, where })
   try {
     const data = await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`)
+    return data.docs[0] ?? null
+  } catch {
+    return null
+  }
+}
+
+export async function getPreviewPostBySlug(
+  slug: string,
+  type: Post['type'],
+  token?: string,
+): Promise<Post | null> {
+  const where: Record<string, unknown> = {
+    slug: { equals: slug },
+    type: { equals: type },
+  }
+
+  const query = buildQuery({ depth: 2, limit: 1, where })
+  try {
+    const data = await fetchPayloadWithOptions<PayloadListResponse<Post>>(
+      `/api/posts?${query}`,
+      0,
+      token
+        ? {
+            headers: {
+              Authorization: `JWT ${token}`,
+            },
+          }
+        : undefined,
+    )
     return data.docs[0] ?? null
   } catch {
     return null

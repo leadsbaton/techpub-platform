@@ -7,8 +7,8 @@ import type { ReactNode } from 'react'
 import { Pagination } from '../_components/Pagination'
 import { PostCard } from '../_components/PostCard'
 import { RichTextRenderer } from '../_components/RichTextRenderer'
-import { getPageBySlug, getPosts, getSiteSettings } from '@/lib/api/cms'
-import type { PageDoc, Post, SiteSettings } from '@/lib/types/cms'
+import { getCategories, getPageBySlug, getPosts, getSiteSettings } from '@/lib/api/cms'
+import type { Category, PageDoc, Post, SiteSettings } from '@/lib/types/cms'
 import { getImageUrl, resolveLinkHref } from '@/lib/utils/formatting'
 
 const typeMap = {
@@ -23,6 +23,54 @@ function getFeaturedPosts(pageDoc: PageDoc) {
     pageDoc.featuredPosts?.filter(
       (item): item is Exclude<typeof item, string> => Boolean(item && typeof item !== 'string'),
     ) ?? []
+  )
+}
+
+function CategoryFilters({
+  categories,
+  contentType,
+  query,
+  selectedCategory,
+}: {
+  categories: Category[]
+  contentType: string
+  query?: string
+  selectedCategory?: string
+}) {
+  const buildHref = (category?: string) => {
+    const params = new URLSearchParams()
+    if (query) params.set('q', query)
+    if (category) params.set('category', category)
+    const queryString = params.toString()
+    return queryString ? `/${contentType}?${queryString}` : `/${contentType}`
+  }
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Link
+        href={buildHref()}
+        className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+          !selectedCategory
+            ? 'border-[color:var(--accent-red)] bg-[color:var(--accent-red)] text-white'
+            : 'border-[var(--border-subtle)] text-[color:var(--text-soft)] hover:border-[var(--accent-red)] hover:text-[color:var(--text-strong)]'
+        }`}
+      >
+        All
+      </Link>
+      {categories.map((category) => (
+        <Link
+          key={category.id}
+          href={buildHref(category.slug)}
+          className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+            selectedCategory === category.slug
+              ? 'border-[color:var(--accent-red)] bg-[color:var(--accent-red)] text-white'
+              : 'border-[var(--border-subtle)] text-[color:var(--text-soft)] hover:border-[var(--accent-red)] hover:text-[color:var(--text-strong)]'
+          }`}
+        >
+          {category.name}
+        </Link>
+      ))}
+    </div>
   )
 }
 
@@ -375,15 +423,18 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ contentType: string }>
-  searchParams: Promise<{ page?: string; q?: string }>
+  searchParams: Promise<{ page?: string; q?: string; category?: string }>
 }) {
   const { contentType } = await params
-  const { page: rawPage, q } = await searchParams
+  const { page: rawPage, q, category } = await searchParams
   const page = Number(rawPage || 1)
   const mappedType = typeMap[contentType as keyof typeof typeMap]
 
   if (mappedType) {
-    const data = await getPosts({ type: mappedType, page, limit: 9, query: q })
+    const [data, categories] = await Promise.all([
+      getPosts({ type: mappedType, page, limit: 9, query: q, category }),
+      getCategories(12),
+    ])
 
     return (
       <section className="mx-auto max-w-7xl space-y-8 px-4 py-10 md:px-6">
@@ -392,13 +443,47 @@ export default async function Page({
           <h1 className="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
             {contentType.replace(/-/g, ' ')}
           </h1>
+          <p className="text-base leading-7 text-slate-600">
+            Search published content and filter by the primary category shown in the public navigation.
+          </p>
+        </div>
+        <div className="rounded-[28px] bg-white p-5 shadow-[var(--shadow-soft)]">
+          <form className="flex flex-col gap-4 md:flex-row md:items-center" method="GET">
+            <input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Search by title or excerpt"
+              className="min-w-0 flex-1 rounded-full border border-[var(--border-subtle)] px-5 py-3 text-[color:var(--text-strong)] outline-none"
+            />
+            {category ? <input type="hidden" name="category" value={category} /> : null}
+            <button
+              type="submit"
+              className="rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
+            >
+              Search
+            </button>
+          </form>
+          <div className="mt-4">
+            <CategoryFilters
+              categories={categories}
+              contentType={contentType}
+              query={q}
+              selectedCategory={category}
+            />
+          </div>
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {data.docs.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
         </div>
-        <Pagination basePath={`/${contentType}`} currentPage={data.page} totalPages={data.totalPages} query={{ q }} />
+        <Pagination
+          basePath={`/${contentType}`}
+          currentPage={data.page}
+          totalPages={data.totalPages}
+          query={{ q, category }}
+        />
       </section>
     )
   }

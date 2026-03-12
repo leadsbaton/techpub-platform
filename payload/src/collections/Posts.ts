@@ -5,14 +5,25 @@ import { linkField } from '../fields/link'
 import { seoFields } from '../fields/seo'
 import { slugHook } from '../fields/slug'
 import { resolvePostPath } from '../lib/contentLinks'
+import type { Post as PostDocument } from '../payload-types'
 
 const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || 'http://localhost:3000'
+type PostFormData = Partial<PostDocument>
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'status', 'publishedAt'],
+    defaultColumns: ['title', 'type', 'primaryCategory', 'status', 'publishedAt'],
+    livePreview: {
+      url: ({ data }) => {
+        const slug = typeof data.slug === 'string' ? data.slug : null
+        const type = typeof data.type === 'string' ? data.type : null
+        return slug && type
+          ? `${frontendURL}/preview/post?slug=${encodeURIComponent(slug)}&type=${encodeURIComponent(type)}`
+          : frontendURL
+      },
+    },
     preview: (doc) => {
       const path = resolvePostPath({
         slug: typeof doc.slug === 'string' ? doc.slug : null,
@@ -30,163 +41,303 @@ export const Posts: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      hooks: {
-        beforeValidate: [slugHook('title')],
-      },
-    },
-    {
-      name: 'type',
-      type: 'select',
-      required: true,
-      defaultValue: 'insight',
-      options: [
-        { label: 'Insight', value: 'insight' },
-        { label: 'Whitepaper', value: 'whitepaper' },
-        { label: 'Webinar', value: 'webinar' },
-        { label: 'Case Study', value: 'case-study' },
-      ],
-    },
-    {
-      name: 'status',
-      type: 'select',
-      required: true,
-      defaultValue: 'draft',
-      options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Published', value: 'published' },
-        { label: 'Archived', value: 'archived' },
-      ],
-    },
-    {
-      name: 'excerpt',
-      type: 'textarea',
-      required: true,
-    },
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'gallery',
-      type: 'array',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
+          label: 'Essentials',
+          fields: [
+            {
+              name: 'editorPreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    exportName: 'PostDraftPreview',
+                    path: './components/admin/PostDraftPreview',
+                  },
+                },
+              },
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    description: 'Public headline shown in cards, SEO, and the post detail page.',
+                    width: '70%',
+                  },
+                },
+                {
+                  name: 'readingTime',
+                  type: 'number',
+                  admin: {
+                    description: 'Estimated reading time in minutes.',
+                    width: '30%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              required: true,
+              unique: true,
+              hooks: {
+                beforeValidate: [slugHook('title')],
+              },
+              admin: {
+                description: 'Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.',
+              },
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'type',
+                  type: 'select',
+                  required: true,
+                  defaultValue: 'insight',
+                  options: [
+                    { label: 'Insight', value: 'insight' },
+                    { label: 'Whitepaper', value: 'whitepaper' },
+                    { label: 'Webinar', value: 'webinar' },
+                    { label: 'Case Study', value: 'case-study' },
+                  ],
+                  admin: {
+                    description:
+                      'Controls the public section and route. Insight -> /insights, Whitepaper -> /whitepapers, Webinar -> /webinars, Case Study -> /case-studies.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'status',
+                  type: 'select',
+                  required: true,
+                  defaultValue: 'draft',
+                  options: [
+                    { label: 'Draft', value: 'draft' },
+                    { label: 'Published', value: 'published' },
+                    { label: 'Archived', value: 'archived' },
+                  ],
+                  admin: {
+                    description:
+                      'Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'authors',
+                  type: 'relationship',
+                  relationTo: 'authors',
+                  hasMany: true,
+                  required: true,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'primaryCategory',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  required: true,
+                  admin: {
+                    description: 'Main taxonomy used in UI filters like Finance, Marketing, and Technology.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'excerpt',
+              type: 'textarea',
+              required: true,
+              admin: {
+                description: 'Short summary used on listing pages and hero cards.',
+              },
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              required: true,
+            },
+          ],
         },
         {
-          name: 'caption',
-          type: 'text',
-        },
-      ],
-    },
-    {
-      name: 'featured',
-      type: 'checkbox',
-      defaultValue: false,
-    },
-    {
-      name: 'pinned',
-      type: 'checkbox',
-      defaultValue: false,
-    },
-    {
-      name: 'authors',
-      type: 'relationship',
-      relationTo: 'authors',
-      hasMany: true,
-      required: true,
-    },
-    {
-      name: 'primaryCategory',
-      type: 'relationship',
-      relationTo: 'categories',
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true,
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-    },
-    {
-      name: 'readingTime',
-      type: 'number',
-      admin: {
-        description: 'Estimated reading time in minutes.',
-      },
-    },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      validate: (value, { siblingData }) => {
-        if (siblingData.status === 'published' && !value) {
-          return 'Published posts require a publish date.'
-        }
+          label: 'Media & Discovery',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'featuredImage',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                  admin: {
+                    description: 'Main card and detail-page image.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'downloadAsset',
+                  type: 'relationship',
+                  relationTo: 'media',
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.type === 'whitepaper' && !value && !siblingData.externalUrl) {
+                      return 'Whitepaper posts need either a download asset or an external URL.'
+                    }
 
-        return true
-      },
-      admin: {
-        description: 'Required for published content. Defaults to now when you publish.',
-        date: {
-          pickerAppearance: 'dayAndTime',
+                    return true
+                  },
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'whitepaper',
+                    description: 'Optional downloadable asset for whitepaper entries.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'gallery',
+              type: 'array',
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                },
+                {
+                  name: 'caption',
+                  type: 'text',
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'videoUrl',
+                  type: 'text',
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.type === 'webinar' && !value && !siblingData.externalUrl) {
+                      return 'Webinar posts need either a video URL or an external URL.'
+                    }
+
+                    return true
+                  },
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Optional event stream, replay, or registration video URL for webinar pages.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'externalUrl',
+                  type: 'text',
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.type === 'whitepaper' && !value && !siblingData.downloadAsset) {
+                      return 'Whitepaper posts need either an external URL or a download asset.'
+                    }
+
+                    if (siblingData.type === 'webinar' && !value && !siblingData.videoUrl) {
+                      return 'Webinar posts need either an external URL or a video URL.'
+                    }
+
+                    return true
+                  },
+                  admin: {
+                    description: 'Optional canonical, download, or registration URL.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'featured',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    width: '25%',
+                  },
+                },
+                {
+                  name: 'pinned',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    width: '25%',
+                  },
+                },
+                {
+                  name: 'publishedAt',
+                  type: 'date',
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.status === 'published' && !value) {
+                      return 'Published posts require a publish date.'
+                    }
+
+                    return true
+                  },
+                  admin: {
+                    description: 'Required for published content. Defaults to now when you publish.',
+                    date: {
+                      pickerAppearance: 'dayAndTime',
+                    },
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              admin: {
+                description: 'Optional secondary categories. Primary category is automatically included.',
+              },
+            },
+            {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
+            },
+            {
+              name: 'relatedPosts',
+              type: 'relationship',
+              relationTo: 'posts',
+              hasMany: true,
+              admin: {
+                description: 'Optional related content suggestions shown near this post.',
+              },
+            },
+          ],
         },
-      },
-    },
-    {
-      name: 'videoUrl',
-      type: 'text',
-      admin: {
-        condition: (_, siblingData) => siblingData?.type === 'webinar',
-      },
-    },
-    {
-      name: 'externalUrl',
-      type: 'text',
-      admin: {
-        description: 'Optional canonical or registration URL.',
-      },
-    },
-    {
-      name: 'downloadAsset',
-      type: 'relationship',
-      relationTo: 'media',
-      admin: {
-        condition: (_, siblingData) => siblingData?.type === 'whitepaper',
-      },
-    },
-    {
-      name: 'cta',
-      type: 'group',
-      fields: [linkField('primary', 'Primary CTA')],
-    },
-    {
-      name: 'content',
-      type: 'richText',
-      required: true,
-    },
-    {
-      name: 'relatedPosts',
-      type: 'relationship',
-      relationTo: 'posts',
-      hasMany: true,
+        {
+          label: 'Actions & SEO',
+          fields: [
+            {
+              name: 'cta',
+              type: 'group',
+              fields: [linkField('primary', 'Primary CTA')],
+            },
+            ...seoFields(),
+          ],
+        },
+      ],
     },
     {
       name: 'createdBy',
@@ -206,12 +357,11 @@ export const Posts: CollectionConfig = {
         readOnly: true,
       },
     },
-    ...seoFields(),
   ],
   hooks: {
     beforeChange: [
       async ({ data, operation, originalDoc, req }) => {
-        const nextData = { ...data }
+        const nextData: PostFormData = { ...(data as PostFormData) }
 
         if (operation === 'create' && req.user) {
           nextData.createdBy = req.user.id
@@ -223,6 +373,21 @@ export const Posts: CollectionConfig = {
 
         if (nextData.status === 'published' && !nextData.publishedAt) {
           nextData.publishedAt = new Date().toISOString()
+        }
+
+        if (nextData.primaryCategory) {
+          const categories = Array.isArray(nextData.categories) ? [...nextData.categories] : []
+          const hasPrimary = categories.some((item) => {
+            if (typeof item === 'string') {
+              return item === nextData.primaryCategory
+            }
+
+            return item?.id === nextData.primaryCategory
+          })
+
+          if (!hasPrimary) {
+            nextData.categories = [nextData.primaryCategory, ...categories]
+          }
         }
 
         if (nextData.slug && typeof nextData.slug === 'string') {
