@@ -14,7 +14,7 @@ function renderEchoTitle() {
   return Array.from({ length: 3 }).map((_, index) => (
     <p
       key={index}
-      className={`text-[1.35rem] font-semibold leading-[0.95] text-white sm:text-[1.45rem] ${
+      className={`headline-font text-[1.35rem] font-extrabold leading-[0.95] text-white sm:text-[1.45rem] ${
         index === 0 ? '' : 'opacity-90'
       }`}
     >
@@ -47,8 +47,8 @@ export function HeroFeature({
   })()
 
   return (
-    <section className="overflow-hidden rounded-[30px] bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] px-3 py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.28)] md:px-6 md:py-6">
-      <div className="grid gap-5 xl:grid-cols-[0.28fr_0.72fr]">
+    <section className="overflow-hidden rounded-[30px] bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] px-3 py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.28)] md:px-6 md:py-7">
+      <div className="grid gap-5 xl:grid-cols-[0.26fr_0.74fr]">
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] xl:grid-cols-1">
           <Link
             href={heroHref}
@@ -83,13 +83,13 @@ export function HeroFeature({
             </div>
           </Link>
 
-          <div className="grid gap-3 rounded-[22px] bg-white/6 px-4 py-4 sm:grid-cols-3 xl:grid-cols-3">
+          <div className="grid gap-3 rounded-[22px] bg-transparent px-1 py-2 sm:grid-cols-3 xl:grid-cols-3">
             {renderEchoTitle()}
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="overflow-hidden rounded-[24px] bg-black/15 p-3 md:p-4">
+          <div className="overflow-hidden rounded-[24px] bg-black/12 p-3 md:p-4">
             <div className="relative aspect-[1.62/0.96] overflow-hidden rounded-[18px]">
               <Image
                 src={getImageUrl(heroImage)}
@@ -101,30 +101,24 @@ export function HeroFeature({
               <div className="absolute inset-0 bg-gradient-to-r from-black/28 via-transparent to-black/12" />
             </div>
 
-            <div className="-mt-4 flex flex-col gap-4 px-2 pb-1 sm:-mt-8 sm:px-5 md:flex-row md:items-end md:justify-between">
+            <div className="-mt-5 flex flex-col gap-4 px-2 pb-1 sm:-mt-10 sm:px-5 md:flex-row md:items-end md:justify-between">
               <div className="md:max-w-[58%]">
                 <p className="text-[0.78rem] uppercase tracking-[0.28em] text-white/72">
                   Explore, Engage, Elevate
                 </p>
                 <Link
                   href={heroHref}
-                  className="mt-2 block text-[clamp(1.55rem,3vw,3rem)] font-semibold leading-[1.03] transition hover:text-white/85"
+                  className="headline-font mt-2 block text-[clamp(1.55rem,3vw,3rem)] font-extrabold leading-[1.03] transition hover:text-white/85"
                 >
                   {post.title}
                 </Link>
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href={webinarHref}
-                  className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-red-dark)]"
-                >
+                <Link href={webinarHref} className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-[var(--accent-red)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]">
                   Join Webinars
                 </Link>
-                <Link
-                  href={whitepaperHref}
-                  className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-white px-5 py-3 text-sm font-semibold text-[color:var(--text-strong)]"
-                >
+                <Link href={whitepaperHref} className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-white px-5 py-3 text-sm font-bold text-[color:var(--text-strong)]">
                   Download White Papers
                 </Link>
               </div>

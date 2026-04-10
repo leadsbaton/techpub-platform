@@ -3,47 +3,51 @@ import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { getCategoryAccent, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
 
 export function HomeResourceCard({ post }: { post: Post }) {
   const href = getPostHref(post)
+  const category = getCategoryName(post.primaryCategory)
+  const accent = getCategoryAccent(post.primaryCategory)
 
   return (
-    <article className="flex h-full flex-col rounded-[18px] bg-white p-3 shadow-[var(--shadow-soft)]">
-      <Link href={href} className="group block overflow-hidden">
-        <div className="relative aspect-[1.08/0.8] overflow-hidden rounded-[12px] bg-white">
-          <Image
-            src={getImageUrl(post.featuredImage)}
-            alt={post.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-          />
-          <div className="absolute right-3 top-3">
-            <span className="inline-flex rounded-[4px] bg-[#2339d7] px-2 py-1 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-white">
-              {getCategoryName(post.primaryCategory)}
-            </span>
+    <article className="flex h-full flex-col rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 shadow-[var(--shadow-soft)]">
+      <div className="relative mb-6 overflow-visible">
+        <div
+          className="vertical-badge absolute right-[-10px] top-0 z-10 rounded-bl-[10px] rounded-br-[10px] px-2 py-3 text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white"
+          style={{ backgroundColor: accent }}
+        >
+          {category}
+        </div>
+        <Link href={href} className="group block overflow-hidden rounded-[14px]">
+          <div className="relative aspect-[1.12/0.68] overflow-hidden rounded-[14px]">
+            <Image
+              src={getImageUrl(post.featuredImage)}
+              alt={post.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            />
           </div>
-        </div>
-      </Link>
-      <div className="flex flex-1 flex-col space-y-3 px-2 pb-2 pt-4">
-        <div className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[color:var(--accent-red)]">
-          White Paper
-        </div>
+        </Link>
+      </div>
+
+      <div className="flex flex-1 flex-col">
         <Link
           href={href}
-          className="block text-[1rem] font-semibold leading-7 text-[color:var(--text-strong)] md:text-[1.05rem]"
+          className="headline-font text-[1.08rem] font-extrabold leading-[1.24] text-[color:var(--text-strong)]"
         >
           {post.title}
         </Link>
-        <p className="text-sm leading-6 text-[color:var(--text-muted)]">
-          {post.excerpt || 'All you need to know from the latest long-form resource and downloadable guide.'}
+        <p className="mt-4 text-[0.98rem] leading-7 text-[color:var(--text-muted)]">
+          {post.excerpt ||
+            'Cards are a great way to organize content in a collection of products, case studies, services, and more.'}
         </p>
-        <div className="pt-2">
+        <div className="mt-8">
           <Link
             href={href}
-            className="inline-flex text-sm font-semibold text-[color:var(--accent-red)] transition hover:text-[color:var(--accent-red-dark)]"
+            className="inline-flex items-center gap-2 text-base font-bold text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
           >
-            Download Now {'->'}
+            Download Now <span aria-hidden="true">-&gt;</span>
           </Link>
         </div>
       </div>

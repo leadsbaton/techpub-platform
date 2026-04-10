@@ -23,6 +23,25 @@ export function formatDate(dateString?: string | null): string {
   }).format(new Date(dateString))
 }
 
+export function formatShortDate(dateString?: string | null): string {
+  if (!dateString) {
+    return 'Unscheduled'
+  }
+
+  const date = new Date(dateString)
+  const day = date.getDate()
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? 'st'
+      : day % 10 === 2 && day !== 12
+        ? 'nd'
+        : day % 10 === 3 && day !== 13
+          ? 'rd'
+          : 'th'
+  const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date)
+  return `${day}${suffix} ${month}`
+}
+
 export function getMediaUrl(media?: Media | string | null): string | null {
   if (!media) return null
   if (typeof media === 'string') return media.startsWith('/') ? `${API_URL}${media}` : media
@@ -42,6 +61,14 @@ export function hasMediaSource(media?: Media | string | null): boolean {
 export function getCategoryName(category?: Category | string | null): string {
   if (!category) return 'General'
   return typeof category === 'string' ? category : category.name
+}
+
+export function getCategoryAccent(category?: Category | string | null): string {
+  const name = getCategoryName(category).toLowerCase()
+  if (name.includes('tech')) return '#1238d6'
+  if (name.includes('finance')) return '#ff2a1f'
+  if (name.includes('marketing')) return '#12a639'
+  return '#1f2937'
 }
 
 export function getAuthorNames(authors?: Array<Author | string> | null): string {

@@ -40,7 +40,8 @@ export default async function HomePage() {
     .slice(0, 4)
   const trendingPosts = insights.slice(0, 3)
   const latestInsights = insights.slice(0, 6)
-  const upcomingWebinars = webinars.slice(0, 3)
+  const webinarLead = webinars[0] ?? null
+  const webinarSupport = webinars.slice(1, 3)
   const mustReadWhitepapers = whitepapers.slice(0, 3)
 
   return (
@@ -71,10 +72,33 @@ export default async function HomePage() {
           href={insightConfig.routeBase}
           actionLabel="View All"
         />
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {latestInsights.map((post) => (
-            <HomeOverlayCard key={post.id} post={post} variant="compact" />
-          ))}
+        <div className="grid gap-5 lg:grid-cols-3">
+          <div className="space-y-5">
+            {latestInsights[0] ? (
+              <HomeOverlayCard post={latestInsights[0]} variant="compact" compactSize="large" />
+            ) : null}
+            {latestInsights[3] ? (
+              <HomeOverlayCard post={latestInsights[3]} variant="compact" compactSize="large" />
+            ) : null}
+          </div>
+
+          <div className="space-y-5">
+            {latestInsights[1] ? (
+              <HomeOverlayCard post={latestInsights[1]} variant="compact" compactSize="small" />
+            ) : null}
+            {latestInsights[4] ? (
+              <HomeOverlayCard post={latestInsights[4]} variant="compact" compactSize="small" />
+            ) : null}
+            {latestInsights[5] ? (
+              <HomeOverlayCard post={latestInsights[5]} variant="compact" compactSize="small" />
+            ) : null}
+          </div>
+
+          <div className="space-y-5">
+            {latestInsights[2] ? (
+              <HomeOverlayCard post={latestInsights[2]} variant="compact" compactSize="large" />
+            ) : null}
+          </div>
         </div>
       </section>
 
@@ -82,10 +106,15 @@ export default async function HomePage() {
 
       <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
         <HomeSectionHeader title="Upcoming Webinars" href={webinarConfig.routeBase} actionLabel="View All" />
-        <div className="grid gap-5 md:grid-cols-3">
-          {upcomingWebinars.map((post) => (
-            <HomeOverlayCard key={post.id} post={post} variant="webinar" />
-          ))}
+        <div className="grid gap-5 lg:grid-cols-[0.48fr_0.52fr]">
+          <div className="space-y-5">
+            {webinarSupport[0] ? (
+              <HomeOverlayCard post={webinarSupport[0]} variant="webinar" />
+            ) : null}
+          </div>
+          <div>
+            {webinarLead ? <HomeOverlayCard post={webinarLead} variant="webinar" /> : null}
+          </div>
         </div>
       </section>
 

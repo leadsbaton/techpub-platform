@@ -30,7 +30,7 @@ const Footer = async () => {
   const sections = settings?.footerSections?.length ? settings.footerSections : fallbackSections
 
   return (
-    <footer className="mt-20 border-t border-[var(--border-subtle)] bg-[var(--surface)]">
+    <footer className="mt-20 border-t border-[var(--border-subtle)] bg-white">
       <div className="site-container grid gap-12 py-14 md:grid-cols-[1fr_auto] md:items-end">
         <div className="space-y-5">
           <div className="space-y-2">
@@ -41,7 +41,7 @@ const Footer = async () => {
               height={110}
               className="h-20 w-auto object-contain"
             />
-            <div className="text-[11px] text-[color:var(--text-muted)]">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--text-muted)]">
               {settings?.siteTagline || 'We Speak Your Language'}
             </div>
           </div>
@@ -66,7 +66,9 @@ const Footer = async () => {
         <div className="grid gap-10 sm:grid-cols-2">
           {sections.map((section) => (
             <div key={section.title} className="space-y-4">
-              <h2 className="text-[14px] font-semibold text-[color:var(--text-strong)]">{section.title}</h2>
+              <h2 className="headline-font text-[1rem] font-extrabold text-[color:var(--text-strong)]">
+                {section.title}
+              </h2>
               <div className="space-y-3">
                 {section.links?.map(({ item }) => (
                   <Link

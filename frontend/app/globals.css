@@ -31,7 +31,7 @@ body {
   min-height: 100vh;
   background: var(--page-bg);
   color: var(--text-strong);
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body), "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 a {
@@ -58,6 +58,16 @@ button {
   flex: 1;
   height: 1px;
   background: var(--border-subtle);
+}
+
+.headline-font {
+  font-family: var(--font-headline), "Segoe UI", sans-serif;
+}
+
+.vertical-badge {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-orientation: mixed;
 }
 
 .nav-link {

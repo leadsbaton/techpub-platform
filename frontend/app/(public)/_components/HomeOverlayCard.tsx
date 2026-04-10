@@ -3,61 +3,83 @@ import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { formatDate, getAuthorNames, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import {
+  formatDate,
+  formatShortDate,
+  getAuthorNames,
+  getCategoryAccent,
+  getCategoryName,
+  getImageUrl,
+} from '@/lib/utils/formatting'
+
+function VerticalBadge({ label, color }: { label: string; color: string }) {
+  return (
+    <div
+      className="vertical-badge absolute right-3 top-0 rounded-bl-[10px] rounded-br-[10px] px-2 py-3 text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white shadow-sm"
+      style={{ backgroundColor: color }}
+    >
+      {label}
+    </div>
+  )
+}
 
 export function HomeOverlayCard({
   post,
   variant = 'default',
+  compactSize = 'large',
 }: {
   post: Post
   variant?: 'default' | 'compact' | 'webinar'
+  compactSize?: 'large' | 'small'
 }) {
   const href = getPostHref(post)
   const isCompact = variant === 'compact'
   const isWebinar = variant === 'webinar'
   const actionLabel =
     post.type === 'webinar' ? 'Join' : post.type === 'whitepaper' ? 'Download' : 'Read'
+  const category = getCategoryName(post.primaryCategory)
+  const accent = getCategoryAccent(post.primaryCategory)
 
   if (!isCompact && !isWebinar) {
     return (
-      <article className="flex h-full flex-col rounded-[18px] bg-white shadow-[var(--shadow-soft)]">
-        <Link href={href} className="group block overflow-hidden rounded-t-[18px]">
-          <div className="relative aspect-[1/0.78] overflow-hidden bg-[color:var(--surface-muted)]">
+      <article className="flex h-full flex-col rounded-[20px] bg-white shadow-[var(--shadow-soft)]">
+        <Link href={href} className="group block overflow-hidden rounded-t-[20px]">
+          <div className="relative h-[330px] overflow-hidden bg-[color:var(--surface-muted)] sm:h-[370px]">
             <Image
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
-            <div className="absolute right-4 top-4">
-              <span className="inline-flex rounded-[4px] bg-[var(--accent-red)] px-2 py-1 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-white shadow-sm">
-                {getCategoryName(post.primaryCategory)}
-              </span>
-            </div>
+            <VerticalBadge label={category} color={accent} />
           </div>
         </Link>
 
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-4">
           <Link
             href={href}
-            className="text-[1.05rem] font-semibold leading-7 text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
+            className="headline-font text-[1.05rem] font-extrabold leading-[1.18] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
           >
             {post.title}
           </Link>
 
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-3">
+          <div className="mt-auto flex items-end justify-between gap-3">
             <Link
               href={href}
-              className="inline-flex min-w-[108px] items-center justify-center rounded-[12px] bg-[var(--accent-red)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-red-dark)]"
+              className="inline-flex min-w-[102px] items-center justify-center rounded-[12px] bg-[var(--accent-red)] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
             >
               {actionLabel}
             </Link>
 
-            <div className="text-right text-sm text-[color:var(--text-muted)]">
-              <div className="font-medium text-[color:var(--text-strong)]">
+            <div className="text-right text-[0.8rem] text-[color:var(--text-muted)]">
+              <div className="font-semibold text-[color:var(--text-strong)]">
                 {getAuthorNames(post.authors)}
               </div>
-              <div>{post.readingTime ? `${post.readingTime} mins` : formatDate(post.publishedAt)}</div>
+              <div className="mt-1">
+                {post.type === 'webinar'
+                  ? `${formatShortDate(post.publishedAt)} • 12:20PM IST`
+                  : `${post.readingTime ?? 12} mins`}
+              </div>
             </div>
           </div>
         </div>
@@ -65,11 +87,43 @@ export function HomeOverlayCard({
     )
   }
 
+  if (isWebinar) {
+    return (
+      <Link href={href} className="group block overflow-hidden rounded-[20px]">
+        <article className="relative h-full min-h-[260px] overflow-hidden rounded-[20px] bg-black md:min-h-[420px]">
+          <Image
+            src={getImageUrl(post.featuredImage)}
+            alt={post.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
+            <h3 className="headline-font max-w-[22ch] text-[1.3rem] font-extrabold leading-tight md:text-[1.8rem]">
+              {post.title}
+            </h3>
+            <p className="mt-2 text-sm text-white/82">
+              Oracle - {formatDate(post.publishedAt)} 11:00AM PT, 2:00PM ET
+            </p>
+            <span
+              className="mt-4 inline-flex rounded-[6px] px-3 py-2 text-[0.75rem] font-extrabold uppercase tracking-[0.1em] text-white"
+              style={{ backgroundColor: accent }}
+            >
+              {category}
+            </span>
+          </div>
+        </article>
+      </Link>
+    )
+  }
+
+  const isSmallCompact = compactSize === 'small'
+
   return (
-    <Link href={href} className="group block overflow-hidden rounded-[16px]">
+    <Link href={href} className="group block overflow-hidden rounded-[18px]">
       <article
-        className={`relative overflow-hidden rounded-[16px] bg-black ${
-          isCompact ? 'aspect-[0.95/1]' : 'aspect-[1.2/1]'
+        className={`relative overflow-hidden rounded-[18px] bg-black ${
+          isSmallCompact ? 'min-h-[170px]' : 'min-h-[320px]'
         }`}
       >
         <Image
@@ -78,29 +132,23 @@ export function HomeOverlayCard({
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
-        <div className="absolute right-3 top-3">
-          <span
-            className={`inline-flex rounded-[4px] px-2 py-1 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-white ${
-              isWebinar ? 'bg-emerald-600' : 'bg-[#2339d7]'
-            }`}
-          >
-            {getCategoryName(post.primaryCategory)}
-          </span>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+          <span
+            className="inline-flex rounded-[4px] px-3 py-1.5 text-[0.7rem] font-extrabold uppercase tracking-[0.12em] text-white"
+            style={{ backgroundColor: accent }}
+          >
+            {category}
+          </span>
           <h3
-            className={`mt-3 line-clamp-3 font-medium ${
-              isCompact ? 'text-[0.98rem] leading-5' : 'text-[1.1rem] leading-6'
+            className={`mt-3 max-w-[24ch] font-semibold ${
+              isSmallCompact
+                ? 'line-clamp-2 text-[1rem] leading-5'
+                : 'line-clamp-3 text-[1.1rem] leading-6'
             }`}
           >
             {post.title}
           </h3>
-          <div className="mt-3 text-xs text-white/80">
-            {isWebinar
-              ? `${getCategoryName(post.primaryCategory)} - ${formatDate(post.publishedAt)}`
-              : formatDate(post.publishedAt)}
-          </div>
         </div>
       </article>
     </Link>
