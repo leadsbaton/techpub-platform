@@ -109,7 +109,10 @@ export default async function HomePage() {
         <div className="grid gap-5 lg:grid-cols-[0.48fr_0.52fr]">
           <div className="space-y-5">
             {webinarSupport[0] ? (
-              <HomeOverlayCard post={webinarSupport[0]} variant="webinar" />
+              <HomeOverlayCard post={webinarSupport[0]} variant="webinar" compactSize="small" />
+            ) : null}
+            {webinarSupport[1] ? (
+              <HomeOverlayCard post={webinarSupport[1]} variant="webinar" compactSize="small" />
             ) : null}
           </div>
           <div>

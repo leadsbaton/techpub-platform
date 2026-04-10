@@ -77,7 +77,7 @@ export function HomeOverlayCard({
               </div>
               <div className="mt-1">
                 {post.type === 'webinar'
-                  ? `${formatShortDate(post.publishedAt)} • 12:20PM IST`
+                  ? `${formatShortDate(post.publishedAt)} | 12:20PM IST`
                   : `${post.readingTime ?? 12} mins`}
               </div>
             </div>
@@ -88,9 +88,15 @@ export function HomeOverlayCard({
   }
 
   if (isWebinar) {
+    const isSmallWebinar = compactSize === 'small'
+
     return (
       <Link href={href} className="group block overflow-hidden rounded-[20px]">
-        <article className="relative h-full min-h-[260px] overflow-hidden rounded-[20px] bg-black md:min-h-[420px]">
+        <article
+          className={`relative h-full overflow-hidden rounded-[20px] bg-black ${
+            isSmallWebinar ? 'min-h-[220px] md:min-h-[250px]' : 'min-h-[260px] md:min-h-[520px]'
+          }`}
+        >
           <Image
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
@@ -98,15 +104,29 @@ export function HomeOverlayCard({
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
-            <h3 className="headline-font max-w-[22ch] text-[1.3rem] font-extrabold leading-tight md:text-[1.8rem]">
+          <div
+            className={`absolute inset-x-0 bottom-0 text-white ${
+              isSmallWebinar ? 'p-5' : 'p-6 md:p-8'
+            }`}
+          >
+            <h3
+              className={`headline-font max-w-[22ch] font-extrabold leading-tight ${
+                isSmallWebinar
+                  ? 'text-[1.05rem] md:text-[1.2rem]'
+                  : 'text-[1.3rem] md:text-[1.8rem]'
+              }`}
+            >
               {post.title}
             </h3>
-            <p className="mt-2 text-sm text-white/82">
+            <p className={`mt-2 text-white/82 ${isSmallWebinar ? 'text-xs' : 'text-sm'}`}>
               Oracle - {formatDate(post.publishedAt)} 11:00AM PT, 2:00PM ET
             </p>
             <span
-              className="mt-4 inline-flex rounded-[6px] px-3 py-2 text-[0.75rem] font-extrabold uppercase tracking-[0.1em] text-white"
+              className={`inline-flex rounded-[6px] font-extrabold uppercase tracking-[0.1em] text-white ${
+                isSmallWebinar
+                  ? 'mt-3 px-3 py-1.5 text-[0.68rem]'
+                  : 'mt-4 px-3 py-2 text-[0.75rem]'
+              }`}
               style={{ backgroundColor: accent }}
             >
               {category}

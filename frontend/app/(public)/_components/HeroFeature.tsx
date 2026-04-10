@@ -3,28 +3,34 @@ import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import {
-  formatDate,
-  getCategoryName,
-  getContentTypeLabel,
-  getImageUrl,
-} from '@/lib/utils/formatting'
+import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
 
-function renderEchoTitle() {
-  return Array.from({ length: 3 }).map((_, index) => (
-    <p
-      key={index}
-      className={`headline-font text-[1.35rem] font-extrabold leading-[0.95] text-white sm:text-[1.45rem] ${
-        index === 0 ? '' : 'opacity-90'
-      }`}
-    >
-      Explore,
-      <br />
-      Engage,
-      <br />
-      Elevate
-    </p>
-  ))
+function EchoCopy() {
+  return (
+    <div className="grid grid-cols-3 gap-3 text-white">
+      <div className="headline-font text-[1.12rem] font-extrabold leading-[0.92] sm:text-[1.4rem]">
+        Explore,
+        <br />
+        Engage,
+        <br />
+        Elevate
+      </div>
+      <div className="headline-font text-[0.9rem] font-bold leading-[1.02] text-white/92 sm:text-[1rem]">
+        Explore,
+        <br />
+        Engage,
+        <br />
+        Elevate
+      </div>
+      <div className="headline-font text-[0.9rem] font-bold leading-[1.02] text-white/92 sm:text-[1rem]">
+        Explore,
+        <br />
+        Engage,
+        <br />
+        Elevate
+      </div>
+    </div>
+  )
 }
 
 export function HeroFeature({
@@ -47,50 +53,28 @@ export function HeroFeature({
   })()
 
   return (
-    <section className="overflow-hidden rounded-[30px] bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] px-3 py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.28)] md:px-6 md:py-7">
-      <div className="grid gap-5 xl:grid-cols-[0.26fr_0.74fr]">
-        <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] xl:grid-cols-1">
-          <Link
-            href={heroHref}
-            className="group overflow-hidden rounded-[22px] bg-white/10 p-3 backdrop-blur-sm"
-          >
-            <div className="grid h-full gap-4 sm:grid-cols-[0.9fr_1.1fr] xl:grid-cols-1">
-              <div className="relative aspect-[1/0.72] overflow-hidden rounded-[16px] xl:aspect-[1/0.92]">
-                <Image
-                  src={getImageUrl(post.featuredImage)}
-                  alt={post.title}
-                  fill
-                  className="object-cover transition duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-
-              <div className="flex flex-col justify-between gap-3 px-1 pb-1">
-                <div className="space-y-2">
-                  <p className="text-[0.72rem] uppercase tracking-[0.24em] text-white/72">
-                    {getContentTypeLabel(post.type)}
-                  </p>
-                  <h2 className="text-[1.08rem] font-semibold leading-6 md:text-[1.22rem]">
-                    {post.title}
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 text-[0.68rem] uppercase tracking-[0.11em] text-white/70">
-                  <span>{formatDate(post.publishedAt)}</span>
-                  <span>{post.readingTime ? `${post.readingTime} mins` : '12 mins'}</span>
-                  <span>{getCategoryName(post.primaryCategory)}</span>
-                </div>
-              </div>
+    <section className="overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] px-4 py-6 text-white shadow-[0_28px_70px_rgba(68,16,125,0.28)] md:px-8 md:py-8">
+      <div className="grid gap-5 xl:grid-cols-[0.28fr_0.72fr]">
+        <div className="flex flex-col gap-4">
+          <Link href={heroHref} className="group block overflow-hidden rounded-[18px]">
+            <div className="relative aspect-[1.18/0.72] overflow-hidden rounded-[18px]">
+              <Image
+                src={getImageUrl(post.featuredImage)}
+                alt={post.title}
+                fill
+                className="object-cover transition duration-300 group-hover:scale-[1.03]"
+              />
             </div>
           </Link>
 
-          <div className="grid gap-3 rounded-[22px] bg-transparent px-1 py-2 sm:grid-cols-3 xl:grid-cols-3">
-            {renderEchoTitle()}
+          <div className="rounded-[18px] bg-transparent px-1 py-2">
+            <EchoCopy />
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="overflow-hidden rounded-[24px] bg-black/12 p-3 md:p-4">
-            <div className="relative aspect-[1.62/0.96] overflow-hidden rounded-[18px]">
+          <div className="overflow-hidden rounded-[22px]">
+            <div className="relative aspect-[1.7/0.92] overflow-hidden rounded-[22px]">
               <Image
                 src={getImageUrl(heroImage)}
                 alt={post.title}
@@ -98,27 +82,18 @@ export function HeroFeature({
                 priority
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/28 via-transparent to-black/12" />
-            </div>
-
-            <div className="-mt-5 flex flex-col gap-4 px-2 pb-1 sm:-mt-10 sm:px-5 md:flex-row md:items-end md:justify-between">
-              <div className="md:max-w-[58%]">
-                <p className="text-[0.78rem] uppercase tracking-[0.28em] text-white/72">
-                  Explore, Engage, Elevate
-                </p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-3 px-4 md:bottom-6">
                 <Link
-                  href={heroHref}
-                  className="headline-font mt-2 block text-[clamp(1.55rem,3vw,3rem)] font-extrabold leading-[1.03] transition hover:text-white/85"
+                  href={webinarHref}
+                  className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-[var(--accent-red)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
                 >
-                  {post.title}
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Link href={webinarHref} className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-[var(--accent-red)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]">
                   Join Webinars
                 </Link>
-                <Link href={whitepaperHref} className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-white px-5 py-3 text-sm font-bold text-[color:var(--text-strong)]">
+                <Link
+                  href={whitepaperHref}
+                  className="inline-flex min-h-12 items-center justify-center rounded-[14px] bg-white px-5 py-3 text-sm font-bold text-[color:var(--text-strong)]"
+                >
                   Download White Papers
                 </Link>
               </div>
@@ -130,9 +105,9 @@ export function HeroFeature({
               <Link
                 key={item.id}
                 href={getPostHref(item)}
-                className="group block overflow-hidden rounded-[16px] bg-white/10 p-2"
+                className="group block overflow-hidden rounded-[16px] bg-white/8 p-2"
               >
-                <div className="relative aspect-[1.05/1] overflow-hidden rounded-[12px]">
+                <div className="relative aspect-[1.04/1] overflow-hidden rounded-[12px]">
                   <Image
                     src={getImageUrl(item.featuredImage)}
                     alt={item.title}
@@ -141,7 +116,7 @@ export function HeroFeature({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/5 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-3">
-                    <p className="text-[0.66rem] uppercase tracking-[0.18em] text-white/72">
+                    <p className="text-[0.62rem] uppercase tracking-[0.16em] text-white/72">
                       {getCategoryName(item.primaryCategory)}
                     </p>
                     <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-5 text-white">
