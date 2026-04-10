@@ -35,6 +35,10 @@ export function getImageUrl(image?: Media | string | null): string {
   return getMediaUrl(image) || FALLBACK_IMAGE
 }
 
+export function hasMediaSource(media?: Media | string | null): boolean {
+  return Boolean(getMediaUrl(media))
+}
+
 export function getCategoryName(category?: Category | string | null): string {
   if (!category) return 'General'
   return typeof category === 'string' ? category : category.name

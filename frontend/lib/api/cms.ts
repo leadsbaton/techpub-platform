@@ -204,7 +204,7 @@ export async function getPreviewPostBySlug(
 }
 
 export async function getCategories(limit = 12): Promise<Category[]> {
-  const query = buildQuery({ limit, depth: 1, sort: 'name' })
+  const query = buildQuery({ limit, depth: 2, sort: '-featured,name' })
   try {
     const data = await fetchPayload<PayloadListResponse<Category>>(
       `/api/categories?${query}`,

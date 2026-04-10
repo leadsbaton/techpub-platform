@@ -27,6 +27,7 @@ export interface Category {
   name: string
   slug: string
   description?: string | null
+  featured?: boolean | null
   color?: string | null
   image?: Media | string | null
 }

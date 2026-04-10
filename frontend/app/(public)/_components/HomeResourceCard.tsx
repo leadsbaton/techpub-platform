@@ -43,7 +43,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
             href={href}
             className="inline-flex text-sm font-semibold text-[color:var(--accent-red)] transition hover:text-[color:var(--accent-red-dark)]"
           >
-            Download Now -&gt;
+            Download Now {'->'}
           </Link>
         </div>
       </div>
