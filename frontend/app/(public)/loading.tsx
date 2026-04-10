@@ -1,26 +1,36 @@
 export default function Loading() {
   return (
-    <div className="pb-20 pt-4 md:pt-8">
-      <section className="site-container">
-        <div className="overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] px-4 py-6 md:px-8 md:py-8">
-          <div className="grid gap-5 xl:grid-cols-[0.28fr_0.72fr]">
-            <div className="flex flex-col gap-4">
-              <div className="skeleton-block aspect-[1.18/0.72] rounded-[18px]" />
-              <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-3 px-1 py-2">
-                <div className="skeleton-block h-28 rounded-[16px]" />
-                <div className="skeleton-block h-28 rounded-[16px]" />
-                <div className="skeleton-block h-28 rounded-[16px]" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="skeleton-block aspect-[1.7/0.92] rounded-[22px]" />
-              <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="rounded-[16px] bg-white/8 p-2">
-                    <div className="skeleton-block aspect-[1.04/1] rounded-[12px]" />
+    <div className="pb-20 pt-0">
+      <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] py-4 md:py-6">
+        <div className="site-container">
+          <div className="overflow-hidden rounded-[26px] px-3 py-4 sm:px-4 md:px-8 md:py-6">
+            <div className="grid gap-5 xl:grid-cols-[228px_minmax(0,1fr)] xl:gap-0">
+              <div className="order-2 grid grid-cols-[108px_minmax(0,1fr)] items-end gap-3 pt-1 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4 xl:order-1 xl:flex xl:flex-col xl:pt-11">
+                <div className="skeleton-block aspect-square rounded-[12px] sm:aspect-[1.02/0.88] xl:aspect-[1.12/0.74]" />
+                <div className="space-y-2">
+                  <div className="skeleton-block h-7 w-36 rounded-full sm:h-8 sm:w-44" />
+                  <div className="hidden gap-2 sm:grid sm:grid-cols-2">
+                    <div className="skeleton-block h-10 rounded-[12px]" />
+                    <div className="skeleton-block h-10 rounded-[12px]" />
                   </div>
-                ))}
+                </div>
+              </div>
+
+              <div className="order-1 space-y-4 xl:order-2 xl:space-y-5">
+                <div className="skeleton-block aspect-[1.5/1] min-h-[210px] rounded-[18px] sm:aspect-[1.72/0.96] md:min-h-[250px] xl:aspect-[2.28/0.9]" />
+                <div className="grid grid-cols-1 gap-2.5 md:hidden">
+                  <div className="skeleton-block h-11 rounded-[10px]" />
+                  <div className="skeleton-block h-11 rounded-[10px]" />
+                </div>
+                <div className="-mr-3 overflow-hidden pr-3 xl:mr-0 xl:pr-0">
+                  <div className="flex gap-3 xl:grid xl:grid-cols-4">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <div key={index} className="min-w-[140px] sm:min-w-[168px] xl:min-w-0">
+                        <div className="skeleton-block aspect-[1/1.08] rounded-[14px]" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
