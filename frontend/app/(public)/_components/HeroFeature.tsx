@@ -3,26 +3,26 @@ import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { getImageUrl } from '@/lib/utils/formatting'
 
 function EchoCopy() {
   return (
-    <div className="grid grid-cols-3 gap-3 text-white">
-      <div className="headline-font text-[1.12rem] font-extrabold leading-[0.92] sm:text-[1.4rem]">
+    <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-3 text-white">
+      <div className="headline-font text-[1.28rem] font-extrabold leading-[0.92] sm:text-[1.75rem]">
         Explore,
         <br />
         Engage,
         <br />
         Elevate
       </div>
-      <div className="headline-font text-[0.9rem] font-bold leading-[1.02] text-white/92 sm:text-[1rem]">
+      <div className="headline-font text-[0.9rem] font-bold leading-[1.03] text-white/94 sm:text-[1.05rem]">
         Explore,
         <br />
         Engage,
         <br />
         Elevate
       </div>
-      <div className="headline-font text-[0.9rem] font-bold leading-[1.02] text-white/92 sm:text-[1rem]">
+      <div className="headline-font text-[0.9rem] font-bold leading-[1.03] text-white/94 sm:text-[1.05rem]">
         Explore,
         <br />
         Engage,
@@ -82,7 +82,7 @@ export function HeroFeature({
                 priority
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-transparent" />
               <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-3 px-4 md:bottom-6">
                 <Link
                   href={webinarHref}
@@ -116,10 +116,7 @@ export function HeroFeature({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/5 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-3">
-                    <p className="text-[0.62rem] uppercase tracking-[0.16em] text-white/72">
-                      {getCategoryName(item.primaryCategory)}
-                    </p>
-                    <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-5 text-white">
+                    <h3 className="line-clamp-2 text-sm font-medium leading-5 text-white">
                       {item.title}
                     </h3>
                   </div>
