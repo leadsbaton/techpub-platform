@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
+import { HomeCallout } from './_components/HomeCallout'
+import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeSectionHeader } from './_components/HomeSectionHeader'
-import { RankedSidebar } from './_components/RankedSidebar'
 import { getHomePageData } from '@/lib/api/cms'
-import { getCategoryFilterHref, getContentTypeConfigByType } from '@/lib/utils/contentTypes'
+import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,80 +24,81 @@ export default async function HomePage() {
     webinars,
     contentTypes,
     categoriesByType,
+    categories,
   } = await getHomePageData()
 
-  const postsByType = {
-    insight: insights,
-    whitepaper: whitepapers,
-    webinar: webinars,
+  if (!heroPost) {
+    return null
   }
 
-  const contentSections = contentTypes
-    .map((contentType) => ({
-      contentType,
-      config: getContentTypeConfigByType(contentType.key, contentTypes),
-      posts: postsByType[contentType.key],
-      categories: categoriesByType[contentType.key] ?? [],
-    }))
-    .filter((section) => section.posts.length > 0)
+  const webinarConfig = getContentTypeConfigByType('webinar', contentTypes)
+  const whitepaperConfig = getContentTypeConfigByType('whitepaper', contentTypes)
+  const insightConfig = getContentTypeConfigByType('insight', contentTypes)
 
-  const rankedItems = [...whitepapers, ...insights, ...webinars]
-    .filter((item, index, all) => all.findIndex((candidate) => candidate.id === item.id) === index)
-    .slice(0, 6)
+  const secondaryHeroPosts = [...whitepapers, ...webinars, ...insights]
+    .filter((item) => item.id !== heroPost.id)
+    .slice(0, 4)
+  const trendingPosts = insights.slice(0, 3)
+  const latestInsights = insights.slice(0, 6)
+  const upcomingWebinars = webinars.slice(0, 3)
+  const mustReadWhitepapers = whitepapers.slice(0, 3)
 
   return (
-    <div className="pb-20 pt-8 md:pt-10">
-      <section className="site-container space-y-10">
-        {heroPost ? <HeroFeature post={heroPost} categories={categoriesByType[heroPost.type] ?? []} /> : null}
+    <div className="pb-20 pt-6 md:pt-8">
+      <section className="site-container">
+        <HeroFeature
+          post={heroPost}
+          secondaryPosts={secondaryHeroPosts}
+          categories={categoriesByType[heroPost.type] ?? []}
+          webinarHref={webinarConfig.routeBase}
+          whitepaperHref={whitepaperConfig.routeBase}
+        />
       </section>
 
-      {contentSections.map((section) => {
-        const cards =
-          section.contentType.key === 'whitepaper'
-            ? section.posts.slice(0, 3).map((post) => <HomeResourceCard key={post.id} post={post} />)
-            : section.posts.slice(0, 3).map((post) => <HomeOverlayCard key={post.id} post={post} />)
+      <section className="site-container mt-14 space-y-7">
+        <HomeSectionHeader title="Trending Now" />
+        <div className="grid gap-5 md:grid-cols-3">
+          {trendingPosts.map((post) => (
+            <HomeOverlayCard key={post.id} post={post} />
+          ))}
+        </div>
+      </section>
 
-        return (
-          <section key={section.contentType.id} className="site-container mt-14 space-y-8">
-            <HomeSectionHeader
-              title={section.config.pluralLabel}
-              href={section.config.routeBase}
-              actionLabel="View All"
-            />
+      <section className="site-container mt-16 space-y-7">
+        <HomeSectionHeader
+          title="Explore our Latest Insights"
+          subtitle="Insight that inspires, informs, and ignites change"
+          href={insightConfig.routeBase}
+          actionLabel="View All"
+        />
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {latestInsights.map((post) => (
+            <HomeOverlayCard key={post.id} post={post} variant="compact" />
+          ))}
+        </div>
+      </section>
 
-            {section.categories.length ? (
-              <div className="flex flex-wrap gap-3">
-                {section.categories.map((category) => (
-                  <Link
-                    key={`${section.contentType.id}-${category.id}`}
-                    href={getCategoryFilterHref(section.config.routeBase, category.slug)}
-                    className="rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-medium text-[color:var(--text-soft)] transition hover:border-[var(--accent-red)] hover:text-[color:var(--text-strong)]"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            ) : null}
+      <HomeCategoryPanel categories={categories.slice(0, 3)} />
 
-            {section.contentType.key === 'insight' ? (
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]">
-                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">{cards}</div>
-                <RankedSidebar title="Favorite" accent="People's" items={rankedItems} />
-              </div>
-            ) : (
-              <div
-                className={
-                  section.contentType.key === 'whitepaper'
-                    ? 'grid gap-8 md:grid-cols-2 xl:grid-cols-3'
-                    : 'grid gap-6 md:grid-cols-2 xl:grid-cols-3'
-                }
-              >
-                {cards}
-              </div>
-            )}
-          </section>
-        )
-      })}
+      <section className="site-container mt-16 space-y-7">
+        <HomeSectionHeader title="Upcoming Webinars" href={webinarConfig.routeBase} actionLabel="View All" />
+        <div className="grid gap-5 md:grid-cols-3">
+          {upcomingWebinars.map((post) => (
+            <HomeOverlayCard key={post.id} post={post} variant="webinar" />
+          ))}
+        </div>
+      </section>
+
+      <section className="site-container mt-16 space-y-7">
+        <HomeSectionHeader title="Must Read White Papers" href={whitepaperConfig.routeBase} actionLabel="View All" />
+        <div className="grid gap-5 md:grid-cols-3">
+          {mustReadWhitepapers.map((post) => (
+            <HomeResourceCard key={post.id} post={post} />
+          ))}
+        </div>
+      </section>
+
+      <HomeCallout />
     </div>
   )
 }

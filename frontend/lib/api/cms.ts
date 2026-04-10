@@ -322,7 +322,7 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
 }
 
 export async function getHomePageData() {
-  const [settings, featuredPosts, insights, whitepapers, webinars, contentTypes] =
+  const [settings, featuredPosts, insights, whitepapers, webinars, contentTypes, categories] =
     await Promise.all([
       getSiteSettings(),
       getPosts({ featured: true, limit: 1 }),
@@ -330,6 +330,7 @@ export async function getHomePageData() {
       getPosts({ type: 'whitepaper', limit: 6 }),
       getPosts({ type: 'webinar', limit: 4 }),
       getContentTypes(6),
+      getCategories(6),
     ])
 
   const [insightCategories, whitepaperCategories, webinarCategories] = await Promise.all([
@@ -350,6 +351,7 @@ export async function getHomePageData() {
     whitepapers: whitepapers.docs,
     webinars: webinars.docs,
     contentTypes,
+    categories,
     categoriesByType: {
       insight: insightCategories,
       whitepaper: whitepaperCategories,
