@@ -45,16 +45,14 @@ export default async function HomePage() {
   const mustReadWhitepapers = whitepapers.slice(0, 3)
 
   return (
-    <div className="pb-20 pt-4 md:pt-8">
-      <section className="site-container">
-        <HeroFeature
-          post={heroPost}
-          secondaryPosts={secondaryHeroPosts}
-          categories={categoriesByType[heroPost.type] ?? []}
-          webinarHref={webinarConfig.routeBase}
-          whitepaperHref={whitepaperConfig.routeBase}
-        />
-      </section>
+    <div className="pb-20 pt-0">
+      <HeroFeature
+        post={heroPost}
+        secondaryPosts={secondaryHeroPosts}
+        categories={categoriesByType[heroPost.type] ?? []}
+        webinarHref={webinarConfig.routeBase}
+        whitepaperHref={whitepaperConfig.routeBase}
+      />
 
       <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
         <HomeSectionHeader title="Trending Now" />
