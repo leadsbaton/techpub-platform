@@ -68,6 +68,7 @@ button {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   text-orientation: mixed;
+  clip-path: polygon(0 0, 100% 0, 100% 84%, 72% 84%, 50% 100%, 28% 84%, 0 84%);
 }
 
 .nav-link {

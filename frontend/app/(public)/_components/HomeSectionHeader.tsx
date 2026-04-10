@@ -15,7 +15,7 @@ export function HomeSectionHeader({
     <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
         <div className="section-heading">
-          <h2 className="text-[clamp(1.4rem,2.4vw,2.2rem)] font-semibold tracking-tight text-[color:var(--text-strong)]">
+          <h2 className="headline-font text-[clamp(1.55rem,2.4vw,2.3rem)] font-extrabold tracking-[-0.03em] text-[color:var(--text-strong)]">
             {title}
           </h2>
         </div>

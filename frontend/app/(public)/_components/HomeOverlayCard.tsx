@@ -15,7 +15,7 @@ import {
 function VerticalBadge({ label, color }: { label: string; color: string }) {
   return (
     <div
-      className="vertical-badge absolute right-3 top-0 rounded-bl-[10px] rounded-br-[10px] px-2 py-3 text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white shadow-sm"
+      className="vertical-badge absolute right-3 top-0 flex h-[126px] w-[28px] items-center justify-center px-0.5 py-3 text-center text-[0.55rem] font-extrabold uppercase tracking-[0.18em] text-white shadow-sm md:right-4 md:h-[132px] md:w-[30px] md:text-[0.58rem]"
       style={{ backgroundColor: color }}
     >
       {label}
@@ -44,7 +44,7 @@ export function HomeOverlayCard({
     return (
       <article className="flex h-full flex-col rounded-[20px] bg-white shadow-[var(--shadow-soft)]">
         <Link href={href} className="group block overflow-hidden rounded-t-[20px]">
-          <div className="relative h-[330px] overflow-hidden bg-[color:var(--surface-muted)] sm:h-[370px]">
+          <div className="relative h-[300px] overflow-hidden bg-[color:var(--surface-muted)] sm:h-[340px] lg:h-[370px]">
             <Image
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
@@ -55,27 +55,27 @@ export function HomeOverlayCard({
           </div>
         </Link>
 
-        <div className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-4">
+        <div className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-4 md:px-5">
           <Link
             href={href}
-            className="headline-font text-[1.05rem] font-extrabold leading-[1.18] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
+            className="headline-font text-[1rem] font-extrabold leading-[1.16] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] md:text-[1.04rem]"
           >
             {post.title}
           </Link>
 
-          <div className="mt-auto flex items-end justify-between gap-3">
+          <div className="mt-auto flex items-end justify-between gap-3 border-t border-black/6 pt-3">
             <Link
               href={href}
-              className="inline-flex min-w-[102px] items-center justify-center rounded-[12px] bg-[var(--accent-red)] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+              className="inline-flex min-w-[88px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)] md:min-w-[96px]"
             >
               {actionLabel}
             </Link>
 
-            <div className="text-right text-[0.8rem] text-[color:var(--text-muted)]">
+            <div className="text-right text-[0.74rem] text-[color:var(--text-muted)] md:text-[0.78rem]">
               <div className="font-semibold text-[color:var(--text-strong)]">
                 {getAuthorNames(post.authors)}
               </div>
-              <div className="mt-1">
+              <div className="mt-1 whitespace-nowrap">
                 {post.type === 'webinar'
                   ? `${formatShortDate(post.publishedAt)} | 12:20PM IST`
                   : `${post.readingTime ?? 12} mins`}
