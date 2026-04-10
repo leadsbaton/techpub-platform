@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import { getCategoryAccent, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { HomeVerticalBadge } from './HomeVerticalBadge'
 
 export function HomeResourceCard({ post }: { post: Post }) {
   const href = getPostHref(post)
@@ -13,12 +14,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
   return (
     <article className="flex h-full flex-col rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 shadow-[var(--shadow-soft)]">
       <div className="relative mb-6 overflow-visible">
-        <div
-          className="vertical-badge absolute right-[-10px] top-0 z-10 rounded-bl-[10px] rounded-br-[10px] px-2 py-3 text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white"
-          style={{ backgroundColor: accent }}
-        >
-          {category}
-        </div>
+        <HomeVerticalBadge label={category} color={accent} className="right-[-8px] md:right-[-10px]" />
         <Link href={href} className="group block overflow-hidden rounded-[14px]">
           <div className="relative aspect-[1.12/0.68] overflow-hidden rounded-[14px]">
             <Image

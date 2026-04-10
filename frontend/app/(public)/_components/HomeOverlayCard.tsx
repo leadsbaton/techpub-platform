@@ -11,17 +11,7 @@ import {
   getCategoryName,
   getImageUrl,
 } from '@/lib/utils/formatting'
-
-function VerticalBadge({ label, color }: { label: string; color: string }) {
-  return (
-    <div
-      className="vertical-badge absolute right-3 top-0 flex h-[126px] w-[28px] items-center justify-center px-0.5 py-3 text-center text-[0.55rem] font-extrabold uppercase tracking-[0.18em] text-white shadow-sm md:right-4 md:h-[132px] md:w-[30px] md:text-[0.58rem]"
-      style={{ backgroundColor: color }}
-    >
-      {label}
-    </div>
-  )
-}
+import { HomeVerticalBadge } from './HomeVerticalBadge'
 
 export function HomeOverlayCard({
   post,
@@ -51,7 +41,7 @@ export function HomeOverlayCard({
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
-            <VerticalBadge label={category} color={accent} />
+            <HomeVerticalBadge label={category} color={accent} />
           </div>
         </Link>
 

@@ -90,13 +90,13 @@ export function HeroFeature({
             <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-2.5 px-4 md:bottom-5 md:gap-3 xl:justify-start xl:px-14">
               <Link
                 href={webinarHref}
-                className="inline-flex min-h-10 items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-4 py-2.5 text-[0.82rem] font-bold text-white transition hover:bg-[var(--accent-red-dark)] md:min-h-11 md:px-5 md:text-sm"
+                className="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-[var(--accent-red-dark)] bg-[var(--accent-red)] px-4 py-2.5 text-[0.82rem] font-bold text-white shadow-[0_8px_20px_rgba(255,42,31,0.28)] transition hover:bg-[var(--accent-red-dark)] md:min-h-11 md:px-5 md:text-sm"
               >
                 Join Webinars
               </Link>
               <Link
                 href={whitepaperHref}
-                className="inline-flex min-h-10 items-center justify-center rounded-[10px] bg-white px-4 py-2.5 text-[0.82rem] font-bold text-[color:var(--text-strong)] md:min-h-11 md:px-5 md:text-sm"
+                className="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-white bg-white px-4 py-2.5 text-[0.82rem] font-bold text-[color:var(--accent-red)] shadow-[0_8px_20px_rgba(255,255,255,0.18)] md:min-h-11 md:px-5 md:text-sm"
               >
                 Download White Papers
               </Link>
