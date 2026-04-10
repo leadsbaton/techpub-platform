@@ -19,6 +19,8 @@
   --category-finance: #ff2a1f;
   --category-marketing: #12a639;
   --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
+  --hero-purple: #42106f;
+  --hero-purple-dark: #2f0a53;
 }
 
 html {
@@ -88,6 +90,27 @@ button {
   border: 1px solid var(--border-subtle);
   background: var(--surface-strong);
   box-shadow: var(--shadow-soft);
+}
+
+.skeleton-block {
+  position: relative;
+  overflow: hidden;
+  background: #e8e8e4;
+}
+
+.skeleton-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: skeleton-shimmer 1.4s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .prose {

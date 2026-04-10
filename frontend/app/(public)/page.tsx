@@ -44,7 +44,7 @@ export default async function HomePage() {
   const mustReadWhitepapers = whitepapers.slice(0, 3)
 
   return (
-    <div className="pb-20 pt-6 md:pt-8">
+    <div className="pb-20 pt-4 md:pt-8">
       <section className="site-container">
         <HeroFeature
           post={heroPost}
@@ -55,7 +55,7 @@ export default async function HomePage() {
         />
       </section>
 
-      <section className="site-container mt-14 space-y-7">
+      <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
         <HomeSectionHeader title="Trending Now" />
         <div className="grid gap-5 md:grid-cols-3">
           {trendingPosts.map((post) => (
@@ -64,7 +64,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="site-container mt-16 space-y-7">
+      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
         <HomeSectionHeader
           title="Explore our Latest Insights"
           subtitle="Insight that inspires, informs, and ignites change"
@@ -78,9 +78,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HomeCategoryPanel categories={categories.slice(0, 3)} />
+      <HomeCategoryPanel categories={categories} />
 
-      <section className="site-container mt-16 space-y-7">
+      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
         <HomeSectionHeader title="Upcoming Webinars" href={webinarConfig.routeBase} actionLabel="View All" />
         <div className="grid gap-5 md:grid-cols-3">
           {upcomingWebinars.map((post) => (
@@ -89,7 +89,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="site-container mt-16 space-y-7">
+      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
         <HomeSectionHeader title="Must Read White Papers" href={whitepaperConfig.routeBase} actionLabel="View All" />
         <div className="grid gap-5 md:grid-cols-3">
           {mustReadWhitepapers.map((post) => (

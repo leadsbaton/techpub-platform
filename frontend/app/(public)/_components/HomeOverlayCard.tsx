@@ -22,7 +22,7 @@ export function HomeOverlayCard({
     return (
       <article className="flex h-full flex-col rounded-[18px] bg-white shadow-[var(--shadow-soft)]">
         <Link href={href} className="group block overflow-hidden rounded-t-[18px]">
-          <div className="relative aspect-[1/0.78] overflow-hidden bg-[color:var(--surface-alt)]">
+          <div className="relative aspect-[1/0.78] overflow-hidden bg-[color:var(--surface-muted)]">
             <Image
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
