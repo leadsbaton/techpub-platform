@@ -22,6 +22,9 @@ type PostFilters = {
   page?: number
   limit?: number
   query?: string
+  sort?: string
+  dateFrom?: string
+  dateTo?: string
 }
 
 function appendQueryParam(query: URLSearchParams, key: string, value: unknown): void {
@@ -130,6 +133,12 @@ export async function getPosts(
   if (filters.author) where['authors.slug'] = { equals: filters.author }
   if (filters.featured !== undefined) where.featured = { equals: filters.featured }
   if (filters.pinned !== undefined) where.pinned = { equals: filters.pinned }
+  if (filters.dateFrom || filters.dateTo) {
+    where.publishedAt = {
+      ...(filters.dateFrom ? { greater_than_equal: filters.dateFrom } : {}),
+      ...(filters.dateTo ? { less_than_equal: filters.dateTo } : {}),
+    }
+  }
 
   if (filters.query) {
     where.or = [
@@ -140,7 +149,7 @@ export async function getPosts(
 
   const query = buildQuery({
     depth: 3,
-    sort: '-publishedAt',
+    sort: filters.sort ?? '-publishedAt',
     limit: filters.limit ?? 9,
     page: filters.page ?? 1,
     where,
