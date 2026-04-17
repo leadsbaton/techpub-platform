@@ -234,10 +234,10 @@ function CategoryWhitepaperSection({
 export default async function WhitepapersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; q?: string }>
+  searchParams: Promise<{ category?: string; q?: string; view?: string }>
 }) {
-  const { category, q } = await searchParams
-  const isFocusedView = Boolean(category || q)
+  const { category, q, view } = await searchParams
+  const isFocusedView = Boolean(category || q || view === 'all')
 
   const [whitepapers, categories, webinars, contentTypes, trendingDownloads, latestWhitepapers] =
     await Promise.all([

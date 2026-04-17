@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
-import { WhitepaperLeadForm } from '../_components/WhitepaperLeadForm'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import {
   formatDate,
@@ -55,6 +54,10 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
       : post.leadCapture?.deliveryMode === 'redirect'
         ? 'Continue'
         : 'Download now'
+  const accessHref =
+    post.leadCapture?.enabled === false
+      ? fallbackUrl
+      : `/whitepapers/${post.slug}/access`
 
   return (
     <article className="site-container space-y-8 py-8 sm:py-10">
@@ -74,15 +77,24 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
               <div className="text-sm leading-6 text-[color:var(--text-soft)]">
                 By {getAuthorNames(post.authors)}
               </div>
-              {post.leadCapture?.enabled === false && fallbackUrl ? (
-                <a
-                  href={fallbackUrl}
-                  target={post.leadCapture?.openDeliveryInNewTab === false ? undefined : '_blank'}
-                  rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
-                >
-                  {directLabel}
-                </a>
+              {accessHref ? (
+                post.leadCapture?.enabled === false && fallbackUrl ? (
+                  <a
+                    href={fallbackUrl}
+                    target={post.leadCapture?.openDeliveryInNewTab === false ? undefined : '_blank'}
+                    rel="noreferrer"
+                    className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
+                  >
+                    {directLabel}
+                  </a>
+                ) : (
+                  <Link
+                    href={accessHref}
+                    className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
+                  >
+                    Read More
+                  </Link>
+                )
               ) : null}
             </div>
           </div>
@@ -100,9 +112,15 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
               {post.title}
             </h1>
             <p className="text-lg leading-8 text-[color:var(--text-soft)]">{post.excerpt}</p>
+            {accessHref && post.leadCapture?.enabled !== false ? (
+              <Link
+                href={accessHref}
+                className="inline-flex rounded-full bg-[var(--accent-red)] px-6 py-3 text-sm font-semibold text-white"
+              >
+                {directLabel}
+              </Link>
+            ) : null}
           </div>
-
-          {post.leadCapture?.enabled !== false ? <WhitepaperLeadForm post={post} /> : null}
 
           <section className="rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
             <div className="prose max-w-none">
