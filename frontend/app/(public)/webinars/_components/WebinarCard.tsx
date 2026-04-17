@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
-import { formatDate, getAuthorNames, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { formatDate, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
 
 const categoryStyles: Record<string, string> = {
   technology: 'text-[#0015AD]',
@@ -13,6 +13,13 @@ const categoryStyles: Record<string, string> = {
 export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
   const categoryClass = categoryStyles[category.toLowerCase()] || 'text-[#0015AD]'
+  const speakers = post.webinarRegistration?.speakers?.filter((speaker) => speaker.name) || []
+  const presenterLabel =
+    speakers.length === 0
+      ? null
+      : speakers.length === 1
+        ? speakers[0]?.name || null
+        : `${speakers[0]?.name || 'Speaker'} + ${speakers.length - 1} more`
 
   return (
     <article className={`ui-font ${compact ? '' : 'w-full'}`}>
@@ -31,9 +38,11 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
         <Link href={`/webinars/${post.slug}`} className={`${compact ? 'text-[14px]' : 'text-[18px]'} block font-medium leading-[1.2] text-[#111]`}>
           {post.title}
         </Link>
-        <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} text-[#808080]`}>
-          By {getAuthorNames(post.authors)}
-        </div>
+        {presenterLabel ? (
+          <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} text-[#808080]`}>
+            Speakers: {presenterLabel}
+          </div>
+        ) : null}
         {!compact ? (
           <div className="text-[13px] text-[#808080]">
             {formatDate(post.publishedAt)} {post.webinarRegistration?.eventDateLabel ? ` ${post.webinarRegistration.eventDateLabel}` : ''}

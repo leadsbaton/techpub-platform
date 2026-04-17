@@ -198,6 +198,13 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
 
 function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentTypes: ContentType[]; railItems: Post[] }) {
   const primaryAction = buildPrimaryAction(post)
+  const speakers = post.webinarRegistration?.speakers?.filter((speaker) => speaker.name) || []
+  const speakerSummary =
+    speakers.length === 0
+      ? 'Speakers listed on the webinar page'
+      : speakers.length === 1
+        ? speakers[0]?.name || 'Speaker'
+        : `${speakers[0]?.name || 'Speaker'} + ${speakers.length - 1} more`
 
   return (
     <article className="site-container space-y-8 py-10">
@@ -210,7 +217,11 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
             <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 space-y-5 p-6 text-white md:p-8">
-              <MetaStrip post={post} />
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/80">
+                <span>{formatDate(post.publishedAt)}</span>
+                <span>{getCategoryName(post.primaryCategory)}</span>
+                {post.webinarRegistration?.eventDateLabel ? <span>{post.webinarRegistration.eventDateLabel}</span> : null}
+              </div>
               <h1 className="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">{post.title}</h1>
               {primaryAction ? (
                 <a
@@ -240,8 +251,8 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
               <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{getCategoryName(post.primaryCategory)}</div>
             </div>
             <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Presented By</div>
-              <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{getAuthorNames(post.authors)}</div>
+              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Speakers</div>
+              <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{speakerSummary}</div>
             </div>
           </div>
           <div className="prose max-w-none">

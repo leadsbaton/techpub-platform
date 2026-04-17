@@ -27,7 +27,7 @@ const guideByType = {
     label: 'White Paper',
     route: '/whitepapers/[slug]',
     checklist: [
-      'Set featured image, excerpt, authors, and a primary category.',
+      'Set featured image, excerpt, author, and a primary category.',
       'Configure the access form, success message, delivery mode, and either a download asset or external/delivery URL.',
       'Review the access page copy because users see this before opening the resource.',
     ],
@@ -38,7 +38,7 @@ const guideByType = {
     route: '/webinars/[slug]',
     checklist: [
       'Set featured image, optional second banner, event date label, CTA label, summary, and agenda points.',
-      'Add speakers and moderator details if they should appear on the detail page.',
+      'Add speakers and moderator details with image, name, role, and company. Webinar posts do not need authors.',
       'Use either an external registration URL or a video URL for the final destination. Webinar form entries are saved in the shared submissions collection.',
     ],
     previewNotes: 'The frontend uses a banner-style webinar detail page plus a separate registration form page.',

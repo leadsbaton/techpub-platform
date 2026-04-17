@@ -155,6 +155,7 @@ export const Posts: CollectionConfig = {
                     return true
                   },
                   admin: {
+                    condition: (_, siblingData) => siblingData?.type !== 'webinar',
                     description:
                       'Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.',
                     width: '50%',
