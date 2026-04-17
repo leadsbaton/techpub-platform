@@ -437,12 +437,18 @@ export interface Post {
     eventDateLabel?: string | null;
     sponsor?: string | null;
     eventSummary?: string | null;
+    /**
+     * Bullet list shown below the webinar intro text.
+     */
     agendaPoints?:
       | {
           point: string;
           id?: string | null;
         }[]
       | null;
+    /**
+     * Add one or more webinar speakers with circular avatar, name, role, and company exactly as they should appear on the page.
+     */
     speakers?:
       | {
           name: string;
@@ -452,6 +458,9 @@ export interface Post {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Moderator details shown beside the speakers section.
+     */
     moderatorName?: string | null;
     moderatorRole?: string | null;
     moderatorCompany?: string | null;

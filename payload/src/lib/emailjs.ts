@@ -23,7 +23,7 @@ export function getEmailJsConfigStatus() {
   const privateKey = process.env.EMAILJS_PRIVATE_KEY
 
   return {
-    configured: Boolean(serviceId && templateId && publicKey && privateKey),
+    configured: Boolean(serviceId && templateId && publicKey),
     serviceId,
     templateId,
     publicKey,
@@ -36,7 +36,7 @@ export async function sendEmailJsTemplate(
 ): Promise<{ sent: boolean; reason?: string }> {
   const { configured, serviceId, templateId, publicKey, privateKey } = getEmailJsConfigStatus()
 
-  if (!configured || !serviceId || !templateId || !publicKey || !privateKey) {
+  if (!configured || !serviceId || !templateId || !publicKey) {
     return { sent: false, reason: 'missing_credentials' }
   }
 
@@ -53,7 +53,7 @@ export async function sendEmailJsTemplate(
         service_id: serviceId,
         template_id: templateId,
         user_id: publicKey,
-        accessToken: privateKey,
+        ...(privateKey ? { accessToken: privateKey } : {}),
         template_params: templateParams,
       }),
       signal: controller.signal,

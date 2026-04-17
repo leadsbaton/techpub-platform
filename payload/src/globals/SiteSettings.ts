@@ -249,7 +249,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'emailCredentialNote',
           type: 'textarea',
           defaultValue:
-            'Set EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, and EMAILJS_PRIVATE_KEY in the backend environment.',
+            'Set EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, and EMAILJS_PUBLIC_KEY in the backend environment. EMAILJS_PRIVATE_KEY is optional if your EmailJS setup requires an access token.',
         },
         {
           name: 'emailTemplateFieldNote',

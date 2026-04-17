@@ -545,6 +545,9 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'agendaPoints',
                   type: 'array',
+                  admin: {
+                    description: 'Bullet list shown below the webinar intro text.',
+                  },
                   fields: [
                     {
                       name: 'point',
@@ -556,6 +559,10 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'speakers',
                   type: 'array',
+                  admin: {
+                    description:
+                      'Add one or more webinar speakers with circular avatar, name, role, and company exactly as they should appear on the page.',
+                  },
                   fields: [
                     {
                       type: 'row',
@@ -591,7 +598,10 @@ export const Posts: CollectionConfig = {
                     {
                       name: 'moderatorName',
                       type: 'text',
-                      admin: { width: '25%' },
+                      admin: {
+                        width: '25%',
+                        description: 'Moderator details shown beside the speakers section.',
+                      },
                     },
                     {
                       name: 'moderatorRole',

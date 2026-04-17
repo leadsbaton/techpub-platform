@@ -21,7 +21,8 @@ const guideByType = {
       'Choose the main category carefully because it drives listing filters and category hubs.',
       'Add SEO title, description, and share image before publishing.',
     ],
-    previewNotes: 'The frontend shows a hero image, title, long-form content, and a favorite rail.',
+    previewNotes:
+      'The frontend shows a hero image, title, long-form content, and a favorite rail.',
   },
   whitepaper: {
     label: 'White Paper',
@@ -29,9 +30,11 @@ const guideByType = {
     checklist: [
       'Set featured image, excerpt, author, and a primary category.',
       'Configure the access form, success message, delivery mode, and either a download asset or external/delivery URL.',
+      'Use preview to confirm the cover image sits on the left, summary text sits on the right, and the CTA opens the form page.',
       'Review the access page copy because users see this before opening the resource.',
     ],
-    previewNotes: 'The frontend uses a dedicated preview page plus a separate gated form/access page. Form entries are saved in the shared submissions collection.',
+    previewNotes:
+      'The frontend uses a dedicated preview page plus a separate gated form/access page. Form entries are saved in the shared submissions collection.',
   },
   webinar: {
     label: 'Webinar',
@@ -39,9 +42,11 @@ const guideByType = {
     checklist: [
       'Set featured image, optional second banner, event date label, CTA label, summary, and agenda points.',
       'Add speakers and moderator details with image, name, role, and company. Webinar posts do not need authors.',
+      'Use preview to check the centered title/button area, banner stack, content section, and speaker or moderator row.',
       'Use either an external registration URL or a video URL for the final destination. Webinar form entries are saved in the shared submissions collection.',
     ],
-    previewNotes: 'The frontend uses a banner-style webinar detail page plus a separate registration form page.',
+    previewNotes:
+      'The frontend uses a banner-style webinar detail page plus a separate registration form page.',
   },
 } as const
 
@@ -60,11 +65,26 @@ export const PostAuthoringGuide: UIFieldClientComponent = () => {
         padding: '1.2rem',
       }}
     >
-      <div style={{ color: '#64748b', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+      <div
+        style={{
+          color: '#64748b',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+        }}
+      >
         Authoring Guide
       </div>
-      <h3 style={{ color: '#0f172a', fontSize: '1.2rem', fontWeight: 800, margin: '0.45rem 0 0' }}>
-        {activeGuide.label} preview for “{title}”
+      <h3
+        style={{
+          color: '#0f172a',
+          fontSize: '1.2rem',
+          fontWeight: 800,
+          margin: '0.45rem 0 0',
+        }}
+      >
+        {activeGuide.label} preview for &quot;{title}&quot;
       </h3>
       <p style={{ color: '#475569', fontSize: '0.92rem', lineHeight: 1.6, margin: '0.75rem 0 0' }}>
         Public route: <strong>{activeGuide.route}</strong>. {activeGuide.previewNotes}
@@ -79,8 +99,17 @@ export const PostAuthoringGuide: UIFieldClientComponent = () => {
           padding: '1rem',
         }}
       >
-        <div style={{ color: '#0f172a', fontSize: '0.92rem', fontWeight: 700 }}>Before publishing</div>
-        <ul style={{ color: '#475569', lineHeight: 1.8, margin: '0.6rem 0 0', paddingLeft: '1.2rem' }}>
+        <div style={{ color: '#0f172a', fontSize: '0.92rem', fontWeight: 700 }}>
+          Before publishing
+        </div>
+        <ul
+          style={{
+            color: '#475569',
+            lineHeight: 1.8,
+            margin: '0.6rem 0 0',
+            paddingLeft: '1.2rem',
+          }}
+        >
           {activeGuide.checklist.map((item) => (
             <li key={item}>{item}</li>
           ))}
