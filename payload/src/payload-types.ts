@@ -76,8 +76,7 @@ export interface Config {
     posts: Post;
     pages: Page;
     subscribers: Subscriber;
-    leads: Lead;
-    registrations: Registration;
+    submissions: Submission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,8 +93,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
-    leads: LeadsSelect<false> | LeadsSelect<true>;
-    registrations: RegistrationsSelect<false> | RegistrationsSelect<true>;
+    submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -339,7 +337,10 @@ export interface Post {
    */
   status: 'draft' | 'published' | 'archived';
   type?: string | null;
-  authors: (string | Author)[];
+  /**
+   * Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.
+   */
+  authors?: (string | Author)[] | null;
   /**
    * Main taxonomy used in UI filters like Finance, Marketing, and Technology.
    */
@@ -386,6 +387,14 @@ export interface Post {
    * Optional canonical, download, or registration URL.
    */
   externalUrl?: string | null;
+  /**
+   * Optional second banner image shown below the main webinar hero banner.
+   */
+  webinarSecondaryBanner?: (string | null) | Media;
+  /**
+   * Optional label for the secondary banner when a second visual is used.
+   */
+  webinarSecondaryBannerAlt?: string | null;
   featured?: boolean | null;
   /**
    * Pinned white papers can be surfaced in Trending Downloads and priority rails.
@@ -564,11 +573,11 @@ export interface Subscriber {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads".
+ * via the `definition` "submissions".
  */
-export interface Lead {
+export interface Submission {
   id: string;
-  resourceType: 'whitepaper';
+  submissionType: 'whitepaper' | 'webinar';
   post: string | Post;
   name: string;
   email: string;
@@ -577,40 +586,11 @@ export interface Lead {
   country?: string | null;
   newsletterOptIn?: boolean | null;
   consentAccepted: boolean;
-  deliveryMode: 'read' | 'download' | 'redirect';
+  deliveryMode: 'read' | 'download' | 'redirect' | 'register' | 'watch';
   submittedAt: string;
   deliveryTarget?: string | null;
   sourceUrl?: string | null;
   notificationStatus?: ('pending' | 'sent' | 'partial' | 'failed' | 'skipped') | null;
-  /**
-   * Comma-separated admin email recipients used for this lead notification.
-   */
-  notificationRecipients?: string | null;
-  notificationError?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "registrations".
- */
-export interface Registration {
-  id: string;
-  post: string | Post;
-  name: string;
-  email: string;
-  jobTitle?: string | null;
-  company?: string | null;
-  country?: string | null;
-  newsletterOptIn?: boolean | null;
-  consentAccepted: boolean;
-  submittedAt: string;
-  sourceUrl?: string | null;
-  redirectTarget?: string | null;
-  notificationStatus?: ('pending' | 'sent' | 'partial' | 'failed' | 'skipped') | null;
-  /**
-   * Comma-separated admin email recipients used for this registration notification.
-   */
   notificationRecipients?: string | null;
   notificationError?: string | null;
   updatedAt: string;
@@ -677,12 +657,8 @@ export interface PayloadLockedDocument {
         value: string | Subscriber;
       } | null)
     | ({
-        relationTo: 'leads';
-        value: string | Lead;
-      } | null)
-    | ({
-        relationTo: 'registrations';
-        value: string | Registration;
+        relationTo: 'submissions';
+        value: string | Submission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -907,6 +883,8 @@ export interface PostsSelect<T extends boolean = true> {
       };
   videoUrl?: T;
   externalUrl?: T;
+  webinarSecondaryBanner?: T;
+  webinarSecondaryBannerAlt?: T;
   featured?: T;
   pinned?: T;
   publishedAt?: T;
@@ -1060,10 +1038,10 @@ export interface SubscribersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads_select".
+ * via the `definition` "submissions_select".
  */
-export interface LeadsSelect<T extends boolean = true> {
-  resourceType?: T;
+export interface SubmissionsSelect<T extends boolean = true> {
+  submissionType?: T;
   post?: T;
   name?: T;
   email?: T;
@@ -1076,28 +1054,6 @@ export interface LeadsSelect<T extends boolean = true> {
   submittedAt?: T;
   deliveryTarget?: T;
   sourceUrl?: T;
-  notificationStatus?: T;
-  notificationRecipients?: T;
-  notificationError?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "registrations_select".
- */
-export interface RegistrationsSelect<T extends boolean = true> {
-  post?: T;
-  name?: T;
-  email?: T;
-  jobTitle?: T;
-  company?: T;
-  country?: T;
-  newsletterOptIn?: T;
-  consentAccepted?: T;
-  submittedAt?: T;
-  sourceUrl?: T;
-  redirectTarget?: T;
   notificationStatus?: T;
   notificationRecipients?: T;
   notificationError?: T;
@@ -1158,7 +1114,7 @@ export interface SiteSetting {
   defaultShareImage?: (string | null) | Media;
   contactEmail?: string | null;
   /**
-   * Admin recipients for white paper lead notifications. EmailJS credentials are read from environment variables.
+   * Admin recipients for white paper and webinar form submissions. EmailJS credentials are read from environment variables.
    */
   leadNotificationEmails?:
     | {

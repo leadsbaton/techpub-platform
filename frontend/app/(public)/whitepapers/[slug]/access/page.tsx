@@ -51,10 +51,10 @@ export default async function WhitepaperAccessPage({ params }: { params: Params 
                 White Papers
               </Link>
               <h1 className="ui-font text-[28px] font-medium leading-[1.25] text-[#020202] sm:text-[42px]">
-                {post.title}
+                {post.leadCapture?.formTitle || post.title}
               </h1>
               <p className="ui-font text-[18px] font-medium text-[#020202]">
-                Thank you for your interest in DBTA Downloads/Webinars!
+                {post.leadCapture?.formDescription || 'Thank you for your interest in DBTA Downloads/Webinars!'}
               </p>
             </div>
 

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
+import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
@@ -55,6 +56,19 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               </div>
             </div>
 
+            {post.webinarSecondaryBanner ? (
+              <div className="relative overflow-hidden">
+                <div className="relative h-[180px] sm:h-[250px]">
+                  <Image
+                    src={getImageUrl(post.webinarSecondaryBanner)}
+                    alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            ) : null}
+
             <div className="flex justify-center">
               <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
                 {post.webinarRegistration?.ctaLabel || 'Register now'}
@@ -67,7 +81,13 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
             <div className="ui-font space-y-5 text-[16px] leading-[145%] text-[#2d2d2d]">
               <p>{post.webinarRegistration?.eventSummary || post.excerpt}</p>
-              <p>{post.excerpt}</p>
+              {post.content ? (
+                <div className="prose max-w-none">
+                  <RichTextRenderer content={post.content} />
+                </div>
+              ) : (
+                <p>{post.excerpt}</p>
+              )}
               {agenda.length ? (
                 <div className="space-y-2">
                   <p className="font-medium text-[#111]">Join this webinar roundtable webinar to learn:</p>

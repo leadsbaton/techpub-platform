@@ -142,6 +142,8 @@ export interface Post {
   publishedAt?: string | null
   videoUrl?: string | null
   externalUrl?: string | null
+  webinarSecondaryBanner?: Media | string | null
+  webinarSecondaryBannerAlt?: string | null
   leadCapture?: {
     enabled?: boolean | null
     formTitle?: string | null

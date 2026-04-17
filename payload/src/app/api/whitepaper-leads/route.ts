@@ -164,10 +164,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const leadRecord = await payload.create({
-    collection: 'leads',
+  const submissionRecord = await payload.create({
+    collection: 'submissions',
     data: {
-      resourceType: 'whitepaper',
+      submissionType: 'whitepaper',
       post: post.id,
       name,
       email,
@@ -273,8 +273,8 @@ export async function POST(request: NextRequest) {
   }
 
   await payload.update({
-    collection: 'leads',
-    id: leadRecord.id,
+    collection: 'submissions',
+    id: submissionRecord.id,
     data: {
       notificationStatus,
       notificationRecipients: adminEmails.join(', '),

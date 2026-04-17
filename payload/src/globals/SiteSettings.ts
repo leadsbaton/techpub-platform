@@ -52,7 +52,7 @@ export const SiteSettings: GlobalConfig = {
       type: 'array',
       admin: {
         description:
-          'Admin recipients for white paper lead notifications. EmailJS credentials are read from environment variables.',
+          'Admin recipients for white paper and webinar form submissions. EmailJS credentials are read from environment variables.',
       },
       fields: [
         {

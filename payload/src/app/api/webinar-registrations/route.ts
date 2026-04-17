@@ -128,10 +128,12 @@ export async function POST(request: NextRequest) {
   }
 
   const redirectTarget = post.externalUrl || post.videoUrl || ''
+  const deliveryMode = post.externalUrl ? 'register' : post.videoUrl ? 'watch' : 'register'
 
-  const registrationRecord = await payload.create({
-    collection: 'registrations',
+  const submissionRecord = await payload.create({
+    collection: 'submissions',
     data: {
+      submissionType: 'webinar',
       post: post.id,
       name,
       email,
@@ -142,7 +144,8 @@ export async function POST(request: NextRequest) {
       consentAccepted,
       sourceUrl,
       submittedAt: new Date().toISOString(),
-      redirectTarget,
+      deliveryMode,
+      deliveryTarget: redirectTarget,
       notificationStatus: 'pending',
     },
     overrideAccess: true,
@@ -213,7 +216,7 @@ export async function POST(request: NextRequest) {
         lead_country: country,
         newsletter_opt_in: newsletterOptIn ? 'Yes' : 'No',
         submitted_at: new Date().toISOString(),
-        delivery_mode: 'webinar-registration',
+        delivery_mode: deliveryMode,
         delivery_target: redirectTarget,
         source_url: sourceUrl,
       })
@@ -236,8 +239,8 @@ export async function POST(request: NextRequest) {
   }
 
   await payload.update({
-    collection: 'registrations',
-    id: registrationRecord.id,
+    collection: 'submissions',
+    id: submissionRecord.id,
     data: {
       notificationStatus,
       notificationRecipients: adminEmails.join(', '),

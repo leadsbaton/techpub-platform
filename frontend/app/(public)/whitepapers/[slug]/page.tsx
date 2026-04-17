@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
+import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 import { formatDate, getAuthorNames, getImageUrl } from '@/lib/utils/formatting'
@@ -66,6 +67,11 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
                 >
                   Read Now
                 </Link>
+                {post.content ? (
+                  <div className="prose max-w-none pt-2">
+                    <RichTextRenderer content={post.content} />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

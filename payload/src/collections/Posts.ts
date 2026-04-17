@@ -144,8 +144,19 @@ export const Posts: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'authors',
                   hasMany: true,
-                  required: true,
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (
+                      (siblingData.type === 'insight' || siblingData.type === 'whitepaper') &&
+                      (!Array.isArray(value) || value.length === 0)
+                    ) {
+                      return 'Insights and white papers should have at least one author.'
+                    }
+
+                    return true
+                  },
                   admin: {
+                    description:
+                      'Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.',
                     width: '50%',
                   },
                 },
@@ -262,6 +273,30 @@ export const Posts: CollectionConfig = {
                   },
                   admin: {
                     description: 'Optional canonical, download, or registration URL.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'webinarSecondaryBanner',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Optional second banner image shown below the main webinar hero banner.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'webinarSecondaryBannerAlt',
+                  type: 'text',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Optional label for the secondary banner when a second visual is used.',
                     width: '50%',
                   },
                 },
