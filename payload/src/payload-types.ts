@@ -77,6 +77,7 @@ export interface Config {
     pages: Page;
     subscribers: Subscriber;
     leads: Lead;
+    registrations: Registration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    registrations: RegistrationsSelect<false> | RegistrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -402,6 +404,41 @@ export interface Post {
      */
     deliveryUrl?: string | null;
   };
+  /**
+   * Controls webinar registration form content, event copy, speakers, and CTA behaviour.
+   */
+  webinarRegistration?: {
+    enabled?: boolean | null;
+    formTitle?: string | null;
+    ctaLabel?: string | null;
+    formDescription?: string | null;
+    submitLabel?: string | null;
+    newsletterLabel?: string | null;
+    consentLabel?: string | null;
+    successMessage?: string | null;
+    eventDateLabel?: string | null;
+    sponsor?: string | null;
+    eventSummary?: string | null;
+    agendaPoints?:
+      | {
+          point: string;
+          id?: string | null;
+        }[]
+      | null;
+    speakers?:
+      | {
+          name: string;
+          role?: string | null;
+          company?: string | null;
+          photo?: (string | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+    moderatorName?: string | null;
+    moderatorRole?: string | null;
+    moderatorCompany?: string | null;
+    moderatorPhoto?: (string | null) | Media;
+  };
   tags?: (string | Tag)[] | null;
   /**
    * Optional related content suggestions shown near this post.
@@ -540,6 +577,25 @@ export interface Lead {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations".
+ */
+export interface Registration {
+  id: string;
+  post: string | Post;
+  name: string;
+  email: string;
+  jobTitle?: string | null;
+  company?: string | null;
+  country?: string | null;
+  newsletterOptIn?: boolean | null;
+  consentAccepted: boolean;
+  submittedAt: string;
+  sourceUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -601,6 +657,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: string | Lead;
+      } | null)
+    | ({
+        relationTo: 'registrations';
+        value: string | Registration;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -842,6 +902,40 @@ export interface PostsSelect<T extends boolean = true> {
         consentLabel?: T;
         deliveryUrl?: T;
       };
+  webinarRegistration?:
+    | T
+    | {
+        enabled?: T;
+        formTitle?: T;
+        ctaLabel?: T;
+        formDescription?: T;
+        submitLabel?: T;
+        newsletterLabel?: T;
+        consentLabel?: T;
+        successMessage?: T;
+        eventDateLabel?: T;
+        sponsor?: T;
+        eventSummary?: T;
+        agendaPoints?:
+          | T
+          | {
+              point?: T;
+              id?: T;
+            };
+        speakers?:
+          | T
+          | {
+              name?: T;
+              role?: T;
+              company?: T;
+              photo?: T;
+              id?: T;
+            };
+        moderatorName?: T;
+        moderatorRole?: T;
+        moderatorCompany?: T;
+        moderatorPhoto?: T;
+      };
   tags?: T;
   relatedPosts?: T;
   cta?:
@@ -959,6 +1053,24 @@ export interface LeadsSelect<T extends boolean = true> {
   deliveryMode?: T;
   submittedAt?: T;
   deliveryTarget?: T;
+  sourceUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations_select".
+ */
+export interface RegistrationsSelect<T extends boolean = true> {
+  post?: T;
+  name?: T;
+  email?: T;
+  jobTitle?: T;
+  company?: T;
+  country?: T;
+  newsletterOptIn?: T;
+  consentAccepted?: T;
+  submittedAt?: T;
   sourceUrl?: T;
   updatedAt?: T;
   createdAt?: T;

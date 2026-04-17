@@ -415,6 +415,169 @@ export const Posts: CollectionConfig = {
               ],
             },
             {
+              name: 'webinarRegistration',
+              type: 'group',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'webinar',
+                description:
+                  'Controls webinar registration form content, event copy, speakers, and CTA behaviour.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'enabled',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '25%' },
+                    },
+                    {
+                      name: 'formTitle',
+                      type: 'text',
+                      defaultValue: 'Register for this webinar',
+                      admin: { width: '35%' },
+                    },
+                    {
+                      name: 'ctaLabel',
+                      type: 'text',
+                      defaultValue: 'Register now',
+                      admin: { width: '40%' },
+                    },
+                  ],
+                },
+                {
+                  name: 'formDescription',
+                  type: 'textarea',
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'submitLabel',
+                      type: 'text',
+                      defaultValue: 'Submit',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'newsletterLabel',
+                      type: 'text',
+                      defaultValue: 'Tick this box to receive our newsletter',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'consentLabel',
+                      type: 'textarea',
+                      defaultValue:
+                        'By requesting this resource, you agree to our terms of use. All data is protected by our Privacy Notice.',
+                      admin: { width: '34%' },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'successMessage',
+                      type: 'textarea',
+                      defaultValue: 'Your registration has been saved successfully.',
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'eventDateLabel',
+                      type: 'text',
+                      defaultValue: 'WEDNESDAY, DECEMBER 10 - 11 AM PT, 2 PM ET',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'sponsor',
+                      type: 'text',
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'eventSummary',
+                      type: 'textarea',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                {
+                  name: 'agendaPoints',
+                  type: 'array',
+                  fields: [
+                    {
+                      name: 'point',
+                      type: 'text',
+                      required: true,
+                    },
+                  ],
+                },
+                {
+                  name: 'speakers',
+                  type: 'array',
+                  fields: [
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'name',
+                          type: 'text',
+                          required: true,
+                          admin: { width: '33%' },
+                        },
+                        {
+                          name: 'role',
+                          type: 'text',
+                          admin: { width: '33%' },
+                        },
+                        {
+                          name: 'company',
+                          type: 'text',
+                          admin: { width: '34%' },
+                        },
+                      ],
+                    },
+                    {
+                      name: 'photo',
+                      type: 'upload',
+                      relationTo: 'media',
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'moderatorName',
+                      type: 'text',
+                      admin: { width: '25%' },
+                    },
+                    {
+                      name: 'moderatorRole',
+                      type: 'text',
+                      admin: { width: '25%' },
+                    },
+                    {
+                      name: 'moderatorCompany',
+                      type: 'text',
+                      admin: { width: '25%' },
+                    },
+                    {
+                      name: 'moderatorPhoto',
+                      type: 'upload',
+                      relationTo: 'media',
+                      admin: { width: '25%' },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
               name: 'tags',
               type: 'relationship',
               relationTo: 'tags',

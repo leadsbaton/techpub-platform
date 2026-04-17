@@ -153,6 +153,32 @@ export interface Post {
     deliveryUrl?: string | null
     openDeliveryInNewTab?: boolean | null
   } | null
+  webinarRegistration?: {
+    enabled?: boolean | null
+    formTitle?: string | null
+    formDescription?: string | null
+    submitLabel?: string | null
+    successMessage?: string | null
+    newsletterLabel?: string | null
+    consentLabel?: string | null
+    ctaLabel?: string | null
+    sponsor?: string | null
+    eventDateLabel?: string | null
+    eventSummary?: string | null
+    agendaPoints?: Array<{
+      point?: string | null
+    }> | null
+    speakers?: Array<{
+      name?: string | null
+      role?: string | null
+      company?: string | null
+      photo?: Media | string | null
+    }> | null
+    moderatorName?: string | null
+    moderatorRole?: string | null
+    moderatorCompany?: string | null
+    moderatorPhoto?: Media | string | null
+  } | null
   cta?: PostCtaGroup | null
   seo?: Seo | null
 }
