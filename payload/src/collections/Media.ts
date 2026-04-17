@@ -11,6 +11,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     useAsTitle: 'alt',
+    defaultColumns: ['alt', 'filename', 'mimeType', 'updatedAt'],
   },
   access: {
     read: () => true,
@@ -23,17 +24,27 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       required: true,
+      admin: {
+        description: 'Accessible image description. This is used anywhere the media appears on the site.',
+      },
     },
     {
       name: 'caption',
       type: 'textarea',
+      admin: {
+        description: 'Optional supporting text for galleries and rich media layouts.',
+      },
     },
     {
       name: 'credit',
       type: 'text',
+      admin: {
+        description: 'Optional source or photographer credit.',
+      },
     },
   ],
   upload: {
+    adminThumbnail: 'card',
     staticDir: path.resolve(dirname, '../../../media'),
     imageSizes: [
       {

@@ -170,8 +170,17 @@ export interface User {
  */
 export interface Media {
   id: string;
+  /**
+   * Accessible image description. This is used anywhere the media appears on the site.
+   */
   alt: string;
+  /**
+   * Optional supporting text for galleries and rich media layouts.
+   */
   caption?: string | null;
+  /**
+   * Optional source or photographer credit.
+   */
   credit?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -572,6 +581,12 @@ export interface Lead {
   submittedAt: string;
   deliveryTarget?: string | null;
   sourceUrl?: string | null;
+  notificationStatus?: ('pending' | 'sent' | 'partial' | 'failed' | 'skipped') | null;
+  /**
+   * Comma-separated admin email recipients used for this lead notification.
+   */
+  notificationRecipients?: string | null;
+  notificationError?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -591,6 +606,13 @@ export interface Registration {
   consentAccepted: boolean;
   submittedAt: string;
   sourceUrl?: string | null;
+  redirectTarget?: string | null;
+  notificationStatus?: ('pending' | 'sent' | 'partial' | 'failed' | 'skipped') | null;
+  /**
+   * Comma-separated admin email recipients used for this registration notification.
+   */
+  notificationRecipients?: string | null;
+  notificationError?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1054,6 +1076,9 @@ export interface LeadsSelect<T extends boolean = true> {
   submittedAt?: T;
   deliveryTarget?: T;
   sourceUrl?: T;
+  notificationStatus?: T;
+  notificationRecipients?: T;
+  notificationError?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1072,6 +1097,10 @@ export interface RegistrationsSelect<T extends boolean = true> {
   consentAccepted?: T;
   submittedAt?: T;
   sourceUrl?: T;
+  redirectTarget?: T;
+  notificationStatus?: T;
+  notificationRecipients?: T;
+  notificationError?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1196,6 +1225,7 @@ export interface SiteSetting {
   systemIntegrations?: {
     emailProvider?: string | null;
     emailCredentialNote?: string | null;
+    emailTemplateFieldNote?: string | null;
   };
   seo?: {
     metaTitle?: string | null;
@@ -1283,6 +1313,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         emailProvider?: T;
         emailCredentialNote?: T;
+        emailTemplateFieldNote?: T;
       };
   seo?:
     | T

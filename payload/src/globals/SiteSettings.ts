@@ -251,6 +251,12 @@ export const SiteSettings: GlobalConfig = {
           defaultValue:
             'Set EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, and EMAILJS_PRIVATE_KEY in the backend environment.',
         },
+        {
+          name: 'emailTemplateFieldNote',
+          type: 'textarea',
+          defaultValue:
+            'Recommended EmailJS template params: to_email, resource_title, lead_name, lead_email, lead_job_title, lead_company, lead_country, newsletter_opt_in, submitted_at, delivery_mode, delivery_target, source_url.',
+        },
       ],
     },
     ...seoFields(),

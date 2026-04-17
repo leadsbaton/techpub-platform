@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
+import { PostShareBar } from '../../_components/PostShareBar'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl } from '@/lib/utils/formatting'
+import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
 
@@ -17,10 +19,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params
   const post = await getWebinar(slug)
   if (!post) return { title: 'Webinar' }
-  return {
-    title: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
-  }
+  return buildPostMetadata(post, `/webinars/${post.slug}`)
 }
 
 export default async function WebinarDetailPage({ params }: { params: Params }) {
@@ -60,6 +59,10 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
                 {post.webinarRegistration?.ctaLabel || 'Register now'}
               </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <PostShareBar post={post} />
             </div>
 
             <div className="ui-font space-y-5 text-[16px] leading-[145%] text-[#2d2d2d]">

@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
+import { PostShareBar } from '../../_components/PostShareBar'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
+import { buildPostMetadata } from '@/lib/utils/metadata'
 import { formatDate, getAuthorNames, getImageUrl } from '@/lib/utils/formatting'
 
 type Params = Promise<{ slug: string }>
@@ -21,10 +23,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     return { title: 'White Paper' }
   }
 
-  return {
-    title: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
-  }
+  return buildPostMetadata(post, `/whitepapers/${post.slug}`)
 }
 
 export default async function WhitepaperDetailPage({ params }: { params: Params }) {
@@ -60,6 +59,7 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
                 <div className="text-[14px] text-[#808080] sm:text-[16px]">
                   By {getAuthorNames(post.authors)} {formatDate(post.publishedAt)}
                 </div>
+                <PostShareBar post={post} />
                 <Link
                   href={`/whitepapers/${post.slug}/access`}
                   className="inline-flex text-[26px] font-medium uppercase leading-none text-[#FC5A0A]"

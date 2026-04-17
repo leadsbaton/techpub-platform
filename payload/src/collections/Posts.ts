@@ -598,6 +598,18 @@ export const Posts: CollectionConfig = {
           label: 'Preview',
           fields: [
             {
+              name: 'postAuthoringGuide',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostAuthoringGuide',
+                    exportName: 'PostAuthoringGuide',
+                  },
+                },
+              },
+            },
+            {
               name: 'postLivePreview',
               type: 'ui',
               admin: {

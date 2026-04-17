@@ -6,7 +6,7 @@ export const Registrations: CollectionConfig = {
   slug: 'registrations',
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['name', 'email', 'post', 'submittedAt'],
+    defaultColumns: ['name', 'email', 'post', 'notificationStatus', 'submittedAt'],
   },
   access: {
     create: isAdmin,
@@ -87,6 +87,50 @@ export const Registrations: CollectionConfig = {
     {
       name: 'sourceUrl',
       type: 'text',
+    },
+    {
+      name: 'redirectTarget',
+      type: 'text',
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'notificationStatus',
+          type: 'select',
+          defaultValue: 'pending',
+          options: [
+            { label: 'Pending', value: 'pending' },
+            { label: 'Sent', value: 'sent' },
+            { label: 'Partial', value: 'partial' },
+            { label: 'Failed', value: 'failed' },
+            { label: 'Skipped', value: 'skipped' },
+          ],
+          admin: {
+            readOnly: true,
+            width: '30%',
+          },
+        },
+        {
+          name: 'notificationRecipients',
+          type: 'text',
+          admin: {
+            readOnly: true,
+            width: '70%',
+            description: 'Comma-separated admin email recipients used for this registration notification.',
+          },
+        },
+      ],
+    },
+    {
+      name: 'notificationError',
+      type: 'textarea',
+      admin: {
+        readOnly: true,
+      },
     },
   ],
 }

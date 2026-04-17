@@ -1,11 +1,14 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import { getImageUrl } from '@/lib/utils/formatting'
+import { buildPostMetadata } from '@/lib/utils/metadata'
 
 function FavoriteRail({ items }: { items: Awaited<ReturnType<typeof getPosts>>['docs'] }) {
   return (
@@ -31,6 +34,21 @@ function FavoriteRail({ items }: { items: Awaited<ReturnType<typeof getPosts>>['
       </div>
     </aside>
   )
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const post = await getPostBySlug(slug, 'insight')
+
+  if (!post) {
+    return { title: 'Insight' }
+  }
+
+  return buildPostMetadata(post, `/insights/${post.slug}`)
 }
 
 export default async function InsightDetailPage({
@@ -69,6 +87,9 @@ export default async function InsightDetailPage({
             <h1 className="headline-font text-[1.6rem] font-extrabold leading-[1.25] text-[color:var(--text-strong)] md:text-[2rem]">
               {post.title}
             </h1>
+            <div className="mt-5 flex justify-center">
+              <PostShareBar post={post} />
+            </div>
           </div>
 
           <div className="mt-8 max-w-4xl space-y-6 text-[1.05rem] leading-8 text-[color:var(--text-soft)]">

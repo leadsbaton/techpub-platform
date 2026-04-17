@@ -49,6 +49,8 @@ type SiteSettingsShape = {
   leadNotificationEmails?: Array<{ email?: string | null }> | null
 }
 
+type NotificationStatus = 'pending' | 'sent' | 'partial' | 'failed' | 'skipped'
+
 function getClientKey(request: NextRequest) {
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded?.split(',')[0]?.trim() || 'unknown'
@@ -125,7 +127,9 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await payload.create({
+  const redirectTarget = post.externalUrl || post.videoUrl || ''
+
+  const registrationRecord = await payload.create({
     collection: 'registrations',
     data: {
       post: post.id,
@@ -138,6 +142,8 @@ export async function POST(request: NextRequest) {
       consentAccepted,
       sourceUrl,
       submittedAt: new Date().toISOString(),
+      redirectTarget,
+      notificationStatus: 'pending',
     },
     overrideAccess: true,
   })
@@ -195,7 +201,7 @@ export async function POST(request: NextRequest) {
     settings.contactEmail,
   ].filter((value, index, array): value is string => Boolean(value) && array.indexOf(value) === index)
 
-  await Promise.all(
+  const notificationResults = await Promise.all(
     adminEmails.map((adminEmail) =>
       sendEmailJsTemplate({
         to_email: adminEmail,
@@ -208,18 +214,47 @@ export async function POST(request: NextRequest) {
         newsletter_opt_in: newsletterOptIn ? 'Yes' : 'No',
         submitted_at: new Date().toISOString(),
         delivery_mode: 'webinar-registration',
-        delivery_target: post.externalUrl || post.videoUrl || '',
+        delivery_target: redirectTarget,
         source_url: sourceUrl,
-      }).catch(() => ({ sent: false })),
+      })
+        .then((result) => ({ adminEmail, ...result }))
+        .catch(() => ({ adminEmail, sent: false, reason: 'emailjs_request_failed' })),
     ),
   )
+
+  const sentCount = notificationResults.filter((result) => result.sent).length
+  let notificationStatus: NotificationStatus = 'skipped'
+
+  if (adminEmails.length > 0) {
+    if (sentCount === adminEmails.length) {
+      notificationStatus = 'sent'
+    } else if (sentCount > 0) {
+      notificationStatus = 'partial'
+    } else {
+      notificationStatus = 'failed'
+    }
+  }
+
+  await payload.update({
+    collection: 'registrations',
+    id: registrationRecord.id,
+    data: {
+      notificationStatus,
+      notificationRecipients: adminEmails.join(', '),
+      notificationError: notificationResults
+        .filter((result) => !result.sent)
+        .map((result) => `${result.adminEmail}: ${result.reason || 'unknown_error'}`)
+        .join('\n'),
+    },
+    overrideAccess: true,
+  })
 
   return NextResponse.json(
     {
       message:
         post.webinarRegistration?.successMessage ||
         'Your registration has been saved successfully.',
-      redirectUrl: post.externalUrl || post.videoUrl || null,
+      redirectUrl: redirectTarget || null,
     },
     { status: 201 },
   )

@@ -106,6 +106,7 @@ export interface SiteSettings {
   systemIntegrations?: {
     emailProvider?: string | null
     emailCredentialNote?: string | null
+    emailTemplateFieldNote?: string | null
   } | null
 }
 

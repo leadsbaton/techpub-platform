@@ -6,7 +6,7 @@ export const Leads: CollectionConfig = {
   slug: 'leads',
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['name', 'email', 'post', 'deliveryMode', 'submittedAt'],
+    defaultColumns: ['name', 'email', 'post', 'deliveryMode', 'notificationStatus', 'submittedAt'],
   },
   access: {
     create: isAdmin,
@@ -127,6 +127,43 @@ export const Leads: CollectionConfig = {
     {
       name: 'sourceUrl',
       type: 'text',
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'notificationStatus',
+          type: 'select',
+          defaultValue: 'pending',
+          options: [
+            { label: 'Pending', value: 'pending' },
+            { label: 'Sent', value: 'sent' },
+            { label: 'Partial', value: 'partial' },
+            { label: 'Failed', value: 'failed' },
+            { label: 'Skipped', value: 'skipped' },
+          ],
+          admin: {
+            readOnly: true,
+            width: '30%',
+          },
+        },
+        {
+          name: 'notificationRecipients',
+          type: 'text',
+          admin: {
+            readOnly: true,
+            width: '70%',
+            description: 'Comma-separated admin email recipients used for this lead notification.',
+          },
+        },
+      ],
+    },
+    {
+      name: 'notificationError',
+      type: 'textarea',
+      admin: {
+        readOnly: true,
+      },
     },
   ],
 }
