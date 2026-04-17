@@ -6,11 +6,11 @@ import { hasMediaSource, getImageUrl } from '@/lib/utils/formatting'
 
 const copyBySlug: Record<string, string> = {
   marketing:
-    'Explore strategies, stories, and playbooks powering high-impact campaigns and brands.',
+    'Explore strategies, stories, & playbooks powering high-impact campaigns & brands.',
   finance:
-    'Understand the numbers, risks, and opportunities driving smarter financial decisions.',
+    'Understand the numbers, risks, & opportunities driving smarter financial decisions.',
   technology:
-    'Dive into cutting-edge trends, tools, and insights shaping the future of digital innovation.',
+    'Dive into cutting-edge trends, tools, & insights shaping the future of digital innovation.',
 }
 
 const preferredOrder = ['marketing', 'finance', 'technology']
