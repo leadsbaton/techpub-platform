@@ -76,6 +76,7 @@ export interface Config {
     posts: Post;
     pages: Page;
     subscribers: Subscriber;
+    leads: Lead;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -376,6 +378,24 @@ export interface Post {
    * Required for published content. Defaults to now when you publish.
    */
   publishedAt?: string | null;
+  /**
+   * Controls the gated white paper form, delivery mode, and post-submit behavior.
+   */
+  leadCapture?: {
+    enabled?: boolean | null;
+    openDeliveryInNewTab?: boolean | null;
+    deliveryMode?: ('download' | 'read' | 'redirect') | null;
+    formTitle?: string | null;
+    submitLabel?: string | null;
+    formDescription?: string | null;
+    successMessage?: string | null;
+    newsletterLabel?: string | null;
+    consentLabel?: string | null;
+    /**
+     * Optional override destination after form submission. If empty, the white paper external URL or uploaded file is used.
+     */
+    deliveryUrl?: string | null;
+  };
   tags?: (string | Tag)[] | null;
   /**
    * Optional related content suggestions shown near this post.
@@ -492,6 +512,28 @@ export interface Subscriber {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: string;
+  resourceType: 'whitepaper';
+  post: string | Post;
+  name: string;
+  email: string;
+  jobTitle?: string | null;
+  company?: string | null;
+  country?: string | null;
+  newsletterOptIn?: boolean | null;
+  consentAccepted: boolean;
+  deliveryMode: 'read' | 'download' | 'redirect';
+  submittedAt: string;
+  deliveryTarget?: string | null;
+  sourceUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -549,6 +591,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'subscribers';
         value: string | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: string | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -776,6 +822,20 @@ export interface PostsSelect<T extends boolean = true> {
   featured?: T;
   pinned?: T;
   publishedAt?: T;
+  leadCapture?:
+    | T
+    | {
+        enabled?: T;
+        openDeliveryInNewTab?: T;
+        deliveryMode?: T;
+        formTitle?: T;
+        submitLabel?: T;
+        formDescription?: T;
+        successMessage?: T;
+        newsletterLabel?: T;
+        consentLabel?: T;
+        deliveryUrl?: T;
+      };
   tags?: T;
   relatedPosts?: T;
   cta?:
@@ -878,6 +938,27 @@ export interface SubscribersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  resourceType?: T;
+  post?: T;
+  name?: T;
+  email?: T;
+  jobTitle?: T;
+  company?: T;
+  country?: T;
+  newsletterOptIn?: T;
+  consentAccepted?: T;
+  deliveryMode?: T;
+  submittedAt?: T;
+  deliveryTarget?: T;
+  sourceUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -929,6 +1010,15 @@ export interface SiteSetting {
   favicon?: (string | null) | Media;
   defaultShareImage?: (string | null) | Media;
   contactEmail?: string | null;
+  /**
+   * Admin recipients for white paper lead notifications. EmailJS credentials are read from environment variables.
+   */
+  leadNotificationEmails?:
+    | {
+        email: string;
+        id?: string | null;
+      }[]
+    | null;
   socialLinks?:
     | {
         platform: string;
@@ -982,6 +1072,13 @@ export interface SiteSetting {
     description?: string | null;
     submitLabel?: string | null;
   };
+  /**
+   * Reference-only labels for environment-based integrations used by the frontend and API routes.
+   */
+  systemIntegrations?: {
+    emailProvider?: string | null;
+    emailCredentialNote?: string | null;
+  };
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -1004,6 +1101,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   favicon?: T;
   defaultShareImage?: T;
   contactEmail?: T;
+  leadNotificationEmails?:
+    | T
+    | {
+        email?: T;
+        id?: T;
+      };
   socialLinks?:
     | T
     | {
@@ -1056,6 +1159,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         submitLabel?: T;
+      };
+  systemIntegrations?:
+    | T
+    | {
+        emailProvider?: T;
+        emailCredentialNote?: T;
       };
   seo?:
     | T

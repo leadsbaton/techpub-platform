@@ -48,6 +48,21 @@ export const SiteSettings: GlobalConfig = {
       defaultValue: 'info@leadsbaton.com',
     },
     {
+      name: 'leadNotificationEmails',
+      type: 'array',
+      admin: {
+        description:
+          'Admin recipients for white paper lead notifications. EmailJS credentials are read from environment variables.',
+      },
+      fields: [
+        {
+          name: 'email',
+          type: 'email',
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'socialLinks',
       type: 'array',
       defaultValue: [
@@ -214,6 +229,27 @@ export const SiteSettings: GlobalConfig = {
           name: 'submitLabel',
           type: 'text',
           defaultValue: 'Subscribe',
+        },
+      ],
+    },
+    {
+      name: 'systemIntegrations',
+      type: 'group',
+      admin: {
+        description:
+          'Reference-only labels for environment-based integrations used by the frontend and API routes.',
+      },
+      fields: [
+        {
+          name: 'emailProvider',
+          type: 'text',
+          defaultValue: 'EmailJS',
+        },
+        {
+          name: 'emailCredentialNote',
+          type: 'textarea',
+          defaultValue:
+            'Set EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, and EMAILJS_PRIVATE_KEY in the backend environment.',
         },
       ],
     },

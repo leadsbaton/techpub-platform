@@ -307,6 +307,113 @@ export const Posts: CollectionConfig = {
               ],
             },
             {
+              name: 'leadCapture',
+              type: 'group',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'whitepaper',
+                description:
+                  'Controls the gated white paper form, delivery mode, and post-submit behavior.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'enabled',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: {
+                        width: '25%',
+                      },
+                    },
+                    {
+                      name: 'openDeliveryInNewTab',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: {
+                        width: '25%',
+                      },
+                    },
+                    {
+                      name: 'deliveryMode',
+                      type: 'select',
+                      defaultValue: 'download',
+                      options: [
+                        { label: 'Download Now', value: 'download' },
+                        { label: 'Read Now', value: 'read' },
+                        { label: 'Redirect To URL', value: 'redirect' },
+                      ],
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'formTitle',
+                      type: 'text',
+                      defaultValue: 'Access this white paper',
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'submitLabel',
+                      type: 'text',
+                      defaultValue: 'Submit and continue',
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'formDescription',
+                  type: 'textarea',
+                  defaultValue:
+                    'Complete the form below to unlock this white paper, save your request, and continue to the configured destination.',
+                },
+                {
+                  name: 'successMessage',
+                  type: 'textarea',
+                  defaultValue: 'Your request has been saved. Opening the white paper now.',
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'newsletterLabel',
+                      type: 'text',
+                      defaultValue: 'Tick this box to receive our newsletter.',
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'consentLabel',
+                      type: 'textarea',
+                      defaultValue:
+                        'By requesting this resource, you agree to our terms of use and privacy notice.',
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'deliveryUrl',
+                  type: 'text',
+                  admin: {
+                    description:
+                      'Optional override destination after form submission. If empty, the white paper external URL or uploaded file is used.',
+                  },
+                },
+              ],
+            },
+            {
               name: 'tags',
               type: 'relationship',
               relationTo: 'tags',

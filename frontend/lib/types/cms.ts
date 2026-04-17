@@ -81,6 +81,9 @@ export interface SiteSettings {
   siteDescription?: string | null
   logo?: Media | string | null
   contactEmail?: string | null
+  leadNotificationEmails?: Array<{
+    email: string
+  }> | null
   socialLinks?: Array<{
     platform: string
     url: string
@@ -100,6 +103,10 @@ export interface SiteSettings {
     description?: string | null
     submitLabel?: string | null
   }
+  systemIntegrations?: {
+    emailProvider?: string | null
+    emailCredentialNote?: string | null
+  } | null
 }
 
 export interface PostCtaGroup {
@@ -134,6 +141,18 @@ export interface Post {
   publishedAt?: string | null
   videoUrl?: string | null
   externalUrl?: string | null
+  leadCapture?: {
+    enabled?: boolean | null
+    formTitle?: string | null
+    formDescription?: string | null
+    submitLabel?: string | null
+    successMessage?: string | null
+    newsletterLabel?: string | null
+    consentLabel?: string | null
+    deliveryMode?: 'read' | 'download' | 'redirect' | null
+    deliveryUrl?: string | null
+    openDeliveryInNewTab?: boolean | null
+  } | null
   cta?: PostCtaGroup | null
   seo?: Seo | null
 }

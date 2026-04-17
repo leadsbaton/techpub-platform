@@ -15,6 +15,7 @@ import { Tags } from './collections/Tags'
 import { Authors } from './collections/Authors'
 import { Pages } from './collections/Pages'
 import { Subscribers } from './collections/Subscribers'
+import { Leads } from './collections/Leads'
 import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -57,6 +58,7 @@ export default buildConfig({
     Posts,
     Pages,
     Subscribers,
+    Leads,
   ],
   globals: [SiteSettings],
   editor: lexicalEditor(),
