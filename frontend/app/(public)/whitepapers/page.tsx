@@ -7,7 +7,7 @@ import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
 import { getCategoriesForType, getContentTypes, getPosts } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getImageUrl } from '@/lib/utils/formatting'
+import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
 
 export const metadata: Metadata = {
   title: 'White Papers',
@@ -66,14 +66,15 @@ function SectionHeader({
   actionLabel?: string
 }) {
   return (
-    <div className="section-heading">
-      <h2 className="text-[1.8rem] font-semibold tracking-tight text-[color:var(--text-strong)]">
+    <div className="ui-font flex items-center gap-4">
+      <h2 className="text-[32px] font-medium leading-[39px] text-[#020202]">
         {title}
       </h2>
+      <div className="double-rule hidden md:block" />
       {href ? (
         <Link
           href={href}
-          className="ml-auto whitespace-nowrap text-sm font-semibold text-[color:var(--text-muted)] transition hover:text-[var(--accent-red)]"
+          className="ml-auto whitespace-nowrap text-[20px] font-normal leading-6 text-[#020202] underline underline-offset-4 transition hover:text-[var(--accent-red)]"
         >
           {actionLabel}
         </Link>
@@ -85,16 +86,33 @@ function SectionHeader({
 function TrendingDownloads({ posts }: { posts: Post[] }) {
   if (!posts.length) return null
 
+  const categoryColors: Record<string, string> = {
+    technology: 'bg-[#0015AD]',
+    finance: 'bg-[#FC0203]',
+    marketing: 'bg-[#00A01D]',
+  }
+
   return (
-    <section className="space-y-4">
-      <SectionHeader title="Trending Downloads" />
-      <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-[#111] p-3 shadow-[var(--shadow-soft)]">
-        <div className="grid gap-3 md:grid-cols-3">
-          {posts.slice(0, 3).map((post) => (
+    <section className="ui-font space-y-6">
+      <div className="flex items-center gap-6">
+        <div className="double-rule" />
+        <h2 className="shrink-0 text-center text-[36px] font-medium uppercase leading-[44px] text-[#020202]">
+          Trending Downloads
+        </h2>
+        <div className="double-rule" />
+      </div>
+      <div className="grid gap-[10px] md:grid-cols-[1.95fr_1fr_0.96fr]">
+        {posts.slice(0, 3).map((post, index) => {
+          const category = getImageCategory(post)
+          const categoryColor = categoryColors[category.toLowerCase()] || 'bg-[#0015AD]'
+
+          return (
             <Link
               key={post.id}
               href={`/whitepapers/${post.slug}`}
-              className="group relative block min-h-[190px] overflow-hidden rounded-[20px] bg-black"
+              className={`group relative block overflow-hidden bg-black ${
+                index === 0 ? 'h-[330px] md:h-[475px]' : 'h-[230px] md:h-[475px]'
+              }`}
             >
               <Image
                 src={getImageUrl(post.featuredImage)}
@@ -102,31 +120,40 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-4">
-                <span className="inline-flex rounded-full bg-[var(--accent-red)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
-                  Trending
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+              <div className={`absolute right-0 top-0 flex h-[108px] w-[28px] items-center justify-center md:h-[162px] ${categoryColor}`}>
+                <span className="vertical-badge text-[18px] font-bold uppercase leading-none tracking-[-0.02em] text-white">
+                  {category}
                 </span>
-                <h3 className="mt-3 line-clamp-3 text-lg font-semibold leading-6 text-white">
-                  {post.title}
-                </h3>
               </div>
+
+              {index === 0 ? (
+                <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                  <h3 className="max-w-[260px] text-[16px] font-medium leading-[145%] tracking-[-0.005em] text-white md:text-[18px]">
+                    {post.title}
+                  </h3>
+                </div>
+              ) : null}
             </Link>
-          ))}
-        </div>
+          )
+        })}
       </div>
     </section>
   )
+}
+
+function getImageCategory(post: Post) {
+  return getCategoryName(post.primaryCategory).toUpperCase()
 }
 
 function LatestWhitepapers({ posts }: { posts: Post[] }) {
   if (!posts.length) return null
 
   return (
-    <section id="latest-whitepapers" className="space-y-6">
-      <SectionHeader title="Latest White Papers" href="#category-sections" />
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post) => (
+    <section id="latest-whitepapers" className="space-y-8">
+      <SectionHeader title="Latest White Papers" href="/whitepapers?view=all" />
+      <div className="grid justify-between gap-y-10 gap-x-8 md:grid-cols-2 xl:grid-cols-3">
+        {posts.slice(0, 9).map((post) => (
           <WhitepaperCard key={post.id} post={post} />
         ))}
       </div>
@@ -136,21 +163,18 @@ function LatestWhitepapers({ posts }: { posts: Post[] }) {
 
 function CategoryBanner({ category }: { category: Category }) {
   return (
-    <div className="overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-white shadow-[var(--shadow-soft)]">
-      <div className="relative min-h-[170px]">
+    <div className="overflow-hidden rounded-[10px]">
+      <div className="relative h-[120px] sm:h-[170px]">
         {category.image ? (
           <Image src={getImageUrl(category.image)} alt={category.name} fill className="object-cover" />
         ) : (
           <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
         )}
-        <div className="absolute inset-0 bg-black/35" />
-        <div className="relative z-10 flex min-h-[170px] items-end p-6 sm:p-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/75">Category</p>
-            <h2 className="mt-2 text-4xl font-semibold tracking-[0.02em] text-white sm:text-5xl">
-              {category.name.toUpperCase()}
-            </h2>
-          </div>
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="ui-font absolute inset-x-0 bottom-0 p-5 sm:p-8">
+          <h2 className="text-4xl font-medium tracking-normal text-white sm:text-[54px]">
+            {category.name.toUpperCase()}
+          </h2>
         </div>
       </div>
     </div>
@@ -177,7 +201,7 @@ function CategoryWhitepaperSection({
       <CategoryBanner category={category} />
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-2">
+          <div className="grid justify-between gap-y-10 gap-x-8 md:grid-cols-2 xl:grid-cols-2">
             {posts.map((post) => (
               <WhitepaperCard key={post.id} post={post} />
             ))}
@@ -185,7 +209,7 @@ function CategoryWhitepaperSection({
           <div className="flex justify-center">
             <Link
               href={buildFilterHref(category.slug)}
-              className="rounded-full bg-[var(--accent-red)] px-6 py-3 text-sm font-semibold text-white"
+              className="ui-font rounded-[4px] bg-[#FC0203] px-6 py-2 text-[14px] font-medium text-white"
             >
               {hasMore ? 'Load More' : 'View Category'}
             </Link>
@@ -254,11 +278,13 @@ export default async function WhitepapersPage({
 
   if (!isFocusedView) {
     return (
-      <article className="site-container space-y-10 py-8 sm:py-10">
-        <TrendingDownloads posts={trendingPosts} />
-        <LatestWhitepapers posts={latestWhitepapers.docs} />
+      <article className="site-container bg-white py-6 sm:py-8">
+        <div className="space-y-14">
+          <TrendingDownloads posts={trendingPosts} />
+          <LatestWhitepapers posts={latestWhitepapers.docs} />
+        </div>
 
-        <div id="category-sections" className="space-y-10">
+        <div id="category-sections" className="space-y-10 hidden">
           {categorySections.map((section) => (
             <CategoryWhitepaperSection
               key={section.category.id}

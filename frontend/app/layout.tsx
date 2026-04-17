@@ -1,4 +1,4 @@
-import { Epilogue, Manrope } from 'next/font/google'
+import { Epilogue, Inter, Manrope } from 'next/font/google'
 import type { Metadata } from 'next'
 
 import './globals.css'
@@ -13,6 +13,12 @@ const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-body',
   weight: ['400', '500', '700', '800'],
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-ui',
+  weight: ['400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -50,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${epilogue.variable} ${manrope.variable}`}>
+    <html lang="en" className={`${epilogue.variable} ${manrope.variable} ${inter.variable}`}>
       <body>{children}</body>
     </html>
   )

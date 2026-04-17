@@ -34,6 +34,34 @@ body {
   font-family: var(--font-body), "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
+.ui-font {
+  font-family: var(--font-ui), "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+.double-rule {
+  position: relative;
+  height: 4px;
+  flex: 1;
+  min-width: 40px;
+}
+
+.double-rule::before,
+.double-rule::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #d4d4d4;
+}
+
+.double-rule::before {
+  top: 0;
+}
+
+.double-rule::after {
+  top: 4px;
+}
+
 a {
   text-decoration: none;
 }
