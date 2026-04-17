@@ -153,6 +153,7 @@ export const Posts: CollectionConfig = {
               fields: [
                 {
                   name: 'authors',
+                  label: 'Authors / Speakers',
                   type: 'relationship',
                   relationTo: 'authors',
                   hasMany: true,
@@ -167,9 +168,8 @@ export const Posts: CollectionConfig = {
                     return true
                   },
                   admin: {
-                    condition: (_, siblingData) => siblingData?.type !== 'webinar',
                     description:
-                      'Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.',
+                      'For insights and white papers, this is the author list. For webinars, the selected authors are shown as the speaker row using each author avatar, role, and bio.',
                     width: '50%',
                   },
                 },
@@ -238,6 +238,9 @@ export const Posts: CollectionConfig = {
             {
               name: 'gallery',
               type: 'array',
+              admin: {
+                condition: () => false,
+              },
               fields: [
                 {
                   name: 'image',
@@ -468,7 +471,7 @@ export const Posts: CollectionConfig = {
               admin: {
                 condition: (_, siblingData) => siblingData?.type === 'webinar',
                 description:
-                  'Controls webinar registration form content, event copy, speakers, and CTA behaviour.',
+                  'Controls webinar registration form content, event copy, moderator, and CTA behaviour.',
               },
               fields: [
                 {
@@ -604,8 +607,9 @@ export const Posts: CollectionConfig = {
                   name: 'speakers',
                   type: 'array',
                   admin: {
+                    condition: () => false,
                     description:
-                      'Add one or more webinar speakers with circular avatar, name, role, and company exactly as they should appear on the page.',
+                      'Legacy speaker list. Webinar pages now use the selected authors as the speaker row and only fall back to this older field if needed.',
                   },
                   fields: [
                     {

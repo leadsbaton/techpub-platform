@@ -338,7 +338,7 @@ export interface Post {
    */
   slug: string;
   /**
-   * Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.
+   * For insights and white papers, this is the author list. For webinars, the selected authors are shown as the speaker row using each author avatar, role, and bio.
    */
   authors?: (string | Author)[] | null;
   /**
@@ -423,7 +423,7 @@ export interface Post {
     deliveryUrl?: string | null;
   };
   /**
-   * Controls webinar registration form content, event copy, speakers, and CTA behaviour.
+   * Controls webinar registration form content, event copy, moderator, and CTA behaviour.
    */
   webinarRegistration?: {
     enabled?: boolean | null;
@@ -453,7 +453,7 @@ export interface Post {
         }[]
       | null;
     /**
-     * Add one or more webinar speakers with circular avatar, name, role, and company exactly as they should appear on the page.
+     * Legacy speaker list. Webinar pages now use the selected authors as the speaker row and only fall back to this older field if needed.
      */
     speakers?:
       | {

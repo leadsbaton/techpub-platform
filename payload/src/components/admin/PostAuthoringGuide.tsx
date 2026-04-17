@@ -55,7 +55,8 @@ const guideByType = {
     route: '/webinars/[slug]',
     checklist: [
       'Set featured image, optional second banner, event date label, CTA label, summary, and agenda points.',
-      'Add speakers and moderator details with image, name, role, and company. Webinar posts do not need authors.',
+      'Use the Authors / Speakers field to pick the people shown in the speaker row. Their avatar, role, and bio are pulled from the author profile.',
+      'Add the moderator details separately with image, name, role, and company.',
       'Use preview to check the centered title/button area, banner stack, content section, and speaker or moderator row.',
       'Use either an external registration URL or a video URL for the final destination. Webinar form entries are saved in the shared submissions collection.',
     ],

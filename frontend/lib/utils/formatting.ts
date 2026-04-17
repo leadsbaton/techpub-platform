@@ -78,6 +78,50 @@ export function getAuthorNames(authors?: Array<Author | string> | null): string 
     .join(', ')
 }
 
+export type WebinarPerson = {
+  id: string
+  name: string
+  role?: string | null
+  secondaryLine?: string | null
+  photo?: Media | string | null
+}
+
+export function getWebinarSpeakers(post: Post): WebinarPerson[] {
+  const authorSpeakers =
+    post.authors
+      ?.filter((author): author is Author => typeof author !== 'string')
+      .map((author) => ({
+        id: author.id,
+        name: author.name,
+        role: author.role,
+        secondaryLine: author.bio,
+        photo: author.avatar,
+      })) ?? []
+
+  if (authorSpeakers.length) {
+    return authorSpeakers
+  }
+
+  return (
+    post.webinarRegistration?.speakers
+      ?.filter((speaker) => speaker.name)
+      .map((speaker, index) => ({
+        id: `${post.id}-speaker-${index}`,
+        name: speaker.name || 'Speaker',
+        role: speaker.role,
+        secondaryLine: speaker.company,
+        photo: speaker.photo,
+      })) ?? []
+  )
+}
+
+export function getWebinarSpeakerSummary(post: Post): string | null {
+  const speakers = getWebinarSpeakers(post)
+  if (!speakers.length) return null
+  if (speakers.length === 1) return speakers[0]?.name || null
+  return `${speakers[0]?.name || 'Speaker'} + ${speakers.length - 1} more`
+}
+
 export function getContentTypeLabel(type: Post['type']): string {
   return getSingularLabelForType(type)
 }

@@ -14,6 +14,7 @@ import {
   getCategoryName,
   getImageUrl,
   getMediaUrl,
+  getWebinarSpeakerSummary,
   resolveLinkHref,
 } from '@/lib/utils/formatting'
 
@@ -198,13 +199,7 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
 
 function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentTypes: ContentType[]; railItems: Post[] }) {
   const primaryAction = buildPrimaryAction(post)
-  const speakers = post.webinarRegistration?.speakers?.filter((speaker) => speaker.name) || []
-  const speakerSummary =
-    speakers.length === 0
-      ? 'Speakers listed on the webinar page'
-      : speakers.length === 1
-        ? speakers[0]?.name || 'Speaker'
-        : `${speakers[0]?.name || 'Speaker'} + ${speakers.length - 1} more`
+  const speakerSummary = getWebinarSpeakerSummary(post) || 'Speakers listed on the webinar page'
 
   return (
     <article className="site-container space-y-8 py-10">

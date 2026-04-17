@@ -7,7 +7,7 @@ import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getImageUrl } from '@/lib/utils/formatting'
+import { getImageUrl, getWebinarSpeakers } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
@@ -33,7 +33,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
   if (!post) notFound()
 
-  const speakers = post.webinarRegistration?.speakers || []
+  const speakers = getWebinarSpeakers(post)
   const agenda = post.webinarRegistration?.agendaPoints || []
 
   return (
@@ -106,8 +106,8 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                   <div>
                     <h2 className="ui-font mb-4 text-[16px] font-bold uppercase text-[#5a5a8d]">Speakers</h2>
                     <div className="grid gap-5 sm:grid-cols-4">
-                      {speakers.map((speaker, index) => (
-                        <div key={`${post.id}-speaker-${index}`} className="ui-font text-center">
+                      {speakers.map((speaker) => (
+                        <div key={speaker.id} className="ui-font text-center">
                           <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
                             {speaker.photo ? (
                               <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill className="object-cover" />
@@ -115,7 +115,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                           </div>
                           <div className="mt-2 text-[12px] font-medium text-[#111]">{speaker.name}</div>
                           <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{speaker.role}</div>
-                          <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{speaker.company}</div>
+                          <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{speaker.secondaryLine}</div>
                         </div>
                       ))}
                     </div>
