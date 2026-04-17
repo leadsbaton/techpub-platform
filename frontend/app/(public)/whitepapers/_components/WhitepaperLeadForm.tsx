@@ -36,7 +36,7 @@ type DeliveryResponse = {
   openInNewTab?: boolean
 }
 
-export function WhitepaperLeadForm({ post }: { post: Post }) {
+export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; variant?: 'default' | 'figma' }) {
   const [form, setForm] = useState<FormState>(initialState)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
@@ -114,6 +114,65 @@ export function WhitepaperLeadForm({ post }: { post: Post }) {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (variant === 'figma') {
+    return (
+      <form onSubmit={handleSubmit} className="ui-font space-y-4 text-[#020202]">
+        <div className="grid gap-3">
+          {[
+            { label: 'Name', key: 'name' as const, type: 'text' },
+            { label: 'Email', key: 'email' as const, type: 'email' },
+            { label: 'Job Title', key: 'jobTitle' as const, type: 'text' },
+            { label: 'Company', key: 'company' as const, type: 'text' },
+            { label: 'Country', key: 'country' as const, type: 'text' },
+          ].map((field) => (
+            <label key={field.key} className="grid grid-cols-[88px_1fr] items-center gap-4 text-[16px]">
+              <span>{field.label}</span>
+              <input
+                type={field.type}
+                value={form[field.key]}
+                onChange={(event) => updateField(field.key, event.target.value)}
+                required
+                className="h-[30px] border border-[#8f8f8f] px-3 outline-none"
+              />
+            </label>
+          ))}
+        </div>
+
+        <label className="flex items-start gap-3 text-[16px] text-[#3b3b3b]">
+          <input
+            type="checkbox"
+            checked={form.newsletterOptIn}
+            onChange={(event) => updateField('newsletterOptIn', event.target.checked)}
+            className="mt-1 h-4 w-4 rounded-none border border-[#9a9a9a]"
+          />
+          <span>{formCopy.newsletterLabel}</span>
+        </label>
+
+        <label className="flex items-start gap-3 text-[16px] leading-[145%] text-[#3b3b3b]">
+          <input
+            type="checkbox"
+            checked={form.consentAccepted}
+            onChange={(event) => updateField('consentAccepted', event.target.checked)}
+            required
+            className="mt-1 h-4 w-4 rounded-none border border-[#9a9a9a]"
+          />
+          <span>{formCopy.consentLabel}</span>
+        </label>
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="ml-[196px] inline-flex bg-[#FC0203] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70"
+        >
+          {submitting ? 'Submitting...' : 'SUBMIT'}
+        </button>
+
+        {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
+        {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}
+      </form>
+    )
   }
 
   return (

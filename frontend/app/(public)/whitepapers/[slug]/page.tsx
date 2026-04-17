@@ -4,15 +4,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
-import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import {
-  formatDate,
-  getAuthorNames,
-  getCategoryName,
-  getImageUrl,
-  getMediaUrl,
-} from '@/lib/utils/formatting'
+import { formatDate, getAuthorNames, getImageUrl } from '@/lib/utils/formatting'
 
 type Params = Promise<{ slug: string }>
 
@@ -46,100 +39,47 @@ export default async function WhitepaperDetailPage({ params }: { params: Params 
     notFound()
   }
 
-  const fallbackUrl =
-    post.leadCapture?.deliveryUrl || post.externalUrl || getMediaUrl(post.downloadAsset) || null
-  const directLabel =
-    post.leadCapture?.deliveryMode === 'read'
-      ? 'Read now'
-      : post.leadCapture?.deliveryMode === 'redirect'
-        ? 'Continue'
-        : 'Download now'
-  const accessHref =
-    post.leadCapture?.enabled === false
-      ? fallbackUrl
-      : `/whitepapers/${post.slug}/access`
-
   return (
-    <article className="site-container space-y-8 py-8 sm:py-10">
-      <section className="grid gap-8 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
-        <div className="space-y-5 xl:sticky xl:top-28 xl:self-start">
-          <div className="overflow-hidden rounded-[28px] border border-[var(--border-subtle)] bg-white shadow-[var(--shadow-soft)]">
-            <div className="relative aspect-[4/5] bg-[var(--surface-muted)]">
-              <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
-            </div>
-            <div className="space-y-3 p-5">
-              <span className="inline-flex rounded-full bg-[var(--surface)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--accent-red)]">
-                {getCategoryName(post.primaryCategory)}
-              </span>
-              <div className="text-sm leading-6 text-[color:var(--text-soft)]">
-                Published {formatDate(post.publishedAt)}
-              </div>
-              <div className="text-sm leading-6 text-[color:var(--text-soft)]">
-                By {getAuthorNames(post.authors)}
-              </div>
-              {accessHref ? (
-                post.leadCapture?.enabled === false && fallbackUrl ? (
-                  <a
-                    href={fallbackUrl}
-                    target={post.leadCapture?.openDeliveryInNewTab === false ? undefined : '_blank'}
-                    rel="noreferrer"
-                    className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
-                  >
-                    {directLabel}
-                  </a>
-                ) : (
-                  <Link
-                    href={accessHref}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent-red)] px-5 py-3 text-sm font-semibold text-white"
-                  >
-                    Read More
-                  </Link>
-                )
-              ) : null}
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <Link
-              href="/whitepapers"
-              className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-red)]"
-            >
-              White Papers
-            </Link>
-            <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--text-strong)] sm:text-5xl">
+    <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
+      <article className="site-container py-8 sm:py-10">
+        <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="space-y-8">
+            <h1 className="ui-font text-[28px] font-medium leading-[1.25] text-[#020202] sm:text-[42px]">
               {post.title}
             </h1>
-            <p className="text-lg leading-8 text-[color:var(--text-soft)]">{post.excerpt}</p>
-            {accessHref && post.leadCapture?.enabled !== false ? (
-              <Link
-                href={accessHref}
-                className="inline-flex rounded-full bg-[var(--accent-red)] px-6 py-3 text-sm font-semibold text-white"
-              >
-                {directLabel}
-              </Link>
-            ) : null}
+
+            <div className="grid gap-8 lg:grid-cols-[90px_minmax(0,1fr)]">
+              <div className="relative h-[130px] w-[90px] overflow-hidden">
+                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+              </div>
+
+              <div className="ui-font space-y-4">
+                <p className="max-w-[640px] text-[14px] leading-[145%] tracking-[-0.005em] text-[#2d2d2d] sm:text-[18px]">
+                  {post.excerpt}
+                </p>
+                <div className="text-[14px] text-[#808080] sm:text-[16px]">
+                  By {getAuthorNames(post.authors)} {formatDate(post.publishedAt)}
+                </div>
+                <Link
+                  href={`/whitepapers/${post.slug}/access`}
+                  className="inline-flex text-[26px] font-medium uppercase leading-none text-[#FC5A0A]"
+                >
+                  Read Now
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <section className="rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
-            <div className="prose max-w-none">
-              <RichTextRenderer content={post.content} />
-            </div>
-          </section>
-        </div>
-
-        <div className="space-y-6 xl:sticky xl:top-28 xl:self-start">
-          {webinars.docs.length ? (
+          <div className="space-y-6 xl:sticky xl:top-28 xl:self-start">
             <RankedSidebar
               title="Webinars"
               accent="Upcoming"
               items={webinars.docs}
               contentTypes={contentTypes}
             />
-          ) : null}
-        </div>
-      </section>
-    </article>
+          </div>
+        </section>
+      </article>
+    </div>
   )
 }
