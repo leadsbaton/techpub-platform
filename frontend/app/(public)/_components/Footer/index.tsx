@@ -17,12 +17,17 @@ const fallbackSections: NonNullable<SiteSettings['footerSections']> = [
   {
     title: 'Support',
     links: [
-      { item: { label: 'Contact', type: 'custom', url: '/contact', newTab: false } },
+      { item: { label: 'Contact Us', type: 'custom', url: '/contact', newTab: false } },
       { item: { label: 'Support', type: 'custom', url: '/support', newTab: false } },
       { item: { label: 'Legal', type: 'custom', url: '/legal', newTab: false } },
     ],
   },
 ]
+
+const getFooterLabel = (label: string, href: string) => {
+  if (href === '/contact' && label.toLowerCase() === 'contact') return 'Contact Us'
+  return label
+}
 
 const Footer = async () => {
   const settings = await getSiteSettings()
@@ -76,7 +81,7 @@ const Footer = async () => {
                     href={resolveLinkHref(item)}
                     className="block text-[15px] text-[color:var(--text-muted)] transition hover:text-[color:var(--text-strong)]"
                   >
-                    {item.label}
+                    {getFooterLabel(item.label, resolveLinkHref(item))}
                   </Link>
                 ))}
               </div>

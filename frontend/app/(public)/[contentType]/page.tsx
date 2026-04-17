@@ -132,10 +132,37 @@ function InfoPanel({ title, children, className = '' }: { title: string; childre
   )
 }
 
+function PageIntro({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+}) {
+  return (
+    <div className="max-w-3xl space-y-3">
+      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[color:var(--accent-red)]">
+        {eyebrow}
+      </p>
+      <h2 className="text-3xl font-semibold tracking-tight text-[color:var(--text-strong)] md:text-4xl">
+        {title}
+      </h2>
+      <p className="text-base leading-7 text-[color:var(--text-soft)]">{description}</p>
+    </div>
+  )
+}
+
 function ContactTemplate({ pageDoc, settings, featuredPosts }: { pageDoc: PageDoc; settings: SiteSettings | null; featuredPosts: Post[] }) {
   return (
     <article className="site-container space-y-10 px-0 py-10">
       <PageHero pageDoc={pageDoc} />
+      <PageIntro
+        eyebrow="Contact"
+        title="Start A Conversation With The Right Team"
+        description="Use this page for editorial questions, partnership requests, content-access issues, or anything related to webinar and white paper delivery."
+      />
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
         <InfoPanel title="How To Reach Us" className="md:p-8">
           <div className="prose max-w-none">
@@ -157,6 +184,10 @@ function ContactTemplate({ pageDoc, settings, featuredPosts }: { pageDoc: PageDo
               <div>
                 <div className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--text-muted)]">Response Window</div>
                 <p className="mt-1">Usually within 1 to 2 business days.</p>
+              </div>
+              <div>
+                <div className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--text-muted)]">Best For</div>
+                <p className="mt-1">Partnerships, editorial requests, download issues, webinar follow-up, and account-related questions.</p>
               </div>
             </div>
           </div>
@@ -183,6 +214,11 @@ function SupportTemplate({ pageDoc, settings, featuredPosts }: { pageDoc: PageDo
   return (
     <article className="site-container space-y-10 px-0 py-10">
       <PageHero pageDoc={pageDoc} />
+      <PageIntro
+        eyebrow="Support"
+        title="Get Help With Access, Downloads, And Registrations"
+        description="This section is for resource-access problems, webinar registrations, newsletter changes, and general platform support."
+      />
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <InfoPanel title="Support Coverage" className="md:p-8">
           <div className="prose max-w-none">
@@ -204,6 +240,9 @@ function SupportTemplate({ pageDoc, settings, featuredPosts }: { pageDoc: PageDo
               ))}
             </div>
           </div>
+          <div className="rounded-[24px] bg-[var(--surface)] p-4 text-[15px] leading-7 text-[color:var(--text-soft)]">
+            Include the page title, resource name, and the email you used when submitting the form so the support team can resolve issues faster.
+          </div>
         </aside>
       </section>
       {featuredPosts.length ? (
@@ -224,6 +263,11 @@ function LegalTemplate({ pageDoc, settings }: { pageDoc: PageDoc; settings: Site
   return (
     <article className="site-container space-y-10 px-0 py-10">
       <PageHero pageDoc={pageDoc} />
+      <PageIntro
+        eyebrow="Legal"
+        title="Review How Content Access And Reader Data Are Managed"
+        description="Use this page to understand how subscriptions, content downloads, registrations, and privacy-related workflows are handled across the site."
+      />
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <InfoPanel title="Legal Overview" className="md:p-8">
           <div className="prose max-w-none">
@@ -380,6 +424,12 @@ export default async function Page({
   return (
     <article className="site-container space-y-10 px-0 py-10">
       <PageHero pageDoc={pageDoc} />
+
+      <PageIntro
+        eyebrow="Overview"
+        title={pageDoc.title}
+        description={pageDoc.summary || 'Explore the latest updates, featured resources, and important information published in this section.'}
+      />
 
       <section className="rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
         <div className="prose max-w-none">

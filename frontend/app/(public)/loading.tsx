@@ -1,121 +1,28 @@
 export default function Loading() {
   return (
-    <div className="pb-20 pt-0">
-      <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] py-4 md:py-6">
-        <div className="site-container">
-          <div className="overflow-hidden rounded-[26px] px-3 py-4 sm:px-4 md:px-8 md:py-6">
-            <div className="grid gap-5 xl:grid-cols-[228px_minmax(0,1fr)] xl:gap-0">
-              <div className="order-2 grid grid-cols-[108px_minmax(0,1fr)] items-end gap-3 pt-1 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4 xl:order-1 xl:flex xl:flex-col xl:pt-11">
-                <div className="skeleton-block aspect-square rounded-[12px] sm:aspect-[1.02/0.88] xl:aspect-[1.12/0.74]" />
-                <div className="space-y-2">
-                  <div className="skeleton-block h-7 w-36 rounded-full sm:h-8 sm:w-44" />
-                  <div className="hidden gap-2 sm:grid sm:grid-cols-2">
-                    <div className="skeleton-block h-10 rounded-[12px]" />
-                    <div className="skeleton-block h-10 rounded-[12px]" />
-                  </div>
-                </div>
-              </div>
+    <section className="site-container flex min-h-[55vh] flex-col items-center justify-center gap-8 py-16">
+      <div className="space-y-4 text-center">
+        <div className="mx-auto h-3 w-28 rounded-full bg-[color:var(--accent-red)]/15" />
+        <div className="mx-auto h-10 w-64 rounded-full skeleton-block" />
+        <div className="mx-auto h-4 w-80 max-w-full rounded-full skeleton-block" />
+      </div>
 
-              <div className="order-1 space-y-4 xl:order-2 xl:space-y-5">
-                <div className="skeleton-block aspect-[1.5/1] min-h-[210px] rounded-[18px] sm:aspect-[1.72/0.96] md:min-h-[250px] xl:aspect-[2.28/0.9]" />
-                <div className="grid grid-cols-1 gap-2.5 md:hidden">
-                  <div className="skeleton-block h-11 rounded-[10px]" />
-                  <div className="skeleton-block h-11 rounded-[10px]" />
-                </div>
-                <div className="-mr-3 overflow-hidden pr-3 xl:mr-0 xl:pr-0">
-                  <div className="flex gap-3 xl:grid xl:grid-cols-4">
-                    {Array.from({ length: 4 }).map((_, index) => (
-                      <div key={index} className="min-w-[140px] sm:min-w-[168px] xl:min-w-0">
-                        <div className="skeleton-block aspect-[1/1.08] rounded-[14px]" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+      <div className="grid w-full max-w-6xl gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div
+            key={index}
+            className="overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-white"
+          >
+            <div className="skeleton-block aspect-[1.35/0.82] w-full" />
+            <div className="space-y-3 p-5">
+              <div className="skeleton-block h-3 w-24 rounded-full" />
+              <div className="skeleton-block h-6 w-full rounded-full" />
+              <div className="skeleton-block h-6 w-4/5 rounded-full" />
+              <div className="skeleton-block h-4 w-2/3 rounded-full" />
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
-        <div className="flex items-center gap-4">
-          <div className="skeleton-block h-10 w-64 rounded-full" />
-          <div className="skeleton-block h-px flex-1" />
-        </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="rounded-[20px] bg-white p-4 shadow-[var(--shadow-soft)]">
-              <div className="skeleton-block h-[330px] rounded-[16px]" />
-              <div className="space-y-3 pt-4">
-                <div className="skeleton-block h-5 w-full rounded-full" />
-                <div className="skeleton-block h-5 w-4/5 rounded-full" />
-                <div className="flex items-center justify-between pt-3">
-                  <div className="skeleton-block h-10 w-28 rounded-[12px]" />
-                  <div className="space-y-2">
-                    <div className="skeleton-block h-3 w-24 rounded-full" />
-                    <div className="skeleton-block h-3 w-20 rounded-full" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <div className="flex items-center gap-4">
-          <div className="skeleton-block h-10 w-72 rounded-full" />
-          <div className="skeleton-block h-px flex-1" />
-        </div>
-        <div className="grid gap-5 lg:grid-cols-3">
-          <div className="space-y-5">
-            <div className="skeleton-block min-h-[320px] rounded-[18px]" />
-            <div className="skeleton-block min-h-[320px] rounded-[18px]" />
-          </div>
-          <div className="space-y-5">
-            <div className="skeleton-block min-h-[170px] rounded-[18px]" />
-            <div className="skeleton-block min-h-[170px] rounded-[18px]" />
-            <div className="skeleton-block min-h-[170px] rounded-[18px]" />
-          </div>
-          <div className="space-y-5">
-            <div className="skeleton-block min-h-[320px] rounded-[18px]" />
-          </div>
-        </div>
-      </section>
-
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <div className="flex items-center gap-4">
-          <div className="skeleton-block h-10 w-72 rounded-full" />
-          <div className="skeleton-block h-px flex-1" />
-        </div>
-        <div className="grid gap-5 lg:grid-cols-[0.48fr_0.52fr]">
-          <div className="space-y-5">
-            <div className="skeleton-block min-h-[220px] rounded-[20px]" />
-            <div className="skeleton-block min-h-[220px] rounded-[20px]" />
-          </div>
-          <div className="skeleton-block min-h-[260px] rounded-[20px] md:min-h-[520px]" />
-        </div>
-      </section>
-
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <div className="flex items-center gap-4">
-          <div className="skeleton-block h-10 w-72 rounded-full" />
-          <div className="skeleton-block h-px flex-1" />
-        </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="rounded-[20px] bg-white p-5 shadow-[var(--shadow-soft)]">
-              <div className="skeleton-block aspect-[1.12/0.68] rounded-[14px]" />
-              <div className="space-y-3 pt-5">
-                <div className="skeleton-block h-5 w-full rounded-full" />
-                <div className="skeleton-block h-5 w-4/5 rounded-full" />
-                <div className="skeleton-block h-4 w-full rounded-full" />
-                <div className="skeleton-block h-4 w-5/6 rounded-full" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+        ))}
+      </div>
+    </section>
   )
 }
