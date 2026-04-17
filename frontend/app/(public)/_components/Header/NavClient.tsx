@@ -17,7 +17,6 @@ type NavLink = {
 
 type NavClientProps = {
   siteName: string
-  siteTagline?: string | null
   links: NavLink[]
 }
 
@@ -59,7 +58,7 @@ function MenuIcon({ open }: { open: boolean }) {
   )
 }
 
-export function NavClient({ siteName, siteTagline, links }: NavClientProps) {
+export function NavClient({ siteName, links }: NavClientProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
@@ -77,14 +76,6 @@ export function NavClient({ siteName, siteTagline, links }: NavClientProps) {
               className="h-14 w-auto shrink-0 object-contain"
               priority
             />
-            <div className="hidden min-w-0 sm:block">
-              <div className="text-[10px] font-semibold tracking-tight text-[color:var(--text-strong)]">
-                {siteName}
-              </div>
-              <div className="text-[8px] uppercase tracking-[0.12em] text-[color:var(--text-muted)]">
-                {siteTagline || 'We Speak Your Language'}
-              </div>
-            </div>
           </Link>
 
           <nav className="hidden items-center gap-12 lg:flex">

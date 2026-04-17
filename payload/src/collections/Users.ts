@@ -7,7 +7,13 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
   },
-  auth: true,
+  auth: {
+    cookies: {
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === 'production',
+    },
+    useSessions: true,
+  },
   access: {
     create: canBootstrapFirstAdmin,
     delete: isAdmin,
@@ -31,4 +37,19 @@ export const Users: CollectionConfig = {
       required: true,
     },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        const nextData = { ...(data || {}) } as Record<string, unknown>
+        const name = typeof nextData.name === 'string' ? nextData.name.trim() : ''
+        const email = typeof nextData.email === 'string' ? nextData.email.trim() : ''
+
+        if (!name && email) {
+          nextData.name = email.split('@')[0].replace(/[._-]+/g, ' ')
+        }
+
+        return nextData
+      },
+    ],
+  },
 }

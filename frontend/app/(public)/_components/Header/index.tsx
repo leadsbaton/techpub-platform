@@ -29,7 +29,6 @@ const Header = async () => {
   return (
     <NavClient
       siteName={settings?.siteName || 'LeadsBaton'}
-      siteTagline={settings?.siteTagline || 'We Speak Your Language'}
       links={links}
     />
   )

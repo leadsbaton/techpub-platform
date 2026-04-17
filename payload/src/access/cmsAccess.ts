@@ -2,7 +2,7 @@ import type { Access, PayloadRequest } from 'payload'
 
 type CMSUser = {
   id?: number | string
-  role?: 'admin' | 'editor'
+  role?: 'admin' | 'editor' | string
 } | null | undefined
 
 function getUser(req: PayloadRequest): CMSUser {
@@ -10,7 +10,7 @@ function getUser(req: PayloadRequest): CMSUser {
 }
 
 export function isAdminUser(user: CMSUser): boolean {
-  return user?.role === 'admin'
+  return String(user?.role || '').toLowerCase() === 'admin'
 }
 
 export const isAdmin: Access = ({ req }) => isAdminUser(getUser(req))

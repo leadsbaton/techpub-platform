@@ -38,18 +38,13 @@ const Footer = async () => {
     <footer className="mt-20 border-t border-[var(--border-subtle)] bg-white">
       <div className="site-container grid gap-12 py-14 md:grid-cols-[1fr_auto] md:items-end">
         <div className="space-y-5">
-          <div className="space-y-2">
-            <Image
-              src="/leads-baton-logo.png"
-              alt={settings?.siteName || 'LeadsBaton'}
-              width={110}
-              height={110}
-              className="h-20 w-auto object-contain"
-            />
-            <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--text-muted)]">
-              {settings?.siteTagline || 'We Speak Your Language'}
-            </div>
-          </div>
+          <Image
+            src="/leads-baton-logo.png"
+            alt={settings?.siteName || 'LeadsBaton'}
+            width={110}
+            height={110}
+            className="h-20 w-auto object-contain"
+          />
 
           {socialLinks.length ? (
             <div className="flex flex-wrap gap-3">

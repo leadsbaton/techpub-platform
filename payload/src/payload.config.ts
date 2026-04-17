@@ -23,7 +23,13 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
 const payloadURL = process.env.PAYLOAD_PUBLIC_URL || `http://localhost:${process.env.PORT || '5000'}`
-const allowedOrigins = Array.from(new Set([frontendURL, payloadURL]))
+const localhostOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  `http://localhost:${process.env.PORT || '5000'}`,
+  `http://127.0.0.1:${process.env.PORT || '5000'}`,
+]
+const allowedOrigins = Array.from(new Set([frontendURL, payloadURL, ...localhostOrigins]))
 
 export default buildConfig({
   admin: {

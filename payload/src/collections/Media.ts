@@ -43,6 +43,25 @@ export const Media: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data, originalDoc, req }) => {
+        const nextData = { ...(data || {}) } as Record<string, unknown>
+        const incomingAlt = typeof nextData.alt === 'string' ? nextData.alt.trim() : ''
+        const originalAlt = typeof originalDoc?.alt === 'string' ? originalDoc.alt.trim() : ''
+        const fileName =
+          typeof req.file?.name === 'string'
+            ? req.file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').trim()
+            : ''
+
+        if (!incomingAlt) {
+          nextData.alt = originalAlt || fileName || 'Media asset'
+        }
+
+        return nextData
+      },
+    ],
+  },
   upload: {
     adminThumbnail: 'card',
     staticDir: path.resolve(dirname, '../../../media'),
