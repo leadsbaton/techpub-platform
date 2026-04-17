@@ -317,6 +317,15 @@ export interface Author {
 export interface Post {
   id: string;
   /**
+   * Choose the post type first. This controls the editor fields, preview examples, and public route.
+   */
+  contentType: string | ContentType;
+  /**
+   * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
+   */
+  status: 'draft' | 'published' | 'archived';
+  type?: string | null;
+  /**
    * Public headline shown in cards, SEO, and the post detail page.
    */
   title: string;
@@ -328,15 +337,6 @@ export interface Post {
    * Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.
    */
   slug: string;
-  /**
-   * Controls the public section and route. Seeded options are Insight, White Paper, and Webinar.
-   */
-  contentType: string | ContentType;
-  /**
-   * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
-   */
-  status: 'draft' | 'published' | 'archived';
-  type?: string | null;
   /**
    * Optional for webinars. Webinar speaker and moderator details are managed below in the webinar section.
    */
@@ -429,6 +429,12 @@ export interface Post {
     enabled?: boolean | null;
     formTitle?: string | null;
     ctaLabel?: string | null;
+    deliveryMode?: ('register' | 'watch' | 'download' | 'redirect') | null;
+    openDeliveryInNewTab?: boolean | null;
+    /**
+     * Optional override target after submission. Leave empty to use the webinar external URL or video URL.
+     */
+    deliveryUrl?: string | null;
     formDescription?: string | null;
     submitLabel?: string | null;
     newsletterLabel?: string | null;
@@ -871,12 +877,12 @@ export interface AuthorsSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  readingTime?: T;
-  slug?: T;
   contentType?: T;
   status?: T;
   type?: T;
+  title?: T;
+  readingTime?: T;
+  slug?: T;
   authors?: T;
   primaryCategory?: T;
   excerpt?: T;
@@ -917,6 +923,9 @@ export interface PostsSelect<T extends boolean = true> {
         enabled?: T;
         formTitle?: T;
         ctaLabel?: T;
+        deliveryMode?: T;
+        openDeliveryInNewTab?: T;
+        deliveryUrl?: T;
         formDescription?: T;
         submitLabel?: T;
         newsletterLabel?: T;

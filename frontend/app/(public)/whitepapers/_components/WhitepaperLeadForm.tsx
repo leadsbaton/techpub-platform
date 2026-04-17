@@ -166,7 +166,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
           disabled={submitting}
           className="ml-[196px] inline-flex bg-[#FC0203] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70"
         >
-          {submitting ? 'Submitting...' : 'SUBMIT'}
+          {submitting ? 'Submitting...' : formCopy.submitLabel}
         </button>
 
         {message ? <p className="text-sm text-emerald-700">{message}</p> : null}

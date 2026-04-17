@@ -18,6 +18,9 @@ type WebinarRegistrationSettings = {
   newsletterLabel?: string | null
   consentLabel?: string | null
   ctaLabel?: string | null
+  deliveryMode?: 'register' | 'watch' | 'download' | 'redirect' | null
+  deliveryUrl?: string | null
+  openDeliveryInNewTab?: boolean | null
   sponsor?: string | null
   eventDateLabel?: string | null
   eventSummary?: string | null
@@ -59,6 +62,26 @@ function getClientKey(request: NextRequest) {
 
 function trimValue(value: unknown) {
   return typeof value === 'string' ? value.trim() : ''
+}
+
+function resolveDelivery(post: WebinarPost) {
+  const mode =
+    post.webinarRegistration?.deliveryMode ||
+    (post.videoUrl ? 'watch' : 'register')
+  const rawTarget =
+    trimValue(post.webinarRegistration?.deliveryUrl) ||
+    trimValue(post.externalUrl) ||
+    trimValue(post.videoUrl)
+
+  if (!rawTarget) {
+    return null
+  }
+
+  return {
+    mode,
+    url: rawTarget,
+    openInNewTab: Boolean(post.webinarRegistration?.openDeliveryInNewTab ?? true),
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -127,8 +150,14 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const redirectTarget = post.externalUrl || post.videoUrl || ''
-  const deliveryMode = post.externalUrl ? 'register' : post.videoUrl ? 'watch' : 'register'
+  const delivery = resolveDelivery(post)
+
+  if (!delivery) {
+    return NextResponse.json(
+      { message: 'This webinar is missing a delivery target in the CMS.' },
+      { status: 422 },
+    )
+  }
 
   const submissionRecord = await payload.create({
     collection: 'submissions',
@@ -144,8 +173,8 @@ export async function POST(request: NextRequest) {
       consentAccepted,
       sourceUrl,
       submittedAt: new Date().toISOString(),
-      deliveryMode,
-      deliveryTarget: redirectTarget,
+      deliveryMode: delivery.mode,
+      deliveryTarget: delivery.url,
       notificationStatus: 'pending',
     },
     overrideAccess: true,
@@ -216,8 +245,8 @@ export async function POST(request: NextRequest) {
         lead_country: country,
         newsletter_opt_in: newsletterOptIn ? 'Yes' : 'No',
         submitted_at: new Date().toISOString(),
-        delivery_mode: deliveryMode,
-        delivery_target: redirectTarget,
+        delivery_mode: delivery.mode,
+        delivery_target: delivery.url,
         source_url: sourceUrl,
       })
         .then((result) => ({ adminEmail, ...result }))
@@ -257,7 +286,7 @@ export async function POST(request: NextRequest) {
       message:
         post.webinarRegistration?.successMessage ||
         'Your registration has been saved successfully.',
-      redirectUrl: redirectTarget || null,
+      delivery,
     },
     { status: 201 },
   )

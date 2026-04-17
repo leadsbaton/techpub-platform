@@ -12,6 +12,20 @@ function readValue<T>(fields: Record<string, FormFieldState>, path: string): T |
   return fields[path]?.value as T | undefined
 }
 
+function getTypeKey(fields: Record<string, FormFieldState>) {
+  const syncedType = readValue<string>(fields, 'type')
+  if (syncedType) {
+    return syncedType
+  }
+
+  const contentType = readValue<unknown>(fields, 'contentType')
+  if (contentType && typeof contentType === 'object' && 'key' in contentType) {
+    return String((contentType as { key?: unknown }).key || 'insight')
+  }
+
+  return 'insight'
+}
+
 const guideByType = {
   insight: {
     label: 'Insight',
@@ -52,7 +66,7 @@ const guideByType = {
 
 export const PostAuthoringGuide: UIFieldClientComponent = () => {
   const fields = useFormFields(([formFields]) => formFields) as Record<string, FormFieldState>
-  const type = (readValue<string>(fields, 'type') || 'insight') as keyof typeof guideByType
+  const type = getTypeKey(fields) as keyof typeof guideByType
   const title = readValue<string>(fields, 'title') || 'Untitled post'
   const activeGuide = guideByType[type] || guideByType.insight
 
@@ -88,6 +102,9 @@ export const PostAuthoringGuide: UIFieldClientComponent = () => {
       </h3>
       <p style={{ color: '#475569', fontSize: '0.92rem', lineHeight: 1.6, margin: '0.75rem 0 0' }}>
         Public route: <strong>{activeGuide.route}</strong>. {activeGuide.previewNotes}
+      </p>
+      <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6, margin: '0.65rem 0 0' }}>
+        Choose the content type first, then fill only the fields shown for that type. The live preview updates from the same structure.
       </p>
 
       <div

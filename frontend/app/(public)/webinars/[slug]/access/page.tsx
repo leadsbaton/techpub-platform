@@ -42,11 +42,16 @@ export default async function WebinarAccessPage({ params }: { params: Params }) 
                 Webinars
               </Link>
               <h1 className="ui-font text-[28px] font-medium leading-[1.25] text-[#020202] sm:text-[42px]">
-                {post.webinarRegistration?.formTitle || post.title}
+                {post.title}
               </h1>
               <p className="ui-font text-[18px] font-medium text-[#020202]">
-                {post.webinarRegistration?.formDescription || 'Thank you for your interest in DBTA Downloads/Webinars!'}
+                Thank you for your interest in DBTA Downloads/Webinars!
               </p>
+              {post.webinarRegistration?.formDescription ? (
+                <p className="ui-font max-w-[720px] text-[15px] leading-[1.6] text-[#4d4d4d]">
+                  {post.webinarRegistration.formDescription}
+                </p>
+              ) : null}
             </div>
             <div className="max-w-[640px]">
               <WebinarRegistrationForm post={post} />

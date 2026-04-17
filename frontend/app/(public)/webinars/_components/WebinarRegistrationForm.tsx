@@ -30,10 +30,17 @@ const initialState: FormState = {
   consentAccepted: false,
 }
 
+type DeliveryResponse = {
+  mode: 'register' | 'watch' | 'download' | 'redirect'
+  url: string
+  openInNewTab?: boolean
+}
+
 export function WebinarRegistrationForm({ post }: { post: Post }) {
   const [form, setForm] = useState<FormState>(initialState)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
+  const [delivery, setDelivery] = useState<DeliveryResponse | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   const copy = useMemo(
@@ -52,6 +59,31 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
+  function openDelivery(target: DeliveryResponse) {
+    if (typeof window === 'undefined') return
+
+    if (target.mode === 'download') {
+      const link = document.createElement('a')
+      link.href = target.url
+      link.rel = 'noopener noreferrer'
+      if (target.openInNewTab !== false) {
+        link.target = '_blank'
+      }
+      link.download = target.url.split('/').pop() || 'resource'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      return
+    }
+
+    if (target.openInNewTab === false) {
+      window.location.assign(target.url)
+      return
+    }
+
+    window.open(target.url, '_blank', 'noopener,noreferrer')
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setSubmitting(true)
@@ -67,14 +99,15 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
           sourceUrl: typeof window !== 'undefined' ? window.location.href : '',
         }),
       })
-      const data = (await response.json()) as { message?: string; redirectUrl?: string | null }
+      const data = (await response.json()) as { message?: string; delivery?: DeliveryResponse | null }
       if (!response.ok) {
         setError(data.message || 'Unable to save your registration right now.')
         return
       }
       setMessage(data.message || 'Your registration has been saved successfully.')
-      if (data.redirectUrl && typeof window !== 'undefined') {
-        window.open(data.redirectUrl, '_blank', 'noopener,noreferrer')
+      setDelivery(data.delivery || null)
+      if (data.delivery?.url) {
+        openDelivery(data.delivery)
       }
     } catch {
       setError('Unable to save your registration right now.')
@@ -134,6 +167,16 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
       >
         {submitting ? 'Submitting...' : copy.submitLabel}
       </button>
+
+      {delivery?.url ? (
+        <button
+          type="button"
+          onClick={() => openDelivery(delivery)}
+          className="ml-[196px] inline-flex border border-[#111] px-8 py-2 text-[16px] font-medium text-[#111]"
+        >
+          Open Resource
+        </button>
+      ) : null}
 
       {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
       {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}

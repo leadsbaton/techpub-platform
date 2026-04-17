@@ -1,3 +1,4 @@
+import { PostAuthoringGuide as PostAuthoringGuide_241113a40b085893c1de459cff87d031 } from '../../../components/admin/PostAuthoringGuide'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -21,12 +22,12 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { PostAuthoringGuide as PostAuthoringGuide_241113a40b085893c1de459cff87d031 } from '../../../components/admin/PostAuthoringGuide'
 import { PostLivePreviewFrame as PostLivePreviewFrame_1c225eb4ce65583eb9672c0fbeadc975 } from '../../../components/admin/PostLivePreviewFrame'
 import { BrandIcon as BrandIcon_54b64b8f6383bf507bb86f08f4ef4afd } from '../../../components/admin/BrandIcon'
 import { BrandLogo as BrandLogo_d63a144ce5455c4acf3c45c633216eeb } from '../../../components/admin/BrandLogo'
 
 export const importMap = {
+  "./components/admin/PostAuthoringGuide#PostAuthoringGuide": PostAuthoringGuide_241113a40b085893c1de459cff87d031,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -50,7 +51,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "./components/admin/PostAuthoringGuide#PostAuthoringGuide": PostAuthoringGuide_241113a40b085893c1de459cff87d031,
   "./components/admin/PostLivePreviewFrame#PostLivePreviewFrame": PostLivePreviewFrame_1c225eb4ce65583eb9672c0fbeadc975,
   "./components/admin/BrandIcon#BrandIcon": BrandIcon_54b64b8f6383bf507bb86f08f4ef4afd,
   "./components/admin/BrandLogo#BrandLogo": BrandLogo_d63a144ce5455c4acf3c45c633216eeb

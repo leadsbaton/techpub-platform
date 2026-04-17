@@ -165,6 +165,9 @@ export interface Post {
     newsletterLabel?: string | null
     consentLabel?: string | null
     ctaLabel?: string | null
+    deliveryMode?: 'register' | 'watch' | 'download' | 'redirect' | null
+    deliveryUrl?: string | null
+    openDeliveryInNewTab?: boolean | null
     sponsor?: string | null
     eventDateLabel?: string | null
     eventSummary?: string | null

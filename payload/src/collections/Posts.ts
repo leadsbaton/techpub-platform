@@ -62,6 +62,62 @@ export const Posts: CollectionConfig = {
               type: 'row',
               fields: [
                 {
+                  name: 'contentType',
+                  type: 'relationship',
+                  relationTo: 'content-types',
+                  required: true,
+                  filterOptions: {
+                    active: {
+                      equals: true,
+                    },
+                  },
+                  admin: {
+                    description:
+                      'Choose the post type first. This controls the editor fields, preview examples, and public route.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'status',
+                  type: 'select',
+                  required: true,
+                  defaultValue: 'draft',
+                  options: [
+                    { label: 'Draft', value: 'draft' },
+                    { label: 'Published', value: 'published' },
+                    { label: 'Archived', value: 'archived' },
+                  ],
+                  admin: {
+                    description:
+                      'Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'type',
+              type: 'text',
+              admin: {
+                hidden: true,
+              },
+            },
+            {
+              name: 'postTypeGuide',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostAuthoringGuide',
+                    exportName: 'PostAuthoringGuide',
+                  },
+                },
+              },
+            },
+            {
+              type: 'row',
+              fields: [
+                {
                   name: 'title',
                   type: 'text',
                   required: true,
@@ -90,50 +146,6 @@ export const Posts: CollectionConfig = {
               },
               admin: {
                 description: 'Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.',
-              },
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'contentType',
-                  type: 'relationship',
-                  relationTo: 'content-types',
-                  required: true,
-                  filterOptions: {
-                    active: {
-                      equals: true,
-                    },
-                  },
-                  admin: {
-                    description:
-                      'Controls the public section and route. Seeded options are Insight, White Paper, and Webinar.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'status',
-                  type: 'select',
-                  required: true,
-                  defaultValue: 'draft',
-                  options: [
-                    { label: 'Draft', value: 'draft' },
-                    { label: 'Published', value: 'published' },
-                    { label: 'Archived', value: 'archived' },
-                  ],
-                  admin: {
-                    description:
-                      'Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.',
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              name: 'type',
-              type: 'text',
-              admin: {
-                hidden: true,
               },
             },
             {
@@ -479,6 +491,38 @@ export const Posts: CollectionConfig = {
                       type: 'text',
                       defaultValue: 'Register now',
                       admin: { width: '40%' },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'deliveryMode',
+                      type: 'select',
+                      defaultValue: 'register',
+                      options: [
+                        { label: 'Register URL', value: 'register' },
+                        { label: 'Watch Video', value: 'watch' },
+                        { label: 'Download PDF', value: 'download' },
+                        { label: 'Redirect URL', value: 'redirect' },
+                      ],
+                      admin: { width: '35%' },
+                    },
+                    {
+                      name: 'openDeliveryInNewTab',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '20%' },
+                    },
+                    {
+                      name: 'deliveryUrl',
+                      type: 'text',
+                      admin: {
+                        width: '45%',
+                        description:
+                          'Optional override target after submission. Leave empty to use the webinar external URL or video URL.',
+                      },
                     },
                   ],
                 },
