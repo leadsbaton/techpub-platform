@@ -55,6 +55,10 @@ export const Categories: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        description:
+          'Banner image used for category-led white paper sections and category landing headers.',
+      },
     },
     ...seoFields(),
   ],

@@ -238,6 +238,9 @@ export interface Category {
    * Hex value such as #0F172A
    */
   color?: string | null;
+  /**
+   * Banner image used for category-led white paper sections and category landing headers.
+   */
   image?: (string | null) | Media;
   seo?: {
     metaTitle?: string | null;
@@ -373,6 +376,9 @@ export interface Post {
    */
   externalUrl?: string | null;
   featured?: boolean | null;
+  /**
+   * Pinned white papers can be surfaced in Trending Downloads and priority rails.
+   */
   pinned?: boolean | null;
   /**
    * Required for published content. Defaults to now when you publish.

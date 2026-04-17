@@ -18,6 +18,7 @@ type PostFilters = {
   tag?: string
   author?: string
   featured?: boolean
+  pinned?: boolean
   page?: number
   limit?: number
   query?: string
@@ -128,6 +129,7 @@ export async function getPosts(
   if (filters.tag) where['tags.slug'] = { equals: filters.tag }
   if (filters.author) where['authors.slug'] = { equals: filters.author }
   if (filters.featured !== undefined) where.featured = { equals: filters.featured }
+  if (filters.pinned !== undefined) where.pinned = { equals: filters.pinned }
 
   if (filters.query) {
     where.or = [

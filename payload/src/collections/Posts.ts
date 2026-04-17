@@ -284,6 +284,7 @@ export const Posts: CollectionConfig = {
                   defaultValue: false,
                   admin: {
                     width: '25%',
+                    description: 'Pinned white papers can be surfaced in Trending Downloads and priority rails.',
                   },
                 },
                 {
