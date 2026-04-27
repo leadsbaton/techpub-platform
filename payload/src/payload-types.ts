@@ -340,9 +340,13 @@ export interface Post {
    */
   slug: string;
   /**
-   * For insights and white papers, this is the author list. For webinars, the selected authors power the speaker row. If you choose multiple authors, the last selected author becomes the moderator automatically unless you override it below.
+   * Used for insight and white paper bylines.
    */
   authors?: (string | Author)[] | null;
+  /**
+   * Pick webinar people from the author profiles. The first selected people appear in the speaker row and the last selected person becomes the moderator automatically.
+   */
+  webinarSpeakerProfiles?: (string | Author)[] | null;
   /**
    * Main taxonomy used in UI filters like Finance, Marketing, and Technology.
    */
@@ -886,6 +890,7 @@ export interface PostsSelect<T extends boolean = true> {
   readingTime?: T;
   slug?: T;
   authors?: T;
+  webinarSpeakerProfiles?: T;
   primaryCategory?: T;
   excerpt?: T;
   content?: T;

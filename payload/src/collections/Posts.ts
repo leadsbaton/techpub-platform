@@ -12,6 +12,7 @@ type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
 type PostFormData = Partial<PostDocument> & {
   contentType?: string | { id?: string; key?: PostTypeKey } | null
   type?: PostTypeKey
+  webinarSpeakerProfiles?: (string | { id?: string } | null)[] | null
 }
 
 export const Posts: CollectionConfig = {
@@ -56,7 +57,7 @@ export const Posts: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Essentials',
+          label: 'Post Builder',
           fields: [
             {
               type: 'row',
@@ -115,6 +116,30 @@ export const Posts: CollectionConfig = {
               },
             },
             {
+              name: 'postTypeTemplatePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostTypeTemplatePreview',
+                    exportName: 'PostTypeTemplatePreview',
+                  },
+                },
+              },
+            },
+            {
+              name: 'postLivePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostLivePreviewFrame',
+                    exportName: 'PostLivePreviewFrame',
+                  },
+                },
+              },
+            },
+            {
               type: 'row',
               fields: [
                 {
@@ -153,7 +178,7 @@ export const Posts: CollectionConfig = {
               fields: [
                 {
                   name: 'authors',
-                  label: 'Authors / Speakers',
+                  label: 'Authors',
                   type: 'relationship',
                   relationTo: 'authors',
                   hasMany: true,
@@ -168,8 +193,29 @@ export const Posts: CollectionConfig = {
                     return true
                   },
                   admin: {
+                    condition: (_, siblingData) => siblingData?.type !== 'webinar',
                     description:
-                      'For insights and white papers, this is the author list. For webinars, the selected authors power the speaker row. If you choose multiple authors, the last selected author becomes the moderator automatically unless you override it below.',
+                      'Used for insight and white paper bylines.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'webinarSpeakerProfiles',
+                  label: 'Speakers',
+                  type: 'relationship',
+                  relationTo: 'authors',
+                  hasMany: true,
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.type === 'webinar' && (!Array.isArray(value) || value.length < 2)) {
+                      return 'Choose at least 2 people for a webinar: speaker(s) first and moderator last.'
+                    }
+
+                    return true
+                  },
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description:
+                      'Pick webinar people from the author profiles. The first selected people appear in the speaker row and the last selected person becomes the moderator automatically.',
                     width: '50%',
                   },
                 },
@@ -689,35 +735,6 @@ export const Posts: CollectionConfig = {
           ],
         },
         {
-          label: 'Preview',
-          fields: [
-            {
-              name: 'postAuthoringGuide',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostAuthoringGuide',
-                    exportName: 'PostAuthoringGuide',
-                  },
-                },
-              },
-            },
-            {
-              name: 'postLivePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostLivePreviewFrame',
-                    exportName: 'PostLivePreviewFrame',
-                  },
-                },
-              },
-            },
-          ],
-        },
-        {
           label: 'Actions & SEO',
           fields: [
             {
@@ -750,6 +767,18 @@ export const Posts: CollectionConfig = {
     },
   ],
   hooks: {
+    afterRead: [
+      async ({ doc }) => {
+        if (doc?.type === 'webinar' && (!Array.isArray(doc.webinarSpeakerProfiles) || doc.webinarSpeakerProfiles.length === 0)) {
+          return {
+            ...doc,
+            webinarSpeakerProfiles: doc.authors ?? [],
+          }
+        }
+
+        return doc
+      },
+    ],
     beforeChange: [
       async ({ data, operation, originalDoc, req }) => {
         const nextData: PostFormData = { ...(data as PostFormData) }
@@ -779,6 +808,26 @@ export const Posts: CollectionConfig = {
           })
 
           nextData.type = contentTypeDoc.key as PostTypeKey
+        }
+
+        if (nextData.type === 'webinar') {
+          const selectedProfiles = Array.isArray(nextData.webinarSpeakerProfiles)
+            ? nextData.webinarSpeakerProfiles
+                .map((item) => {
+                  if (typeof item === 'string') return item
+                  if (item && typeof item === 'object' && 'id' in item) {
+                    return typeof item.id === 'string' ? item.id : null
+                  }
+                  return null
+                })
+                .filter((item): item is string => Boolean(item))
+            : []
+
+          if (selectedProfiles.length) {
+            nextData.authors = selectedProfiles
+          }
+        } else {
+          nextData.webinarSpeakerProfiles = undefined
         }
 
         if (nextData.status === 'published' && !nextData.publishedAt) {

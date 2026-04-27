@@ -55,7 +55,7 @@ const guideByType = {
     route: '/webinars/[slug]',
     checklist: [
       'Set the main banner image first. It renders as the full-width top webinar hero. You can also add a second banner image as an optional second strip below it.',
-      'Use the Authors / Speakers field to pick the speaker row. If you choose 2 or more authors, the last selected author becomes the moderator automatically and the others stay in the speakers row.',
+      'Use the Speakers field to pick the webinar people from the author profiles. If you choose 2 or more people, the last selected person becomes the moderator automatically and the others stay in the speakers row.',
       'Use the moderator fields only when you want to override the automatic moderator from the last selected author.',
       'Set CTA label, event date label, summary, agenda points, and rich text content with lists, bold, italic, and links exactly as they should appear.',
       'Use preview to check the centered title/button area, banner stack, content section, and the speaker/moderator row layout.',
