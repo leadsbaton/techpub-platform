@@ -15,6 +15,7 @@ export function BrandLogo() {
         src="/leads-baton-logo.png"
         width={48}
         height={48}
+        loading="eager"
         style={{ display: 'block', height: '3rem', objectFit: 'contain', width: '3rem' }}
       />
       <div style={{ lineHeight: 1.1 }}>
