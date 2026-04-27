@@ -9,21 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "next": "^16.1.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "remixicon": "^4.7.0"
+    "next": "^16.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "remixicon": "^4.9.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19",
-    "baseline-browser-mapping": "^2.10.7",
-    "daisyui": "^5.5.14",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.7",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "baseline-browser-mapping": "^2.10.23",
+    "daisyui": "^5.5.19",
+    "eslint": "^10.2.1",
+    "eslint-config-next": "16.2.4",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^6.0.3"
   }
 }
