@@ -58,6 +58,14 @@ export function hasMediaSource(media?: Media | string | null): boolean {
   return Boolean(getMediaUrl(media))
 }
 
+export function getMediaAspectRatio(media?: Media | string | null, fallback = 16 / 9): number {
+  if (media && typeof media === 'object' && media.width && media.height && media.width > 0 && media.height > 0) {
+    return media.width / media.height
+  }
+
+  return fallback
+}
+
 export function getCategoryName(category?: Category | string | null): string {
   if (!category) return 'General'
   return typeof category === 'string' ? category : category.name

@@ -74,26 +74,6 @@ function TagPills({ post }: { post: Post }) {
   )
 }
 
-function GalleryBlock({ post }: { post: Post }) {
-  if (!post.gallery?.length) return null
-
-  return (
-    <section className="space-y-4 rounded-[28px] bg-white p-6 shadow-[var(--shadow-soft)]">
-      <h2 className="text-2xl font-semibold tracking-tight text-[color:var(--text-strong)]">Gallery</h2>
-      <div className="grid gap-4 md:grid-cols-2">
-        {post.gallery.map((item, index) => (
-          <figure key={item.id || `${post.id}-gallery-${index}`} className="overflow-hidden rounded-[24px] bg-[var(--surface)]">
-            <div className="relative aspect-[16/10]">
-              <Image src={getImageUrl(item.image)} alt={item.caption || post.title} fill className="object-cover" />
-            </div>
-            {item.caption ? <figcaption className="px-4 py-3 text-sm text-[color:var(--text-soft)]">{item.caption}</figcaption> : null}
-          </figure>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 function ResourceRail({ post, contentTypes, railItems }: { post: Post; contentTypes: ContentType[]; railItems: Post[] }) {
   const config = getContentTypeConfigByType(post.type, contentTypes)
   const items = railItems.filter((item) => item.id !== post.id).slice(0, 6)
@@ -127,7 +107,6 @@ function InsightLayout({ post, contentTypes, railItems }: { post: Post; contentT
             </div>
             <TagPills post={post} />
           </section>
-          <GalleryBlock post={post} />
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-28">
@@ -192,7 +171,6 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
         </div>
       </section>
 
-      <GalleryBlock post={post} />
     </article>
   )
 }
@@ -261,7 +239,6 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
         </div>
       </section>
 
-      <GalleryBlock post={post} />
     </article>
   )
 }

@@ -114,12 +114,6 @@ export interface PostCtaGroup {
   primary?: LinkReference | null
 }
 
-export interface PostGalleryItem {
-  id?: string
-  image: Media | string
-  caption?: string | null
-}
-
 export interface Post {
   id: string
   title: string
@@ -131,7 +125,6 @@ export interface Post {
   contentType?: ContentType | string | null
   featuredImage?: Media | string | null
   downloadAsset?: Media | string | null
-  gallery?: PostGalleryItem[] | null
   featured?: boolean
   pinned?: boolean
   authors?: Array<Author | string> | null

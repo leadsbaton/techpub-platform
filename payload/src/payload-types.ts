@@ -378,13 +378,6 @@ export interface Post {
    * Optional downloadable asset for whitepaper entries.
    */
   downloadAsset?: (string | null) | Media;
-  gallery?:
-    | {
-        image: string | Media;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   /**
    * Optional event stream, replay, or registration video URL for webinar pages.
    */
@@ -896,13 +889,6 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   featuredImage?: T;
   downloadAsset?: T;
-  gallery?:
-    | T
-    | {
-        image?: T;
-        caption?: T;
-        id?: T;
-      };
   videoUrl?: T;
   externalUrl?: T;
   webinarSecondaryBanner?: T;

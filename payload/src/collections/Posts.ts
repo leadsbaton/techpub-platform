@@ -116,30 +116,6 @@ export const Posts: CollectionConfig = {
               },
             },
             {
-              name: 'postTypeTemplatePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostTypeTemplatePreview',
-                    exportName: 'PostTypeTemplatePreview',
-                  },
-                },
-              },
-            },
-            {
-              name: 'postLivePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostLivePreviewFrame',
-                    exportName: 'PostLivePreviewFrame',
-                  },
-                },
-              },
-            },
-            {
               type: 'row',
               fields: [
                 {
@@ -244,11 +220,6 @@ export const Posts: CollectionConfig = {
               type: 'richText',
               required: true,
             },
-          ],
-        },
-        {
-          label: 'Media & Discovery',
-          fields: [
             {
               type: 'row',
               fields: [
@@ -278,25 +249,6 @@ export const Posts: CollectionConfig = {
                     description: 'Optional downloadable asset for whitepaper entries.',
                     width: '50%',
                   },
-                },
-              ],
-            },
-            {
-              name: 'gallery',
-              type: 'array',
-              admin: {
-                condition: () => false,
-              },
-              fields: [
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  required: true,
-                },
-                {
-                  name: 'caption',
-                  type: 'text',
                 },
               ],
             },
@@ -730,6 +682,47 @@ export const Posts: CollectionConfig = {
               hasMany: true,
               admin: {
                 description: 'Optional related content suggestions shown near this post.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Preview',
+          fields: [
+            {
+              name: 'postTypeGuide',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostAuthoringGuide',
+                    exportName: 'PostAuthoringGuide',
+                  },
+                },
+              },
+            },
+            {
+              name: 'postTypeTemplatePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostTypeTemplatePreview',
+                    exportName: 'PostTypeTemplatePreview',
+                  },
+                },
+              },
+            },
+            {
+              name: 'postLivePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostLivePreviewFrame',
+                    exportName: 'PostLivePreviewFrame',
+                  },
+                },
               },
             },
           ],

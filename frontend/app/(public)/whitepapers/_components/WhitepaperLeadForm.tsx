@@ -66,6 +66,20 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
   function openDelivery(target: DeliveryResponse) {
     if (typeof window === 'undefined') return
 
+    if (target.mode === 'download') {
+      const link = document.createElement('a')
+      link.href = target.url
+      link.rel = 'noopener noreferrer'
+      if (target.openInNewTab !== false) {
+        link.target = '_blank'
+      }
+      link.download = target.url.split('/').pop() || 'resource'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      return
+    }
+
     if (target.openInNewTab === false) {
       window.location.assign(target.url)
       return

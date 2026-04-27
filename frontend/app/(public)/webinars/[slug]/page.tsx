@@ -7,7 +7,7 @@ import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getImageUrl, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
+import { getImageUrl, getMediaAspectRatio, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
@@ -36,6 +36,8 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   const speakers = getWebinarSpeakers(post)
   const moderator = getWebinarModerator(post)
   const agenda = post.webinarRegistration?.agendaPoints || []
+  const heroAspectRatio = getMediaAspectRatio(post.featuredImage, 16 / 7)
+  const secondaryAspectRatio = getMediaAspectRatio(post.webinarSecondaryBanner, 16 / 7)
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
@@ -43,7 +45,13 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
         <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-8">
             <div className="relative overflow-hidden">
-              <div className="relative h-[180px] sm:h-[250px]">
+              <div
+                className="relative w-full"
+                style={{
+                  aspectRatio: `${heroAspectRatio}`,
+                  minHeight: '180px',
+                }}
+              >
                 <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
                 <div className="absolute inset-0 bg-black/20" />
                 {post.webinarRegistration?.eventDateLabel ? (
@@ -59,7 +67,13 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
             {post.webinarSecondaryBanner ? (
               <div className="relative overflow-hidden">
-                <div className="relative h-[180px] sm:h-[250px]">
+                <div
+                  className="relative w-full"
+                  style={{
+                    aspectRatio: `${secondaryAspectRatio}`,
+                    minHeight: '180px',
+                  }}
+                >
                   <Image
                     src={getImageUrl(post.webinarSecondaryBanner)}
                     alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
