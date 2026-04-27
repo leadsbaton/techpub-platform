@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { SearchResultCard } from './SearchResultCard'
@@ -73,27 +73,18 @@ export function SearchPageClient({
   const [page, setPage] = useState(initialResults.page)
   const [hasNextPage, setHasNextPage] = useState(initialResults.hasNextPage)
   const [error, setError] = useState<string | null>(null)
-  const [history, setHistory] = useState<string[]>([])
-  const [isPending, startTransition] = useTransition()
-
-  useEffect(() => {
-    setFilters(initialFilters)
-    setResults(initialResults.docs)
-    setPage(initialResults.page)
-    setHasNextPage(initialResults.hasNextPage)
-    setError(null)
-  }, [initialFilters, initialResults])
-
-  useEffect(() => {
+  const [history, setHistory] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return []
     try {
       const raw = window.localStorage.getItem(HISTORY_KEY)
-      if (!raw) return
+      if (!raw) return []
       const parsed = JSON.parse(raw) as string[]
-      setHistory(Array.isArray(parsed) ? parsed.slice(0, 6) : [])
+      return Array.isArray(parsed) ? parsed.slice(0, 6) : []
     } catch {
-      setHistory([])
+      return []
     }
-  }, [])
+  })
+  const [isPending, startTransition] = useTransition()
 
   function updateFilter<K extends keyof SearchFilters>(key: K, value: SearchFilters[K]) {
     setFilters((current) => ({ ...current, [key]: value }))

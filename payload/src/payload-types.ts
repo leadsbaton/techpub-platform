@@ -340,7 +340,7 @@ export interface Post {
    */
   slug: string;
   /**
-   * For insights and white papers, this is the author list. For webinars, the selected authors are shown as the speaker row using each author avatar, role, and bio.
+   * For insights and white papers, this is the author list. For webinars, the selected authors power the speaker row. If you choose multiple authors, the last selected author becomes the moderator automatically unless you override it below.
    */
   authors?: (string | Author)[] | null;
   /**
@@ -367,7 +367,7 @@ export interface Post {
     [k: string]: unknown;
   };
   /**
-   * Main card and detail-page image.
+   * Main card and detail-page image. For webinars this is the top hero banner, so use a wide horizontal image.
    */
   featuredImage: string | Media;
   /**
@@ -390,7 +390,7 @@ export interface Post {
    */
   externalUrl?: string | null;
   /**
-   * Optional second banner image shown below the main webinar hero banner.
+   * Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.
    */
   webinarSecondaryBanner?: (string | null) | Media;
   /**
@@ -425,7 +425,7 @@ export interface Post {
     deliveryUrl?: string | null;
   };
   /**
-   * Controls webinar registration form content, event copy, moderator, and CTA behaviour.
+   * Controls webinar registration form content, event copy, moderator override, and CTA behaviour.
    */
   webinarRegistration?: {
     enabled?: boolean | null;
@@ -467,7 +467,7 @@ export interface Post {
         }[]
       | null;
     /**
-     * Moderator details shown beside the speakers section.
+     * Optional override. If left empty and 2 or more authors are selected, the last selected author is used as moderator automatically.
      */
     moderatorName?: string | null;
     moderatorRole?: string | null;

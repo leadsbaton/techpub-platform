@@ -54,10 +54,11 @@ const guideByType = {
     label: 'Webinar',
     route: '/webinars/[slug]',
     checklist: [
-      'Set featured image, optional second banner, event date label, CTA label, summary, and agenda points.',
-      'Use the Authors / Speakers field to pick the people shown in the speaker row. Their avatar, role, and bio are pulled from the author profile.',
-      'Add the moderator details separately with image, name, role, and company.',
-      'Use preview to check the centered title/button area, banner stack, content section, and speaker or moderator row.',
+      'Set the main banner image first. It renders as the full-width top webinar hero. You can also add a second banner image as an optional second strip below it.',
+      'Use the Authors / Speakers field to pick the speaker row. If you choose 2 or more authors, the last selected author becomes the moderator automatically and the others stay in the speakers row.',
+      'Use the moderator fields only when you want to override the automatic moderator from the last selected author.',
+      'Set CTA label, event date label, summary, agenda points, and rich text content with lists, bold, italic, and links exactly as they should appear.',
+      'Use preview to check the centered title/button area, banner stack, content section, and the speaker/moderator row layout.',
       'Use either an external registration URL or a video URL for the final destination. Webinar form entries are saved in the shared submissions collection.',
     ],
     previewNotes:

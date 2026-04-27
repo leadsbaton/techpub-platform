@@ -21,7 +21,7 @@
     "@types/react-dom": "^19",
     "baseline-browser-mapping": "^2.10.23",
     "daisyui": "^5.5.19",
-    "eslint": "^10.2.1",
+    "eslint": "^9.39.4",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3"

@@ -169,7 +169,7 @@ export const Posts: CollectionConfig = {
                   },
                   admin: {
                     description:
-                      'For insights and white papers, this is the author list. For webinars, the selected authors are shown as the speaker row using each author avatar, role, and bio.',
+                      'For insights and white papers, this is the author list. For webinars, the selected authors power the speaker row. If you choose multiple authors, the last selected author becomes the moderator automatically unless you override it below.',
                     width: '50%',
                   },
                 },
@@ -212,7 +212,7 @@ export const Posts: CollectionConfig = {
                   relationTo: 'media',
                   required: true,
                   admin: {
-                    description: 'Main card and detail-page image.',
+                    description: 'Main card and detail-page image. For webinars this is the top hero banner, so use a wide horizontal image.',
                     width: '50%',
                   },
                 },
@@ -303,7 +303,7 @@ export const Posts: CollectionConfig = {
                   relationTo: 'media',
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description: 'Optional second banner image shown below the main webinar hero banner.',
+                    description: 'Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.',
                     width: '50%',
                   },
                 },
@@ -471,7 +471,7 @@ export const Posts: CollectionConfig = {
               admin: {
                 condition: (_, siblingData) => siblingData?.type === 'webinar',
                 description:
-                  'Controls webinar registration form content, event copy, moderator, and CTA behaviour.',
+                  'Controls webinar registration form content, event copy, moderator override, and CTA behaviour.',
               },
               fields: [
                 {
@@ -648,7 +648,7 @@ export const Posts: CollectionConfig = {
                       type: 'text',
                       admin: {
                         width: '25%',
-                        description: 'Moderator details shown beside the speakers section.',
+                        description: 'Optional override. If left empty and 2 or more authors are selected, the last selected author is used as moderator automatically.',
                       },
                     },
                     {

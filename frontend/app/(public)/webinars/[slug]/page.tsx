@@ -7,7 +7,7 @@ import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getImageUrl, getWebinarSpeakers } from '@/lib/utils/formatting'
+import { getImageUrl, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
@@ -34,6 +34,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   if (!post) notFound()
 
   const speakers = getWebinarSpeakers(post)
+  const moderator = getWebinarModerator(post)
   const agenda = post.webinarRegistration?.agendaPoints || []
 
   return (
@@ -100,7 +101,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               ) : null}
             </div>
 
-            {(speakers.length || post.webinarRegistration?.moderatorName) ? (
+            {(speakers.length || moderator) ? (
               <section className="grid gap-8 sm:grid-cols-[1fr_auto]">
                 {speakers.length ? (
                   <div>
@@ -122,18 +123,18 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                   </div>
                 ) : null}
 
-                {post.webinarRegistration?.moderatorName ? (
+                {moderator ? (
                   <div>
                     <h2 className="ui-font mb-4 text-[16px] font-bold uppercase text-[#8a8ab5]">Moderator</h2>
                     <div className="ui-font text-center">
                       <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
-                        {post.webinarRegistration?.moderatorPhoto ? (
-                          <Image src={getImageUrl(post.webinarRegistration.moderatorPhoto)} alt={post.webinarRegistration.moderatorName} fill className="object-cover" />
+                        {moderator.photo ? (
+                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill className="object-cover" />
                         ) : null}
                       </div>
-                      <div className="mt-2 text-[12px] font-medium text-[#111]">{post.webinarRegistration.moderatorName}</div>
-                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{post.webinarRegistration.moderatorRole}</div>
-                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{post.webinarRegistration.moderatorCompany}</div>
+                      <div className="mt-2 text-[12px] font-medium text-[#111]">{moderator.name}</div>
+                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{moderator.role}</div>
+                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{moderator.secondaryLine}</div>
                     </div>
                   </div>
                 ) : null}

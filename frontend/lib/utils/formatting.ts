@@ -86,8 +86,8 @@ export type WebinarPerson = {
   photo?: Media | string | null
 }
 
-export function getWebinarSpeakers(post: Post): WebinarPerson[] {
-  const authorSpeakers =
+function getWebinarAuthors(post: Post): WebinarPerson[] {
+  return (
     post.authors
       ?.filter((author): author is Author => typeof author !== 'string')
       .map((author) => ({
@@ -97,9 +97,18 @@ export function getWebinarSpeakers(post: Post): WebinarPerson[] {
         secondaryLine: author.bio,
         photo: author.avatar,
       })) ?? []
+  )
+}
 
-  if (authorSpeakers.length) {
-    return authorSpeakers
+export function getWebinarSpeakers(post: Post): WebinarPerson[] {
+  const webinarAuthors = getWebinarAuthors(post)
+
+  if (webinarAuthors.length > 1) {
+    return webinarAuthors.slice(0, -1)
+  }
+
+  if (webinarAuthors.length === 1) {
+    return webinarAuthors
   }
 
   return (
@@ -113,6 +122,25 @@ export function getWebinarSpeakers(post: Post): WebinarPerson[] {
         photo: speaker.photo,
       })) ?? []
   )
+}
+
+export function getWebinarModerator(post: Post): WebinarPerson | null {
+  if (post.webinarRegistration?.moderatorName) {
+    return {
+      id: `${post.id}-moderator`,
+      name: post.webinarRegistration.moderatorName,
+      role: post.webinarRegistration.moderatorRole,
+      secondaryLine: post.webinarRegistration.moderatorCompany,
+      photo: post.webinarRegistration.moderatorPhoto,
+    }
+  }
+
+  const webinarAuthors = getWebinarAuthors(post)
+  if (webinarAuthors.length > 1) {
+    return webinarAuthors[webinarAuthors.length - 1] || null
+  }
+
+  return null
 }
 
 export function getWebinarSpeakerSummary(post: Post): string | null {

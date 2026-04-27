@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 
 import { WebinarCard } from './WebinarCard'
 import type { PayloadListResponse, Post } from '@/lib/types/cms'
@@ -50,13 +50,6 @@ export function WebinarListingClient({
   const [hasNextPage, setHasNextPage] = useState(initialHasNextPage)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-
-  useEffect(() => {
-    setPosts(initialPosts)
-    setPage(initialPage)
-    setHasNextPage(initialHasNextPage)
-    setError(null)
-  }, [initialHasNextPage, initialPage, initialPosts])
 
   function loadMore() {
     startTransition(() => {
