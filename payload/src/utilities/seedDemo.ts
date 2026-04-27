@@ -44,7 +44,6 @@ type SeedPostData = {
   externalUrl?: string
   videoUrl?: string
   webinarRegistration?: Post['webinarRegistration']
-  gallery?: StoredPostData['gallery']
   relatedPosts?: string[]
   seo?: Post['seo']
 }
@@ -687,10 +686,6 @@ export async function seedDemoContent(payload: Payload) {
       readingTime: 9,
       publishedAt: '2026-01-15T08:00:00.000Z',
       tags: pickTags('ai', 'analytics', 'cloud'),
-      gallery: [
-        { image: mediaId('dashboard-card'), caption: 'Editorial listing layout preview' },
-        { image: mediaId('dashboard-source'), caption: 'Source dashboard capture' },
-      ],
       content: richTextFromParagraphs([
         'Governance becomes practical when product, legal, analytics, and platform teams agree on approval boundaries before launch.',
         'The strongest operating models pair workflow checkpoints with observable datasets, model review notes, and rollback plans.',
