@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { jsonWithCors, optionsWithCors } from '@/lib/cors'
 import { consumeRateLimit } from '@/lib/rateLimit'
 import { sendEmailJsTemplate } from '@/lib/emailjs'
 
@@ -88,7 +89,8 @@ export async function POST(request: NextRequest) {
   const rate = consumeRateLimit(getClientKey(request), LIMIT, WINDOW_MS)
 
   if (!rate.allowed) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Too many submission attempts. Please try again later.' },
       { status: 429 },
     )
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ message: 'Invalid JSON payload.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'Invalid JSON payload.' }, { status: 400 })
   }
 
   const postId = trimValue(body.postId)
@@ -113,22 +115,24 @@ export async function POST(request: NextRequest) {
   const consentAccepted = Boolean(body.consentAccepted)
 
   if (!postId) {
-    return NextResponse.json({ message: 'White paper reference is required.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'White paper reference is required.' }, { status: 400 })
   }
 
   if (!name || !email || !jobTitle || !company || !country) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Name, email, job title, company, and country are required.' },
       { status: 400 },
     )
   }
 
   if (!EMAIL_REGEX.test(email)) {
-    return NextResponse.json({ message: 'A valid email address is required.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'A valid email address is required.' }, { status: 400 })
   }
 
   if (!consentAccepted) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Privacy and terms consent must be accepted before continuing.' },
       { status: 400 },
     )
@@ -143,13 +147,14 @@ export async function POST(request: NextRequest) {
   })) as WhitepaperPost
 
   if (!post || post.type !== 'whitepaper' || post.status !== 'published') {
-    return NextResponse.json({ message: 'White paper not found.' }, { status: 404 })
+    return jsonWithCors(request, { message: 'White paper not found.' }, { status: 404 })
   }
 
   const leadCapture = getLeadCapture(post)
 
   if (leadCapture?.enabled === false) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'This white paper is configured for direct access and does not accept gated submissions.' },
       { status: 400 },
     )
@@ -158,7 +163,8 @@ export async function POST(request: NextRequest) {
   const delivery = resolveDelivery(post, leadCapture)
 
   if (!delivery) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'This white paper is missing a delivery target in the CMS.' },
       { status: 422 },
     )
@@ -286,7 +292,8 @@ export async function POST(request: NextRequest) {
     overrideAccess: true,
   })
 
-  return NextResponse.json(
+  return jsonWithCors(
+    request,
     {
       message:
         leadCapture?.successMessage ||
@@ -295,4 +302,8 @@ export async function POST(request: NextRequest) {
     },
     { status: 201 },
   )
+}
+
+export function OPTIONS(request: NextRequest) {
+  return optionsWithCors(request)
 }

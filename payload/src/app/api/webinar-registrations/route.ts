@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { jsonWithCors, optionsWithCors } from '@/lib/cors'
 import { sendEmailJsTemplate } from '@/lib/emailjs'
 import { consumeRateLimit } from '@/lib/rateLimit'
 
@@ -88,7 +89,8 @@ export async function POST(request: NextRequest) {
   const rate = consumeRateLimit(getClientKey(request), LIMIT, WINDOW_MS)
 
   if (!rate.allowed) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Too many registration attempts. Please try again later.' },
       { status: 429 },
     )
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ message: 'Invalid JSON payload.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'Invalid JSON payload.' }, { status: 400 })
   }
 
   const postId = trimValue(body.postId)
@@ -113,22 +115,23 @@ export async function POST(request: NextRequest) {
   const consentAccepted = Boolean(body.consentAccepted)
 
   if (!postId) {
-    return NextResponse.json({ message: 'Webinar reference is required.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'Webinar reference is required.' }, { status: 400 })
   }
 
   if (!name || !email || !jobTitle || !company || !country) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Name, email, job title, company, and country are required.' },
       { status: 400 },
     )
   }
 
   if (!EMAIL_REGEX.test(email)) {
-    return NextResponse.json({ message: 'A valid email address is required.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'A valid email address is required.' }, { status: 400 })
   }
 
   if (!consentAccepted) {
-    return NextResponse.json({ message: 'Consent is required before registering.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'Consent is required before registering.' }, { status: 400 })
   }
 
   const payload = await getPayload({ config })
@@ -140,11 +143,12 @@ export async function POST(request: NextRequest) {
   })) as WebinarPost
 
   if (!post || post.type !== 'webinar' || post.status !== 'published') {
-    return NextResponse.json({ message: 'Webinar not found.' }, { status: 404 })
+    return jsonWithCors(request, { message: 'Webinar not found.' }, { status: 404 })
   }
 
   if (post.webinarRegistration?.enabled === false) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'This webinar is configured for direct access and does not accept registrations.' },
       { status: 400 },
     )
@@ -153,7 +157,8 @@ export async function POST(request: NextRequest) {
   const delivery = resolveDelivery(post)
 
   if (!delivery) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'This webinar is missing a delivery target in the CMS.' },
       { status: 422 },
     )
@@ -281,7 +286,8 @@ export async function POST(request: NextRequest) {
     overrideAccess: true,
   })
 
-  return NextResponse.json(
+  return jsonWithCors(
+    request,
     {
       message:
         post.webinarRegistration?.successMessage ||
@@ -290,4 +296,8 @@ export async function POST(request: NextRequest) {
     },
     { status: 201 },
   )
+}
+
+export function OPTIONS(request: NextRequest) {
+  return optionsWithCors(request)
 }

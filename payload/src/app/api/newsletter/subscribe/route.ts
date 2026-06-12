@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { jsonWithCors, optionsWithCors } from '@/lib/cors'
 import { consumeRateLimit } from '@/lib/rateLimit'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -18,7 +19,8 @@ export async function POST(request: NextRequest) {
   const rate = consumeRateLimit(getClientKey(request), LIMIT, WINDOW_MS)
 
   if (!rate.allowed) {
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'Too many subscription attempts. Please try again later.' },
       {
         headers: {
@@ -41,7 +43,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ message: 'Invalid JSON payload.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'Invalid JSON payload.' }, { status: 400 })
   }
 
   const email = body.email?.trim().toLowerCase()
@@ -50,7 +52,7 @@ export async function POST(request: NextRequest) {
   const source = body.source?.trim() || 'website'
 
   if (!email || !EMAIL_REGEX.test(email)) {
-    return NextResponse.json({ message: 'A valid email address is required.' }, { status: 400 })
+    return jsonWithCors(request, { message: 'A valid email address is required.' }, { status: 400 })
   }
 
   const payload = await getPayload({ config })
@@ -85,7 +87,8 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    return NextResponse.json(
+    return jsonWithCors(
+      request,
       { message: 'You are already subscribed.' },
       {
         headers: {
@@ -110,7 +113,8 @@ export async function POST(request: NextRequest) {
     overrideAccess: true,
   })
 
-  return NextResponse.json(
+  return jsonWithCors(
+    request,
     { message: 'Subscription saved successfully.' },
     {
       headers: {
@@ -121,4 +125,8 @@ export async function POST(request: NextRequest) {
       status: 201,
     },
   )
+}
+
+export function OPTIONS(request: NextRequest) {
+  return optionsWithCors(request)
 }

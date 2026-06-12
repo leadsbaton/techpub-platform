@@ -64,6 +64,7 @@ export function HeroFeature({
                     src={getImageUrl(post.featuredImage)}
                     alt={post.title}
                     fill
+                    loading="eager"
                     className="object-cover transition duration-300 group-hover:scale-[1.03]"
                   />
                 </div>
@@ -83,6 +84,7 @@ export function HeroFeature({
                       alt={post.title}
                       fill
                       priority
+                      loading="eager"
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
