@@ -112,14 +112,14 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             </div>
 
             <div className="ui-font space-y-5 text-[16px] leading-[145%] text-[#2d2d2d]">
-              <p>{post.webinarRegistration?.eventSummary || post.excerpt}</p>
+              {post.webinarRegistration?.eventSummary ? (
+                <p>{post.webinarRegistration.eventSummary}</p>
+              ) : null}
               {post.content ? (
                 <div className="prose max-w-none">
                   <RichTextRenderer content={post.content} />
                 </div>
-              ) : (
-                <p>{post.excerpt}</p>
-              )}
+              ) : null}
               {agenda.length ? (
                 <div className="space-y-2">
                   <p className="font-medium text-[#111]">Join this webinar roundtable webinar to learn:</p>

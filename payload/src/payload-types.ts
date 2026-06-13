@@ -340,7 +340,7 @@ export interface Post {
    */
   slug: string;
   /**
-   * Used for insight and white paper bylines.
+   * Used for insight bylines.
    */
   authors?: (string | Author)[] | null;
   /**
@@ -375,7 +375,7 @@ export interface Post {
    */
   featuredImage: string | Media;
   /**
-   * Optional downloadable asset for whitepaper entries.
+   * PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.
    */
   downloadAsset?: (string | null) | Media;
   /**
@@ -383,7 +383,7 @@ export interface Post {
    */
   videoUrl?: string | null;
   /**
-   * Optional canonical, download, or registration URL.
+   * Paste any URL to redirect users to after they submit the form (e.g. a hosted PDF or landing page). For white papers, use this instead of uploading a PDF.
    */
   externalUrl?: string | null;
   /**
@@ -451,25 +451,6 @@ export interface Post {
           id?: string | null;
         }[]
       | null;
-    /**
-     * Legacy speaker list. Webinar pages now use the selected authors as the speaker row and only fall back to this older field if needed.
-     */
-    speakers?:
-      | {
-          name: string;
-          role?: string | null;
-          company?: string | null;
-          photo?: (string | null) | Media;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Optional override. If left empty and 2 or more authors are selected, the last selected author is used as moderator automatically.
-     */
-    moderatorName?: string | null;
-    moderatorRole?: string | null;
-    moderatorCompany?: string | null;
-    moderatorPhoto?: (string | null) | Media;
   };
   tags?: (string | Tag)[] | null;
   /**
@@ -933,19 +914,6 @@ export interface PostsSelect<T extends boolean = true> {
               point?: T;
               id?: T;
             };
-        speakers?:
-          | T
-          | {
-              name?: T;
-              role?: T;
-              company?: T;
-              photo?: T;
-              id?: T;
-            };
-        moderatorName?: T;
-        moderatorRole?: T;
-        moderatorCompany?: T;
-        moderatorPhoto?: T;
       };
   tags?: T;
   relatedPosts?: T;

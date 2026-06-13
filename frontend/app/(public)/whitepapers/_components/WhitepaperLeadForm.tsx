@@ -129,6 +129,9 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
 
       setMessage(data.message || post.leadCapture?.successMessage || 'Request saved successfully.')
       setDelivery(data.delivery || null)
+      // Clear the typed values so the form is ready for the next person and no
+      // personal data lingers on screen after submission.
+      setForm(initialState)
 
       if (data.delivery?.url) {
         openDelivery(data.delivery)

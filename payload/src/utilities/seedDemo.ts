@@ -972,16 +972,6 @@ export async function seedDemoContent(payload: Payload) {
           { point: 'The biggest pitfalls organizations encounter during adoption' },
           { point: 'Key trends shaping the next wave of enterprise AI' },
         ],
-        speakers: [
-          { name: 'Irem Radzik', role: 'Senior Director of Product Marketing', company: 'Reltio', photo: mediaId('dashboard-card') },
-          { name: 'Robert Stanley', role: 'Senior Director of Special Projects', company: 'Melissa Informatics', photo: mediaId('dashboard-source') },
-          { name: 'Sami Akbay', role: 'Vice President, Product Management', company: 'InsightAnalytics', photo: mediaId('dashboard-card') },
-          { name: 'Jared Johnson', role: 'Senior Technology Evangelist', company: 'CData Software', photo: mediaId('dashboard-source') },
-        ],
-        moderatorName: 'Stephen Faig',
-        moderatorRole: 'Research Director',
-        moderatorCompany: 'DBTA',
-        moderatorPhoto: mediaId('dashboard-card'),
       },
       content: richTextFromParagraphs([
         'Roundtable sessions are useful for surfacing how workflow automation changes approval paths, reporting expectations, and ownership models.',
@@ -1016,16 +1006,6 @@ export async function seedDemoContent(payload: Payload) {
           { point: 'Common pitfalls and governance gaps during rollout' },
           { point: 'How enterprise AI programs are evolving for 2026' },
         ],
-        speakers: [
-          { name: 'Irem Radzik', role: 'Senior Director of Product Marketing', company: 'Reltio', photo: mediaId('dashboard-card') },
-          { name: 'Robert Stanley', role: 'Senior Director of Special Projects', company: 'Melissa Informatics', photo: mediaId('dashboard-source') },
-          { name: 'Sami Akbay', role: 'Vice President, Product Management', company: 'InsightAnalytics', photo: mediaId('dashboard-card') },
-          { name: 'Jared Johnson', role: 'Senior Technology Evangelist', company: 'CData Software', photo: mediaId('dashboard-source') },
-        ],
-        moderatorName: 'Stephen Faig',
-        moderatorRole: 'Research Director',
-        moderatorCompany: 'DBTA',
-        moderatorPhoto: mediaId('dashboard-card'),
       },
       content: richTextFromParagraphs([
         'Modern AI initiatives succeed when they are connected to real operational systems instead of living in isolated demos.',

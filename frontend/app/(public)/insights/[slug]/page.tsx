@@ -63,7 +63,6 @@ export default async function InsightDetailPage({
           </div>
 
           <div className="mt-6 max-w-4xl space-y-5 text-[0.98rem] leading-[1.75] text-[color:var(--text-soft)]">
-            {post.excerpt ? <p>{post.excerpt}</p> : null}
             <div className="prose max-w-none">
               <RichTextRenderer content={post.content} />
             </div>

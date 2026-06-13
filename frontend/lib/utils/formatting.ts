@@ -119,40 +119,19 @@ function getWebinarAuthors(post: Post): WebinarPerson[] {
 }
 
 export function getWebinarSpeakers(post: Post): WebinarPerson[] {
+  // Speakers = every selected webinar author except the last one (which is the
+  // moderator). A single selected author is shown as the sole speaker.
   const webinarAuthors = getWebinarAuthors(post)
 
   if (webinarAuthors.length > 1) {
     return webinarAuthors.slice(0, -1)
   }
 
-  if (webinarAuthors.length === 1) {
-    return webinarAuthors
-  }
-
-  return (
-    post.webinarRegistration?.speakers
-      ?.filter((speaker) => speaker.name)
-      .map((speaker, index) => ({
-        id: `${post.id}-speaker-${index}`,
-        name: speaker.name || 'Speaker',
-        role: speaker.role,
-        secondaryLine: speaker.company,
-        photo: speaker.photo,
-      })) ?? []
-  )
+  return webinarAuthors
 }
 
 export function getWebinarModerator(post: Post): WebinarPerson | null {
-  if (post.webinarRegistration?.moderatorName) {
-    return {
-      id: `${post.id}-moderator`,
-      name: post.webinarRegistration.moderatorName,
-      role: post.webinarRegistration.moderatorRole,
-      secondaryLine: post.webinarRegistration.moderatorCompany,
-      photo: post.webinarRegistration.moderatorPhoto,
-    }
-  }
-
+  // Moderator = the LAST selected webinar author (only when 2+ are chosen).
   const webinarAuthors = getWebinarAuthors(post)
   if (webinarAuthors.length > 1) {
     return webinarAuthors[webinarAuthors.length - 1] || null

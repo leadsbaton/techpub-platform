@@ -57,55 +57,41 @@ export default async function WhitepaperDetailPage({
     <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
       <article className='site-container py-8 sm:py-10'>
         <section className='grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
-          {/* Mobile order (via `order-*`): title -> cover image -> body text ->
-              download button. Desktop restores the cover+button left column and
-              title+text right column through explicit grid placement. */}
-          <div className='ui-font grid min-w-0 grid-cols-1 gap-x-9 gap-y-5 sm:grid-cols-[190px_minmax(0,1fr)]'>
-            <h1 className='order-1 text-[26px] font-medium leading-[1.2] text-[#111] sm:order-none sm:col-start-2 sm:row-start-1 sm:text-[32px]'>
-              {post.title}
-            </h1>
-
-            <div className='order-2 mx-auto w-full max-w-[240px] sm:order-none sm:col-start-1 sm:row-start-1 sm:mx-0 sm:max-w-none'>
-              <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
-                <Image
-                  src={getImageUrl(post.featuredImage)}
-                  alt={post.title}
-                  fill
-                  sizes='(max-width: 640px) 240px, 190px'
-                  className='object-cover'
-                />
-              </div>
-              <Link
-                href={`/whitepapers/${post.slug}/access`}
-                className='ui-font mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-6 py-2.5 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)]'
-              >
-                {actionLabel}
-              </Link>
-            </div>
-
-            <div className='order-3 min-w-0 space-y-4 sm:order-none sm:col-start-2 sm:row-start-2'>
-              {post.excerpt ? (
-                <p className='text-[16px] leading-[1.7] text-[#2d2d2d]'>
-                  {post.excerpt}
-                </p>
-              ) : null}
-              {post.content ? (
-                <div className='prose max-w-none break-words pt-2'>
-                  <RichTextRenderer content={post.content} />
+          {/* Header: cover image + (title / description / download), vertically
+              centered beside the image so a short intro doesn't leave an empty
+              column. The full article body renders at full width below. */}
+          <div className='ui-font min-w-0 space-y-7'>
+            <div className='grid grid-cols-1 gap-x-9 gap-y-5 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-center'>
+              <div className='mx-auto w-full max-w-[240px] sm:mx-0 sm:max-w-none'>
+                <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
+                  <Image
+                    src={getImageUrl(post.featuredImage)}
+                    alt={post.title}
+                    fill
+                    sizes='(max-width: 640px) 240px, 220px'
+                    className='object-cover'
+                  />
                 </div>
-              ) : null}
+              </div>
 
-              <div className='flex justify-center pt-2'>
+              <div className='min-w-0 space-y-4'>
+                <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
+                  {post.title}
+                </h1>
                 <Link
                   href={`/whitepapers/${post.slug}/access`}
-                  className='ui-font inline-flex text-[18px] font-semibold uppercase tracking-[0.02em] text-[var(--accent-red)] transition hover:underline'
+                  className='flex w-full items-center justify-center bg-[var(--accent-red)] px-8 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)] sm:inline-flex sm:w-auto'
                 >
                   {actionLabel}
                 </Link>
               </div>
             </div>
 
-          
+            {post.content ? (
+              <div className='prose max-w-none break-words'>
+                <RichTextRenderer content={post.content} />
+              </div>
+            ) : null}
           </div>
 
           <div className='space-y-6 xl:sticky xl:top-28 xl:self-start'>

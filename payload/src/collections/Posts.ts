@@ -133,19 +133,17 @@ export const Posts: CollectionConfig = {
                   relationTo: 'authors',
                   hasMany: true,
                   validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (
-                      (siblingData.type === 'insight' || siblingData.type === 'whitepaper') &&
-                      (!Array.isArray(value) || value.length === 0)
-                    ) {
-                      return 'Insights and white papers should have at least one author.'
+                    if (siblingData.type === 'insight' && (!Array.isArray(value) || value.length === 0)) {
+                      return 'Insights should have at least one author.'
                     }
 
                     return true
                   },
                   admin: {
-                    condition: (_, siblingData) => siblingData?.type !== 'webinar',
-                    description:
-                      'Used for insight and white paper bylines.',
+                    // Authors are only used for insight bylines. White papers and
+                    // webinars don't need them, so the field is hidden for those.
+                    condition: (_, siblingData) => siblingData?.type === 'insight',
+                    description: 'Used for insight bylines.',
                     width: '50%',
                   },
                 },
@@ -227,7 +225,8 @@ export const Posts: CollectionConfig = {
                   },
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'whitepaper',
-                    description: 'Optional downloadable asset for whitepaper entries.',
+                    description:
+                      'PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.',
                     width: '50%',
                   },
                 },
@@ -267,7 +266,8 @@ export const Posts: CollectionConfig = {
                     return true
                   },
                   admin: {
-                    description: 'Optional canonical, download, or registration URL.',
+                    description:
+                      'Paste any URL to redirect users to after they submit the form (e.g. a hosted PDF or landing page). For white papers, use this instead of uploading a PDF.',
                     width: '50%',
                   },
                 },
@@ -593,72 +593,6 @@ export const Posts: CollectionConfig = {
                       name: 'point',
                       type: 'text',
                       required: true,
-                    },
-                  ],
-                },
-                {
-                  name: 'speakers',
-                  type: 'array',
-                  admin: {
-                    condition: () => false,
-                    description:
-                      'Legacy speaker list. Webinar pages now use the selected authors as the speaker row and only fall back to this older field if needed.',
-                  },
-                  fields: [
-                    {
-                      type: 'row',
-                      fields: [
-                        {
-                          name: 'name',
-                          type: 'text',
-                          required: true,
-                          admin: { width: '33%' },
-                        },
-                        {
-                          name: 'role',
-                          type: 'text',
-                          admin: { width: '33%' },
-                        },
-                        {
-                          name: 'company',
-                          type: 'text',
-                          admin: { width: '34%' },
-                        },
-                      ],
-                    },
-                    {
-                      name: 'photo',
-                      type: 'upload',
-                      relationTo: 'media',
-                    },
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'moderatorName',
-                      type: 'text',
-                      admin: {
-                        width: '25%',
-                        description: 'Optional override. If left empty and 2 or more authors are selected, the last selected author is used as moderator automatically.',
-                      },
-                    },
-                    {
-                      name: 'moderatorRole',
-                      type: 'text',
-                      admin: { width: '25%' },
-                    },
-                    {
-                      name: 'moderatorCompany',
-                      type: 'text',
-                      admin: { width: '25%' },
-                    },
-                    {
-                      name: 'moderatorPhoto',
-                      type: 'upload',
-                      relationTo: 'media',
-                      admin: { width: '25%' },
                     },
                   ],
                 },

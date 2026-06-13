@@ -101,7 +101,6 @@ function InsightLayout({ post, contentTypes, railItems }: { post: Post; contentT
             <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 760px" className="object-cover" />
           </div>
           <section className="space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
-            <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
             <div className="prose max-w-none">
               <RichTextRenderer content={post.content} />
             </div>
@@ -150,7 +149,6 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
 
         <div className="min-w-0 space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
           <MetaStrip post={post} />
-          <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
           <div className="prose max-w-none">
             <RichTextRenderer content={post.content} />
           </div>
@@ -213,7 +211,6 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
 
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
         <div className="min-w-0 space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
-          <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Event Type</div>

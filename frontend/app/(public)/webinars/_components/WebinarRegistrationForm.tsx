@@ -119,6 +119,8 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
       }
       setMessage(data.message || 'Your registration has been saved successfully.')
       setDelivery(data.delivery || null)
+      // Clear the typed values after a successful submit.
+      setForm(initialState)
       if (data.delivery?.url) {
         openDelivery(data.delivery)
       }
