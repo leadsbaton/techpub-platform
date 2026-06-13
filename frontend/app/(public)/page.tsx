@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
 import { HomeCallout } from './_components/HomeCallout'
@@ -27,8 +28,43 @@ export default async function HomePage() {
     categories,
   } = await getHomePageData()
 
+  // No hero means there's no published content yet, or the backend is
+  // unreachable (the API layer swallows errors and returns empty lists). Show a
+  // friendly placeholder instead of a completely blank page.
   if (!heroPost) {
-    return null
+    const sections = [
+      getContentTypeConfigByType('insight', contentTypes),
+      getContentTypeConfigByType('whitepaper', contentTypes),
+      getContentTypeConfigByType('webinar', contentTypes),
+    ]
+
+    return (
+      <section className="site-container flex min-h-[60vh] items-center justify-center py-16">
+        <div className="max-w-xl space-y-5 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-red)]">
+            LeadsBaton TechPub
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-[color:var(--text-strong)] md:text-4xl">
+            Fresh content is on the way.
+          </h1>
+          <p className="text-lg text-[color:var(--text-soft)]">
+            We couldn&apos;t load the homepage highlights right now. Please check back
+            shortly, or browse our sections directly.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {sections.map((section) => (
+              <Link
+                key={section.routeBase}
+                href={section.routeBase}
+                className="rounded-full border border-[var(--border-subtle)] px-6 py-3 text-sm font-semibold text-[color:var(--text-strong)]"
+              >
+                {section.pluralLabel}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
   }
 
   const webinarConfig = getContentTypeConfigByType('webinar', contentTypes)
