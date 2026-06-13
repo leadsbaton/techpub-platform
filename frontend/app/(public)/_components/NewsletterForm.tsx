@@ -4,6 +4,19 @@ import { useState } from 'react'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.onrender.com' : 'http://localhost:5000')
 
+// Safely parse a response body that may not be JSON (e.g. a 502/504 HTML page
+// from the host, or an empty body). Never throws — returns {} so the caller can
+// branch on response.ok instead of assuming every status carries a JSON body.
+async function parseJsonSafe(response: Response): Promise<{ message?: string }> {
+  const text = await response.text()
+  if (!text) return {}
+  try {
+    return JSON.parse(text) as { message?: string }
+  } catch {
+    return {}
+  }
+}
+
 export function NewsletterForm({ submitLabel }: { submitLabel: string }) {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +41,7 @@ export function NewsletterForm({ submitLabel }: { submitLabel: string }) {
         }),
       })
 
-      const data = (await response.json()) as { message?: string }
+      const data = await parseJsonSafe(response)
 
       if (!response.ok) {
         setError(data.message || 'Unable to subscribe right now.')

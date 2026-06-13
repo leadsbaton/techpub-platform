@@ -36,6 +36,24 @@ type DeliveryResponse = {
   openInNewTab?: boolean
 }
 
+type LeadResponse = {
+  message?: string
+  delivery?: DeliveryResponse
+}
+
+// Safely parse a response body that may not be JSON (e.g. a 502/504 HTML page
+// from the host, or an empty body). Never throws — returns {} when the body
+// isn't valid JSON so the caller can branch on response.ok instead.
+async function parseJsonSafe(response: Response): Promise<LeadResponse> {
+  const text = await response.text()
+  if (!text) return {}
+  try {
+    return JSON.parse(text) as LeadResponse
+  } catch {
+    return {}
+  }
+}
+
 export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; variant?: 'default' | 'figma' }) {
   const [form, setForm] = useState<FormState>(initialState)
   const [error, setError] = useState<string | null>(null)
@@ -107,10 +125,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
         }),
       })
 
-      const data = (await response.json()) as {
-        message?: string
-        delivery?: DeliveryResponse
-      }
+      const data = await parseJsonSafe(response)
 
       if (!response.ok) {
         setError(data.message || 'Unable to save your request right now.')
@@ -185,6 +200,19 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
 
         {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
         {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}
+
+        {/* Fallback link: the auto-open in openDelivery() runs after an await,
+            so browsers may block it as a non-user-gesture popup. This button
+            lets the user reach the resource manually. */}
+        {delivery?.url ? (
+          <button
+            type="button"
+            onClick={() => openDelivery(delivery)}
+            className="ml-[196px] inline-flex border border-[#8f8f8f] px-8 py-2 text-[18px] font-medium text-[#020202]"
+          >
+            {delivery.mode === 'download' ? 'Download resource' : 'Open resource'}
+          </button>
+        ) : null}
       </form>
     )
   }

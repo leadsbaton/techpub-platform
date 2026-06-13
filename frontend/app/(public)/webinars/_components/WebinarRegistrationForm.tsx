@@ -36,6 +36,24 @@ type DeliveryResponse = {
   openInNewTab?: boolean
 }
 
+type RegistrationResponse = {
+  message?: string
+  delivery?: DeliveryResponse | null
+}
+
+// Safely parse a response body that may not be JSON (e.g. a 502/504 HTML page
+// from the host, or an empty body). Never throws — returns {} when the body
+// isn't valid JSON so the caller can branch on response.ok instead.
+async function parseJsonSafe(response: Response): Promise<RegistrationResponse> {
+  const text = await response.text()
+  if (!text) return {}
+  try {
+    return JSON.parse(text) as RegistrationResponse
+  } catch {
+    return {}
+  }
+}
+
 export function WebinarRegistrationForm({ post }: { post: Post }) {
   const [form, setForm] = useState<FormState>(initialState)
   const [error, setError] = useState<string | null>(null)
@@ -99,7 +117,7 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
           sourceUrl: typeof window !== 'undefined' ? window.location.href : '',
         }),
       })
-      const data = (await response.json()) as { message?: string; delivery?: DeliveryResponse | null }
+      const data = await parseJsonSafe(response)
       if (!response.ok) {
         setError(data.message || 'Unable to save your registration right now.')
         return

@@ -4,7 +4,8 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { jsonWithCors, optionsWithCors } from '@/lib/cors'
 import { sendEmailJsTemplate } from '@/lib/emailjs'
-import { consumeRateLimit } from '@/lib/rateLimit'
+import { consumeRateLimit, getClientIp } from '@/lib/rateLimit'
+import { createOrUpdateSubscriber } from '@/lib/subscribers'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const WINDOW_MS = 15 * 60 * 1000
@@ -56,9 +57,7 @@ type SiteSettingsShape = {
 type NotificationStatus = 'pending' | 'sent' | 'partial' | 'failed' | 'skipped'
 
 function getClientKey(request: NextRequest) {
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded?.split(',')[0]?.trim() || 'unknown'
-  return `webinar-registration:${ip}`
+  return `webinar-registration:${getClientIp(request)}`
 }
 
 function trimValue(value: unknown) {
@@ -213,16 +212,12 @@ export async function POST(request: NextRequest) {
         overrideAccess: true,
       })
     } else {
-      await payload.create({
-        collection: 'subscribers',
-        data: {
-          email,
-          firstName: name.split(' ')[0] || undefined,
-          lastName: name.split(' ').slice(1).join(' ') || undefined,
-          source: 'webinar-registration',
-          status: 'subscribed',
-        },
-        overrideAccess: true,
+      await createOrUpdateSubscriber(payload, {
+        email,
+        firstName: name.split(' ')[0] || undefined,
+        lastName: name.split(' ').slice(1).join(' ') || undefined,
+        source: 'webinar-registration',
+        status: 'subscribed',
       })
     }
   }

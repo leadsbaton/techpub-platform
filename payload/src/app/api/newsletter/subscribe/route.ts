@@ -3,16 +3,15 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import { jsonWithCors, optionsWithCors } from '@/lib/cors'
-import { consumeRateLimit } from '@/lib/rateLimit'
+import { consumeRateLimit, getClientIp } from '@/lib/rateLimit'
+import { createOrUpdateSubscriber } from '@/lib/subscribers'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const WINDOW_MS = 15 * 60 * 1000
 const LIMIT = 5
 
 function getClientKey(request: NextRequest) {
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded?.split(',')[0]?.trim() || 'unknown'
-  return `newsletter:${ip}`
+  return `newsletter:${getClientIp(request)}`
 }
 
 export async function POST(request: NextRequest) {
@@ -101,16 +100,12 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await payload.create({
-    collection: 'subscribers',
-    data: {
-      email,
-      firstName,
-      lastName,
-      source,
-      status: 'subscribed',
-    },
-    overrideAccess: true,
+  await createOrUpdateSubscriber(payload, {
+    email,
+    firstName,
+    lastName,
+    source,
+    status: 'subscribed',
   })
 
   return jsonWithCors(
