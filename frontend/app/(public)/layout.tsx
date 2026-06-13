@@ -3,9 +3,9 @@ import Header from "./_components/Header";
 
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen bg-[var(--page-bg)] text-[color:var(--text-strong)]">
+    <div className="flex min-h-screen flex-col bg-[var(--page-bg)] text-[color:var(--text-strong)]">
       <Header />
-      <main>{children}</main>
+      <main className="flex flex-1 flex-col [&>*]:grow">{children}</main>
       <Footer />
     </div>
   );

@@ -13,11 +13,12 @@ export const metadata: Metadata = {
 export default async function InsightsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; q?: string; category?: string }>
+  searchParams: Promise<{ page?: string; q?: string; category?: string; view?: string }>
 }) {
   const params = await searchParams
   const query = params.q
   const selectedCategory = params.category
+  const viewAll = params.view === 'all'
 
   const [insightsResponse, categories, whitepapers] = await Promise.all([
     getPosts({
@@ -36,7 +37,10 @@ export default async function InsightsPage({
       insights={insightsResponse.docs}
       categories={categories}
       selectedCategory={selectedCategory}
+      viewAll={viewAll}
       whitepapers={whitepapers.docs}
+      currentPage={insightsResponse.page ?? Number(params.page || '1')}
+      hasNextPage={insightsResponse.hasNextPage}
     />
   )
 }

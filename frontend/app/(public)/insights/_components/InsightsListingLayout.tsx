@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { RankedSidebar } from '../../_components/RankedSidebar'
 import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import {
@@ -36,38 +37,6 @@ function CategoryTab({ category }: { category: Category }) {
         {category.name}
       </span>
     </div>
-  )
-}
-
-function SidebarRail({
-  title,
-  items,
-}: {
-  title: React.ReactNode
-  items: Post[]
-}) {
-  return (
-    <aside className="rounded-[18px] border border-[var(--accent-red)] bg-white p-5">
-      <h2 className="headline-font border-b border-[var(--border-subtle)] pb-3 text-[1.15rem] font-extrabold text-[color:var(--text-strong)]">
-        {title}
-      </h2>
-      <div className="mt-2">
-        {items.slice(0, 6).map((item, index) => (
-          <Link
-            key={item.id}
-            href={getPostHref(item)}
-            className="flex gap-4 border-b border-[var(--border-subtle)] py-4 last:border-b-0"
-          >
-            <span className="text-[1.35rem] font-extrabold text-[var(--accent-red)]">
-              {index + 1}.
-            </span>
-            <span className="text-[0.98rem] font-medium leading-6 text-[color:var(--text-soft)]">
-              {item.title}
-            </span>
-          </Link>
-        ))}
-      </div>
-    </aside>
   )
 }
 
@@ -138,7 +107,7 @@ function TopPickFeature({ post }: { post: Post }) {
 function TopPickListItem({ post }: { post: Post }) {
   return (
     <Link href={getPostHref(post)} className="group flex gap-3">
-      <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden">
+      <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden bg-[var(--surface-muted)]">
         <Image
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
@@ -146,11 +115,11 @@ function TopPickListItem({ post }: { post: Post }) {
           className="object-cover transition duration-300 group-hover:scale-[1.02]"
         />
       </div>
-      <div className="pt-1">
-        <p className="text-[0.95rem] text-[color:var(--text-muted)]">
+      <div>
+        <p className="text-[0.82rem] text-[color:var(--text-muted)]">
           {formatShortDate(post.publishedAt)}
         </p>
-        <h4 className="mt-1 headline-font text-[1rem] font-bold leading-[1.2] text-[color:var(--text-strong)]">
+        <h4 className="mt-1 text-[0.92rem] font-semibold leading-[1.3] text-[color:var(--text-strong)]">
           {post.title}
         </h4>
       </div>
@@ -165,17 +134,17 @@ function CategoryHero({
 }) {
   return (
     <div className="relative overflow-hidden rounded-[8px]">
-      <div className="relative aspect-[3.6/0.9] min-h-[140px]">
+      <div className="relative aspect-[4.4/1] max-h-[280px] min-h-[150px]">
         <Image
           src={getImageUrl(category.image)}
           alt={category.name}
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/18" />
-        <div className="headline-font absolute left-8 top-1/2 -translate-y-1/2 text-[2.5rem] font-extrabold uppercase tracking-[0.04em] text-white md:text-[4rem]">
+        <div className="absolute inset-0 bg-black/25" />
+        <h1 className="headline-font absolute inset-0 flex items-center justify-center px-6 text-center text-[2.2rem] font-extrabold uppercase tracking-[0.04em] text-white sm:text-[3rem] md:text-[3.8rem]">
           {category.name}
-        </div>
+        </h1>
       </div>
     </div>
   )
@@ -185,17 +154,17 @@ function CategoryListItem({ post }: { post: Post }) {
   return (
     <Link
       href={getPostHref(post)}
-      className="grid items-start gap-4 border-b border-[var(--border-subtle)] py-6 sm:grid-cols-[1fr_96px]"
+      className="grid items-center gap-5 border-b border-[var(--border-subtle)] py-5 sm:grid-cols-[1fr_120px]"
     >
       <div>
-        <h3 className="text-[0.98rem] font-semibold leading-6 text-[color:var(--text-strong)]">
+        <h3 className="text-[1rem] font-bold leading-[1.4] text-[color:var(--text-strong)]">
           {post.title}
         </h3>
-        <p className="mt-3 text-[0.92rem] text-[color:var(--text-muted)]">
+        <p className="mt-2 text-[0.85rem] text-[color:var(--text-muted)]">
           {formatShortDate(post.publishedAt)}
         </p>
       </div>
-      <div className="relative h-[90px] w-[90px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
+      <div className="relative aspect-square w-[120px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
         <Image
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
@@ -220,20 +189,18 @@ function LandingView({
 
   return (
     <>
-      <section className="bg-[#b30000] py-12 md:py-14">
+      <section className="bg-[#c40000] py-11 md:py-12">
         <div className="site-container">
-          <div className="mb-10 flex items-center gap-4">
+          <div className="mb-9 flex items-center gap-4">
             <div className="h-px flex-1 bg-white/70" />
-            <h1 className="headline-font text-center text-[2rem] font-extrabold uppercase tracking-[0.03em] text-white md:text-[2.35rem]">
+            <h1 className="headline-font text-center text-[1.7rem] font-extrabold uppercase tracking-[0.06em] text-white md:text-[2rem]">
               Just In: Insights
             </h1>
             <div className="h-px flex-1 bg-white/70" />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.46fr_0.54fr]">
-            <div className="rounded-[4px] bg-black px-6 py-6">
-              {justInLead ? <JustInCard post={justInLead} large /> : null}
-            </div>
+            <div>{justInLead ? <JustInCard post={justInLead} large /> : null}</div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               {justInSide.map((post) => (
@@ -246,12 +213,12 @@ function LandingView({
 
       <section className="site-container mt-14 space-y-8 md:mt-16">
         <div className="flex items-center gap-4">
-          <h2 className="headline-font text-[2rem] font-extrabold text-[color:var(--text-strong)]">
+          <h2 className="headline-font text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
             Top Picks
           </h2>
           <div className="h-px flex-1 bg-[var(--border-subtle)]" />
           <Link
-            href="/insights"
+            href="/insights?view=all"
             className="text-[0.95rem] font-semibold text-[color:var(--text-strong)] underline underline-offset-4"
           >
             View all
@@ -268,7 +235,7 @@ function LandingView({
                   <TopPickListItem key={post.id} post={post} />
                 ))}
               </div>
-              <div className="pt-1 text-right">
+              <div className="pt-1 text-center">
                 <Link
                   href={`/insights?category=${category.slug}`}
                   className="text-[0.95rem] font-semibold text-[color:var(--text-muted)] underline underline-offset-4"
@@ -288,40 +255,121 @@ function CategoryView({
   category,
   insights,
   whitepapers,
+  currentPage,
+  hasNextPage,
 }: {
   category: Category
   insights: Post[]
   whitepapers: Post[]
+  currentPage: number
+  hasNextPage: boolean
 }) {
   return (
-    <section className="site-container py-10">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <section className="site-container py-8 sm:py-10">
+      <CategoryHero category={category} />
+
+      <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
-          <CategoryHero category={category} />
-          <div className="mt-6">
+          <div>
             {insights.map((post) => (
               <CategoryListItem key={post.id} post={post} />
             ))}
           </div>
-          <div className="flex justify-center pt-10">
-            <button
-              type="button"
-              className="rounded-[8px] bg-[var(--accent-red)] px-8 py-3 text-sm font-bold text-white"
-            >
-              Load More
-            </button>
-          </div>
+          {hasNextPage ? (
+            <div className="flex justify-center pt-10">
+              <Link
+                href={`/insights?category=${category.slug}&page=${currentPage + 1}`}
+                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+              >
+                Load More
+              </Link>
+            </div>
+          ) : null}
         </div>
 
-        <div className="lg:pt-10">
-          <SidebarRail
-            title={
-              <>
-                <span className="text-[var(--accent-red)]">Most Downloaded</span> White Papers
-              </>
-            }
-            items={whitepapers}
-          />
+        <div>
+          <RankedSidebar accent="Most Downloaded" title="White Papers" items={whitepapers} />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function InsightListRow({ post }: { post: Post }) {
+  const category = getCategoryName(post.primaryCategory)
+  const accent = getCategoryAccent(post.primaryCategory)
+
+  return (
+    <Link
+      href={getPostHref(post)}
+      className="grid items-center gap-5 border-b border-[var(--border-subtle)] py-5 sm:grid-cols-[1fr_120px]"
+    >
+      <div>
+        <span
+          className="text-[0.72rem] font-extrabold uppercase tracking-[0.08em]"
+          style={{ color: accent }}
+        >
+          {category}
+        </span>
+        <h3 className="mt-1.5 text-[1rem] font-bold leading-[1.4] text-[color:var(--text-strong)]">
+          {post.title}
+        </h3>
+        <p className="mt-2 text-[0.85rem] text-[color:var(--text-muted)]">
+          {formatShortDate(post.publishedAt)}
+        </p>
+      </div>
+      <div className="relative aspect-square w-[120px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
+        <Image
+          src={getImageUrl(post.featuredImage)}
+          alt={post.title}
+          fill
+          className="object-cover"
+        />
+      </div>
+    </Link>
+  )
+}
+
+function AllInsightsView({
+  insights,
+  whitepapers,
+  currentPage,
+  hasNextPage,
+}: {
+  insights: Post[]
+  whitepapers: Post[]
+  currentPage: number
+  hasNextPage: boolean
+}) {
+  return (
+    <section className="site-container py-8 sm:py-10">
+      <div className="section-heading">
+        <h1 className="headline-font text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
+          Insights
+        </h1>
+      </div>
+
+      <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div>
+          <div>
+            {insights.map((post) => (
+              <InsightListRow key={post.id} post={post} />
+            ))}
+          </div>
+          {hasNextPage ? (
+            <div className="flex justify-center pt-10">
+              <Link
+                href={`/insights?view=all&page=${currentPage + 1}`}
+                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+              >
+                Load More
+              </Link>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <RankedSidebar accent="Most Downloaded" title="White Papers" items={whitepapers} />
         </div>
       </div>
     </section>
@@ -333,11 +381,17 @@ export function InsightsListingLayout({
   categories,
   whitepapers,
   selectedCategory,
+  viewAll = false,
+  currentPage = 1,
+  hasNextPage = false,
 }: {
   insights: Post[]
   categories: Category[]
   whitepapers: Post[]
   selectedCategory?: string
+  viewAll?: boolean
+  currentPage?: number
+  hasNextPage?: boolean
 }) {
   const activeCategory = selectedCategory
     ? categories.find((item) => item.slug === selectedCategory)
@@ -350,6 +404,15 @@ export function InsightsListingLayout({
           category={activeCategory}
           insights={insights}
           whitepapers={whitepapers}
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+        />
+      ) : viewAll ? (
+        <AllInsightsView
+          insights={insights}
+          whitepapers={whitepapers}
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
         />
       ) : (
         <LandingView insights={insights} categories={categories} />

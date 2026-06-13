@@ -89,20 +89,20 @@ export function WhitepaperListingClient({
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
         {posts.map((post) => (
           <WhitepaperCard key={post.id} post={post} />
         ))}
       </div>
 
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-3 pt-2">
         {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}
         {hasNextPage ? (
           <button
             type="button"
             onClick={loadMore}
             disabled={isPending}
-            className="rounded-full bg-[var(--accent-red)] px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+            className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isPending ? 'Loading...' : 'Load More'}
           </button>
