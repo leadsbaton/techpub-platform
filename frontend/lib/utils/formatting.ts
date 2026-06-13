@@ -58,6 +58,16 @@ export function hasMediaSource(media?: Media | string | null): boolean {
   return Boolean(getMediaUrl(media))
 }
 
+export function getMediaDimensions(
+  media?: Media | string | null,
+): { width: number; height: number } | null {
+  if (media && typeof media === 'object' && media.width && media.height && media.width > 0 && media.height > 0) {
+    return { width: media.width, height: media.height }
+  }
+
+  return null
+}
+
 export function getMediaAspectRatio(media?: Media | string | null, fallback = 16 / 9): number {
   if (media && typeof media === 'object' && media.width && media.height && media.width > 0 && media.height > 0) {
     return media.width / media.height

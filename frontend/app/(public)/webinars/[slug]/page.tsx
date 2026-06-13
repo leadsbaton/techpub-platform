@@ -7,7 +7,7 @@ import { RankedSidebar } from '../../_components/RankedSidebar'
 import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getImageUrl, getMediaAspectRatio, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
+import { getImageUrl, getMediaDimensions, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
@@ -36,52 +36,68 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   const speakers = getWebinarSpeakers(post)
   const moderator = getWebinarModerator(post)
   const agenda = post.webinarRegistration?.agendaPoints || []
-  const heroAspectRatio = getMediaAspectRatio(post.featuredImage, 16 / 7)
-  const secondaryAspectRatio = getMediaAspectRatio(post.webinarSecondaryBanner, 16 / 7)
+  const heroDims = getMediaDimensions(post.featuredImage)
+  const secondaryDims = getMediaDimensions(post.webinarSecondaryBanner)
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
       <article className="site-container py-8 sm:py-10">
         <section className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
-            <div className="relative overflow-hidden">
-              <div
-                className="relative w-full"
-                style={{
-                  aspectRatio: `${heroAspectRatio}`,
-                  minHeight: '180px',
-                }}
-              >
-                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
-                <div className="absolute inset-0 bg-black/20" />
-                {post.webinarRegistration?.eventDateLabel ? (
-                  <div className="ui-font absolute inset-x-0 top-0 bg-black/25 px-4 py-2 text-center text-[10px] uppercase text-white sm:text-[16px]">
-                    {post.webinarRegistration.eventDateLabel}
-                  </div>
-                ) : null}
-                <div className="ui-font absolute inset-x-0 bottom-0 p-4 text-center text-white sm:p-8">
-                  <h1 className="text-[24px] font-medium leading-[1.15] sm:text-[48px]">{post.title}</h1>
+            {/* Top banner: clean image only (no title/timing overlay). Rendered
+                at its natural dimensions so it isn't cropped. */}
+            <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
+              {heroDims ? (
+                <Image
+                  src={getImageUrl(post.featuredImage)}
+                  alt={post.title}
+                  width={heroDims.width}
+                  height={heroDims.height}
+                  sizes="(max-width: 1280px) 100vw, 900px"
+                  priority
+                  className="h-auto w-full"
+                />
+              ) : (
+                <div className="relative aspect-[16/7] w-full" style={{ minHeight: '180px' }}>
+                  <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill priority sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
                 </div>
-              </div>
+              )}
+            </div>
+
+            {/* Title + event timing, shown below the banner instead of over it. */}
+            <div className="space-y-2 text-center">
+              {post.webinarRegistration?.eventDateLabel ? (
+                <p className="ui-font text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent-red)] sm:text-[15px]">
+                  {post.webinarRegistration.eventDateLabel}
+                </p>
+              ) : null}
+              <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[40px]">
+                {post.title}
+              </h1>
             </div>
 
             {post.webinarSecondaryBanner ? (
-              <div className="relative overflow-hidden">
-                <div
-                  className="relative w-full"
-                  style={{
-                    aspectRatio: `${secondaryAspectRatio}`,
-                    minHeight: '180px',
-                  }}
-                >
+              <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
+                {secondaryDims ? (
                   <Image
                     src={getImageUrl(post.webinarSecondaryBanner)}
                     alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
-                    fill
+                    width={secondaryDims.width}
+                    height={secondaryDims.height}
                     sizes="(max-width: 1280px) 100vw, 900px"
-                    className="object-cover"
+                    className="h-auto w-full"
                   />
-                </div>
+                ) : (
+                  <div className="relative aspect-[16/7] w-full" style={{ minHeight: '180px' }}>
+                    <Image
+                      src={getImageUrl(post.webinarSecondaryBanner)}
+                      alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
+                      fill
+                      sizes="(max-width: 1280px) 100vw, 900px"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
               </div>
             ) : null}
 
@@ -117,21 +133,25 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             </div>
 
             {(speakers.length || moderator) ? (
-              <section className="grid gap-8 sm:grid-cols-[1fr_auto]">
+              <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:gap-8">
                 {speakers.length ? (
                   <div>
-                    <h2 className="ui-font mb-4 text-[16px] font-bold uppercase text-[#5a5a8d]">Speakers</h2>
-                    <div className="grid gap-5 sm:grid-cols-4">
+                    <h2 className="ui-font mb-5 text-center text-[15px] font-bold uppercase tracking-[0.04em] text-[#5a5a8d] sm:text-left">
+                      Speakers
+                    </h2>
+                    <div className="grid gap-7 sm:grid-cols-4 sm:gap-5">
                       {speakers.map((speaker) => (
-                        <div key={speaker.id} className="ui-font text-center">
-                          <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
+                        <div key={speaker.id} className="ui-font mx-auto max-w-[260px] text-center">
+                          <div className="relative mx-auto h-[92px] w-[92px] overflow-hidden rounded-full bg-[#ddd]">
                             {speaker.photo ? (
-                              <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill sizes="82px" className="object-cover" />
+                              <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill sizes="92px" className="object-cover" />
                             ) : null}
                           </div>
-                          <div className="mt-2 text-[12px] font-medium text-[#111]">{speaker.name}</div>
-                          <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{speaker.role}</div>
-                          <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{speaker.secondaryLine}</div>
+                          <div className="mt-3 text-[14px] font-semibold text-[#111]">{speaker.name}</div>
+                          {speaker.role ? <div className="mt-0.5 text-[12px] font-medium text-[#4d4d4d]">{speaker.role}</div> : null}
+                          {speaker.secondaryLine ? (
+                            <div className="mt-1 line-clamp-3 text-[12px] leading-[1.4] text-[#6a6a6a]">{speaker.secondaryLine}</div>
+                          ) : null}
                         </div>
                       ))}
                     </div>
@@ -140,16 +160,20 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
                 {moderator ? (
                   <div>
-                    <h2 className="ui-font mb-4 text-[16px] font-bold uppercase text-[#8a8ab5]">Moderator</h2>
-                    <div className="ui-font text-center">
-                      <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
+                    <h2 className="ui-font mb-5 text-center text-[15px] font-bold uppercase tracking-[0.04em] text-[#8a8ab5] sm:text-left">
+                      Moderator
+                    </h2>
+                    <div className="ui-font mx-auto max-w-[260px] text-center sm:w-[180px]">
+                      <div className="relative mx-auto h-[92px] w-[92px] overflow-hidden rounded-full bg-[#ddd]">
                         {moderator.photo ? (
-                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill sizes="82px" className="object-cover" />
+                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill sizes="92px" className="object-cover" />
                         ) : null}
                       </div>
-                      <div className="mt-2 text-[12px] font-medium text-[#111]">{moderator.name}</div>
-                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{moderator.role}</div>
-                      <div className="text-[10px] leading-[1.2] text-[#4d4d4d]">{moderator.secondaryLine}</div>
+                      <div className="mt-3 text-[14px] font-semibold text-[#111]">{moderator.name}</div>
+                      {moderator.role ? <div className="mt-0.5 text-[12px] font-medium text-[#4d4d4d]">{moderator.role}</div> : null}
+                      {moderator.secondaryLine ? (
+                        <div className="mt-1 line-clamp-3 text-[12px] leading-[1.4] text-[#6a6a6a]">{moderator.secondaryLine}</div>
+                      ) : null}
                     </div>
                   </div>
                 ) : null}

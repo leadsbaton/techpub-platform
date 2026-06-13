@@ -20,23 +20,9 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'type', 'primaryCategory', 'status', 'publishedAt'],
-    livePreview: {
-      url: ({ data }) => {
-        const slug = typeof data.slug === 'string' ? data.slug : null
-        const type = typeof data.type === 'string' ? data.type : null
-        const title = typeof data.title === 'string' ? data.title : ''
-        const excerpt = typeof data.excerpt === 'string' ? data.excerpt : ''
-        const status = typeof data.status === 'string' ? data.status : 'draft'
-        const route = `${frontendURL}/preview/post`
-        const params = new URLSearchParams()
-        if (slug) params.set('slug', slug)
-        if (type) params.set('type', type)
-        if (title) params.set('title', title)
-        if (excerpt) params.set('excerpt', excerpt)
-        if (status) params.set('status', status)
-        return params.toString() ? `${route}?${params.toString()}` : route
-      },
-    },
+    // "View on site" link to the published page. The in-admin live-preview
+    // iframe and the dedicated Preview tab were removed to keep the editor focused
+    // on entering content rather than previewing it.
     preview: (doc) => {
       const path = resolvePostPath({
         slug: typeof doc.slug === 'string' ? doc.slug : null,
@@ -101,18 +87,6 @@ export const Posts: CollectionConfig = {
               type: 'text',
               admin: {
                 hidden: true,
-              },
-            },
-            {
-              name: 'postTypeGuide',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostAuthoringGuide',
-                    exportName: 'PostAuthoringGuide',
-                  },
-                },
               },
             },
             {
@@ -703,47 +677,6 @@ export const Posts: CollectionConfig = {
               hasMany: true,
               admin: {
                 description: 'Optional related content suggestions shown near this post.',
-              },
-            },
-          ],
-        },
-        {
-          label: 'Preview',
-          fields: [
-            {
-              name: 'postTypeGuidePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostAuthoringGuide',
-                    exportName: 'PostAuthoringGuide',
-                  },
-                },
-              },
-            },
-            {
-              name: 'postTypeTemplatePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostTypeTemplatePreview',
-                    exportName: 'PostTypeTemplatePreview',
-                  },
-                },
-              },
-            },
-            {
-              name: 'postLivePreview',
-              type: 'ui',
-              admin: {
-                components: {
-                  Field: {
-                    path: './components/admin/PostLivePreviewFrame',
-                    exportName: 'PostLivePreviewFrame',
-                  },
-                },
               },
             },
           ],
