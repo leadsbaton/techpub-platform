@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
-import { isAdmin } from '../access/cmsAccess'
+import { isAdmin, isAdminUser } from '../access/cmsAccess'
 import { linkField } from '../fields/link'
 import { seoFields } from '../fields/seo'
 
@@ -50,6 +50,11 @@ export const SiteSettings: GlobalConfig = {
     {
       name: 'leadNotificationEmails',
       type: 'array',
+      // Internal admin recipient addresses — the global is publicly readable,
+      // so restrict this field to admins to avoid leaking these addresses.
+      access: {
+        read: ({ req }) => isAdminUser(req.user),
+      },
       admin: {
         description:
           'Admin recipients for white paper and webinar form submissions. EmailJS credentials are read from environment variables.',
@@ -235,6 +240,11 @@ export const SiteSettings: GlobalConfig = {
     {
       name: 'systemIntegrations',
       type: 'group',
+      // Internal infrastructure notes (env var names, provider details) —
+      // not meant for public consumption on a publicly-readable global.
+      access: {
+        read: ({ req }) => isAdminUser(req.user),
+      },
       admin: {
         description:
           'Reference-only labels for environment-based integrations used by the frontend and API routes.',

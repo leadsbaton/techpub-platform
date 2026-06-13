@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { canBootstrapFirstAdmin, isAdmin } from '../access/cmsAccess'
+import { canBootstrapFirstAdmin, canSetUserRole, isAdmin } from '../access/cmsAccess'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -13,6 +13,11 @@ export const Users: CollectionConfig = {
       secure: process.env.NODE_ENV === 'production',
     },
     useSessions: true,
+    // Throttle brute-force password guessing on /api/users/login. After
+    // `maxLoginAttempts` consecutive failures Payload locks the account for
+    // `lockTime` (ms) and tracks loginAttempts/lockUntil automatically.
+    maxLoginAttempts: 5,
+    lockTime: 15 * 60 * 1000, // 15 minutes
   },
   access: {
     create: canBootstrapFirstAdmin,
@@ -35,6 +40,13 @@ export const Users: CollectionConfig = {
         { label: 'Editor', value: 'editor' },
       ],
       required: true,
+      // Only admins may set or change a user's role (with a bootstrap
+      // exception for the first user). This prevents a non-admin editor
+      // from self-promoting to admin via create/update.
+      access: {
+        create: canSetUserRole,
+        update: canSetUserRole,
+      },
     },
   ],
   hooks: {

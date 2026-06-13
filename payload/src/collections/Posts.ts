@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminOrPublished } from '../access/cmsAccess'
+import { isAdmin, isAdminOrPublished, isAuthenticatedField } from '../access/cmsAccess'
 import { linkField } from '../fields/link'
 import { seoFields } from '../fields/seo'
 import { slugHook } from '../fields/slug'
@@ -237,6 +237,13 @@ export const Posts: CollectionConfig = {
                   name: 'downloadAsset',
                   type: 'relationship',
                   relationTo: 'media',
+                  // Gated asset: keep the download target out of public API
+                  // responses so it can't be scraped before completing the
+                  // lead-capture form. The whitepaper-leads POST route reads it
+                  // with overrideAccess and returns the URL after submission.
+                  access: {
+                    read: isAuthenticatedField,
+                  },
                   validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
                     if (siblingData.type === 'whitepaper' && !value && !siblingData.externalUrl) {
                       return 'Whitepaper posts need either a download asset or an external URL.'
@@ -456,6 +463,13 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'deliveryUrl',
                   type: 'text',
+                  // Gated delivery target (highest priority in resolveDelivery).
+                  // Keep it out of public API responses so it can't be scraped
+                  // before the lead form is submitted; the whitepaper-leads POST
+                  // route reads it with overrideAccess after capturing the lead.
+                  access: {
+                    read: isAuthenticatedField,
+                  },
                   admin: {
                     description:
                       'Optional override destination after form submission. If empty, the white paper external URL or uploaded file is used.',
@@ -519,6 +533,13 @@ export const Posts: CollectionConfig = {
                     {
                       name: 'deliveryUrl',
                       type: 'text',
+                      // Gated delivery target (highest priority in resolveDelivery).
+                      // Hidden from public API responses; the webinar-registrations
+                      // POST route reads it with overrideAccess after the lead is
+                      // captured.
+                      access: {
+                        read: isAuthenticatedField,
+                      },
                       admin: {
                         width: '45%',
                         description:
@@ -690,7 +711,7 @@ export const Posts: CollectionConfig = {
           label: 'Preview',
           fields: [
             {
-              name: 'postTypeGuide',
+              name: 'postTypeGuidePreview',
               type: 'ui',
               admin: {
                 components: {
@@ -760,6 +781,38 @@ export const Posts: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeValidate: [
+      // Resolve `type` from the selected content type BEFORE field validation
+      // runs. The field-level validators (downloadAsset, videoUrl, externalUrl,
+      // etc.) read `siblingData.type`; without this, `type` is only set in
+      // beforeChange (after validation), so type-conditional required rules
+      // silently pass on create.
+      async ({ data, req }) => {
+        if (!data) return data
+
+        const nextData = data as PostFormData
+        const contentTypeValue = nextData.contentType
+        const contentTypeId =
+          typeof contentTypeValue === 'string'
+            ? contentTypeValue
+            : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
+              ? contentTypeValue.id
+              : null
+
+        if (contentTypeId) {
+          const contentTypeDoc = await req.payload.findByID({
+            collection: 'content-types',
+            id: contentTypeId,
+            depth: 0,
+            overrideAccess: true,
+          })
+
+          nextData.type = contentTypeDoc.key as PostTypeKey
+        }
+
+        return nextData
+      },
+    ],
     afterRead: [
       async ({ doc }) => {
         if (doc?.type === 'webinar' && (!Array.isArray(doc.webinarSpeakerProfiles) || doc.webinarSpeakerProfiles.length === 0)) {
@@ -784,39 +837,51 @@ export const Posts: CollectionConfig = {
           nextData.updatedBy = req.user.id
         }
 
-        const contentTypeValue = nextData.contentType
-        const contentTypeId =
-          typeof contentTypeValue === 'string'
-            ? contentTypeValue
-            : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
-              ? contentTypeValue.id
-              : null
+        // `type` is already resolved from `contentType` in beforeValidate (which
+        // runs first, so the conditional validators can see it). Only re-resolve
+        // here as a defensive fallback if it's somehow missing, to avoid a second
+        // findByID round-trip on every save.
+        if (!nextData.type) {
+          const contentTypeValue = nextData.contentType
+          const contentTypeId =
+            typeof contentTypeValue === 'string'
+              ? contentTypeValue
+              : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
+                ? contentTypeValue.id
+                : null
 
-        if (contentTypeId) {
-          const contentTypeDoc = await req.payload.findByID({
-            collection: 'content-types',
-            id: contentTypeId,
-            depth: 0,
-            overrideAccess: true,
-          })
+          if (contentTypeId) {
+            const contentTypeDoc = await req.payload.findByID({
+              collection: 'content-types',
+              id: contentTypeId,
+              depth: 0,
+              overrideAccess: true,
+            })
 
-          nextData.type = contentTypeDoc.key as PostTypeKey
+            nextData.type = contentTypeDoc.key as PostTypeKey
+          }
         }
 
         if (nextData.type === 'webinar') {
-          const selectedProfiles = Array.isArray(nextData.webinarSpeakerProfiles)
-            ? nextData.webinarSpeakerProfiles
-                .map((item) => {
-                  if (typeof item === 'string') return item
-                  if (item && typeof item === 'object' && 'id' in item) {
-                    return typeof item.id === 'string' ? item.id : null
-                  }
-                  return null
-                })
-                .filter((item): item is string => Boolean(item))
-            : []
+          // Mirror the Speakers selection into `authors` so the two stay
+          // consistent. Only act when this write actually includes the field
+          // (undefined = field omitted in a partial update → leave authors
+          // alone); an explicit empty array clears authors too, so reducing the
+          // speaker list to none can't leave a stale `authors` behind (which the
+          // afterRead back-fill would otherwise resurrect).
+          if (nextData.webinarSpeakerProfiles !== undefined) {
+            const selectedProfiles = Array.isArray(nextData.webinarSpeakerProfiles)
+              ? nextData.webinarSpeakerProfiles
+                  .map((item) => {
+                    if (typeof item === 'string') return item
+                    if (item && typeof item === 'object' && 'id' in item) {
+                      return typeof item.id === 'string' ? item.id : null
+                    }
+                    return null
+                  })
+                  .filter((item): item is string => Boolean(item))
+              : []
 
-          if (selectedProfiles.length) {
             nextData.authors = selectedProfiles
           }
         } else {
@@ -828,17 +893,22 @@ export const Posts: CollectionConfig = {
         }
 
         if (nextData.slug && typeof nextData.slug === 'string') {
-          const existing = await req.payload.find({
+          const baseSlug = nextData.slug
+
+          // Gather any existing posts whose slug is `baseSlug` or `baseSlug-N`
+          // (excluding this doc on update). `like` is a substring match, so we
+          // filter precisely in code afterwards.
+          const candidates = await req.payload.find({
             collection: 'posts',
             depth: 0,
-            limit: 1,
+            limit: 200,
             overrideAccess: true,
             pagination: false,
             where: {
               and: [
                 {
                   slug: {
-                    equals: nextData.slug,
+                    like: baseSlug,
                   },
                 },
                 ...(originalDoc?.id
@@ -854,8 +924,22 @@ export const Posts: CollectionConfig = {
             },
           })
 
-          if (existing.docs.length > 0) {
-            nextData.slug = `${nextData.slug}-${Date.now().toString().slice(-6)}`
+          const taken = new Set(
+            candidates.docs
+              .map((docItem) => (docItem as { slug?: string }).slug)
+              .filter((value): value is string => typeof value === 'string'),
+          )
+
+          // Deterministic: keep baseSlug if free, otherwise append the smallest
+          // available -N suffix (-2, -3, ...). Same input always yields the same
+          // result. The DB `unique` index remains the backstop for the rare
+          // concurrent-write race.
+          if (taken.has(baseSlug)) {
+            let suffix = 2
+            while (taken.has(`${baseSlug}-${suffix}`)) {
+              suffix += 1
+            }
+            nextData.slug = `${baseSlug}-${suffix}`
           }
         }
 

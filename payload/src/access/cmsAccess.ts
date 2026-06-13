@@ -1,4 +1,4 @@
-import type { Access, PayloadRequest } from 'payload'
+import type { Access, FieldAccess, PayloadRequest } from 'payload'
 
 type CMSUser = {
   id?: number | string
@@ -15,6 +15,12 @@ export function isAdminUser(user: CMSUser): boolean {
 
 export const isAdmin: Access = ({ req }) => isAdminUser(getUser(req))
 
+// Field-level read access: only authenticated CMS users may read the field.
+// Used to keep gated delivery assets (e.g. the whitepaper download) out of
+// public API responses. The gated POST routes use `overrideAccess: true`, so
+// they can still resolve the asset after a lead is captured.
+export const isAuthenticatedField: FieldAccess = ({ req }) => Boolean(getUser(req))
+
 export const isAdminOrPublished: Access = ({ req }) => {
   if (isAdminUser(getUser(req))) {
     return true
@@ -27,11 +33,7 @@ export const isAdminOrPublished: Access = ({ req }) => {
   }
 }
 
-export const canBootstrapFirstAdmin: Access = async ({ req }) => {
-  if (isAdminUser(getUser(req))) {
-    return true
-  }
-
+async function noUsersExist(req: PayloadRequest): Promise<boolean> {
   const existingUsers = await req.payload.find({
     collection: 'users',
     depth: 0,
@@ -41,4 +43,23 @@ export const canBootstrapFirstAdmin: Access = async ({ req }) => {
   })
 
   return existingUsers.docs.length === 0
+}
+
+export const canBootstrapFirstAdmin: Access = async ({ req }) => {
+  if (isAdminUser(getUser(req))) {
+    return true
+  }
+
+  return noUsersExist(req)
+}
+
+// Field-level access for the `role` field: only admins may set/change it,
+// except during first-admin bootstrap (no users exist yet) so the very first
+// user can be created as an admin.
+export const canSetUserRole: FieldAccess = async ({ req }) => {
+  if (isAdminUser(getUser(req))) {
+    return true
+  }
+
+  return noUsersExist(req)
 }

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin } from '../access/cmsAccess'
+import { isAdmin, isAdminUser } from '../access/cmsAccess'
 import { seoFields } from '../fields/seo'
 import { slugHook } from '../fields/slug'
 
@@ -48,6 +48,11 @@ export const Authors: CollectionConfig = {
     {
       name: 'email',
       type: 'email',
+      // PII: the Authors collection is publicly readable, so restrict the
+      // email field to admins to avoid leaking author addresses via the API.
+      access: {
+        read: ({ req }) => isAdminUser(req.user),
+      },
     },
     {
       name: 'linkedUser',

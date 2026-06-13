@@ -1,5 +1,7 @@
 import type { CollectionConfig, CollectionSlug } from 'payload'
 
+import { isAdmin } from '../access/cmsAccess'
+
 export const Insights: CollectionConfig = {
   slug: 'insights',
   admin: {
@@ -8,6 +10,11 @@ export const Insights: CollectionConfig = {
   },
   access: {
     read: () => true, // Public read access
+    // Without these, Payload defaults writes to "any authenticated user",
+    // which would let a non-admin editor create/edit/delete Insights.
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   fields: [
     {

@@ -20,15 +20,26 @@ import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
-const payloadURL = process.env.PAYLOAD_PUBLIC_URL || `http://localhost:${process.env.PORT || '5000'}`
-const localhostOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  `http://localhost:${process.env.PORT || '5000'}`,
-  `http://127.0.0.1:${process.env.PORT || '5000'}`,
-]
-const allowedOrigins = Array.from(new Set([frontendURL, payloadURL, ...localhostOrigins]))
+const isProduction = process.env.NODE_ENV === 'production'
+const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (isProduction ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
+// In production, only use an explicitly configured public URL — never fall back
+// to localhost (which would otherwise re-enter the CORS/CSRF allow-list below).
+const payloadURL =
+  process.env.PAYLOAD_PUBLIC_URL || (isProduction ? '' : `http://localhost:${process.env.PORT || '5000'}`)
+// Only trust localhost/loopback origins outside production. In production these
+// must not be in the CORS/CSRF allow-list, or a malicious app on the same host
+// as a victim could be treated as a trusted origin against the admin session.
+const localhostOrigins = isProduction
+  ? []
+  : [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      `http://localhost:${process.env.PORT || '5000'}`,
+      `http://127.0.0.1:${process.env.PORT || '5000'}`,
+    ]
+const allowedOrigins = Array.from(
+  new Set([frontendURL, payloadURL, ...localhostOrigins].filter(Boolean)),
+)
 
 export default buildConfig({
   admin: {
