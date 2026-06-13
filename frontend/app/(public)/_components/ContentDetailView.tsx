@@ -95,8 +95,8 @@ function InsightLayout({ post, contentTypes, railItems }: { post: Post; contentT
         <MetaStrip post={post} />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
-        <div className="space-y-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
+        <div className="min-w-0 space-y-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-[32px]">
             <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 760px" className="object-cover" />
           </div>
@@ -131,7 +131,7 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
         </h1>
       </div>
 
-      <section className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)_360px] lg:items-start">
+      <section className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)_360px] lg:items-start">
         <div className="rounded-[28px] bg-white p-5 shadow-[var(--shadow-soft)]">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[var(--surface-muted)]">
             <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 280px" className="object-cover" />
@@ -148,7 +148,7 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
           ) : null}
         </div>
 
-        <div className="space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
+        <div className="min-w-0 space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
           <MetaStrip post={post} />
           <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
           <div className="prose max-w-none">
@@ -212,7 +212,7 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
       </div>
 
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
-        <div className="space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
+        <div className="min-w-0 space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
           <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">

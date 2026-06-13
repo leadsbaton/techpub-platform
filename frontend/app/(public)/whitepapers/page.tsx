@@ -68,7 +68,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
     <section className="ui-font space-y-6">
       <div className="flex items-center gap-4 sm:gap-6">
         <div className="double-rule" />
-        <h2 className="shrink-0 text-center text-[24px] font-medium uppercase leading-[1.2] text-[#020202] sm:text-[36px]">
+        <h2 className="min-w-0 text-center text-[24px] font-medium uppercase leading-[1.2] text-[#020202] sm:text-[36px]">
           Trending Downloads
         </h2>
         <div className="double-rule" />

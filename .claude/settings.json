@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(foreach\\($p in 3000,3001,5000\\){ try { $r=Invoke-WebRequest \"http://localhost:$\\($p\\)\" -UseBasicParsing -TimeoutSec 6; \"port $\\($p\\): $\\($r.StatusCode\\)\" } catch { \"port $\\($p\\): down\" } })",
+      "Bash(ls \"$HOME/AppData/Local/ms-playwright\" 2>/dev/null | head; echo \"---\"; ls /d/tuchmath/techpub-platform/techpub-platform/payload/node_modules/.cache/ms-playwright 2>/dev/null | head)",
+      "Read(//c/Users/biswa/AppData/Local/**)"
+    ]
+  }
+}

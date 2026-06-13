@@ -42,8 +42,8 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
       <article className="site-container py-8 sm:py-10">
-        <section className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="space-y-8">
+        <section className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-w-0 space-y-8">
             <div className="relative overflow-hidden">
               <div
                 className="relative w-full"

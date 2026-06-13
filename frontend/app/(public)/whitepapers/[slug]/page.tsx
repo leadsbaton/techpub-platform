@@ -56,8 +56,8 @@ export default async function WhitepaperDetailPage({
   return (
     <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
       <article className='site-container py-8 sm:py-10'>
-        <section className='grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
-          <div className='flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-9'>
+        <section className='grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
+          <div className='flex min-w-0 flex-col gap-8 sm:flex-row sm:items-start sm:gap-9'>
             {/* Downloadable content — cover + its download button, kept together
                 on the left so it's clear what the button delivers. */}
             <div className='mx-auto w-full max-w-[200px] shrink-0 sm:mx-0 sm:w-[190px]'>

@@ -44,8 +44,8 @@ export default async function InsightDetailPage({
 
   return (
     <article className="site-container py-10">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <div>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-w-0">
           <div className="relative aspect-[3.7/1] overflow-hidden rounded-[8px]">
             <Image
               src={getImageUrl(post.featuredImage)}
