@@ -73,10 +73,9 @@ function resolveDelivery(post: WebinarPost) {
     trimValue(post.externalUrl) ||
     trimValue(post.videoUrl)
 
-  if (!rawTarget) {
-    return null
-  }
-
+  // `url` may be an empty string when the webinar only collects registrations
+  // (no replay/redirect link configured). The frontend treats an empty url as
+  // "no redirect" and just shows the success message.
   return {
     mode,
     url: rawTarget,
@@ -153,13 +152,36 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  // Delivery is optional: a webinar can simply collect registrations without a
+  // replay/redirect link, so `delivery` may be null.
   const delivery = resolveDelivery(post)
 
-  if (!delivery) {
+  // One registration per email per webinar. The same email may register for
+  // OTHER webinars, but not for this same one a second time.
+  const existingRegistration = await payload.find({
+    collection: 'submissions',
+    depth: 0,
+    limit: 1,
+    overrideAccess: true,
+    pagination: false,
+    where: {
+      and: [
+        { submissionType: { equals: 'webinar' } },
+        { post: { equals: post.id } },
+        { email: { equals: email } },
+      ],
+    },
+  })
+
+  if (existingRegistration.docs[0]) {
     return jsonWithCors(
       request,
-      { message: 'This webinar is missing a delivery target in the CMS.' },
-      { status: 422 },
+      {
+        message: 'This email is already registered for this webinar.',
+        delivery,
+        alreadyRegistered: true,
+      },
+      { status: 200 },
     )
   }
 

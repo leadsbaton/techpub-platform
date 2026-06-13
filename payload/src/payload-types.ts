@@ -379,11 +379,11 @@ export interface Post {
    */
   downloadAsset?: (string | null) | Media;
   /**
-   * Optional event stream, replay, or registration video URL for webinar pages.
+   * Optional. Video/replay/registration link opened after someone registers. Leave empty to just collect registrations.
    */
   videoUrl?: string | null;
   /**
-   * Paste any URL to redirect users to after they submit the form (e.g. a hosted PDF or landing page). For white papers, use this instead of uploading a PDF.
+   * Optional link opened after the form is submitted. White papers: use this instead of uploading a PDF. Webinars: optional replay/registration link.
    */
   externalUrl?: string | null;
   /**
@@ -439,18 +439,10 @@ export interface Post {
     newsletterLabel?: string | null;
     consentLabel?: string | null;
     successMessage?: string | null;
-    eventDateLabel?: string | null;
-    sponsor?: string | null;
-    eventSummary?: string | null;
     /**
-     * Bullet list shown below the webinar intro text.
+     * Optional date/time shown on webinar listing cards (e.g. "WED, DEC 10 — 11 AM PT"). Not shown on the detail page.
      */
-    agendaPoints?:
-      | {
-          point: string;
-          id?: string | null;
-        }[]
-      | null;
+    eventDateLabel?: string | null;
   };
   tags?: (string | Tag)[] | null;
   /**
@@ -906,14 +898,6 @@ export interface PostsSelect<T extends boolean = true> {
         consentLabel?: T;
         successMessage?: T;
         eventDateLabel?: T;
-        sponsor?: T;
-        eventSummary?: T;
-        agendaPoints?:
-          | T
-          | {
-              point?: T;
-              id?: T;
-            };
       };
   tags?: T;
   relatedPosts?: T;

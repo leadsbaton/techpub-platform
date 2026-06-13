@@ -57,41 +57,48 @@ export default async function WhitepaperDetailPage({
     <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
       <article className='site-container py-8 sm:py-10'>
         <section className='grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
-          {/* Header: cover image + (title / description / download), vertically
-              centered beside the image so a short intro doesn't leave an empty
-              column. The full article body renders at full width below. */}
-          <div className='ui-font min-w-0 space-y-7'>
-            <div className='grid grid-cols-1 gap-x-9 gap-y-5 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-center'>
-              <div className='mx-auto w-full max-w-[240px] sm:mx-0 sm:max-w-none'>
-                <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
-                  <Image
-                    src={getImageUrl(post.featuredImage)}
-                    alt={post.title}
-                    fill
-                    sizes='(max-width: 640px) 240px, 220px'
-                    className='object-cover'
-                  />
-                </div>
-              </div>
+          {/* Title at top; cover image + download button floated left so the body
+              content fills the row beside AND below it; a centered text CTA closes
+              the article. Mobile flows as: title -> image -> button -> content -> CTA. */}
+          <div className='ui-font min-w-0'>
+            <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
+              {post.title}
+            </h1>
 
-              <div className='min-w-0 space-y-4'>
-                <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
-                  {post.title}
-                </h1>
-                <Link
-                  href={`/whitepapers/${post.slug}/access`}
-                  className='flex w-full items-center justify-center bg-[var(--accent-red)] px-8 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)] sm:inline-flex sm:w-auto'
-                >
-                  {actionLabel}
-                </Link>
+            <div className='mx-auto mt-5 w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:mt-6 sm:w-[230px]'>
+              <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
+                <Image
+                  src={getImageUrl(post.featuredImage)}
+                  alt={post.title}
+                  fill
+                  sizes='(max-width: 640px) 240px, 230px'
+                  className='object-cover'
+                />
               </div>
+              <Link
+                href={`/whitepapers/${post.slug}/access`}
+                className='mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-6 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)]'
+              >
+                {actionLabel}
+              </Link>
             </div>
 
             {post.content ? (
-              <div className='prose max-w-none break-words'>
+              <div className='prose mt-5 max-w-none break-words sm:mt-6'>
                 <RichTextRenderer content={post.content} />
               </div>
             ) : null}
+
+            <div className='clear-both' />
+
+            <div className='mt-8 flex justify-center'>
+              <Link
+                href={`/whitepapers/${post.slug}/access`}
+                className='inline-flex text-[18px] font-semibold uppercase tracking-[0.02em] text-[var(--accent-red)] transition hover:underline'
+              >
+                {actionLabel}
+              </Link>
+            </div>
           </div>
 
           <div className='space-y-6 xl:sticky xl:top-28 xl:self-start'>

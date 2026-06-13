@@ -238,16 +238,9 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'videoUrl',
                   type: 'text',
-                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (siblingData.type === 'webinar' && !value && !siblingData.externalUrl) {
-                      return 'Webinar posts need either a video URL or an external URL.'
-                    }
-
-                    return true
-                  },
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description: 'Optional event stream, replay, or registration video URL for webinar pages.',
+                    description: 'Optional. Video/replay/registration link opened after someone registers. Leave empty to just collect registrations.',
                     width: '50%',
                   },
                 },
@@ -259,15 +252,11 @@ export const Posts: CollectionConfig = {
                       return 'Whitepaper posts need either an external URL or a download asset.'
                     }
 
-                    if (siblingData.type === 'webinar' && !value && !siblingData.videoUrl) {
-                      return 'Webinar posts need either an external URL or a video URL.'
-                    }
-
                     return true
                   },
                   admin: {
                     description:
-                      'Paste any URL to redirect users to after they submit the form (e.g. a hosted PDF or landing page). For white papers, use this instead of uploading a PDF.',
+                      'Optional link opened after the form is submitted. White papers: use this instead of uploading a PDF. Webinars: optional replay/registration link.',
                     width: '50%',
                   },
                 },
@@ -562,37 +551,10 @@ export const Posts: CollectionConfig = {
                     {
                       name: 'eventDateLabel',
                       type: 'text',
-                      defaultValue: 'WEDNESDAY, DECEMBER 10 - 11 AM PT, 2 PM ET',
-                      admin: { width: '50%' },
-                    },
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'sponsor',
-                      type: 'text',
-                      admin: { width: '50%' },
-                    },
-                    {
-                      name: 'eventSummary',
-                      type: 'textarea',
-                      admin: { width: '50%' },
-                    },
-                  ],
-                },
-                {
-                  name: 'agendaPoints',
-                  type: 'array',
-                  admin: {
-                    description: 'Bullet list shown below the webinar intro text.',
-                  },
-                  fields: [
-                    {
-                      name: 'point',
-                      type: 'text',
-                      required: true,
+                      admin: {
+                        width: '50%',
+                        description: 'Optional date/time shown on webinar listing cards (e.g. "WED, DEC 10 — 11 AM PT"). Not shown on the detail page.',
+                      },
                     },
                   ],
                 },

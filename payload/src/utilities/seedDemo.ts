@@ -962,16 +962,6 @@ export async function seedDemoContent(payload: Payload) {
       webinarRegistration: {
         enabled: true,
         ctaLabel: 'Register now',
-        eventDateLabel: 'WEDNESDAY, DECEMBER 10 - 11 AM PT, 2 PM ET',
-        sponsor: 'Sponsored by: Couchbase, CData and Glean',
-        eventSummary:
-          'AI can enable organizations to make more informed decisions and optimize operational efficiency, but many enterprises must connect modern intelligence with long-standing systems and workflows first.',
-        agendaPoints: [
-          { point: 'How to integrate AI into legacy systems without costly overhauls' },
-          { point: 'Where AI delivers the greatest impact in day-to-day workflow' },
-          { point: 'The biggest pitfalls organizations encounter during adoption' },
-          { point: 'Key trends shaping the next wave of enterprise AI' },
-        ],
       },
       content: richTextFromParagraphs([
         'Roundtable sessions are useful for surfacing how workflow automation changes approval paths, reporting expectations, and ownership models.',
@@ -996,16 +986,6 @@ export async function seedDemoContent(payload: Payload) {
       webinarRegistration: {
         enabled: true,
         ctaLabel: 'Register now',
-        eventDateLabel: 'WEDNESDAY, DECEMBER 10 - 11 AM PT, 2 PM ET',
-        sponsor: 'Sponsored by: Couchbase, CData and Glean',
-        eventSummary:
-          'Hybrid solutions blending cloud and on-premises systems are gaining momentum. This session focuses on integrating AI with long-established systems and workflows in a responsible, high-impact way.',
-        agendaPoints: [
-          { point: 'How to connect AI to legacy systems without expensive rewrites' },
-          { point: 'What teams should prioritize in workflow AI adoption' },
-          { point: 'Common pitfalls and governance gaps during rollout' },
-          { point: 'How enterprise AI programs are evolving for 2026' },
-        ],
       },
       content: richTextFromParagraphs([
         'Modern AI initiatives succeed when they are connected to real operational systems instead of living in isolated demos.',
@@ -1029,8 +1009,6 @@ export async function seedDemoContent(payload: Payload) {
       webinarRegistration: {
         enabled: true,
         ctaLabel: 'Register now',
-        eventDateLabel: 'THURSDAY, DECEMBER 4 - 11:00 AM PT, 2:00 PM ET',
-        sponsor: 'By Oracle',
       },
       content: richTextFromParagraphs([
         'Architects entering 2026 are balancing platform modernization, lineage, governance, and cost expectations at the same time.',
@@ -1054,8 +1032,6 @@ export async function seedDemoContent(payload: Payload) {
       webinarRegistration: {
         enabled: true,
         ctaLabel: 'Register now',
-        eventDateLabel: 'WEDNESDAY, JULY 3 - 11 AM PT, 2 PM ET',
-        sponsor: 'Sponsored by: Couchbase, CData and Glean',
       },
       content: richTextFromParagraphs([
         'Trustworthy AI requires more than model accuracy. It also needs explainability, interpretability, and governance patterns teams can operationalize.',
@@ -1079,8 +1055,6 @@ export async function seedDemoContent(payload: Payload) {
       webinarRegistration: {
         enabled: true,
         ctaLabel: 'Register now',
-        eventDateLabel: 'TUESDAY, JANUARY 14 - 11 AM PT, 2 PM ET',
-        sponsor: 'By Oracle',
       },
       content: richTextFromParagraphs([
         'Automation is changing how finance teams coordinate approvals, reporting workflows, and exception management.',

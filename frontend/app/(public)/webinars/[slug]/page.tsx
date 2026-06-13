@@ -35,7 +35,6 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
   const speakers = getWebinarSpeakers(post)
   const moderator = getWebinarModerator(post)
-  const agenda = post.webinarRegistration?.agendaPoints || []
   const heroDims = getMediaDimensions(post.featuredImage)
   const secondaryDims = getMediaDimensions(post.webinarSecondaryBanner)
 
@@ -44,8 +43,12 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
       <article className="site-container py-8 sm:py-10">
         <section className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
-            {/* Top banner: clean image only (no title/timing overlay). Rendered
-                at its natural dimensions so it isn't cropped. */}
+            {/* Title above the banner. */}
+            <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[34px]">
+              {post.title}
+            </h1>
+
+            {/* Top banner: clean image at its natural dimensions (no overlay). */}
             <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
               {heroDims ? (
                 <Image
@@ -62,18 +65,6 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                   <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill priority sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
                 </div>
               )}
-            </div>
-
-            {/* Title + event timing, shown below the banner instead of over it. */}
-            <div className="space-y-2 text-center">
-              {post.webinarRegistration?.eventDateLabel ? (
-                <p className="ui-font text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent-red)] sm:text-[15px]">
-                  {post.webinarRegistration.eventDateLabel}
-                </p>
-              ) : null}
-              <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[40px]">
-                {post.title}
-              </h1>
             </div>
 
             {post.webinarSecondaryBanner ? (
@@ -111,26 +102,11 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               <PostShareBar post={post} />
             </div>
 
-            <div className="ui-font space-y-5 text-[16px] leading-[145%] text-[#2d2d2d]">
-              {post.webinarRegistration?.eventSummary ? (
-                <p>{post.webinarRegistration.eventSummary}</p>
-              ) : null}
-              {post.content ? (
-                <div className="prose max-w-none">
-                  <RichTextRenderer content={post.content} />
-                </div>
-              ) : null}
-              {agenda.length ? (
-                <div className="space-y-2">
-                  <p className="font-medium text-[#111]">Join this webinar roundtable webinar to learn:</p>
-                  <ul className="list-disc pl-6">
-                    {agenda.map((item, index) => (
-                      <li key={`${post.id}-agenda-${index}`}>{item.point}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
+            {post.content ? (
+              <div className="ui-font prose max-w-none text-[16px] leading-[145%] text-[#2d2d2d]">
+                <RichTextRenderer content={post.content} />
+              </div>
+            ) : null}
 
             {(speakers.length || moderator) ? (
               <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:gap-8">

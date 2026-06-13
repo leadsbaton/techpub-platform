@@ -161,12 +161,7 @@ export interface Post {
     deliveryMode?: 'register' | 'watch' | 'download' | 'redirect' | null
     deliveryUrl?: string | null
     openDeliveryInNewTab?: boolean | null
-    sponsor?: string | null
     eventDateLabel?: string | null
-    eventSummary?: string | null
-    agendaPoints?: Array<{
-      point?: string | null
-    }> | null
   } | null
   cta?: PostCtaGroup | null
   seo?: Seo | null
