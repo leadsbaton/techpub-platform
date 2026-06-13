@@ -8,7 +8,10 @@ type LexicalNode = {
   type?: string
   tag?: string
   text?: string
+  // Text nodes: numeric bitmask of bold/italic/etc. Block nodes: alignment string.
   format?: string | number
+  // Inline CSS string set by the editor (e.g. "color: #ff0000;font-size: 20px").
+  style?: string
   url?: string
   // Payload 3 link nodes store their target under `fields`.
   fields?: {
@@ -29,11 +32,39 @@ const IS_ITALIC = 2
 const IS_STRIKETHROUGH = 4
 const IS_UNDERLINE = 8
 const IS_CODE = 16
+const IS_SUBSCRIPT = 32
+const IS_SUPERSCRIPT = 64
 
 function hasFormat(format: string | number | undefined, bit: number, name: string): boolean {
   if (typeof format === 'number') return (format & bit) !== 0
   if (typeof format === 'string') return format.includes(name)
   return false
+}
+
+// Convert an inline CSS string ("color: red; font-size: 18px") into a React
+// style object so editor-applied colors/sizes survive to the rendered page.
+function parseStyleString(style?: string): React.CSSProperties | undefined {
+  if (!style || typeof style !== 'string') return undefined
+  const out: Record<string, string> = {}
+  for (const declaration of style.split(';')) {
+    const [rawProp, ...rest] = declaration.split(':')
+    const value = rest.join(':').trim()
+    const prop = rawProp?.trim()
+    if (!prop || !value) continue
+    const camel = prop.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
+    out[camel] = value
+  }
+  return Object.keys(out).length ? (out as React.CSSProperties) : undefined
+}
+
+const ALIGNMENTS = new Set(['left', 'center', 'right', 'justify'])
+
+// Block-level nodes (paragraph/heading) carry alignment in `format` as a string.
+function blockAlignStyle(node: LexicalNode): React.CSSProperties | undefined {
+  if (typeof node.format === 'string' && ALIGNMENTS.has(node.format)) {
+    return { textAlign: node.format as React.CSSProperties['textAlign'] }
+  }
+  return undefined
 }
 
 function renderChildren(children?: LexicalNode[]) {
@@ -54,6 +85,14 @@ function renderTextNode(node: LexicalNode) {
   if (hasFormat(format, IS_ITALIC, 'italic')) content = <em>{content}</em>
   if (hasFormat(format, IS_UNDERLINE, 'underline')) content = <u>{content}</u>
   if (hasFormat(format, IS_STRIKETHROUGH, 'strikethrough')) content = <s>{content}</s>
+  if (hasFormat(format, IS_SUBSCRIPT, 'subscript')) content = <sub>{content}</sub>
+  if (hasFormat(format, IS_SUPERSCRIPT, 'superscript')) content = <sup>{content}</sup>
+
+  // Inline color / font-size / etc. set in the editor.
+  const style = parseStyleString(node.style)
+  if (style) {
+    content = <span style={style}>{content}</span>
+  }
 
   return content
 }
@@ -67,9 +106,6 @@ function renderUploadNode(node: LexicalNode) {
   const width = media?.width
   const height = media?.height
 
-  // When the CMS exposes intrinsic dimensions, render an optimized, CLS-safe
-  // image (reserves space before load). Otherwise fall back to a plain <img>,
-  // since next/image requires known sizing or a positioned fill container.
   if (width && height) {
     return (
       <Image
@@ -91,16 +127,16 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
   switch (node.type) {
     case 'heading': {
       const Tag = (node.tag || 'h2') as keyof React.JSX.IntrinsicElements
-      return <Tag>{renderChildren(node.children)}</Tag>
+      return <Tag style={blockAlignStyle(node)}>{renderChildren(node.children)}</Tag>
     }
     case 'paragraph':
-      return <p>{renderChildren(node.children)}</p>
+      return <p style={blockAlignStyle(node)}>{renderChildren(node.children)}</p>
     case 'list':
       return node.tag === 'ol' ? <ol>{renderChildren(node.children)}</ol> : <ul>{renderChildren(node.children)}</ul>
     case 'listitem':
       return <li>{renderChildren(node.children)}</li>
     case 'quote':
-      return <blockquote>{renderChildren(node.children)}</blockquote>
+      return <blockquote style={blockAlignStyle(node)}>{renderChildren(node.children)}</blockquote>
     case 'link': {
       const href = node.fields?.url ?? node.url ?? '#'
       // Open external links in a new tab; keep internal links in the same tab.

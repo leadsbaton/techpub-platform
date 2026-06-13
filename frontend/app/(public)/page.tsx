@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
-import { HomeCallout } from './_components/HomeCallout'
 import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
@@ -165,8 +164,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      <HomeCallout />
     </div>
   )
 }

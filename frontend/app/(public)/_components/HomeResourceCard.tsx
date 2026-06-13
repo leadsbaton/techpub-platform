@@ -35,10 +35,11 @@ export function HomeResourceCard({ post }: { post: Post }) {
         >
           {post.title}
         </Link>
-        <p className="mt-4 text-[0.98rem] leading-7 text-[color:var(--text-muted)]">
-          {post.excerpt ||
-            'Cards are a great way to organize content in a collection of products, case studies, services, and more.'}
-        </p>
+        {post.excerpt ? (
+          <p className="mt-4 text-[0.98rem] leading-7 text-[color:var(--text-muted)]">
+            {post.excerpt}
+          </p>
+        ) : null}
         <div className="mt-8">
           <Link
             href={href}

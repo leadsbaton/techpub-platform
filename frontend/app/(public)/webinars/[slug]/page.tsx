@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
-import { PostShareBar } from '../../_components/PostShareBar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl, getMediaDimensions, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
@@ -98,9 +97,6 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               </Link>
             </div>
 
-            <div className="flex justify-center">
-              <PostShareBar post={post} />
-            </div>
 
             {post.content ? (
               <div className="ui-font prose max-w-none text-[16px] leading-[145%] text-[#2d2d2d]">
@@ -109,50 +105,40 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             ) : null}
 
             {(speakers.length || moderator) ? (
-              <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:gap-8">
-                {speakers.length ? (
-                  <div>
-                    <h2 className="ui-font mb-5 text-center text-[15px] font-bold uppercase tracking-[0.04em] text-[#5a5a8d] sm:text-left">
-                      Speakers
-                    </h2>
-                    <div className="grid gap-7 sm:grid-cols-4 sm:gap-5">
-                      {speakers.map((speaker) => (
-                        <div key={speaker.id} className="ui-font mx-auto max-w-[260px] text-center">
-                          <div className="relative mx-auto h-[92px] w-[92px] overflow-hidden rounded-full bg-[#ddd]">
-                            {speaker.photo ? (
-                              <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill sizes="92px" className="object-cover" />
-                            ) : null}
-                          </div>
-                          <div className="mt-3 text-[14px] font-semibold text-[#111]">{speaker.name}</div>
-                          {speaker.role ? <div className="mt-0.5 text-[12px] font-medium text-[#4d4d4d]">{speaker.role}</div> : null}
-                          {speaker.secondaryLine ? (
-                            <div className="mt-1 line-clamp-3 text-[12px] leading-[1.4] text-[#6a6a6a]">{speaker.secondaryLine}</div>
+              <section className="mt-2">
+                {/* Desktop: one centered row with gaps. Mobile: stacked, centered.
+                    First person is headed "Speakers", the last (moderator) is
+                    headed "Moderator"; people in between get an invisible heading
+                    placeholder so the row stays aligned on desktop. */}
+                <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-center md:gap-12">
+                  {[
+                    ...speakers.map((person) => ({ person, isModerator: false })),
+                    ...(moderator ? [{ person: moderator, isModerator: true }] : []),
+                  ].map(({ person, isModerator }, index) => {
+                    const headingText = index === 0 ? 'Speakers' : isModerator ? 'Moderator' : null
+                    return (
+                      <div key={person.id} className="ui-font w-[180px] text-center">
+                        <h3
+                          className={`mb-6 text-[15px] font-bold uppercase tracking-[0.06em] ${
+                            isModerator ? 'text-[var(--accent-red)]' : 'text-[#7f1d1d]'
+                          } ${headingText ? '' : 'hidden md:invisible md:block'}`}
+                        >
+                          {headingText || ' '}
+                        </h3>
+                        <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
+                          {person.photo ? (
+                            <Image src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" />
                           ) : null}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-
-                {moderator ? (
-                  <div>
-                    <h2 className="ui-font mb-5 text-center text-[15px] font-bold uppercase tracking-[0.04em] text-[#8a8ab5] sm:text-left">
-                      Moderator
-                    </h2>
-                    <div className="ui-font mx-auto max-w-[260px] text-center sm:w-[180px]">
-                      <div className="relative mx-auto h-[92px] w-[92px] overflow-hidden rounded-full bg-[#ddd]">
-                        {moderator.photo ? (
-                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill sizes="92px" className="object-cover" />
+                        <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
+                        {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
+                        {person.secondaryLine ? (
+                          <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div>
                         ) : null}
                       </div>
-                      <div className="mt-3 text-[14px] font-semibold text-[#111]">{moderator.name}</div>
-                      {moderator.role ? <div className="mt-0.5 text-[12px] font-medium text-[#4d4d4d]">{moderator.role}</div> : null}
-                      {moderator.secondaryLine ? (
-                        <div className="mt-1 line-clamp-3 text-[12px] leading-[1.4] text-[#6a6a6a]">{moderator.secondaryLine}</div>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : null}
+                    )
+                  })}
+                </div>
               </section>
             ) : null}
           </div>

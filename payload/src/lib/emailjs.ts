@@ -1,17 +1,6 @@
-type EmailJsPayload = {
-  to_email: string
-  resource_title: string
-  lead_name: string
-  lead_email: string
-  lead_job_title: string
-  lead_company: string
-  lead_country: string
-  newsletter_opt_in: string
-  submitted_at: string
-  delivery_mode: string
-  delivery_target: string
-  source_url: string
-}
+// Flexible template params so callers can match whatever variable names the
+// configured EmailJS template expects (e.g. `name`, `email`, `job_title`).
+type EmailJsPayload = Record<string, string>
 
 const EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send'
 const EMAILJS_TIMEOUT_MS = 10_000

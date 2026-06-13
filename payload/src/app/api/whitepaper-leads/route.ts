@@ -242,6 +242,16 @@ export async function POST(request: NextRequest) {
   const notificationResults = await Promise.all(
     adminEmails.map((adminEmail) =>
       sendEmailJsTemplate({
+        // Names matching the configured EmailJS template (template_sgg6gwp).
+        form_name: post.title,
+        name,
+        email,
+        job_title: jobTitle,
+        company,
+        country,
+        newsletter: newsletterOptIn ? 'Yes' : 'No',
+        time: new Date().toLocaleString(),
+        // Legacy/extra params (ignored by templates that don't use them).
         to_email: adminEmail,
         resource_title: post.title,
         lead_name: name,
