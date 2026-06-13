@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 import type { Media } from '@/lib/types/cms'
 import { getMediaUrl } from '@/lib/utils/formatting'
@@ -63,6 +64,24 @@ function renderUploadNode(node: LexicalNode) {
 
   const media = node.value && typeof node.value === 'object' ? node.value : null
   const alt = media?.alt || ''
+  const width = media?.width
+  const height = media?.height
+
+  // When the CMS exposes intrinsic dimensions, render an optimized, CLS-safe
+  // image (reserves space before load). Otherwise fall back to a plain <img>,
+  // since next/image requires known sizing or a positioned fill container.
+  if (width && height) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes="(max-width: 768px) 100vw, 720px"
+        className="h-auto w-full rounded-lg"
+      />
+    )
+  }
 
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt={alt} loading="lazy" className="h-auto w-full rounded-lg" />

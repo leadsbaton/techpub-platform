@@ -95,7 +95,7 @@ export function PostShareBar({ post }: { post: Post }) {
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-[calc(100%+10px)] z-40 min-w-[220px] rounded-[18px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_22px_48px_rgba(15,23,42,0.14)]">
+        <div className="absolute left-0 top-[calc(100%+10px)] z-40 min-w-[220px] max-w-[calc(100vw-32px)] rounded-[18px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_22px_48px_rgba(15,23,42,0.14)]">
           <div className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
             Share this post
           </div>

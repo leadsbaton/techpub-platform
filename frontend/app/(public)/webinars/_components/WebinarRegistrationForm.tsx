@@ -3,12 +3,7 @@
 import { useMemo, useState } from 'react'
 
 import type { Post } from '@/lib/types/cms'
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://techpub-platform.onrender.com'
-    : 'http://localhost:5000')
+import { API_URL } from '@/lib/api/config'
 
 type FormState = {
   name: string

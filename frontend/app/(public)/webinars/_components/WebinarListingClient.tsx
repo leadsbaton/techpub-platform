@@ -4,12 +4,7 @@ import { useState, useTransition } from 'react'
 
 import { WebinarCard } from './WebinarCard'
 import type { PayloadListResponse, Post } from '@/lib/types/cms'
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://techpub-platform.onrender.com'
-    : 'http://localhost:5000')
+import { API_URL } from '@/lib/api/config'
 
 function buildFeedUrl(page: number, category?: string, query?: string) {
   const params = new URLSearchParams()

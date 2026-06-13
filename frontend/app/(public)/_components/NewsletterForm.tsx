@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.onrender.com' : 'http://localhost:5000')
+import { API_URL } from '@/lib/api/config'
 
 // Safely parse a response body that may not be JSON (e.g. a 502/504 HTML page
 // from the host, or an empty body). Never throws — returns {} so the caller can
