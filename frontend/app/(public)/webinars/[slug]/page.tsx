@@ -52,7 +52,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                   minHeight: '180px',
                 }}
               >
-                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
                 <div className="absolute inset-0 bg-black/20" />
                 {post.webinarRegistration?.eventDateLabel ? (
                   <div className="ui-font absolute inset-x-0 top-0 bg-black/25 px-4 py-2 text-center text-[10px] uppercase text-white sm:text-[16px]">
@@ -78,6 +78,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                     src={getImageUrl(post.webinarSecondaryBanner)}
                     alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
                     fill
+                    sizes="(max-width: 1280px) 100vw, 900px"
                     className="object-cover"
                   />
                 </div>
@@ -125,7 +126,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                         <div key={speaker.id} className="ui-font text-center">
                           <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
                             {speaker.photo ? (
-                              <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill className="object-cover" />
+                              <Image src={getImageUrl(speaker.photo)} alt={speaker.name || 'Speaker'} fill sizes="82px" className="object-cover" />
                             ) : null}
                           </div>
                           <div className="mt-2 text-[12px] font-medium text-[#111]">{speaker.name}</div>
@@ -143,7 +144,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                     <div className="ui-font text-center">
                       <div className="mx-auto relative h-[82px] w-[82px] overflow-hidden rounded-full bg-[#ddd]">
                         {moderator.photo ? (
-                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill className="object-cover" />
+                          <Image src={getImageUrl(moderator.photo)} alt={moderator.name} fill sizes="82px" className="object-cover" />
                         ) : null}
                       </div>
                       <div className="mt-2 text-[12px] font-medium text-[#111]">{moderator.name}</div>

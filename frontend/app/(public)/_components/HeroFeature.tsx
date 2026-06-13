@@ -121,6 +121,7 @@ export function HeroFeature({
                         src={getImageUrl(item.featuredImage)}
                         alt={item.title}
                         fill
+                        sizes="(max-width: 1280px) 168px, 220px"
                         className="object-cover transition duration-300 group-hover:scale-[1.03]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />

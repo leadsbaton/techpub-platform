@@ -43,7 +43,7 @@ export function FeaturedPost({ post }: { post: Post }) {
         </div>
       </div>
       <div className="relative min-h-[320px] overflow-hidden rounded-[28px]">
-        <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+        <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 768px) 100vw, 500px" className="object-cover" />
       </div>
     </section>
   )

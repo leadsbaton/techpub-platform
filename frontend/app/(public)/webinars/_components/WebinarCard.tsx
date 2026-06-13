@@ -19,7 +19,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
     <article className={`ui-font ${compact ? '' : 'w-full'}`}>
       <Link href={`/webinars/${post.slug}`} className="block">
         <div className={`relative overflow-hidden bg-[#ececec] ${compact ? 'h-[115px]' : 'h-[146px] sm:h-[170px]'}`}>
-          <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+          <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
           {post.webinarRegistration?.eventDateLabel ? (
             <div className="absolute inset-x-0 top-0 bg-black/25 px-3 py-1 text-center text-[10px] font-medium uppercase tracking-[0.03em] text-white sm:text-[12px]">
               {post.webinarRegistration.eventDateLabel}

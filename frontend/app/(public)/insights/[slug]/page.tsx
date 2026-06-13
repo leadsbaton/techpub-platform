@@ -51,6 +51,7 @@ export default async function InsightDetailPage({
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 900px"
               className="object-cover"
             />
           </div>

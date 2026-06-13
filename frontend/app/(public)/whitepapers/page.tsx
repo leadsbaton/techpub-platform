@@ -5,9 +5,12 @@ import Link from 'next/link'
 import { RankedSidebar } from '../_components/RankedSidebar'
 import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
-import { getCategoriesForType, getContentTypes, getPosts } from '@/lib/api/cms'
+import { getCategoriesForType, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
 import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+
+// Cache CMS fetches between refreshes instead of hitting the backend per view.
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'White Papers',
@@ -87,6 +90,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 src={getImageUrl(post.featuredImage)}
                 alt={post.title}
                 fill
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent" />
@@ -119,7 +123,7 @@ function CategoryBanner({ category }: { category: Category }) {
     <section className="overflow-hidden rounded-[6px]">
       <div className="relative h-[120px] sm:h-[170px]">
         {category.image ? (
-          <Image src={getImageUrl(category.image)} alt={category.name} fill className="object-cover" />
+          <Image src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
         ) : (
           <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
         )}
@@ -201,13 +205,13 @@ export default async function WhitepapersPage({
   searchParams: Promise<{ category?: string; q?: string; view?: string }>
 }) {
   const { category, q, view } = await searchParams
-  const categories = await getCategoriesForType('whitepaper', 12)
+  const categories = await getCategoriesForType('whitepaper', 12, LISTING_REVALIDATE)
   const selectedCategory = categories.find((item) => item.slug === category)
   const contentTypes = await getContentTypes(12)
-  const webinars = await getPosts({ type: 'webinar', limit: 6 })
+  const webinars = await getPosts({ type: 'webinar', limit: 6 }, LISTING_REVALIDATE)
 
   if (category && selectedCategory) {
-    const categoryWhitepapers = await getPosts({ type: 'whitepaper', category, limit: 6 })
+    const categoryWhitepapers = await getPosts({ type: 'whitepaper', category, limit: 6 }, LISTING_REVALIDATE)
 
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
@@ -228,7 +232,7 @@ export default async function WhitepapersPage({
   }
 
   if (q || view === 'all') {
-    const listing = await getPosts({ type: 'whitepaper', limit: 6, query: q })
+    const listing = await getPosts({ type: 'whitepaper', limit: 6, query: q }, LISTING_REVALIDATE)
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
@@ -247,8 +251,8 @@ export default async function WhitepapersPage({
   }
 
   const [trendingDownloads, latestWhitepapers] = await Promise.all([
-    getPosts({ type: 'whitepaper', limit: 6, pinned: true }),
-    getPosts({ type: 'whitepaper', limit: 9 }),
+    getPosts({ type: 'whitepaper', limit: 6, pinned: true }, LISTING_REVALIDATE),
+    getPosts({ type: 'whitepaper', limit: 9 }, LISTING_REVALIDATE),
   ])
 
   const trendingPosts = trendingDownloads.docs.length

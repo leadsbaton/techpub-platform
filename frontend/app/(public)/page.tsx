@@ -7,10 +7,12 @@ import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeSectionHeader } from './_components/HomeSectionHeader'
-import { getHomePageData } from '@/lib/api/cms'
+import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 
-export const dynamic = 'force-dynamic'
+// Serve from the Data Cache between refreshes instead of hitting the CMS on
+// every view; content is at most LISTING_REVALIDATE seconds stale.
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -26,7 +28,7 @@ export default async function HomePage() {
     contentTypes,
     categoriesByType,
     categories,
-  } = await getHomePageData()
+  } = await getHomePageData(LISTING_REVALIDATE)
 
   // No hero means there's no published content yet, or the backend is
   // unreachable (the API layer swallows errors and returns empty lists). Show a

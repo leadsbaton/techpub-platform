@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 
 import { InsightsListingLayout } from './_components/InsightsListingLayout'
-import { getCategoriesForType, getPosts } from '@/lib/api/cms'
+import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 
-export const dynamic = 'force-dynamic'
+// Cache fetches between refreshes; the page still renders per-request for its
+// search/category params, but the CMS isn't hit on every view.
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Insights',
@@ -21,15 +23,18 @@ export default async function InsightsPage({
   const viewAll = params.view === 'all'
 
   const [insightsResponse, categories, whitepapers] = await Promise.all([
-    getPosts({
-      type: 'insight',
-      limit: 18,
-      page: Number(params.page || '1'),
-      query,
-      category: selectedCategory,
-    }),
-    getCategoriesForType('insight', 9),
-    getPosts({ type: 'whitepaper', limit: 6 }),
+    getPosts(
+      {
+        type: 'insight',
+        limit: 18,
+        page: Number(params.page || '1'),
+        query,
+        category: selectedCategory,
+      },
+      LISTING_REVALIDATE,
+    ),
+    getCategoriesForType('insight', 9, LISTING_REVALIDATE),
+    getPosts({ type: 'whitepaper', limit: 6 }, LISTING_REVALIDATE),
   ])
 
   return (

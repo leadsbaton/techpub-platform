@@ -188,7 +188,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
         <button
           type="submit"
           disabled={submitting}
-          className="ml-[196px] inline-flex bg-[#FC0203] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70"
+          className="inline-flex bg-[#FC0203] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70 sm:ml-[196px]"
         >
           {submitting ? 'Submitting...' : formCopy.submitLabel}
         </button>
@@ -203,7 +203,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
           <button
             type="button"
             onClick={() => openDelivery(delivery)}
-            className="ml-[196px] inline-flex border border-[#8f8f8f] px-8 py-2 text-[18px] font-medium text-[#020202]"
+            className="inline-flex border border-[#8f8f8f] px-8 py-2 text-[18px] font-medium text-[#020202] sm:ml-[196px]"
           >
             {delivery.mode === 'download' ? 'Download resource' : 'Open resource'}
           </button>

@@ -146,7 +146,9 @@ export function NavClient({ siteName, links }: NavClientProps) {
 
             <button
               type="button"
-              aria-label="Open menu"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
               className="grid h-12 w-12 place-items-center rounded-full border border-[var(--border-subtle)] text-[color:var(--text-strong)] lg:hidden"
               onClick={() => setMobileOpen((value) => !value)}
             >
@@ -157,7 +159,7 @@ export function NavClient({ siteName, links }: NavClientProps) {
       </header>
 
       {mobileOpen ? (
-        <div className="fixed inset-x-0 top-[88px] z-40 max-h-[calc(100vh-88px)] overflow-y-auto border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
+        <div id="mobile-navigation" className="fixed inset-x-0 top-[88px] z-40 max-h-[calc(100vh-88px)] overflow-y-auto border-b border-[var(--border-subtle)] bg-white px-5 py-5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] lg:hidden">
           <div className="space-y-2">
             {links.map((link) => {
               const normalizedHref = normalizeRouteBase(link.href)

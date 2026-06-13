@@ -56,6 +56,7 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
             fill
+            sizes={large ? '(max-width: 1024px) 100vw, 45vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
             className="object-cover transition duration-300 group-hover:scale-[1.02]"
           />
           <div
@@ -89,6 +90,7 @@ function TopPickFeature({ post }: { post: Post }) {
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
             fill
+            sizes="(max-width: 1024px) 100vw, 33vw"
             className="object-cover transition duration-300 group-hover:scale-[1.02]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-transparent to-transparent" />
@@ -112,6 +114,7 @@ function TopPickListItem({ post }: { post: Post }) {
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
           fill
+          sizes="88px"
           className="object-cover transition duration-300 group-hover:scale-[1.02]"
         />
       </div>
@@ -139,6 +142,7 @@ function CategoryHero({
           src={getImageUrl(category.image)}
           alt={category.name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/25" />
@@ -169,6 +173,7 @@ function CategoryListItem({ post }: { post: Post }) {
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
           fill
+          sizes="120px"
           className="object-cover"
         />
       </div>
@@ -323,6 +328,7 @@ function InsightListRow({ post }: { post: Post }) {
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
           fill
+          sizes="120px"
           className="object-cover"
         />
       </div>

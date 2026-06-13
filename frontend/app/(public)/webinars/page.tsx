@@ -4,9 +4,12 @@ import Link from 'next/link'
 
 import { WebinarCard } from './_components/WebinarCard'
 import { WebinarListingClient } from './_components/WebinarListingClient'
-import { getCategoriesForType, getPosts } from '@/lib/api/cms'
+import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
 import { getImageUrl } from '@/lib/utils/formatting'
+
+// Cache CMS fetches between refreshes instead of hitting the backend per view.
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Webinars',
@@ -27,7 +30,7 @@ function CategoryBanner({ category }: { category: Category }) {
     <section className="overflow-hidden rounded-[6px]">
       <div className="relative h-[120px] sm:h-[170px]">
         {category.image ? (
-          <Image src={getImageUrl(category.image)} alt={category.name} fill className="object-cover" />
+          <Image src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
         ) : (
           <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
         )}
@@ -136,7 +139,7 @@ function DontMiss({ posts }: { posts: Post[] }) {
           {posts.slice(0, 3).map((post) => (
             <Link key={post.id} href={`/whitepapers/${post.slug}`} className="grid grid-cols-[72px_1fr] items-center gap-4">
               <div className="relative h-[62px] w-[72px] overflow-hidden bg-white">
-                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="72px" className="object-cover" />
               </div>
               <div className="ui-font space-y-1">
                 <div className="text-[12px] font-bold uppercase text-[#0015AD]">{post.primaryCategory && typeof post.primaryCategory !== 'string' ? post.primaryCategory.name : 'Technology'}</div>
@@ -156,11 +159,11 @@ export default async function WebinarsPage({
   searchParams: Promise<{ category?: string; q?: string; view?: string }>
 }) {
   const { category, q, view } = await searchParams
-  const categories = await getCategoriesForType('webinar', 12)
+  const categories = await getCategoriesForType('webinar', 12, LISTING_REVALIDATE)
   const selectedCategory = categories.find((item) => item.slug === category)
 
   if (category && selectedCategory) {
-    const listing = await getPosts({ type: 'webinar', category, limit: 6 })
+    const listing = await getPosts({ type: 'webinar', category, limit: 6 }, LISTING_REVALIDATE)
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
@@ -178,7 +181,7 @@ export default async function WebinarsPage({
   }
 
   if (q || view === 'all') {
-    const listing = await getPosts({ type: 'webinar', limit: 6, query: q })
+    const listing = await getPosts({ type: 'webinar', limit: 6, query: q }, LISTING_REVALIDATE)
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
@@ -195,8 +198,8 @@ export default async function WebinarsPage({
   }
 
   const [featuredWebinars, dontMissWhitepapers] = await Promise.all([
-    getPosts({ type: 'webinar', limit: 6 }),
-    getPosts({ type: 'whitepaper', limit: 3 }),
+    getPosts({ type: 'webinar', limit: 6 }, LISTING_REVALIDATE),
+    getPosts({ type: 'whitepaper', limit: 3 }, LISTING_REVALIDATE),
   ])
 
   return (

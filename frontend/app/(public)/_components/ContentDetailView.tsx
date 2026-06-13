@@ -98,7 +98,7 @@ function InsightLayout({ post, contentTypes, railItems }: { post: Post; contentT
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
         <div className="space-y-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-[32px]">
-            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 760px" className="object-cover" />
           </div>
           <section className="space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
             <p className="text-xl leading-9 text-[color:var(--text-soft)]">{post.excerpt}</p>
@@ -134,7 +134,7 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
       <section className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)_360px] lg:items-start">
         <div className="rounded-[28px] bg-white p-5 shadow-[var(--shadow-soft)]">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[var(--surface-muted)]">
-            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 280px" className="object-cover" />
           </div>
           {primaryAction ? (
             <a
@@ -187,7 +187,7 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
         </Link>
         <div className="overflow-hidden rounded-[32px] bg-white shadow-[var(--shadow-soft)]">
           <div className="relative aspect-[16/7] min-h-[260px]">
-            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill className="object-cover" />
+            <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 space-y-5 p-6 text-white md:p-8">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/80">

@@ -20,11 +20,12 @@ export function WhitepaperCard({ post }: { post: Post }) {
   return (
     <article className="ui-font group w-full max-w-[320px]">
       <Link href={href} className="block">
-        <div className="relative h-[445px] overflow-hidden bg-[#ececec]">
+        <div className="relative h-[360px] overflow-hidden bg-[#ececec] sm:h-[445px]">
           <Image
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
             fill
+            sizes="(max-width: 768px) 100vw, 320px"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent px-4 pb-6 pt-20">

@@ -65,6 +65,7 @@ export function NewsletterForm({ submitLabel }: { submitLabel: string }) {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Work email"
+          aria-label="Work email"
           autoComplete="email"
           required
           className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-white outline-none placeholder:text-slate-400"

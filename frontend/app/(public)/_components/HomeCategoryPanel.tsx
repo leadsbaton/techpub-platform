@@ -69,6 +69,7 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
                   src={getImageUrl(category.image)}
                   alt={category.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transition duration-300 group-hover:scale-[1.02]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
@@ -99,6 +100,7 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
                 src={getImageUrl(featured.image)}
                 alt={featured.name}
                 fill
+                sizes="(max-width: 1280px) 100vw, 1200px"
                 className="object-cover transition duration-300 group-hover:scale-[1.02]"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />

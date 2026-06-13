@@ -85,7 +85,7 @@ function resolveDelivery(post: WebinarPost) {
 }
 
 export async function POST(request: NextRequest) {
-  const rate = consumeRateLimit(getClientKey(request), LIMIT, WINDOW_MS)
+  const rate = await consumeRateLimit(getClientKey(request), LIMIT, WINDOW_MS)
 
   if (!rate.allowed) {
     return jsonWithCors(

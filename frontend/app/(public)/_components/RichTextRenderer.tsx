@@ -135,5 +135,5 @@ export type RichTextDocument = {
 export function RichTextRenderer({ content }: { content?: RichTextDocument | null }) {
   const children = content?.root?.children
   if (!children?.length) return null
-  return <div className="prose prose-slate max-w-none">{renderChildren(children)}</div>
+  return <div className="prose prose-slate max-w-none break-words">{renderChildren(children)}</div>
 }

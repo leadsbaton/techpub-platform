@@ -10,7 +10,11 @@ import type {
 } from '@/lib/types/cms'
 import { API_URL } from '@/lib/api/config'
 
+// 0 = always fresh (no-store). Used where staleness is unacceptable (search,
+// detail pages). Listing/home pages opt into LISTING_REVALIDATE so repeated
+// views are served from the Data Cache instead of hitting the CMS every time.
 const LIVE_REVALIDATE = 0
+export const LISTING_REVALIDATE = 60
 
 type PostFilters = {
   type?: Post['type']
@@ -124,6 +128,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 
 export async function getPosts(
   filters: PostFilters = {},
+  revalidate: number = LIVE_REVALIDATE,
 ): Promise<PayloadListResponse<Post>> {
   const where: Record<string, unknown> = publishedWhere()
 
@@ -156,7 +161,7 @@ export async function getPosts(
   })
 
   try {
-    return await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`, LIVE_REVALIDATE)
+    return await fetchPayload<PayloadListResponse<Post>>(`/api/posts?${query}`, revalidate)
   } catch {
     return emptyListResponse<Post>(filters.limit ?? 9, filters.page ?? 1)
   }
@@ -230,12 +235,13 @@ export async function getCategories(limit = 12): Promise<Category[]> {
 export async function getCategoriesForType(
   type: Post['type'],
   limit = 12,
+  revalidate: number = LIVE_REVALIDATE,
 ): Promise<Category[]> {
   const categoryMap = new Map<string, Category>()
   let page = 1
 
   while (page <= 5 && categoryMap.size < limit) {
-    const posts = await getPosts({ type, page, limit: 24 })
+    const posts = await getPosts({ type, page, limit: 24 }, revalidate)
 
     posts.docs.forEach((post) => {
       const category = getPrimaryCategoryDoc(post)
@@ -332,22 +338,22 @@ export async function getPageBySlug(slug: string): Promise<PageDoc | null> {
   }
 }
 
-export async function getHomePageData() {
+export async function getHomePageData(revalidate: number = LIVE_REVALIDATE) {
   const [settings, featuredPosts, insights, whitepapers, webinars, contentTypes, categories] =
     await Promise.all([
       getSiteSettings(),
-      getPosts({ featured: true, limit: 1 }),
-      getPosts({ type: 'insight', limit: 7 }),
-      getPosts({ type: 'whitepaper', limit: 6 }),
-      getPosts({ type: 'webinar', limit: 4 }),
+      getPosts({ featured: true, limit: 1 }, revalidate),
+      getPosts({ type: 'insight', limit: 7 }, revalidate),
+      getPosts({ type: 'whitepaper', limit: 6 }, revalidate),
+      getPosts({ type: 'webinar', limit: 4 }, revalidate),
       getContentTypes(6),
       getCategories(6),
     ])
 
   const [insightCategories, whitepaperCategories, webinarCategories] = await Promise.all([
-    getCategoriesForType('insight', 6),
-    getCategoriesForType('whitepaper', 6),
-    getCategoriesForType('webinar', 6),
+    getCategoriesForType('insight', 6, revalidate),
+    getCategoriesForType('whitepaper', 6, revalidate),
+    getCategoriesForType('webinar', 6, revalidate),
   ])
 
   return {

@@ -54,6 +54,7 @@ const Footer = async () => {
                   href={item.url}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label={item.platform}
                   className="grid h-10 w-10 place-items-center rounded-full border border-[var(--border-subtle)] text-xs font-semibold text-[color:var(--text-soft)] transition hover:border-[var(--accent-red)] hover:text-[color:var(--accent-red)]"
                 >
                   {item.platform.slice(0, 2).toUpperCase()}

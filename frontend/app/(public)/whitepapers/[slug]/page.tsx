@@ -66,6 +66,7 @@ export default async function WhitepaperDetailPage({
                   src={getImageUrl(post.featuredImage)}
                   alt={post.title}
                   fill
+                  sizes='200px'
                   className='object-cover'
                 />
               </div>

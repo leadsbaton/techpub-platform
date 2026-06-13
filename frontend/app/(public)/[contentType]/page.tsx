@@ -116,7 +116,7 @@ function PageHero({ pageDoc }: { pageDoc: PageDoc }) {
 
       {pageDoc.hero?.image ? (
         <div className="relative min-h-[280px] overflow-hidden rounded-[28px]">
-          <Image src={getImageUrl(pageDoc.hero.image)} alt={pageDoc.title} fill className="object-cover" />
+          <Image src={getImageUrl(pageDoc.hero.image)} alt={pageDoc.title} fill sizes="(max-width: 768px) 100vw, 540px" className="object-cover" />
         </div>
       ) : null}
     </section>
