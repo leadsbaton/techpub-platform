@@ -11,12 +11,16 @@ const nextConfig: NextConfig = {
   // http://127.0.0.1:3000 or from another device on the LAN. Dev-only.
   allowedDevOrigins: ['localhost', '127.0.0.1'],
   images: {
-    remotePatterns: allowedImageHosts.map((hostname) => ({
-      protocol: hostname === 'localhost' ? 'http' : 'https',
-      hostname,
-      ...(hostname === 'localhost' ? { port: '5000' } : {}),
-      pathname: '/**',
-    })),
+    remotePatterns: [
+      ...allowedImageHosts.map((hostname) => ({
+        protocol: (hostname === 'localhost' ? 'http' : 'https') as 'http' | 'https',
+        hostname,
+        ...(hostname === 'localhost' ? { port: '5000' } : {}),
+        pathname: '/**',
+      })),
+      // Supabase Storage (in case media ever resolves to a direct bucket URL).
+      { protocol: 'https' as const, hostname: '**.supabase.co', pathname: '/**' },
+    ],
     unoptimized: process.env.NODE_ENV === 'development',
   },
 };

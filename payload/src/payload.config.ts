@@ -1,6 +1,6 @@
-// storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -43,6 +43,45 @@ const localhostOrigins = isProduction
 const allowedOrigins = Array.from(
   new Set([frontendURL, payloadURL, ...localhostOrigins].filter(Boolean)),
 )
+
+// Object storage for media (Supabase Storage or any S3-compatible service).
+// When configured, uploads go to a SHARED bucket so local and production see the
+// exact same files — fixing the "image missing on disk" 500s caused by Render's
+// ephemeral, non-shared local disk. Keep the bucket PRIVATE: files are streamed
+// through Payload's access-controlled /api/media route, so nothing is reachable
+// directly from the bucket without going through the CMS.
+//
+// Set these in BOTH payload/.env (local) and the Render dashboard (prod):
+//   S3_BUCKET, S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_REGION
+// For Supabase: Storage -> S3 Connection gives the endpoint
+//   (https://<ref>.supabase.co/storage/v1/s3), region, and access keys.
+const s3Configured = Boolean(
+  process.env.S3_BUCKET &&
+    process.env.S3_ENDPOINT &&
+    process.env.S3_ACCESS_KEY_ID &&
+    process.env.S3_SECRET_ACCESS_KEY,
+)
+
+const storagePlugins = s3Configured
+  ? [
+      s3Storage({
+        collections: {
+          media: { disableLocalStorage: true },
+        },
+        bucket: process.env.S3_BUCKET as string,
+        config: {
+          endpoint: process.env.S3_ENDPOINT,
+          region: process.env.S3_REGION || 'us-east-1',
+          // Supabase (and most non-AWS S3 services) require path-style URLs.
+          forcePathStyle: true,
+          credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
+          },
+        },
+      }),
+    ]
+  : []
 
 export default buildConfig({
   // Setting serverURL in production pins the admin to its canonical origin so
@@ -95,7 +134,5 @@ export default buildConfig({
     url: process.env.MONGODB_URI || process.env.DATABASE_URI || '',
   }),
   sharp,
-  plugins: [
-    // storage-adapter-placeholder
-  ],
+  plugins: [...storagePlugins],
 })

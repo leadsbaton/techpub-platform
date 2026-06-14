@@ -84,17 +84,41 @@ Expected URLs:
 
 ## Media storage
 
-Local development:
+Media uploads use **Supabase Storage** (any S3-compatible service works) when
+configured, so local and production share the **same files**. This fixes the
+"File … is missing on the disk" 500s — Render's free disk is ephemeral and is NOT
+shared with your machine, so disk uploads only exist where they were made.
 
-- Uploads are stored in the repo-level `media/` folder
-- The upload config lives in [Media.ts](/d:/tuchmath/techpub-platform/techpub-platform/payload/src/collections/Media.ts)
+The upload config lives in
+[Media.ts](payload/src/collections/Media.ts) and the storage plugin is wired in
+[payload.config.ts](payload/src/payload.config.ts).
 
-Free hosting reality:
+### Behaviour
+- **If the S3 env vars below are set** → uploads go to the shared bucket. Keep the
+  bucket **private**: files are streamed through Payload's access-controlled
+  `/api/media/file/...` route, so nothing in the bucket is reachable directly.
+- **If they are not set** → falls back to the local `media/` folder (fine for
+  quick local testing, not for production).
+- Only the **original** file is stored (no generated `card`/`hero` sizes) — the
+  frontend's `next/image` resizes/optimizes per the UI, saving storage.
 
-- Render free disk is ephemeral
-- That means locally uploaded images/files can disappear after restart or redeploy
-- For testing, local disk storage is fine
-- For real production media, use S3, Cloudinary, or Cloudflare R2
+### Setup (Supabase)
+1. Supabase → **Storage** → create a **private** bucket (e.g. `media`).
+2. Supabase → Storage → **S3 Connection** → copy the endpoint, region, and create
+   S3 access keys.
+3. Set these in **both** `payload/.env` (local) **and** the Render dashboard (prod)
+   so they share the bucket:
+
+```env
+S3_BUCKET=media
+S3_ENDPOINT=https://<project-ref>.supabase.co/storage/v1/s3
+S3_REGION=<your-project-region>      # e.g. ap-south-1
+S3_ACCESS_KEY_ID=<supabase-s3-access-key>
+S3_SECRET_ACCESS_KEY=<supabase-s3-secret-key>
+```
+
+Restart both apps after setting them. New uploads land in Supabase; existing
+local-disk files must be re-uploaded once (they aren't migrated automatically).
 
 ## Figma status
 

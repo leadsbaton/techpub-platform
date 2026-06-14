@@ -63,22 +63,11 @@ export const Media: CollectionConfig = {
     ],
   },
   upload: {
-    adminThumbnail: 'card',
+    // No generated image sizes: we store only the original to save storage, and
+    // the frontend's next/image resizes/optimizes on demand per the UI (the
+    // `sizes` prop on each <Image>). staticDir is only used as a local-disk
+    // fallback when object storage (S3/Supabase) isn't configured.
     staticDir: path.resolve(dirname, '../../../media'),
-    imageSizes: [
-      {
-        name: 'card',
-        width: 720,
-        height: 480,
-        position: 'center',
-      },
-      {
-        name: 'hero',
-        width: 1440,
-        height: 900,
-        position: 'center',
-      },
-    ],
     mimeTypes: ['image/*', 'application/pdf', 'video/mp4'],
   },
 }
