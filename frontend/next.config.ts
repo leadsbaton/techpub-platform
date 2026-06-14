@@ -7,6 +7,9 @@ const allowedImageHosts = [
 ].filter(Boolean)
 
 const nextConfig: NextConfig = {
+  // Trust these hosts for dev (HMR + RSC) so the site also works when opened at
+  // http://127.0.0.1:3000 or from another device on the LAN. Dev-only.
+  allowedDevOrigins: ['localhost', '127.0.0.1'],
   images: {
     remotePatterns: allowedImageHosts.map((hostname) => ({
       protocol: hostname === 'localhost' ? 'http' : 'https',

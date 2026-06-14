@@ -7,6 +7,11 @@ const __dirname = path.dirname(__filename)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Trust these hosts for dev (HMR WebSocket + RSC). Without this, visiting the
+  // admin at http://127.0.0.1:5000 (instead of localhost) fails the HMR handshake
+  // and the admin app never hydrates — a blank/black screen. Add your LAN IP here
+  // too if you open the dev admin from another device. Dev-only; no prod effect.
+  allowedDevOrigins: ['localhost', '127.0.0.1'],
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
