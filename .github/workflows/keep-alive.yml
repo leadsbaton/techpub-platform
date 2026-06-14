@@ -1,0 +1,36 @@
+name: Keep Render backend warm
+
+# Pings the deployed backend's /health so Render's free web service does not spin
+# down (free tier sleeps after ~15 min idle; cold start is ~30-60s).
+#
+# GitHub scheduled crons are best-effort and can be delayed under load, so we ping
+# every 10 minutes. For more reliable warming, also add an UptimeRobot or
+# cron-job.org monitor hitting the same URL every 5 minutes.
+#
+# Override the target by setting a repo variable or secret named RENDER_HEALTH_URL.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          URL="${{ secrets.RENDER_HEALTH_URL || vars.RENDER_HEALTH_URL || 'https://techpub-platform.onrender.com/health' }}"
+          echo "Pinging $URL"
+          for i in 1 2 3; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 70 "$URL" || echo "000")
+            echo "Attempt $i -> HTTP $code"
+            if [ "$code" = "200" ]; then
+              echo "Backend is awake."
+              exit 0
+            fi
+            sleep 20
+          done
+          # A cold start can exceed the run; the request itself still wakes the
+          # instance, so don't fail the job just because the first pings were slow.
+          echo "No 200 yet (likely a cold start). The ping still triggered a wake-up."

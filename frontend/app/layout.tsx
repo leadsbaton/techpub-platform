@@ -35,6 +35,11 @@ export const metadata: Metadata = {
   description:
     'Editorial platform for insights, white papers, webinars, and category-led discovery.',
   applicationName: 'LeadsBaton TechPub',
+  icons: {
+    icon: '/leads-baton-logo.png',
+    shortcut: '/leads-baton-logo.png',
+    apple: '/leads-baton-logo.png',
+  },
   openGraph: {
     title: 'LeadsBaton TechPub',
     description:
