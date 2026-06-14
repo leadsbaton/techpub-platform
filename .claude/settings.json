@@ -3,7 +3,12 @@
     "allow": [
       "PowerShell(foreach\\($p in 3000,3001,5000\\){ try { $r=Invoke-WebRequest \"http://localhost:$\\($p\\)\" -UseBasicParsing -TimeoutSec 6; \"port $\\($p\\): $\\($r.StatusCode\\)\" } catch { \"port $\\($p\\): down\" } })",
       "Bash(ls \"$HOME/AppData/Local/ms-playwright\" 2>/dev/null | head; echo \"---\"; ls /d/tuchmath/techpub-platform/techpub-platform/payload/node_modules/.cache/ms-playwright 2>/dev/null | head)",
-      "Read(//c/Users/biswa/AppData/Local/**)"
+      "Read(//c/Users/biswa/AppData/Local/**)",
+      "Bash(npm install *)",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; \"stopped dev server PID $\\($c.OwningProcess\\)\" } else { \"nothing on :5000\" })",
+      "Read(//d/tuchmath/techpub-platform/**)",
+      "Bash(xargs echo \"files in media/:\")",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; \"freed :5000 \\(stopped PID $\\($c.OwningProcess\\)\\) — you can run 'npm run dev' now\" } else { \":5000 is free\" })"
     ]
   }
 }
