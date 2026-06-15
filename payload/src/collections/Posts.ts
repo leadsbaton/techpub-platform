@@ -49,18 +49,17 @@ export const Posts: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'contentType',
-                  type: 'relationship',
-                  relationTo: 'content-types',
+                  name: 'type',
+                  type: 'select',
                   required: true,
-                  filterOptions: {
-                    active: {
-                      equals: true,
-                    },
-                  },
+                  options: [
+                    { label: 'Insight', value: 'insight' },
+                    { label: 'White Paper', value: 'whitepaper' },
+                    { label: 'Webinar', value: 'webinar' },
+                  ],
                   admin: {
                     description:
-                      'Choose the post type first. This controls the editor fields, preview examples, and public route.',
+                      'Pick the post type first — this controls which fields appear below and the public route.',
                     width: '50%',
                   },
                 },
@@ -83,8 +82,12 @@ export const Posts: CollectionConfig = {
               ],
             },
             {
-              name: 'type',
-              type: 'text',
+              // Auto-kept in sync with `type` (resolved in beforeChange) for any
+              // internal reference. Hidden so editors pick the type only once,
+              // via the select above.
+              name: 'contentType',
+              type: 'relationship',
+              relationTo: 'content-types',
               admin: {
                 hidden: true,
               },
@@ -605,38 +608,6 @@ export const Posts: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeValidate: [
-      // Resolve `type` from the selected content type BEFORE field validation
-      // runs. The field-level validators (downloadAsset, videoUrl, externalUrl,
-      // etc.) read `siblingData.type`; without this, `type` is only set in
-      // beforeChange (after validation), so type-conditional required rules
-      // silently pass on create.
-      async ({ data, req }) => {
-        if (!data) return data
-
-        const nextData = data as PostFormData
-        const contentTypeValue = nextData.contentType
-        const contentTypeId =
-          typeof contentTypeValue === 'string'
-            ? contentTypeValue
-            : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
-              ? contentTypeValue.id
-              : null
-
-        if (contentTypeId) {
-          const contentTypeDoc = await req.payload.findByID({
-            collection: 'content-types',
-            id: contentTypeId,
-            depth: 0,
-            overrideAccess: true,
-          })
-
-          nextData.type = contentTypeDoc.key as PostTypeKey
-        }
-
-        return nextData
-      },
-    ],
     afterRead: [
       async ({ doc }) => {
         if (doc?.type === 'webinar' && (!Array.isArray(doc.webinarSpeakerProfiles) || doc.webinarSpeakerProfiles.length === 0)) {
@@ -661,28 +632,22 @@ export const Posts: CollectionConfig = {
           nextData.updatedBy = req.user.id
         }
 
-        // `type` is already resolved from `contentType` in beforeValidate (which
-        // runs first, so the conditional validators can see it). Only re-resolve
-        // here as a defensive fallback if it's somehow missing, to avoid a second
-        // findByID round-trip on every save.
-        if (!nextData.type) {
-          const contentTypeValue = nextData.contentType
-          const contentTypeId =
-            typeof contentTypeValue === 'string'
-              ? contentTypeValue
-              : contentTypeValue && typeof contentTypeValue === 'object' && 'id' in contentTypeValue
-                ? contentTypeValue.id
-                : null
-
-          if (contentTypeId) {
-            const contentTypeDoc = await req.payload.findByID({
-              collection: 'content-types',
-              id: contentTypeId,
-              depth: 0,
-              overrideAccess: true,
-            })
-
-            nextData.type = contentTypeDoc.key as PostTypeKey
+        // `type` is now chosen directly in the editor (a select), so the
+        // type-conditional fields/validators react immediately on create. Keep the
+        // hidden `contentType` relationship in sync — look up the content-type
+        // whose key matches the chosen type — so any internal reference stays
+        // populated.
+        if (nextData.type) {
+          const match = await req.payload.find({
+            collection: 'content-types',
+            where: { key: { equals: nextData.type } },
+            limit: 1,
+            depth: 0,
+            overrideAccess: true,
+          })
+          const matchedId = match.docs[0]?.id
+          if (matchedId) {
+            nextData.contentType = matchedId
           }
         }
 

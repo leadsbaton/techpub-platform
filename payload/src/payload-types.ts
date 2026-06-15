@@ -301,14 +301,14 @@ export interface Author {
 export interface Post {
   id: string;
   /**
-   * Choose the post type first. This controls the editor fields, preview examples, and public route.
+   * Pick the post type first — this controls which fields appear below and the public route.
    */
-  contentType: string | ContentType;
+  type: 'insight' | 'whitepaper' | 'webinar';
   /**
    * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
    */
   status: 'draft' | 'published' | 'archived';
-  type?: string | null;
+  contentType?: (string | null) | ContentType;
   /**
    * Public headline shown in cards, SEO, and the post detail page.
    */
@@ -807,9 +807,9 @@ export interface AuthorsSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  contentType?: T;
-  status?: T;
   type?: T;
+  status?: T;
+  contentType?: T;
   title?: T;
   readingTime?: T;
   slug?: T;
