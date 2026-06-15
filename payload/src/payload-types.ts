@@ -326,7 +326,7 @@ export interface Post {
    */
   authors?: (string | Author)[] | null;
   /**
-   * Pick webinar people from the author profiles. The first selected people appear in the speaker row and the last selected person becomes the moderator automatically.
+   * Optional. Pick webinar people from the author profiles — speaker(s) first; if you add 2 or more, the LAST one becomes the moderator automatically. Leave empty to hide the speakers row.
    */
   webinarSpeakerProfiles?: (string | Author)[] | null;
   /**

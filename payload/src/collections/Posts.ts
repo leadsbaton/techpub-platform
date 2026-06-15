@@ -153,17 +153,12 @@ export const Posts: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'authors',
                   hasMany: true,
-                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (siblingData.type === 'webinar' && (!Array.isArray(value) || value.length < 2)) {
-                      return 'Choose at least 2 people for a webinar: speaker(s) first and moderator last.'
-                    }
-
-                    return true
-                  },
+                  // Optional — a webinar can be saved with no speakers. When 2+ are
+                  // chosen, the last one is shown as the moderator automatically.
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'webinar',
                     description:
-                      'Pick webinar people from the author profiles. The first selected people appear in the speaker row and the last selected person becomes the moderator automatically.',
+                      'Optional. Pick webinar people from the author profiles — speaker(s) first; if you add 2 or more, the LAST one becomes the moderator automatically. Leave empty to hide the speakers row.',
                     width: '50%',
                   },
                 },
