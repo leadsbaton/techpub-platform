@@ -53,7 +53,16 @@ export function HeroFeature({
   })()
 
   return (
-    <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:py-6">
+    <section
+      // Fixed decorative background. Drop `herobg.png` into frontend/public to use
+      // it; until then the purple gradient fallback shows. The gradient sits on top
+      // of the image at low opacity so the white hero text stays readable.
+      className="bg-[var(--hero-purple)] bg-cover bg-center bg-no-repeat py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:py-6"
+      style={{
+        backgroundImage:
+          "linear-gradient(180deg, rgba(66,16,111,0.45) 0%, rgba(47,10,83,0.55) 100%), url('/herobg.png')",
+      }}
+    >
       <div className="site-container">
         <div className="overflow-hidden rounded-[26px] px-4 py-4 md:px-8 md:py-6">
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-[228px_minmax(0,1fr)] xl:gap-0">

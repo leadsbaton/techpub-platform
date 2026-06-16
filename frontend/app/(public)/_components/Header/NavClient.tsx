@@ -65,7 +65,7 @@ export function NavClient({ siteName, links }: NavClientProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[color:var(--surface)]">
+      <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-white">
         <div className="site-container flex h-[88px] items-center justify-between gap-4">
           <Link href="/" className="flex min-w-0 items-center gap-3">
             <Image

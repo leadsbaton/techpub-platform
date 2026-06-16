@@ -105,6 +105,24 @@ export default buildConfig({
       titleSuffix: '- TechPub CMS',
       icons: [{ rel: 'icon', type: 'image/png', url: '/leads-baton-logo.png' }],
     },
+    // Live Preview: the post editor gets a "Live Preview" view that renders the
+    // real frontend (via /preview/post) and refreshes as you fill in fields. The
+    // preview route fills sensible defaults for empty fields (title, image
+    // placeholder, dummy content) and matches each of the 3 post types.
+    livePreview: {
+      collections: ['posts'],
+      url: ({ data }) => {
+        const str = (v: unknown) => (typeof v === 'string' ? v : '')
+        const params = new URLSearchParams()
+        if (str(data.slug)) params.set('slug', str(data.slug))
+        if (str(data.type)) params.set('type', str(data.type))
+        if (str(data.title)) params.set('title', str(data.title))
+        if (str(data.excerpt)) params.set('excerpt', str(data.excerpt))
+        params.set('status', str(data.status) || 'draft')
+        const qs = params.toString()
+        return qs ? `${frontendURL}/preview/post?${qs}` : `${frontendURL}/preview/post`
+      },
+    },
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
