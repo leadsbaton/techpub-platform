@@ -47,32 +47,35 @@ export function HeroFeature({
   whitepaperHref: string
 }) {
   return (
-    <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] py-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:py-6">
-      <div className="site-container">
-        <div className="overflow-hidden rounded-[26px] px-4 py-4 md:px-8 md:py-6">
-          <div className="grid grid-cols-1 gap-5 xl:grid-cols-[228px_minmax(0,1fr)] xl:gap-0">
-            {/* Left: fixed circuit image + Explore/Engage/Elevate. */}
-            <div className="relative z-10 flex flex-col gap-4 pt-1 xl:translate-x-8 xl:pt-11">
-              <div className="ml-1 block max-w-[198px] overflow-hidden rounded-[12px] xl:ml-0 xl:max-w-[210px]">
-                <div className="relative aspect-[1.12/0.74] overflow-hidden rounded-[12px]">
-                  <Image
-                    src="/hero-circuit.png"
-                    alt=""
-                    fill
-                    priority
-                    sizes="(max-width: 1280px) 210px, 210px"
-                    className="object-cover"
-                  />
+    <div>
+      {/* Purple banner. Extra bottom padding on desktop leaves room for the card
+          row to overlap into it (the cards bridge the purple hero and the white
+          section below). */}
+      <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] pb-6 pt-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:pt-6 xl:pb-[250px]">
+        <div className="site-container">
+          <div className="overflow-hidden rounded-[26px] px-4 py-4 md:px-8 md:py-6">
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-[228px_minmax(0,1fr)] xl:gap-0">
+              {/* Left: fixed circuit image + Explore/Engage/Elevate. */}
+              <div className="relative z-10 flex flex-col gap-4 pt-1 xl:translate-x-8 xl:pt-11">
+                <div className="ml-1 block max-w-[198px] overflow-hidden rounded-[12px] xl:ml-0 xl:max-w-[210px]">
+                  <div className="relative aspect-[1.12/0.74] overflow-hidden rounded-[12px]">
+                    <Image
+                      src="/hero-circuit.png"
+                      alt=""
+                      fill
+                      priority
+                      sizes="210px"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                <div className="max-w-[220px] px-1 pt-1 xl:max-w-[228px] xl:px-0">
+                  <EchoCopy />
                 </div>
               </div>
 
-              <div className="max-w-[220px] px-1 pt-1 xl:max-w-[228px] xl:px-0">
-                <EchoCopy />
-              </div>
-            </div>
-
-            {/* Right: fixed laptop image with the CTA buttons, then dynamic cards. */}
-            <div className="min-w-0 space-y-4 xl:space-y-5">
+              {/* Right: fixed laptop image with the CTA buttons. */}
               <div className="relative overflow-hidden rounded-[18px] xl:ml-[-10px]">
                 <div className="relative aspect-[2.28/0.9] min-h-[190px] overflow-hidden rounded-[18px] md:min-h-[250px] xl:min-h-[0]">
                   <Image
@@ -86,7 +89,7 @@ export function HeroFeature({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                 </div>
 
-                <div className="absolute inset-x-0 bottom-3 flex flex-col items-center justify-center gap-2 px-4 sm:flex-row sm:flex-wrap sm:bottom-4 md:bottom-5 md:gap-3 xl:justify-center xl:px-14">
+                <div className="absolute inset-x-0 bottom-3 flex flex-col items-center justify-center gap-2 px-4 sm:flex-row sm:flex-wrap sm:bottom-4 md:bottom-5 md:gap-3">
                   <Link
                     href={webinarHref}
                     className="inline-flex min-h-10 items-center justify-center rounded-[8px] border border-[var(--accent-red-dark)] bg-[var(--accent-red)] px-4 py-2.5 text-[0.82rem] font-bold text-white shadow-[0_8px_20px_rgba(255,42,31,0.28)] transition hover:bg-[var(--accent-red-dark)] md:min-h-11 md:px-5 md:text-sm"
@@ -101,38 +104,43 @@ export function HeroFeature({
                   </Link>
                 </div>
               </div>
-
-              <div className="mt-5 min-w-0 overflow-x-auto pb-1 md:mt-6 xl:overflow-visible">
-                <div className="flex gap-3 xl:grid xl:grid-cols-4">
-                  {secondaryPosts.map((item) => (
-                    <Link
-                      key={item.id}
-                      href={getPostHref(item)}
-                      className="group block min-w-[148px] overflow-hidden rounded-[14px] sm:min-w-[168px] xl:min-w-0"
-                    >
-                      <div className="relative aspect-[1/1.08] overflow-hidden rounded-[14px]">
-                        <Image
-                          src={getImageUrl(item.featuredImage)}
-                          alt={item.title}
-                          fill
-                          sizes="(max-width: 1280px) 168px, 220px"
-                          className="object-cover transition duration-300 group-hover:scale-[1.03]"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/18 to-transparent" />
-                        <div className="absolute inset-x-0 bottom-0 p-3">
-                          <h3 className="line-clamp-3 text-[0.9rem] font-medium leading-5 text-white">
-                            {item.title}
-                          </h3>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Dynamic post cards. On desktop they are pulled up to overlap the bottom of
+          the purple banner (matching xl:pb above), so ~30% sits over the white page
+          background below; on mobile they sit normally beneath the banner. */}
+      <div className="site-container relative z-10 mt-5 xl:-mt-[220px]">
+        <div className="min-w-0 overflow-x-auto pb-1 xl:overflow-visible">
+          <div className="flex gap-3 xl:grid xl:grid-cols-4 xl:gap-5">
+            {secondaryPosts.map((item) => (
+              <Link
+                key={item.id}
+                href={getPostHref(item)}
+                className="group block min-w-[150px] overflow-hidden rounded-[14px] shadow-[0_18px_40px_rgba(15,23,42,0.18)] sm:min-w-[180px] xl:min-w-0"
+              >
+                <div className="relative aspect-[1/1.12] overflow-hidden rounded-[14px]">
+                  <Image
+                    src={getImageUrl(item.featuredImage)}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 1280px) 180px, 260px"
+                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-3">
+                    <h3 className="line-clamp-3 text-[0.9rem] font-medium leading-5 text-white">
+                      {item.title}
+                    </h3>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   )
 }

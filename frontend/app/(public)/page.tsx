@@ -75,8 +75,15 @@ export default async function HomePage() {
   const secondaryHeroPosts = [...whitepapers, ...webinars, ...insights]
     .filter((item) => item.id !== heroPost.id)
     .slice(0, 4)
-  const trendingPosts = insights.slice(0, 3)
-  const latestInsights = insights.slice(0, 6)
+  // Trending shows a 3-card row. Prefer insights (matching the design), but fall
+  // back to whitepapers/webinars so the row never renders with an empty column
+  // when only a couple of insights are published.
+  const trendingPosts = Array.from(
+    new Map(
+      [...insights, ...whitepapers, ...webinars].map((item) => [item.id, item]),
+    ).values(),
+  ).slice(0, 3)
+  const latestInsights = insights.slice(0, 7)
   const webinarLead = webinars[0] ?? null
   const webinarSupport = webinars.slice(1, 3)
   const mustReadWhitepapers = whitepapers.slice(0, 3)
@@ -93,10 +100,15 @@ export default async function HomePage() {
 
       <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
         <HomeSectionHeader title="Trending Now" />
-        <div className="grid gap-5 md:grid-cols-3">
-          {trendingPosts.map((post) => (
-            <HomeOverlayCard key={post.id} post={post} />
-          ))}
+        {/* Mobile: horizontal scroll carousel (no visible scrollbar). Desktop: 3-col grid. */}
+        <div className="no-scrollbar overflow-x-auto pb-1 md:overflow-visible">
+          <div className="flex gap-5 md:grid md:grid-cols-3">
+            {trendingPosts.map((post) => (
+              <div key={post.id} className="w-[78%] shrink-0 sm:w-[46%] md:w-auto">
+                <HomeOverlayCard post={post} />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -131,7 +143,10 @@ export default async function HomePage() {
 
           <div className="space-y-5">
             {latestInsights[2] ? (
-              <HomeOverlayCard post={latestInsights[2]} variant="compact" compactSize="large" />
+              <HomeOverlayCard post={latestInsights[2]} variant="compact" compactSize="small" />
+            ) : null}
+            {latestInsights[6] ? (
+              <HomeOverlayCard post={latestInsights[6]} variant="compact" compactSize="large" />
             ) : null}
           </div>
         </div>

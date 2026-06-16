@@ -13,6 +13,46 @@ import {
 } from '@/lib/utils/formatting'
 import { HomeVerticalBadge } from './HomeVerticalBadge'
 
+function CalendarIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0 text-[color:var(--accent-red)]"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+    </svg>
+  )
+}
+
+function ClockIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0 text-[color:var(--accent-red)]"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  )
+}
+
 export function HomeOverlayCard({
   post,
   variant = 'default',
@@ -32,9 +72,9 @@ export function HomeOverlayCard({
 
   if (!isCompact && !isWebinar) {
     return (
-      <article className="flex h-full flex-col rounded-[20px] bg-white shadow-[var(--shadow-soft)]">
-        <Link href={href} className="group block overflow-hidden rounded-t-[20px]">
-          <div className="relative h-[300px] overflow-hidden bg-[color:var(--surface-muted)] sm:h-[340px] lg:h-[370px]">
+      <article className="flex h-full flex-col">
+        <Link href={href} className="group relative block">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-[color:var(--surface-muted)]">
             <Image
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
@@ -42,11 +82,11 @@ export function HomeOverlayCard({
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
-            <HomeVerticalBadge label={category} color={accent} />
           </div>
+          <HomeVerticalBadge label={category} color={accent} />
         </Link>
 
-        <div className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-4 md:px-5">
+        <div className="flex flex-1 flex-col gap-4 pt-4">
           <Link
             href={href}
             className="headline-font text-[1rem] font-extrabold leading-[1.16] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] md:text-[1.04rem]"
@@ -54,7 +94,7 @@ export function HomeOverlayCard({
             {post.title}
           </Link>
 
-          <div className="mt-auto flex items-end justify-between gap-3 border-t border-black/6 pt-3">
+          <div className="mt-auto flex items-end justify-between gap-3 pt-1">
             <Link
               href={href}
               className="inline-flex min-w-[88px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)] md:min-w-[96px]"
@@ -66,11 +106,23 @@ export function HomeOverlayCard({
               <div className="font-semibold text-[color:var(--text-strong)]">
                 {getAuthorNames(post.authors)}
               </div>
-              <div className="mt-1 whitespace-nowrap">
-                {post.type === 'webinar'
-                  ? `${formatShortDate(post.publishedAt)} | 12:20PM IST`
-                  : `${post.readingTime ?? 12} mins`}
-              </div>
+              {post.type === 'webinar' ? (
+                <div className="mt-1 flex items-center justify-end gap-2 whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    <CalendarIcon />
+                    {formatShortDate(post.publishedAt)}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <ClockIcon />
+                    12:20PM IST
+                  </span>
+                </div>
+              ) : (
+                <div className="mt-1 flex items-center justify-end gap-1 whitespace-nowrap">
+                  <ClockIcon />
+                  {post.readingTime ?? 12} mins
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -95,9 +147,9 @@ export function HomeOverlayCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/35 to-transparent" />
           <div
-            className={`absolute inset-x-0 bottom-0 text-white ${
+            className={`absolute inset-x-0 top-0 text-white ${
               isSmallWebinar ? 'p-5' : 'p-6 md:p-8'
             }`}
           >
@@ -135,7 +187,7 @@ export function HomeOverlayCard({
     <Link href={href} className="group block overflow-hidden rounded-[18px]">
       <article
         className={`relative overflow-hidden rounded-[18px] bg-black ${
-          isSmallCompact ? 'min-h-[170px]' : 'min-h-[320px]'
+          isSmallCompact ? 'aspect-[1.5/1]' : 'aspect-square'
         }`}
       >
         <Image
