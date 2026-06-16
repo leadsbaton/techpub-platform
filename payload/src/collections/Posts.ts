@@ -576,6 +576,26 @@ export const Posts: CollectionConfig = {
           ],
         },
         {
+          // Inline live preview, always visible as a tab in the editor (works in
+          // create AND edit). Reads the form fields live and renders the real
+          // frontend layout for the chosen type, updating as you fill them in.
+          label: 'Live Preview',
+          fields: [
+            {
+              name: 'postLivePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostLivePreviewFrame',
+                    exportName: 'PostLivePreviewFrame',
+                  },
+                },
+              },
+            },
+          ],
+        },
+        {
           label: 'Actions & SEO',
           fields: [
             {
