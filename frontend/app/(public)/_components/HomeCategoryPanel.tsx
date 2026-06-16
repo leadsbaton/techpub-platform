@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import type { Category } from '@/lib/types/cms'
 import { hasMediaSource, getImageUrl } from '@/lib/utils/formatting'
+import { HomeRuledHeader } from './HomeRuledHeader'
 
 const copyBySlug: Record<string, string> = {
   marketing:
@@ -50,21 +51,17 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
 
   return (
     <section className="site-container mt-16 space-y-7">
-      <div className="section-heading">
-        <h2 className="text-[clamp(1.5rem,2.4vw,2.25rem)] font-semibold tracking-tight text-[color:var(--text-strong)]">
-          Discover by Category
-        </h2>
-      </div>
+      <HomeRuledHeader title="Discover by Category" />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-[0.34fr_0.66fr]">
         {primary.map((category) => (
           <Link
             key={category.id}
             href={getCategoryHref(category.slug)}
-            className="group block rounded-[22px]"
+            className="group block rounded-[16px]"
           >
-            <article className="overflow-hidden rounded-[22px] bg-white shadow-[var(--shadow-soft)]">
-              <div className="relative aspect-[1.2/0.78] overflow-hidden bg-[color:var(--surface-muted)]">
+            <article className="space-y-3">
+              <div className="relative min-h-[260px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)] md:min-h-[350px]">
                 <Image
                   src={getImageUrl(category.image)}
                   alt={category.name}
@@ -72,13 +69,12 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transition duration-300 group-hover:scale-[1.02]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               </div>
-              <div className="space-y-3 px-5 py-5">
-                <h3 className="text-[1.35rem] font-semibold text-[color:var(--text-strong)]">
+              <div className="space-y-2">
+                <h3 className="text-[1.1rem] font-extrabold leading-tight text-[color:var(--text-strong)]">
                   {category.name}
                 </h3>
-                <p className="text-[0.98rem] leading-7 text-[color:var(--text-muted)]">
+                <p className="line-clamp-2 text-[0.92rem] leading-6 text-[color:var(--text-muted)]">
                   {copyBySlug[category.slug] ||
                     category.description ||
                     'Explore the latest editorial coverage in this category.'}
@@ -92,10 +88,10 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
       {featured ? (
         <Link
           href={getCategoryHref(featured.slug)}
-          className="group block rounded-[24px] bg-white shadow-[var(--shadow-soft)]"
+          className="group block rounded-[16px]"
         >
-          <article className="overflow-hidden rounded-[24px]">
-            <div className="relative aspect-[2.8/1] min-h-[240px] overflow-hidden bg-[color:var(--surface-muted)]">
+          <article className="space-y-3">
+            <div className="relative min-h-[260px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)] md:min-h-[350px]">
               <Image
                 src={getImageUrl(featured.image)}
                 alt={featured.name}
@@ -103,13 +99,12 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
                 sizes="(max-width: 1280px) 100vw, 1200px"
                 className="object-cover transition duration-300 group-hover:scale-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
             </div>
-            <div className="space-y-3 px-6 py-5 md:px-7">
-              <h3 className="text-[1.8rem] font-semibold tracking-tight text-[color:var(--text-strong)]">
+            <div className="space-y-2">
+              <h3 className="text-[1.1rem] font-extrabold leading-tight text-[color:var(--text-strong)]">
                 {featured.name}
               </h3>
-              <p className="max-w-3xl text-[1rem] leading-7 text-[color:var(--text-muted)]">
+              <p className="line-clamp-2 max-w-3xl text-[0.92rem] leading-6 text-[color:var(--text-muted)]">
                 {copyBySlug[featured.slug] ||
                   featured.description ||
                   'Explore a focused stream of high-signal category coverage.'}

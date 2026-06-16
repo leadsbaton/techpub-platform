@@ -12,11 +12,11 @@ export function HomeResourceCard({ post }: { post: Post }) {
   const accent = getCategoryAccent(post.primaryCategory)
 
   return (
-    <article className="flex h-full flex-col rounded-[20px] border border-[var(--border-subtle)] bg-white p-5 shadow-[var(--shadow-soft)]">
-      <div className="relative mb-6 overflow-visible">
-        <HomeVerticalBadge label={category} color={accent} className="right-[-8px] md:right-[-10px]" />
-        <Link href={href} className="group block overflow-hidden rounded-[14px]">
-          <div className="relative aspect-[1.12/0.68] overflow-hidden rounded-[14px]">
+    <article className="flex h-[510px] flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-white shadow-[0px_6px_12px_0px_#00000008,0px_4px_8px_0px_#00000005]">
+      <div className="relative overflow-visible">
+        <HomeVerticalBadge label={category} color={accent} className="right-4 top-0" />
+        <Link href={href} className="group block overflow-hidden rounded-t-[16px]">
+          <div className="relative h-[235px] overflow-hidden rounded-t-[16px]">
             <Image
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
@@ -28,19 +28,19 @@ export function HomeResourceCard({ post }: { post: Post }) {
         </Link>
       </div>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col p-6">
         <Link
           href={href}
-          className="headline-font text-[1.08rem] font-extrabold leading-[1.24] text-[color:var(--text-strong)]"
+          className="headline-font line-clamp-2 text-[1.08rem] font-extrabold leading-[1.28] text-[color:var(--text-strong)]"
         >
           {post.title}
         </Link>
         {post.excerpt ? (
-          <p className="mt-4 text-[0.98rem] leading-7 text-[color:var(--text-muted)]">
+          <p className="mt-3 line-clamp-3 text-[0.98rem] leading-6 text-[color:var(--text-muted)]">
             {post.excerpt}
           </p>
         ) : null}
-        <div className="mt-8">
+        <div className="mt-auto pt-5">
           <Link
             href={href}
             className="inline-flex items-center gap-2 text-base font-bold text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"

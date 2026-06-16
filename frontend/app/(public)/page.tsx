@@ -5,7 +5,7 @@ import { HeroFeature } from './_components/HeroFeature'
 import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
-import { HomeSectionHeader } from './_components/HomeSectionHeader'
+import { HomeRuledHeader } from './_components/HomeRuledHeader'
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 
@@ -86,7 +86,7 @@ export default async function HomePage() {
   const latestInsights = insights.slice(0, 7)
   const webinarLead = webinars[0] ?? null
   const webinarSupport = webinars.slice(1, 3)
-  const mustReadWhitepapers = whitepapers.slice(0, 3)
+  const mustReadWhitepapers = whitepapers.slice(0, 8)
 
   return (
     <div className="pb-20 pt-0">
@@ -99,7 +99,7 @@ export default async function HomePage() {
       />
 
       <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
-        <HomeSectionHeader title="Trending Now" />
+        <HomeRuledHeader title="Trending Now" />
         {/* Mobile: horizontal scroll carousel (no visible scrollbar). Desktop: 3-col grid. */}
         <div className="no-scrollbar overflow-x-auto pb-1 md:overflow-visible">
           <div className="flex gap-5 md:grid md:grid-cols-3">
@@ -113,14 +113,14 @@ export default async function HomePage() {
       </section>
 
       <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <HomeSectionHeader
+        <HomeRuledHeader
           title="Explore our Latest Insights"
           subtitle="Insight that inspires, informs, and ignites change"
           href={insightConfig.routeBase}
           actionLabel="View All"
         />
-        <div className="grid gap-5 lg:grid-cols-3">
-          <div className="space-y-5">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="space-y-6">
             {latestInsights[0] ? (
               <HomeOverlayCard post={latestInsights[0]} variant="compact" compactSize="large" />
             ) : null}
@@ -129,7 +129,7 @@ export default async function HomePage() {
             ) : null}
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             {latestInsights[1] ? (
               <HomeOverlayCard post={latestInsights[1]} variant="compact" compactSize="small" />
             ) : null}
@@ -141,7 +141,7 @@ export default async function HomePage() {
             ) : null}
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             {latestInsights[2] ? (
               <HomeOverlayCard post={latestInsights[2]} variant="compact" compactSize="small" />
             ) : null}
@@ -155,9 +155,9 @@ export default async function HomePage() {
       <HomeCategoryPanel categories={categories} />
 
       <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <HomeSectionHeader title="Upcoming Webinars" href={webinarConfig.routeBase} actionLabel="View All" />
-        <div className="grid gap-5 lg:grid-cols-[0.48fr_0.52fr]">
-          <div className="space-y-5">
+        <HomeRuledHeader title="Upcoming Webinars" />
+        <div className="grid gap-2 lg:grid-cols-[0.48fr_0.52fr]">
+          <div className="grid gap-2">
             {webinarSupport[0] ? (
               <HomeOverlayCard post={webinarSupport[0]} variant="webinar" compactSize="small" />
             ) : null}
@@ -165,18 +165,25 @@ export default async function HomePage() {
               <HomeOverlayCard post={webinarSupport[1]} variant="webinar" compactSize="small" />
             ) : null}
           </div>
-          <div>
+          <div className="min-h-[420px] lg:min-h-0">
             {webinarLead ? <HomeOverlayCard post={webinarLead} variant="webinar" /> : null}
           </div>
         </div>
       </section>
 
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <HomeSectionHeader title="Must Read White Papers" href={whitepaperConfig.routeBase} actionLabel="View All" />
-        <div className="grid gap-5 md:grid-cols-3">
-          {mustReadWhitepapers.map((post) => (
-            <HomeResourceCard key={post.id} post={post} />
-          ))}
+      <section className="mt-14 space-y-6 overflow-hidden md:mt-16 md:space-y-7">
+        <HomeRuledHeader title="Must Read White Papers" className="site-container" />
+        <div className="no-scrollbar overflow-x-auto py-3">
+          <div className="flex gap-5">
+            {mustReadWhitepapers.map((post) => (
+              <div
+                key={post.id}
+                className="w-[82vw] shrink-0 first:ml-[max(16px,calc((100vw-1200px)/2))] last:mr-[max(16px,calc((100vw-1200px)/2))] sm:w-[48vw] lg:w-[31vw] xl:w-[390px]"
+              >
+                <HomeResourceCard post={post} />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

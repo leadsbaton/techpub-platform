@@ -134,10 +134,10 @@ export function HomeOverlayCard({
     const isSmallWebinar = compactSize === 'small'
 
     return (
-      <Link href={href} className="group block overflow-hidden rounded-[20px]">
+      <Link href={href} className="group block h-full overflow-hidden">
         <article
-          className={`relative h-full overflow-hidden rounded-[20px] bg-black ${
-            isSmallWebinar ? 'min-h-[220px] md:min-h-[250px]' : 'min-h-[260px] md:min-h-[520px]'
+          className={`relative h-full overflow-hidden bg-black ${
+            isSmallWebinar ? 'min-h-[280px] lg:min-h-[310px]' : 'min-h-[420px] lg:min-h-[620px]'
           }`}
         >
           <Image
@@ -147,30 +147,22 @@ export function HomeOverlayCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/35 to-transparent" />
-          <div
-            className={`absolute inset-x-0 top-0 text-white ${
-              isSmallWebinar ? 'p-5' : 'p-6 md:p-8'
-            }`}
-          >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/35 to-transparent" />
+          <div className="absolute inset-x-0 top-0 p-6 text-white md:p-8">
             <h3
-              className={`headline-font max-w-[22ch] font-extrabold leading-tight ${
+              className={`headline-font line-clamp-2 max-w-[24ch] font-extrabold leading-[1.14] ${
                 isSmallWebinar
-                  ? 'text-[1.05rem] md:text-[1.2rem]'
-                  : 'text-[1.3rem] md:text-[1.8rem]'
+                  ? 'text-[1.35rem] md:text-[1.5rem]'
+                  : 'text-[1.45rem] md:text-[1.75rem]'
               }`}
             >
               {post.title}
             </h3>
-            <p className={`mt-2 text-white/82 ${isSmallWebinar ? 'text-xs' : 'text-sm'}`}>
+            <p className="mt-3 max-w-full text-[0.98rem] font-medium leading-6 text-white/90 md:text-[1.08rem]">
               Oracle - {formatDate(post.publishedAt)} 11:00AM PT, 2:00PM ET
             </p>
             <span
-              className={`inline-flex rounded-[6px] font-extrabold uppercase tracking-[0.1em] text-white ${
-                isSmallWebinar
-                  ? 'mt-3 px-3 py-1.5 text-[0.68rem]'
-                  : 'mt-4 px-3 py-2 text-[0.75rem]'
-              }`}
+              className="mt-4 inline-flex px-4 py-2 text-[0.95rem] font-extrabold uppercase tracking-[0.02em] text-white md:text-[1.05rem]"
               style={{ backgroundColor: accent }}
             >
               {category}
@@ -184,10 +176,10 @@ export function HomeOverlayCard({
   const isSmallCompact = compactSize === 'small'
 
   return (
-    <Link href={href} className="group block overflow-hidden rounded-[18px]">
+    <Link href={href} className="group block overflow-hidden rounded-[16px]">
       <article
-        className={`relative overflow-hidden rounded-[18px] bg-black ${
-          isSmallCompact ? 'aspect-[1.5/1]' : 'aspect-square'
+        className={`relative overflow-hidden rounded-[16px] bg-black ${
+          isSmallCompact ? 'h-[280px] md:h-[300px]' : 'h-[360px] md:h-[411px]'
         }`}
       >
         <Image
@@ -197,19 +189,25 @@ export function HomeOverlayCard({
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(179.85deg, rgba(0, 0, 0, 0) 71.72%, #000000 99.87%)',
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-5">
           <span
-            className="inline-flex rounded-[4px] px-3 py-1.5 text-[0.7rem] font-extrabold uppercase tracking-[0.12em] text-white"
+            className="inline-flex rounded-[3px] px-3 py-2 text-[0.78rem] font-extrabold uppercase leading-none text-white md:text-[0.9rem]"
             style={{ backgroundColor: accent }}
           >
             {category}
           </span>
           <h3
-            className={`mt-3 max-w-[24ch] font-semibold ${
+            className={`mt-2 max-w-[25ch] font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${
               isSmallCompact
-                ? 'line-clamp-2 text-[1rem] leading-5'
-                : 'line-clamp-3 text-[1.1rem] leading-6'
+                ? 'line-clamp-2 text-[1rem] leading-5 md:text-[1.08rem] md:leading-6'
+                : 'line-clamp-2 text-[1.08rem] leading-6 md:text-[1.18rem] md:leading-7'
             }`}
           >
             {post.title}
