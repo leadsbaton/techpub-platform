@@ -105,20 +105,11 @@ export default buildConfig({
       titleSuffix: '- TechPub CMS',
       icons: [{ rel: 'icon', type: 'image/png', url: '/leads-baton-logo.png' }],
     },
-    // Live Preview: the post editor gets a "Live Preview" view that renders the
-    // real frontend (via /preview/post) and refreshes as you fill in fields. The
-    // preview route fills sensible defaults for empty fields (title, image
-    // placeholder, dummy content) and matches each of the 3 post types.
-    livePreview: {
-      collections: ['posts'],
-      // MUST be a STRING, not a function. Payload only executes a function `url`
-      // when operation !== 'create' (see handleLivePreview), so a function-based
-      // url silently disables Live Preview on the CREATE view. With a static url
-      // the eye-icon + split preview show in create AND edit; the live field data
-      // (type/title/content/images) is delivered to the preview via postMessage,
-      // which the preview route consumes with useLivePreview.
-      url: `${frontendURL}/preview/post`,
-    },
+    // NOTE: no native `livePreview` (the eye-icon split view) on purpose. Payload
+    // hard-disables it on the create view, which made create and edit behave
+    // differently. Instead, the inline "Post Preview" panel (PostLivePreviewFrame,
+    // at the bottom of Post Builder) is used for BOTH create and edit so the flow
+    // is identical everywhere.
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
