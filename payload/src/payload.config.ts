@@ -105,11 +105,14 @@ export default buildConfig({
       titleSuffix: '- TechPub CMS',
       icons: [{ rel: 'icon', type: 'image/png', url: '/leads-baton-logo.png' }],
     },
-    // NOTE: no native `livePreview` (the eye-icon split view) on purpose. Payload
-    // hard-disables it on the create view, which made create and edit behave
-    // differently. Instead, the inline "Post Preview" panel (PostLivePreviewFrame,
-    // at the bottom of Post Builder) is used for BOTH create and edit so the flow
-    // is identical everywhere.
+    // Native Live Preview (the eye-icon split view). NOTE: Payload hard-disables
+    // this on the CREATE view (Document view forces `&& operation !== 'create'`),
+    // so the eye icon only appears when EDITING an existing post — not while
+    // creating a new one. That is a Payload limitation, not a config issue.
+    livePreview: {
+      collections: ['posts'],
+      url: `${frontendURL}/preview/post`,
+    },
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
