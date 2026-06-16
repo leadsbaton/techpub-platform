@@ -111,17 +111,13 @@ export default buildConfig({
     // placeholder, dummy content) and matches each of the 3 post types.
     livePreview: {
       collections: ['posts'],
-      url: ({ data }) => {
-        const str = (v: unknown) => (typeof v === 'string' ? v : '')
-        const params = new URLSearchParams()
-        if (str(data.slug)) params.set('slug', str(data.slug))
-        if (str(data.type)) params.set('type', str(data.type))
-        if (str(data.title)) params.set('title', str(data.title))
-        if (str(data.excerpt)) params.set('excerpt', str(data.excerpt))
-        params.set('status', str(data.status) || 'draft')
-        const qs = params.toString()
-        return qs ? `${frontendURL}/preview/post?${qs}` : `${frontendURL}/preview/post`
-      },
+      // MUST be a STRING, not a function. Payload only executes a function `url`
+      // when operation !== 'create' (see handleLivePreview), so a function-based
+      // url silently disables Live Preview on the CREATE view. With a static url
+      // the eye-icon + split preview show in create AND edit; the live field data
+      // (type/title/content/images) is delivered to the preview via postMessage,
+      // which the preview route consumes with useLivePreview.
+      url: `${frontendURL}/preview/post`,
     },
     user: Users.slug,
     importMap: {
