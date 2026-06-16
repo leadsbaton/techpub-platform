@@ -573,6 +573,22 @@ export const Posts: CollectionConfig = {
                 description: 'Optional related content suggestions shown near this post.',
               },
             },
+            {
+              // Real-time preview INLINE in the form so it works while CREATING a
+              // post — Payload's native eye-icon live preview is hard-disabled on
+              // the create view (operation !== 'create'), so this is the only way
+              // to preview a brand-new post. Reads the form fields live.
+              name: 'postLivePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: {
+                    path: './components/admin/PostLivePreviewFrame',
+                    exportName: 'PostLivePreviewFrame',
+                  },
+                },
+              },
+            },
           ],
         },
         {
