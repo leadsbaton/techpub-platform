@@ -24,7 +24,43 @@ type LexicalNode = {
   // query depth resolves the relationship).
   relationTo?: string
   value?: Media | string | null
+  // Lexical node state (text color / highlight set via the editor's
+  // TextStateFeature) is serialized under the "$" key as { color, highlight }.
+  $?: Record<string, string | undefined>
   children?: LexicalNode[]
+}
+
+// Maps the text-state KEYS stored in the editor JSON back to CSS. Must stay in
+// sync with `editorTextColors` / `editorHighlights` in payload.config.ts, since
+// the editor only stores the key (e.g. "red"), not the underlying color.
+const TEXT_STATE_CSS: Record<string, Record<string, React.CSSProperties>> = {
+  color: {
+    red: { color: '#FC0203' },
+    black: { color: '#111111' },
+    gray: { color: '#6B7280' },
+    blue: { color: '#1D4ED8' },
+    green: { color: '#15803D' },
+    orange: { color: '#EA580C' },
+    purple: { color: '#7C3AED' },
+  },
+  highlight: {
+    yellow: { backgroundColor: '#FEF08A' },
+    green: { backgroundColor: '#BBF7D0' },
+    blue: { backgroundColor: '#BFDBFE' },
+    red: { backgroundColor: '#FECACA' },
+  },
+}
+
+// Build a React style object from a text node's "$" state (editor colors).
+function stateStyle(state: LexicalNode['$']): React.CSSProperties | undefined {
+  if (!state) return undefined
+  let out: React.CSSProperties | undefined
+  for (const stateKey of Object.keys(state)) {
+    const value = state[stateKey]
+    const css = value ? TEXT_STATE_CSS[stateKey]?.[value] : undefined
+    if (css) out = { ...out, ...css }
+  }
+  return out
 }
 
 // Render-time options threaded through the recursive node walk.
@@ -127,9 +163,10 @@ function renderTextNode(node: LexicalNode, index: number, opts: RenderOptions) {
   if (hasFormat(format, IS_SUBSCRIPT, 'subscript')) content = <sub>{content}</sub>
   if (hasFormat(format, IS_SUPERSCRIPT, 'superscript')) content = <sup>{content}</sup>
 
-  // Inline color / font-size / etc. set in the editor.
-  const style = parseStyleString(node.style)
-  if (style) {
+  // Inline color / font-size from a raw style string, plus editor text-state
+  // colors/highlights (stored under "$"). Merge both into one wrapping span.
+  const style = { ...stateStyle(node.$), ...parseStyleString(node.style) }
+  if (Object.keys(style).length) {
     content = <span style={style}>{content}</span>
   }
 

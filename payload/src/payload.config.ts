@@ -1,5 +1,5 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, TextStateFeature } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -20,6 +20,26 @@ import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Inline text colors / highlights available in the rich-text toolbar.
+// IMPORTANT: TextStateFeature stores only the state KEY (e.g. "red") in the
+// editor JSON, not the CSS. The public site re-maps these same keys to CSS in
+// frontend `RichTextRenderer` (TEXT_STATE_CSS) — keep the two maps in sync.
+const editorTextColors = {
+  red: { label: 'Red', css: { color: '#FC0203' } },
+  black: { label: 'Black', css: { color: '#111111' } },
+  gray: { label: 'Gray', css: { color: '#6B7280' } },
+  blue: { label: 'Blue', css: { color: '#1D4ED8' } },
+  green: { label: 'Green', css: { color: '#15803D' } },
+  orange: { label: 'Orange', css: { color: '#EA580C' } },
+  purple: { label: 'Purple', css: { color: '#7C3AED' } },
+}
+const editorHighlights = {
+  yellow: { label: 'Yellow', css: { 'background-color': '#FEF08A' } },
+  green: { label: 'Green', css: { 'background-color': '#BBF7D0' } },
+  blue: { label: 'Blue', css: { 'background-color': '#BFDBFE' } },
+  red: { label: 'Red', css: { 'background-color': '#FECACA' } },
+}
 const isProduction = process.env.NODE_ENV === 'production'
 const frontendURL = process.env.NEXT_PUBLIC_SITE_URL || process.env.FRONTEND_URL || (isProduction ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
 // The admin's own public URL. In production it MUST be in the CORS/CSRF allow-list
@@ -133,7 +153,17 @@ export default buildConfig({
     Submissions,
   ],
   globals: [SiteSettings],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      TextStateFeature({
+        state: {
+          color: editorTextColors,
+          highlight: editorHighlights,
+        },
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
