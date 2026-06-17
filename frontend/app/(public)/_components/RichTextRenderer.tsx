@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import type { Media } from '@/lib/types/cms'
 import { getMediaUrl } from '@/lib/utils/formatting'
@@ -24,6 +25,14 @@ type LexicalNode = {
   relationTo?: string
   value?: Media | string | null
   children?: LexicalNode[]
+}
+
+// Render-time options threaded through the recursive node walk.
+type RenderOptions = {
+  // When set, plain "Register Now" text in the body is turned into a red link
+  // pointing here (the webinar /access route). Lets editors type "Register Now"
+  // without manually styling/linking it every time.
+  registerHref?: string
 }
 
 // Lexical text-format bitmask flags.
@@ -67,16 +76,46 @@ function blockAlignStyle(node: LexicalNode): React.CSSProperties | undefined {
   return undefined
 }
 
-function renderChildren(children?: LexicalNode[]) {
+// Find "Register Now" (case-insensitive) inside a plain text run and turn each
+// occurrence into a red link to the webinar access page. Returns the original
+// string untouched when there is no match, so non-webinar content is unaffected.
+const REGISTER_RE = /register now/gi
+
+function linkifyRegister(text: string, href: string, keyPrefix: string): React.ReactNode {
+  if (!text || !REGISTER_RE.test(text)) return text
+  REGISTER_RE.lastIndex = 0
+
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  let i = 0
+  while ((match = REGISTER_RE.exec(text)) !== null) {
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index))
+    parts.push(
+      <Link key={`${keyPrefix}-reg-${i}`} href={href} className="font-bold text-[#FC0203] no-underline hover:underline">
+        {match[0]}
+      </Link>,
+    )
+    lastIndex = match.index + match[0].length
+    i += 1
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex))
+  return parts
+}
+
+function renderChildren(children: LexicalNode[] | undefined, opts: RenderOptions) {
   return children?.map((child, index) => (
     <React.Fragment key={`${child.type ?? 'node'}-${index}`}>
-      {renderNode(child, index)}
+      {renderNode(child, index, opts)}
     </React.Fragment>
   ))
 }
 
-function renderTextNode(node: LexicalNode) {
-  let content: React.ReactNode = node.text ?? ''
+function renderTextNode(node: LexicalNode, index: number, opts: RenderOptions) {
+  const raw = node.text ?? ''
+  let content: React.ReactNode = opts.registerHref
+    ? linkifyRegister(raw, opts.registerHref, `t-${index}`)
+    : raw
   const format = node.format
 
   // Innermost first so wrappers nest cleanly.
@@ -123,20 +162,20 @@ function renderUploadNode(node: LexicalNode) {
   return <img src={src} alt={alt} loading="lazy" className="h-auto w-full rounded-lg" />
 }
 
-function renderNode(node: LexicalNode, index: number): React.ReactNode {
+function renderNode(node: LexicalNode, index: number, opts: RenderOptions): React.ReactNode {
   switch (node.type) {
     case 'heading': {
       const Tag = (node.tag || 'h2') as keyof React.JSX.IntrinsicElements
-      return <Tag style={blockAlignStyle(node)}>{renderChildren(node.children)}</Tag>
+      return <Tag style={blockAlignStyle(node)}>{renderChildren(node.children, opts)}</Tag>
     }
     case 'paragraph':
-      return <p style={blockAlignStyle(node)}>{renderChildren(node.children)}</p>
+      return <p style={blockAlignStyle(node)}>{renderChildren(node.children, opts)}</p>
     case 'list':
-      return node.tag === 'ol' ? <ol>{renderChildren(node.children)}</ol> : <ul>{renderChildren(node.children)}</ul>
+      return node.tag === 'ol' ? <ol>{renderChildren(node.children, opts)}</ol> : <ul>{renderChildren(node.children, opts)}</ul>
     case 'listitem':
-      return <li>{renderChildren(node.children)}</li>
+      return <li>{renderChildren(node.children, opts)}</li>
     case 'quote':
-      return <blockquote style={blockAlignStyle(node)}>{renderChildren(node.children)}</blockquote>
+      return <blockquote style={blockAlignStyle(node)}>{renderChildren(node.children, opts)}</blockquote>
     case 'link': {
       const href = node.fields?.url ?? node.url ?? '#'
       // Open external links in a new tab; keep internal links in the same tab.
@@ -148,7 +187,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
           target={openNewTab ? '_blank' : undefined}
           rel={openNewTab ? 'noreferrer' : undefined}
         >
-          {renderChildren(node.children)}
+          {renderChildren(node.children, opts)}
         </a>
       )
     }
@@ -158,7 +197,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
       return <br key={`br-${index}`} />
     case 'text':
     default:
-      return renderTextNode(node)
+      return renderTextNode(node, index, opts)
   }
 }
 
@@ -168,8 +207,18 @@ export type RichTextDocument = {
   }
 }
 
-export function RichTextRenderer({ content }: { content?: RichTextDocument | null }) {
+export function RichTextRenderer({
+  content,
+  registerHref,
+}: {
+  content?: RichTextDocument | null
+  registerHref?: string
+}) {
   const children = content?.root?.children
   if (!children?.length) return null
-  return <div className="prose prose-slate max-w-none break-words">{renderChildren(children)}</div>
+  return (
+    <div className="prose prose-slate max-w-none break-words">
+      {renderChildren(children, { registerHref })}
+    </div>
+  )
 }

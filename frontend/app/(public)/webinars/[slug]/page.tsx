@@ -100,7 +100,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
             {post.content ? (
               <div className="ui-font prose max-w-none text-[16px] leading-[145%] text-[#2d2d2d]">
-                <RichTextRenderer content={post.content} />
+                <RichTextRenderer content={post.content} registerHref={`/webinars/${post.slug}/access`} />
               </div>
             ) : null}
 
