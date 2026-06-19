@@ -45,11 +45,11 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
   const accent = getCategoryAccent(post.primaryCategory)
 
   return (
-    <Link href={getPostHref(post)} className="group block">
-      <article>
+    <Link href={getPostHref(post)} className="group block h-full">
+      <article className="flex h-full flex-col">
         <div
-          className={`relative overflow-hidden rounded-[4px] ${
-            large ? 'aspect-[1.1/0.98]' : 'aspect-[1.26/0.7]'
+          className={`relative overflow-hidden rounded-[6px] bg-black shadow-[0_18px_45px_rgba(0,0,0,0.28)] ${
+            large ? 'aspect-[1.28/0.9] lg:aspect-[1.12/0.88]' : 'aspect-[1.58/0.9]'
           }`}
         >
           <Image
@@ -57,25 +57,26 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
             alt={post.title}
             fill
             sizes={large ? '(max-width: 1024px) 100vw, 45vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
-            className="object-cover transition duration-300 group-hover:scale-[1.02]"
+            className="object-cover transition duration-500 group-hover:scale-[1.04]"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90" />
           <div
-            className="absolute bottom-3 left-3 inline-flex px-3 py-1.5 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-white"
+            className="absolute bottom-4 left-4 inline-flex px-3 py-1.5 text-[0.68rem] font-extrabold uppercase text-white"
             style={{ backgroundColor: accent }}
           >
             {category}
           </div>
         </div>
         <h3
-          className={`mt-4 text-white ${
+          className={`mt-4 text-balance text-white transition group-hover:text-white/82 ${
             large
-              ? 'headline-font text-[1rem] font-bold leading-[1.18] md:text-[1.05rem]'
-              : 'text-[0.96rem] font-semibold leading-[1.18]'
+              ? 'headline-font text-[1.25rem] font-bold leading-[1.18] sm:text-[1.45rem] lg:text-[1.55rem]'
+              : 'text-[1rem] font-semibold leading-[1.18] sm:text-[1.05rem]'
           }`}
         >
           {post.title}
         </h3>
-        <p className="mt-2 text-sm text-white/82">{formatShortDate(post.publishedAt)}</p>
+        <p className="mt-2 text-sm font-medium text-white/82">{formatShortDate(post.publishedAt)}</p>
       </article>
     </Link>
   )
@@ -84,19 +85,19 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
 function TopPickFeature({ post }: { post: Post }) {
   return (
     <Link href={getPostHref(post)} className="group block">
-      <article className="space-y-4">
-        <div className="relative aspect-[1.22/0.8] overflow-hidden">
+      <article>
+        <div className="relative aspect-[1.45/0.95] overflow-hidden rounded-[6px] bg-[var(--surface-muted)] shadow-[0_14px_36px_rgba(15,23,42,0.1)]">
           <Image
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
-            className="object-cover transition duration-300 group-hover:scale-[1.02]"
+            className="object-cover transition duration-500 group-hover:scale-[1.04]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-transparent to-transparent" />
-          <div className="absolute bottom-4 left-3 text-white">
-            <p className="text-[0.92rem]">{formatShortDate(post.publishedAt)}</p>
-            <h3 className="mt-1 max-w-[18ch] text-[0.95rem] font-medium leading-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/12 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+            <p className="text-[0.92rem] font-medium">{formatShortDate(post.publishedAt)}</p>
+            <h3 className="mt-1 max-w-[24ch] text-[1.05rem] font-semibold leading-[1.25]">
               {post.title}
             </h3>
           </div>
@@ -108,21 +109,21 @@ function TopPickFeature({ post }: { post: Post }) {
 
 function TopPickListItem({ post }: { post: Post }) {
   return (
-    <Link href={getPostHref(post)} className="group flex gap-3">
-      <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden bg-[var(--surface-muted)]">
+    <Link href={getPostHref(post)} className="group grid grid-cols-[112px_1fr] items-center gap-4">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-[4px] bg-[var(--surface-muted)]">
         <Image
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
           fill
-          sizes="88px"
-          className="object-cover transition duration-300 group-hover:scale-[1.02]"
+          sizes="112px"
+          className="object-cover transition duration-500 group-hover:scale-[1.04]"
         />
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="text-[0.82rem] text-[color:var(--text-muted)]">
           {formatShortDate(post.publishedAt)}
         </p>
-        <h4 className="mt-1 text-[0.92rem] font-semibold leading-[1.3] text-[color:var(--text-strong)]">
+        <h4 className="mt-1 text-[1rem] font-bold leading-[1.25] text-[color:var(--text-strong)] transition group-hover:text-[var(--accent-red)]">
           {post.title}
         </h4>
       </div>
@@ -194,17 +195,20 @@ function LandingView({
 
   return (
     <>
-      <section className="bg-[#c40000] py-11 md:py-12">
+      <section
+        className="py-10 sm:py-12 md:py-14"
+        style={{ background: 'linear-gradient(180deg, #C70001 -3.96%, #000000 74.4%)' }}
+      >
         <div className="site-container">
-          <div className="mb-9 flex items-center gap-4">
-            <div className="h-px flex-1 bg-white/70" />
-            <h1 className="headline-font text-center text-[1.7rem] font-extrabold uppercase tracking-[0.06em] text-white md:text-[2rem]">
+          <div className="mb-8 flex items-center gap-4 sm:mb-10">
+            <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
+            <h1 className="headline-font shrink-0 text-center text-[1.65rem] font-extrabold uppercase text-white sm:text-[2rem] md:text-[2.15rem]">
               Just In: Insights
             </h1>
-            <div className="h-px flex-1 bg-white/70" />
+            <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[0.46fr_0.54fr]">
+          <div className="grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:items-stretch">
             <div>{justInLead ? <JustInCard post={justInLead} large /> : null}</div>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -218,7 +222,7 @@ function LandingView({
 
       <section className="site-container mt-14 space-y-8 md:mt-16">
         <div className="flex items-center gap-4">
-          <h2 className="headline-font text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
+          <h2 className="headline-font shrink-0 text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
             Top Picks
           </h2>
           <div className="h-px flex-1 bg-[var(--border-subtle)]" />
@@ -230,7 +234,7 @@ function LandingView({
           </Link>
         </div>
 
-        <div className="grid gap-9 lg:grid-cols-3">
+        <div className="grid gap-10 lg:grid-cols-3">
           {topPickGroups.map(({ category, posts }) => (
             <section key={category.id} className="space-y-6">
               <CategoryTab category={category} />
