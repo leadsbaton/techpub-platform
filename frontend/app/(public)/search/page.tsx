@@ -51,6 +51,7 @@ export default async function SearchPage({
         </header>
 
         <SearchPageClient
+          key={`${q}-${type || ''}-${category || ''}-${from || ''}-${to || ''}-${sort}`}
           initialResults={results}
           initialFilters={{
             q,
