@@ -199,7 +199,34 @@ export const Posts: CollectionConfig = {
                   relationTo: 'media',
                   required: true,
                   admin: {
-                    description: 'Main card and detail-page image. For webinars this is the top hero banner, so use a wide horizontal image.',
+                    description: 'Main detail-page image. Cards can optionally use the Card Banner Image below.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'cardBannerImage',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    description: 'Optional image used on home/listing/search cards. Leave empty to use the main image.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'cardBannerFit',
+                  type: 'select',
+                  defaultValue: 'cover',
+                  options: [
+                    { label: 'Cover - crop to fill card', value: 'cover' },
+                    { label: 'Contain - fit whole image', value: 'contain' },
+                  ],
+                  admin: {
+                    description: 'Controls how the card banner image appears inside card rectangles.',
                     width: '50%',
                   },
                 },

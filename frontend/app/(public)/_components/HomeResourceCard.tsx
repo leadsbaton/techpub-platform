@@ -1,10 +1,10 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { getCategoryAccent, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { getCategoryAccent, getCategoryName, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 import { HomeVerticalBadge } from './HomeVerticalBadge'
+import { SafeImage } from './SafeImage'
 
 export function HomeResourceCard({ post }: { post: Post }) {
   const href = getPostHref(post)
@@ -17,12 +17,12 @@ export function HomeResourceCard({ post }: { post: Post }) {
         <HomeVerticalBadge label={category} color={accent} className="right-4 top-0" />
         <Link href={href} className="group block overflow-hidden rounded-t-[16px]">
           <div className="relative h-[235px] overflow-hidden rounded-t-[16px]">
-            <Image
-              src={getImageUrl(post.featuredImage)}
+            <SafeImage
+              src={getPostCardImageUrl(post)}
               alt={post.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-[1.02]`}
             />
           </div>
         </Link>

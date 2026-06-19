@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
@@ -8,8 +7,10 @@ import {
   getAuthorNames,
   getCategoryName,
   getContentTypeLabel,
-  getImageUrl,
+  getPostCardImageClass,
+  getPostCardImageUrl,
 } from '@/lib/utils/formatting'
+import { SafeImage } from './SafeImage'
 
 const categoryColors: Record<string, string> = {
   technology: 'var(--category-tech)',
@@ -26,12 +27,12 @@ export function PostCard({ post }: { post: Post }) {
     <article className="group panel-card overflow-hidden rounded-[28px] transition-transform duration-200 hover:-translate-y-1">
       <Link href={href} className="block">
         <div className="relative aspect-[16/10] overflow-hidden">
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
           />
         </div>
       </Link>

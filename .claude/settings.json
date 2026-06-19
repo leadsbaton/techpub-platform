@@ -8,7 +8,26 @@
       "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; \"stopped dev server PID $\\($c.OwningProcess\\)\" } else { \"nothing on :5000\" })",
       "Read(//d/tuchmath/techpub-platform/**)",
       "Bash(xargs echo \"files in media/:\")",
-      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; \"freed :5000 \\(stopped PID $\\($c.OwningProcess\\)\\) — you can run 'npm run dev' now\" } else { \":5000 is free\" })"
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; \"freed :5000 \\(stopped PID $\\($c.OwningProcess\\)\\) — you can run 'npm run dev' now\" } else { \":5000 is free\" })",
+      "Bash(npx tsc *)",
+      "Bash(git add *)",
+      "Bash(export MSYS_NO_PATHCONV=1)",
+      "Bash(mkdir -p shots)",
+      "Bash(node --input-type=module -e ' *)",
+      "Bash(head -50 src/components/admin/PostLivePreviewFrame.tsx)",
+      "Bash(powershell -NoProfile -Command \"if \\(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue\\) {'running'} else {'free'}\")",
+      "Bash(npm run *)",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; Start-Sleep 2; \"stopped old dev \\(PID $\\($c.OwningProcess\\)\\)\" } else { \":5000 free\" })",
+      "Bash(node -e \"const s=require\\('fs'\\).readFileSync\\('frontend/public/hero_bg.png'\\);console.log\\('hero_bg.png dimensions:', s.readUInt32BE\\(16\\)+' x '+s.readUInt32BE\\(20\\)\\)\")",
+      "Bash(powershell -NoProfile -Command 'Add-Type -AssemblyName System.Drawing; $i=[System.Drawing.Image]::FromFile\\('\\\\''frontend\\\\public\\\\hero_bg.png'\\\\''\\); \"hero_bg.png: $\\($i.Width\\) x $\\($i.Height\\)\"; $i.Dispose\\(\\)')",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; Start-Sleep 2; \"restarting dev\" } else { \"free\" })",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; Start-Sleep 2; \"stopped, restarting\" } else { \"free\" })",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($c\\) { Stop-Process -Id $c.OwningProcess -Force; Start-Sleep 2; \"restarting\" } else { \"free\" })",
+      "Bash(mv \"image 6.png\" hero-laptop.png)",
+      "Bash(mv \"image 7.png\" hero-circuit.png)",
+      "Bash(python -)",
+      "Read(//tmp/cur/**)",
+      "Read(//d/tmp/cur/**)"
     ]
   }
 }

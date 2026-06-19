@@ -1,9 +1,9 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
+import { SafeImage } from '../../_components/SafeImage'
 import type { Post } from '@/lib/types/cms'
 import { getPostHref, getSingularLabelForType } from '@/lib/utils/contentTypes'
-import { formatDate, getAuthorNames, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { formatDate, getAuthorNames, getCategoryName, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 const categoryColors: Record<string, string> = {
   technology: 'bg-[#0015AD]',
@@ -20,12 +20,12 @@ export function SearchResultCard({ post }: { post: Post }) {
     <article className="ui-font overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-white shadow-[var(--shadow-soft)]">
       <Link href={href} className="block">
         <div className="relative h-[210px] overflow-hidden bg-[var(--surface-muted)]">
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 hover:scale-[1.03]"
+            className={`${getPostCardImageClass(post)} transition-transform duration-300 hover:scale-[1.03]`}
           />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/55 via-transparent to-transparent px-4 pb-4 pt-14">
             <span className={`inline-flex rounded-[3px] px-3 py-2 text-[12px] font-bold uppercase text-white ${categoryClass}`}>

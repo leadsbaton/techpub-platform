@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { SafeImage } from '../_components/SafeImage'
 import { WebinarCard } from './_components/WebinarCard'
 import { WebinarListingClient } from './_components/WebinarListingClient'
 import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getImageUrl } from '@/lib/utils/formatting'
+import { getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -139,7 +140,7 @@ function DontMiss({ posts }: { posts: Post[] }) {
           {posts.slice(0, 3).map((post) => (
             <Link key={post.id} href={`/whitepapers/${post.slug}`} className="grid grid-cols-[72px_1fr] items-center gap-4">
               <div className="relative h-[62px] w-[72px] overflow-hidden bg-white">
-                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="72px" className="object-cover" />
+                <SafeImage src={getPostCardImageUrl(post)} alt={post.title} fill sizes="72px" className={getPostCardImageClass(post)} />
               </div>
               <div className="ui-font space-y-1">
                 <div className="text-[12px] font-bold uppercase text-[#0015AD]">{post.primaryCategory && typeof post.primaryCategory !== 'string' ? post.primaryCategory.name : 'Technology'}</div>

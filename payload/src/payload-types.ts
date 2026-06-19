@@ -353,9 +353,17 @@ export interface Post {
     [k: string]: unknown;
   };
   /**
-   * Main card and detail-page image. For webinars this is the top hero banner, so use a wide horizontal image.
+   * Main detail-page image. Cards can optionally use the Card Banner Image below.
    */
   featuredImage: string | Media;
+  /**
+   * Optional image used on home/listing/search cards. Leave empty to use the main image.
+   */
+  cardBannerImage?: (string | null) | Media;
+  /**
+   * Controls how the card banner image appears inside card rectangles.
+   */
+  cardBannerFit?: ('cover' | 'contain') | null;
   /**
    * PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.
    */
@@ -823,6 +831,8 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   content?: T;
   featuredImage?: T;
+  cardBannerImage?: T;
+  cardBannerFit?: T;
   downloadAsset?: T;
   videoUrl?: T;
   externalUrl?: T;

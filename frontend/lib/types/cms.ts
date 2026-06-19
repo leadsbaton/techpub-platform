@@ -124,6 +124,8 @@ export interface Post {
   content?: RichTextDocument | null
   contentType?: ContentType | string | null
   featuredImage?: Media | string | null
+  cardBannerImage?: Media | string | null
+  cardBannerFit?: 'cover' | 'contain' | null
   downloadAsset?: Media | string | null
   featured?: boolean
   pinned?: boolean

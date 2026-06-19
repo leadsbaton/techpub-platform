@@ -3,7 +3,8 @@ import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { getImageUrl } from '@/lib/utils/formatting'
+import { getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { SafeImage } from './SafeImage'
 
 function EchoCopy() {
   return (
@@ -78,7 +79,7 @@ export function HeroFeature({
               {/* Right: fixed laptop image with the CTA buttons. */}
               <div className="relative -ml-6 overflow-hidden rounded-[8px] sm:-ml-8 md:-ml-10 xl:ml-0">
                 <div className="relative h-[168px] overflow-hidden rounded-[8px] sm:h-[220px] md:h-[285px] xl:h-[364px] xl:w-[714px]">
-                  <Image
+                  <SafeImage
                     src="/hero-laptop.png"
                     alt=""
                     fill
@@ -123,11 +124,11 @@ export function HeroFeature({
               >
                 <div className="relative h-[300px] w-[300px] overflow-hidden rounded-[14px]">
                   <Image
-                    src={getImageUrl(item.featuredImage)}
+                    src={getPostCardImageUrl(item)}
                     alt={item.title}
                     fill
                     sizes="(max-width: 1280px) 180px, 260px"
-                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                    className={`${getPostCardImageClass(item)} transition duration-300 group-hover:scale-[1.03]`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-3">

@@ -2,8 +2,8 @@ import type { Author, Category, LinkReference, Media, Post } from '@/lib/types/c
 import { getPostHref, getSingularLabelForType } from '@/lib/utils/contentTypes'
 import { API_URL } from '@/lib/api/config'
 
-const FALLBACK_IMAGE =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect width='1200' height='675' fill='%23e8ecef'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' fill='%236b7280'%3ELeadsBaton TechPub%3C/text%3E%3C/svg%3E"
+export const FALLBACK_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Crect width='1200' height='675' fill='%23f4f4f4'/%3E%3Cg fill='none' stroke='%23999999' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='390' y='180' width='420' height='315' rx='24'/%3E%3Ccircle cx='510' cy='290' r='34'/%3E%3Cpath d='M430 445l115-120 85 82 65-70 75 108'/%3E%3C/g%3E%3Ctext x='50%25' y='565' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='34' fill='%23777777'%3EImage unavailable%3C/text%3E%3C/svg%3E"
 
 export function formatDateShort(dateString: string): string {
   const date = new Date(dateString)
@@ -52,6 +52,18 @@ export function getMediaUrl(media?: Media | string | null): string | null {
 
 export function getImageUrl(image?: Media | string | null): string {
   return getMediaUrl(image) || FALLBACK_IMAGE
+}
+
+export function getPostCardImageUrl(post: Pick<Post, 'cardBannerImage' | 'featuredImage'>): string {
+  return getImageUrl(post.cardBannerImage || post.featuredImage)
+}
+
+export function getPostCardImageFit(post: Pick<Post, 'cardBannerFit'>): 'cover' | 'contain' {
+  return post.cardBannerFit === 'contain' ? 'contain' : 'cover'
+}
+
+export function getPostCardImageClass(post: Pick<Post, 'cardBannerFit'>): string {
+  return getPostCardImageFit(post) === 'contain' ? 'object-contain' : 'object-cover'
 }
 
 export function hasMediaSource(media?: Media | string | null): boolean {

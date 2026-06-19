@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
@@ -9,9 +8,11 @@ import {
   getAuthorNames,
   getCategoryAccent,
   getCategoryName,
-  getImageUrl,
+  getPostCardImageClass,
+  getPostCardImageUrl,
 } from '@/lib/utils/formatting'
 import { HomeVerticalBadge } from './HomeVerticalBadge'
+import { SafeImage } from './SafeImage'
 
 function CalendarIcon() {
   return (
@@ -75,12 +76,12 @@ export function HomeOverlayCard({
       <article className="flex h-full flex-col">
         <Link href={href} className="group relative block">
           <div className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-[color:var(--surface-muted)]">
-            <Image
-              src={getImageUrl(post.featuredImage)}
+            <SafeImage
+              src={getPostCardImageUrl(post)}
               alt={post.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-[1.03]`}
             />
           </div>
           <HomeVerticalBadge label={category} color={accent} />
@@ -140,12 +141,12 @@ export function HomeOverlayCard({
             isSmallWebinar ? 'min-h-[280px] lg:min-h-[310px]' : 'min-h-[420px] lg:min-h-[620px]'
           }`}
         >
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-[1.03]`}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/35 to-transparent" />
           <div className="absolute inset-x-0 top-0 p-6 text-white md:p-8">
@@ -182,12 +183,12 @@ export function HomeOverlayCard({
           isSmallCompact ? 'h-[280px] md:h-[300px]' : 'h-[360px] md:h-[411px]'
         }`}
       >
-        <Image
-          src={getImageUrl(post.featuredImage)}
+        <SafeImage
+          src={getPostCardImageUrl(post)}
           alt={post.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
         />
         <div
           className="absolute inset-0"

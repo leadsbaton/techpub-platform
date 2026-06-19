@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
+import { SafeImage } from '../../_components/SafeImage'
 import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import {
@@ -9,6 +10,8 @@ import {
   getCategoryAccent,
   getCategoryName,
   getImageUrl,
+  getPostCardImageClass,
+  getPostCardImageUrl,
 } from '@/lib/utils/formatting'
 
 function groupByCategory(posts: Post[], categories: Category[]) {
@@ -52,12 +55,12 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
             large ? 'aspect-[1.28/0.9] lg:aspect-[1.12/0.88]' : 'aspect-[1.58/0.9]'
           }`}
         >
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes={large ? '(max-width: 1024px) 100vw, 45vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
-            className="object-cover transition duration-500 group-hover:scale-[1.04]"
+            className={`${getPostCardImageClass(post)} transition duration-500 group-hover:scale-[1.04]`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90" />
           <div
@@ -87,12 +90,12 @@ function TopPickFeature({ post }: { post: Post }) {
     <Link href={getPostHref(post)} className="group block">
       <article>
         <div className="relative aspect-[1.45/0.95] overflow-hidden">
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
-            className="object-cover transition duration-500 group-hover:scale-[1.04]"
+            className={`${getPostCardImageClass(post)} transition duration-500 group-hover:scale-[1.04]`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/12 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-4 text-white">
@@ -111,12 +114,12 @@ function TopPickListItem({ post }: { post: Post }) {
   return (
     <Link href={getPostHref(post)} className="group grid grid-cols-[112px_1fr] items-center gap-4">
       <div className="relative aspect-square w-full shrink-0 overflow-hidden">
-        <Image
-          src={getImageUrl(post.featuredImage)}
+        <SafeImage
+          src={getPostCardImageUrl(post)}
           alt={post.title}
           fill
           sizes="112px"
-          className="object-cover transition duration-500 group-hover:scale-[1.04]"
+          className={`${getPostCardImageClass(post)} transition duration-500 group-hover:scale-[1.04]`}
         />
       </div>
       <div className="min-w-0">
@@ -139,7 +142,7 @@ function CategoryHero({
   return (
     <div className="relative overflow-hidden rounded-[8px]">
       <div className="relative aspect-[4.4/1] max-h-[280px] min-h-[150px]">
-        <Image
+        <SafeImage
           src={getImageUrl(category.image)}
           alt={category.name}
           fill
@@ -170,12 +173,12 @@ function CategoryListItem({ post }: { post: Post }) {
         </p>
       </div>
       <div className="relative aspect-square w-[120px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
-        <Image
-          src={getImageUrl(post.featuredImage)}
+        <SafeImage
+          src={getPostCardImageUrl(post)}
           alt={post.title}
           fill
           sizes="120px"
-          className="object-cover"
+          className={getPostCardImageClass(post)}
         />
       </div>
     </Link>
@@ -329,11 +332,11 @@ function InsightListRow({ post }: { post: Post }) {
       </div>
       <div className="relative aspect-square w-[120px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
         <Image
-          src={getImageUrl(post.featuredImage)}
+          src={getPostCardImageUrl(post)}
           alt={post.title}
           fill
           sizes="120px"
-          className="object-cover"
+          className={getPostCardImageClass(post)}
         />
       </div>
     </Link>

@@ -3,11 +3,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { RankedSidebar } from '../_components/RankedSidebar'
+import { SafeImage } from '../_components/SafeImage'
 import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
 import { getCategoriesForType, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -86,12 +87,12 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 index === 0 ? 'h-[220px] sm:h-[320px] md:h-[475px]' : 'h-[220px] md:h-[475px]'
               }`}
             >
-              <Image
-                src={getImageUrl(post.featuredImage)}
+              <SafeImage
+                src={getPostCardImageUrl(post)}
                 alt={post.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent" />
               <div

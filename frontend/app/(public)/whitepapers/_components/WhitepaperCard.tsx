@@ -1,9 +1,9 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
+import { SafeImage } from '../../_components/SafeImage'
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { formatDate, getAuthorNames, getCategoryName, getImageUrl } from '@/lib/utils/formatting'
+import { formatDate, getAuthorNames, getCategoryName, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 const categoryStyles: Record<string, string> = {
   technology: 'bg-[#0015AD]',
@@ -21,12 +21,12 @@ export function WhitepaperCard({ post }: { post: Post }) {
     <article className="ui-font group w-full max-w-[320px]">
       <Link href={href} className="block">
         <div className="relative h-[360px] overflow-hidden bg-[#ececec] sm:h-[445px]">
-          <Image
-            src={getImageUrl(post.featuredImage)}
+          <SafeImage
+            src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, 320px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent px-4 pb-6 pt-20">
             <span
