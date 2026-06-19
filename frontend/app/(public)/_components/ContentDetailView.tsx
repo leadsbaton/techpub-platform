@@ -89,9 +89,11 @@ function InsightLayout({ post, contentTypes, railItems }: { post: Post; contentT
         <Link href={getRouteBaseForType(post.type, contentTypes)} className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-red)]">
           {getContentTypeConfigByType(post.type, contentTypes).pluralLabel}
         </Link>
-        <h1 className="max-w-5xl text-4xl font-semibold tracking-tight text-[color:var(--text-strong)] md:text-6xl">
-          {post.title}
-        </h1>
+        {post.hideTitleOnDetail ? null : (
+          <h1 className="max-w-5xl text-4xl font-semibold tracking-tight text-[color:var(--text-strong)] md:text-6xl">
+            {post.title}
+          </h1>
+        )}
         <MetaStrip post={post} />
       </div>
 
@@ -125,9 +127,11 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
         <Link href={getRouteBaseForType(post.type, contentTypes)} className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-red)]">
           {getContentTypeConfigByType(post.type, contentTypes).pluralLabel}
         </Link>
-        <h1 className="mx-auto max-w-4xl text-4xl font-semibold tracking-tight text-[color:var(--text-strong)] lg:mx-0 md:text-6xl">
-          {post.title}
-        </h1>
+        {post.hideTitleOnDetail ? null : (
+          <h1 className="mx-auto max-w-4xl text-4xl font-semibold tracking-tight text-[color:var(--text-strong)] lg:mx-0 md:text-6xl">
+            {post.title}
+          </h1>
+        )}
       </div>
 
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)_360px] lg:items-start">
@@ -193,7 +197,9 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
                 <span>{getCategoryName(post.primaryCategory)}</span>
                 {post.webinarRegistration?.eventDateLabel ? <span>{post.webinarRegistration.eventDateLabel}</span> : null}
               </div>
-              <h1 className="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">{post.title}</h1>
+              {post.hideTitleOnDetail ? null : (
+                <h1 className="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">{post.title}</h1>
+              )}
               {primaryAction ? (
                 <a
                   href={primaryAction.href}

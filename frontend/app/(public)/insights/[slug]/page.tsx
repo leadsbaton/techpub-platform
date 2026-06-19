@@ -56,13 +56,15 @@ export default async function InsightDetailPage({
             />
           </div>
 
-          <div className="mx-auto max-w-4xl px-4 pt-7 text-center">
-            <h1 className="headline-font text-[1.4rem] font-extrabold leading-[1.3] text-[color:var(--text-strong)] md:text-[1.6rem]">
-              {post.title}
-            </h1>
-          </div>
+          {post.hideTitleOnDetail ? null : (
+            <div className="mx-auto max-w-4xl px-4 pt-7 text-center">
+              <h1 className="headline-font text-[1.4rem] font-extrabold leading-[1.3] text-[color:var(--text-strong)] md:text-[1.6rem]">
+                {post.title}
+              </h1>
+            </div>
+          )}
 
-          <div className="mt-6 max-w-4xl space-y-5 text-[0.98rem] leading-[1.75] text-[color:var(--text-soft)]">
+          <div className={`${post.hideTitleOnDetail ? 'mt-7' : 'mt-6'} max-w-4xl space-y-5 text-[0.98rem] leading-[1.75] text-[color:var(--text-soft)]`}>
             <div className="prose max-w-none">
               <RichTextRenderer content={post.content} />
             </div>

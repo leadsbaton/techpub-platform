@@ -42,10 +42,11 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
       <article className="site-container py-8 sm:py-10">
         <section className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
-            {/* Title above the banner. */}
-            <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[34px]">
-              {post.title}
-            </h1>
+            {post.hideTitleOnDetail ? null : (
+              <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[34px]">
+                {post.title}
+              </h1>
+            )}
 
             {/* Top banner: clean image at its natural dimensions (no overlay). */}
             <div>

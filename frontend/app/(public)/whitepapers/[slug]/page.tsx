@@ -61,11 +61,13 @@ export default async function WhitepaperDetailPage({
               content fills the row beside AND below it; a centered text CTA closes
               the article. Mobile flows as: title -> image -> button -> content -> CTA. */}
           <div className='ui-font min-w-0'>
-            <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
-              {post.title}
-            </h1>
+            {post.hideTitleOnDetail ? null : (
+              <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
+                {post.title}
+              </h1>
+            )}
 
-            <div className='mx-auto mt-5 w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:mt-6 sm:w-[230px]'>
+            <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
               <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
                 <Image
                   src={getImageUrl(post.featuredImage)}

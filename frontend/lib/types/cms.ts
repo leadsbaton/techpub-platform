@@ -135,6 +135,7 @@ export interface Post {
   publishedAt?: string | null
   videoUrl?: string | null
   externalUrl?: string | null
+  hideTitleOnDetail?: boolean | null
   webinarSecondaryBanner?: Media | string | null
   webinarSecondaryBannerAlt?: string | null
   leadCapture?: {

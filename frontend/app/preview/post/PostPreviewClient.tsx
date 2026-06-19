@@ -63,12 +63,14 @@ function InsightLayout({ post }: { post: Post }) {
         <div className="relative aspect-[3.7/1] overflow-hidden rounded-[8px]">
           <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 900px" className="object-cover" />
         </div>
-        <div className="mx-auto max-w-4xl px-4 pt-7 text-center">
-          <h1 className="headline-font text-[1.4rem] font-extrabold leading-[1.3] text-[color:var(--text-strong)] md:text-[1.6rem]">
-            {post.title}
-          </h1>
-        </div>
-        <div className="mx-auto mt-6 max-w-4xl space-y-5 text-[0.98rem] leading-[1.75] text-[color:var(--text-soft)]">
+        {post.hideTitleOnDetail ? null : (
+          <div className="mx-auto max-w-4xl px-4 pt-7 text-center">
+            <h1 className="headline-font text-[1.4rem] font-extrabold leading-[1.3] text-[color:var(--text-strong)] md:text-[1.6rem]">
+              {post.title}
+            </h1>
+          </div>
+        )}
+        <div className={`mx-auto ${post.hideTitleOnDetail ? 'mt-7' : 'mt-6'} max-w-4xl space-y-5 text-[0.98rem] leading-[1.75] text-[color:var(--text-soft)]`}>
           <div className="prose max-w-none">
             <RichTextRenderer content={post.content} />
           </div>
@@ -90,9 +92,11 @@ function WhitepaperLayout({ post }: { post: Post }) {
     <div className="bg-white">
       <article className="site-container py-8 sm:py-10">
         <div className="ui-font min-w-0">
-          <h1 className="text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]">{post.title}</h1>
+          {post.hideTitleOnDetail ? null : (
+            <h1 className="text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]">{post.title}</h1>
+          )}
 
-          <div className="mx-auto mt-5 w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:mt-6 sm:w-[230px]">
+          <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
             <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white">
               <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 640px) 240px, 230px" className="object-cover" />
             </div>
@@ -130,7 +134,9 @@ function WebinarLayout({ post }: { post: Post }) {
     <div className="bg-white">
       <article className="site-container py-8 sm:py-10">
         <div className="min-w-0 space-y-8">
-          <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[34px]">{post.title}</h1>
+          {post.hideTitleOnDetail ? null : (
+            <h1 className="ui-font text-[24px] font-medium leading-[1.2] text-[#111] sm:text-[34px]">{post.title}</h1>
+          )}
 
           <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
             {heroDims ? (

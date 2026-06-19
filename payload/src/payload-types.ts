@@ -369,6 +369,10 @@ export interface Post {
    */
   externalUrl?: string | null;
   /**
+   * Hide the post title on the public detail page. The title is still used in admin, links, and metadata.
+   */
+  hideTitleOnDetail?: boolean | null;
+  /**
    * Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.
    */
   webinarSecondaryBanner?: (string | null) | Media;
@@ -822,6 +826,7 @@ export interface PostsSelect<T extends boolean = true> {
   downloadAsset?: T;
   videoUrl?: T;
   externalUrl?: T;
+  hideTitleOnDetail?: T;
   webinarSecondaryBanner?: T;
   webinarSecondaryBannerAlt?: T;
   featured?: T;

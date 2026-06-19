@@ -264,13 +264,22 @@ export const Posts: CollectionConfig = {
               type: 'row',
               fields: [
                 {
+                  name: 'hideTitleOnDetail',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Hide the post title on the public detail page. The title is still used in admin, links, and metadata.',
+                    width: '33%',
+                  },
+                },
+                {
                   name: 'webinarSecondaryBanner',
                   type: 'upload',
                   relationTo: 'media',
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'webinar',
                     description: 'Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.',
-                    width: '50%',
+                    width: '33%',
                   },
                 },
                 {
@@ -279,7 +288,7 @@ export const Posts: CollectionConfig = {
                   admin: {
                     condition: (_, siblingData) => siblingData?.type === 'webinar',
                     description: 'Optional label for the secondary banner when a second visual is used.',
-                    width: '50%',
+                    width: '33%',
                   },
                 },
               ],
