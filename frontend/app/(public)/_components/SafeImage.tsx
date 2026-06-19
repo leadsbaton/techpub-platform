@@ -6,7 +6,14 @@ import { useState } from 'react'
 import { FALLBACK_IMAGE } from '@/lib/utils/formatting'
 
 export function SafeImage({ src, alt, onError, ...props }: ImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src)
+  const [fallbackState, setFallbackState] = useState<{
+    originalSrc: ImageProps['src']
+    currentSrc: ImageProps['src']
+  }>({
+    originalSrc: src,
+    currentSrc: src,
+  })
+  const currentSrc = fallbackState.originalSrc === src ? fallbackState.currentSrc : src
 
   return (
     <Image
@@ -15,7 +22,7 @@ export function SafeImage({ src, alt, onError, ...props }: ImageProps) {
       alt={alt}
       onError={(event) => {
         if (currentSrc !== FALLBACK_IMAGE) {
-          setCurrentSrc(FALLBACK_IMAGE)
+          setFallbackState({ originalSrc: src, currentSrc: FALLBACK_IMAGE })
         }
         onError?.(event)
       }}

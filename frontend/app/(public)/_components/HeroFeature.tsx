@@ -116,17 +116,18 @@ export function HeroFeature({
       <div className="relative z-10 -mt-[210px]">
         <div className="no-scrollbar min-w-0 overflow-x-auto pb-2">
           <div className="flex gap-3 pl-[max(16px,calc((100vw-972px)/2))] xl:gap-5">
-            {secondaryPosts.map((item) => (
+            {secondaryPosts.map((item, index) => (
               <Link
                 key={item.id}
                 href={getPostHref(item)}
                 className="group block h-[300px] w-[300px] shrink-0 overflow-hidden rounded-[14px] shadow-[0px_4px_4px_0px_#00000040]"
               >
                 <div className="relative h-[300px] w-[300px] overflow-hidden rounded-[14px]">
-                  <Image
+                  <SafeImage
                     src={getPostCardImageUrl(item)}
                     alt={item.title}
                     fill
+                    priority={index < 3}
                     sizes="(max-width: 1280px) 180px, 260px"
                     className={`${getPostCardImageClass(item)} transition duration-300 group-hover:scale-[1.03]`}
                   />

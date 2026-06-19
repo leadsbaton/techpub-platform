@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
+import { SafeImage } from '../../_components/SafeImage'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl, getMediaDimensions, getWebinarModerator, getWebinarSpeakers } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
@@ -51,7 +51,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             {/* Top banner: clean image at its natural dimensions (no overlay). */}
             <div>
               {heroDims ? (
-                <Image
+                <SafeImage
                   src={getImageUrl(post.featuredImage)}
                   alt={post.title}
                   width={heroDims.width}
@@ -62,7 +62,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                 />
               ) : (
                 <div className="relative aspect-[16/7] w-full" style={{ minHeight: '180px' }}>
-                  <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill priority sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
+                  <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill priority sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
                 </div>
               )}
             </div>
@@ -70,7 +70,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             {post.webinarSecondaryBanner ? (
               <div>
                 {secondaryDims ? (
-                  <Image
+                  <SafeImage
                     src={getImageUrl(post.webinarSecondaryBanner)}
                     alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
                     width={secondaryDims.width}
@@ -80,7 +80,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                   />
                 ) : (
                   <div className="relative aspect-[16/7] w-full" style={{ minHeight: '180px' }}>
-                    <Image
+                    <SafeImage
                       src={getImageUrl(post.webinarSecondaryBanner)}
                       alt={post.webinarSecondaryBannerAlt || `${post.title} banner`}
                       fill
@@ -128,7 +128,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
                         </h3>
                         <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
                           {person.photo ? (
-                            <Image src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" />
+                            <SafeImage src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" />
                           ) : null}
                         </div>
                         <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>

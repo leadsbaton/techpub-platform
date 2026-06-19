@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { SafeImage } from '../_components/SafeImage'
@@ -31,7 +30,7 @@ function CategoryBanner({ category }: { category: Category }) {
     <section className="overflow-hidden rounded-[6px]">
       <div className="relative h-[120px] sm:h-[170px]">
         {category.image ? (
-          <Image src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
+          <SafeImage src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
         ) : (
           <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
         )}

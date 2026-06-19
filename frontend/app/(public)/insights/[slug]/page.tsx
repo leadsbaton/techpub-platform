@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
+import { SafeImage } from '../../_components/SafeImage'
 import { getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
@@ -47,7 +47,7 @@ export default async function InsightDetailPage({
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0">
           <div className="relative aspect-[3.7/1] overflow-hidden rounded-[8px]">
-            <Image
+            <SafeImage
               src={getImageUrl(post.featuredImage)}
               alt={post.title}
               fill

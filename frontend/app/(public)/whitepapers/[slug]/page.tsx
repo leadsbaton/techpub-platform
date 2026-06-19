@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { RankedSidebar } from "../../_components/RankedSidebar";
 import { RichTextRenderer } from "../../_components/RichTextRenderer";
+import { SafeImage } from "../../_components/SafeImage";
 import { getContentTypes, getPostBySlug, getPosts } from "@/lib/api/cms";
 import { buildPostMetadata } from "@/lib/utils/metadata";
 import { getImageUrl } from "@/lib/utils/formatting";
@@ -69,7 +69,7 @@ export default async function WhitepaperDetailPage({
 
             <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
               <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
-                <Image
+                <SafeImage
                   src={getImageUrl(post.featuredImage)}
                   alt={post.title}
                   fill

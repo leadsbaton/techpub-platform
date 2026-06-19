@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { RankedSidebar } from '../../_components/RankedSidebar'
@@ -331,7 +330,7 @@ function InsightListRow({ post }: { post: Post }) {
         </p>
       </div>
       <div className="relative aspect-square w-[120px] overflow-hidden bg-[var(--surface-muted)] sm:justify-self-end">
-        <Image
+        <SafeImage
           src={getPostCardImageUrl(post)}
           alt={post.title}
           fill

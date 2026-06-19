@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
@@ -7,6 +6,7 @@ import type { ReactNode } from 'react'
 import { Pagination } from '../_components/Pagination'
 import { PostCard } from '../_components/PostCard'
 import { RichTextRenderer } from '../_components/RichTextRenderer'
+import { SafeImage } from '../_components/SafeImage'
 import {
   getCategoriesForType,
   getContentTypes,
@@ -116,7 +116,7 @@ function PageHero({ pageDoc }: { pageDoc: PageDoc }) {
 
       {pageDoc.hero?.image ? (
         <div className="relative min-h-[280px] overflow-hidden rounded-[28px]">
-          <Image src={getImageUrl(pageDoc.hero.image)} alt={pageDoc.title} fill sizes="(max-width: 768px) 100vw, 540px" className="object-cover" />
+          <SafeImage src={getImageUrl(pageDoc.hero.image)} alt={pageDoc.title} fill sizes="(max-width: 768px) 100vw, 540px" className="object-cover" />
         </div>
       ) : null}
     </section>

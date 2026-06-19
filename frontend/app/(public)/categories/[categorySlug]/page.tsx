@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { HomeOverlayCard } from '../../_components/HomeOverlayCard'
+import { SafeImage } from '../../_components/SafeImage'
 import { WhitepaperCard } from '../../whitepapers/_components/WhitepaperCard'
 import { WebinarCard } from '../../webinars/_components/WebinarCard'
 import { getCategoryBySlug, getPosts } from '@/lib/api/cms'
@@ -74,7 +74,7 @@ export default async function CategoryPage({
       <article className="site-container space-y-10 py-8 sm:py-10">
         <section className="overflow-hidden rounded-[8px]">
           <div className="relative h-[120px] sm:h-[170px]">
-            <Image src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
+            <SafeImage src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
             <div className="absolute inset-0 bg-black/5" />
             <div className="ui-font absolute inset-x-0 bottom-0 p-5 sm:p-7">
               <h1 className="text-[34px] font-medium leading-none text-white sm:text-[58px]">

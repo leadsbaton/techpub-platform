@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { useLivePreview } from '@payloadcms/live-preview-react'
 
 import { RichTextRenderer } from '@/app/(public)/_components/RichTextRenderer'
+import { SafeImage } from '@/app/(public)/_components/SafeImage'
 import { API_URL } from '@/lib/api/config'
 import type { Post } from '@/lib/types/cms'
 import {
@@ -61,7 +61,7 @@ function InsightLayout({ post }: { post: Post }) {
     <article className="site-container py-10">
       <div className="min-w-0">
         <div className="relative aspect-[3.7/1] overflow-hidden rounded-[8px]">
-          <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 900px" className="object-cover" />
+          <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1024px) 100vw, 900px" className="object-cover" />
         </div>
         {post.hideTitleOnDetail ? null : (
           <div className="mx-auto max-w-4xl px-4 pt-7 text-center">
@@ -98,7 +98,7 @@ function WhitepaperLayout({ post }: { post: Post }) {
 
           <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
             <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white">
-              <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 640px) 240px, 230px" className="object-cover" />
+              <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 640px) 240px, 230px" className="object-cover" />
             </div>
             <div className="mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-6 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white">
               {actionLabel}
@@ -140,10 +140,10 @@ function WebinarLayout({ post }: { post: Post }) {
 
           <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
             {heroDims ? (
-              <Image src={getImageUrl(post.featuredImage)} alt={post.title} width={heroDims.width} height={heroDims.height} sizes="(max-width: 1280px) 100vw, 900px" className="h-auto w-full" />
+              <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} width={heroDims.width} height={heroDims.height} sizes="(max-width: 1280px) 100vw, 900px" className="h-auto w-full" />
             ) : (
               <div className="relative aspect-[16/7] w-full" style={{ minHeight: '180px' }}>
-                <Image src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
+                <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 1280px) 100vw, 900px" className="object-cover" />
               </div>
             )}
           </div>
@@ -171,7 +171,7 @@ function WebinarLayout({ post }: { post: Post }) {
                         {headingText || ' '}
                       </h3>
                       <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
-                        {person.photo ? <Image src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" /> : null}
+                        {person.photo ? <SafeImage src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" /> : null}
                       </div>
                       <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
                       {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}

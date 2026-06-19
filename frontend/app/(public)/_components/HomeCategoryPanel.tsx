@@ -1,9 +1,9 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Category } from '@/lib/types/cms'
 import { hasMediaSource, getImageUrl } from '@/lib/utils/formatting'
 import { HomeRuledHeader } from './HomeRuledHeader'
+import { SafeImage } from './SafeImage'
 
 const copyBySlug: Record<string, string> = {
   marketing:
@@ -62,7 +62,7 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
           >
             <article className="space-y-3">
               <div className="relative min-h-[260px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)] md:min-h-[350px]">
-                <Image
+                <SafeImage
                   src={getImageUrl(category.image)}
                   alt={category.name}
                   fill
@@ -92,7 +92,7 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
         >
           <article className="space-y-3">
             <div className="relative min-h-[260px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)] md:min-h-[350px]">
-              <Image
+              <SafeImage
                 src={getImageUrl(featured.image)}
                 alt={featured.name}
                 fill
