@@ -48,7 +48,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             </h1>
 
             {/* Top banner: clean image at its natural dimensions (no overlay). */}
-            <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
+            <div>
               {heroDims ? (
                 <Image
                   src={getImageUrl(post.featuredImage)}
@@ -67,7 +67,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             </div>
 
             {post.webinarSecondaryBanner ? (
-              <div className="overflow-hidden rounded-[12px] bg-[#f4f4f2]">
+              <div>
                 {secondaryDims ? (
                   <Image
                     src={getImageUrl(post.webinarSecondaryBanner)}

@@ -48,7 +48,7 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
     <Link href={getPostHref(post)} className="group block h-full">
       <article className="flex h-full flex-col">
         <div
-          className={`relative overflow-hidden rounded-[6px] bg-black shadow-[0_18px_45px_rgba(0,0,0,0.28)] ${
+          className={`relative overflow-hidden rounded-[6px]  ${
             large ? 'aspect-[1.28/0.9] lg:aspect-[1.12/0.88]' : 'aspect-[1.58/0.9]'
           }`}
         >
@@ -86,7 +86,7 @@ function TopPickFeature({ post }: { post: Post }) {
   return (
     <Link href={getPostHref(post)} className="group block">
       <article>
-        <div className="relative aspect-[1.45/0.95] overflow-hidden rounded-[6px] bg-[var(--surface-muted)] shadow-[0_14px_36px_rgba(15,23,42,0.1)]">
+        <div className="relative aspect-[1.45/0.95] overflow-hidden">
           <Image
             src={getImageUrl(post.featuredImage)}
             alt={post.title}
@@ -110,7 +110,7 @@ function TopPickFeature({ post }: { post: Post }) {
 function TopPickListItem({ post }: { post: Post }) {
   return (
     <Link href={getPostHref(post)} className="group grid grid-cols-[112px_1fr] items-center gap-4">
-      <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-[4px] bg-[var(--surface-muted)]">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden">
         <Image
           src={getImageUrl(post.featuredImage)}
           alt={post.title}
