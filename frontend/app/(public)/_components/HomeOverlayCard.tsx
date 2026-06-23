@@ -59,10 +59,12 @@ export function HomeOverlayCard({
   post,
   variant = 'default',
   compactSize = 'large',
+  carouselSize = 'default',
 }: {
   post: Post
   variant?: 'default' | 'compact' | 'webinar'
   compactSize?: 'large' | 'small'
+  carouselSize?: 'default' | 'tall'
 }) {
   const href = getPostHref(post)
   const isCompact = variant === 'compact'
@@ -72,10 +74,20 @@ export function HomeOverlayCard({
   const accent = getCategoryAccent(post.primaryCategory)
 
   if (!isCompact && !isWebinar) {
+    const isTallCarousel = carouselSize === 'tall'
+
     return (
-      <article className="flex h-[380px] w-[300px] flex-col gap-3">
+      <article
+        className={`flex flex-col gap-3 ${
+          isTallCarousel ? 'h-[430px] w-[280px] sm:w-[286px]' : 'h-[380px] w-[300px]'
+        }`}
+      >
         <Link href={href} className="group relative block">
-          <div className="relative h-[270px] w-[300px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
+          <div
+            className={`relative overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)] ${
+              isTallCarousel ? 'h-[320px] w-[280px] sm:w-[286px]' : 'h-[270px] w-[300px]'
+            }`}
+          >
             <SafeImage
               src={getPostCardImageUrl(post)}
               alt={post.title}

@@ -150,7 +150,9 @@ export default async function HomePage() {
   const latestInsights = insights.slice(0, 7)
   const webinarLead = webinars[0] ?? null
   const webinarSupport = webinars.slice(1, 3)
-  const mustReadWhitepapers = whitepapers.slice(0, 8)
+  const carouselTrackClassName =
+    'pl-[max(12px,calc((100vw-1200px)/2))] pr-[max(12px,calc((100vw-1200px)/2))] sm:pl-[max(16px,calc((100vw-1200px)/2))] sm:pr-[max(16px,calc((100vw-1200px)/2))]'
+  const mustReadWhitepapers = whitepapers.slice(0, 12)
 
   return (
     <div className="pb-20 pt-0">
@@ -162,11 +164,11 @@ export default async function HomePage() {
         whitepaperHref={whitepaperConfig.routeBase}
       />
 
-      <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
-        <HomeRuledHeader title="Trending Now" />
-        <HomeAutoCarousel trackClassName="px-0 sm:px-12 md:px-14" autoScroll={false}>
+      <section className="mt-12 space-y-6 overflow-hidden md:mt-14 md:space-y-7">
+        <HomeRuledHeader title="Trending Now" className="site-container" />
+        <HomeAutoCarousel className="py-3" trackClassName={carouselTrackClassName} autoScroll={false}>
           {trendingPosts.map((post) => (
-            <HomeOverlayCard key={post.id} post={post} />
+            <HomeOverlayCard key={post.id} post={post} carouselSize="tall" />
           ))}
         </HomeAutoCarousel>
       </section>
@@ -234,7 +236,7 @@ export default async function HomePage() {
         <HomeRuledHeader title="Must Read White Papers" className="site-container" />
         <HomeAutoCarousel
           className="py-3"
-          trackClassName="pl-[max(64px,calc((100vw-1200px)/2+48px))] pr-[max(64px,calc((100vw-1200px)/2+48px))]"
+          trackClassName={carouselTrackClassName}
           autoScroll={false}
         >
           {mustReadWhitepapers.map((post) => (
