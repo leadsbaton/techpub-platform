@@ -6,7 +6,7 @@ import { WebinarCard } from './_components/WebinarCard'
 import { WebinarListingClient } from './_components/WebinarListingClient'
 import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { getCategoryAccent, getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -63,7 +63,7 @@ function CenterHeader({
       </div>
       {href ? (
         <div className="flex justify-end">
-          <Link href={href} className="text-[16px] underline underline-offset-4 sm:text-[20px]">
+          <Link href={href} className="border-b border-[#020202] text-[16px] leading-none text-[#020202] sm:text-[20px]">
             View all
           </Link>
         </div>
@@ -112,7 +112,7 @@ function FeaturedWebinars({ posts }: { posts: Post[] }) {
   return (
     <section className="space-y-8">
       <CenterHeader title="Upcoming Webinars" href={buildFilterHref(undefined, undefined, 'all')} />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_360px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,668px)_minmax(0,467px)] lg:items-start">
         <div className="space-y-3">
           <WebinarCard post={lead} />
         </div>
@@ -130,20 +130,28 @@ function DontMiss({ posts }: { posts: Post[] }) {
   if (!posts.length) return null
 
   return (
-    <section className="space-y-0 pt-2">
-      <div className="ui-font w-[210px] bg-[#FC0203] px-8 py-5 text-[24px] font-medium uppercase text-white sm:w-[240px] sm:text-[28px]">
-        Don&apos;t Miss
+    <section className="relative pt-2">
+      <div className="absolute left-0 top-2 hidden h-[255px] w-[356px] bg-[#FC0203] sm:block" />
+      <div className="relative bg-[#FC0203] px-8 py-7 text-white sm:w-[356px] sm:px-10">
+        <h2 className="ui-font text-[24px] font-bold uppercase leading-none sm:text-[32px]">
+          Don&apos;t Miss
+        </h2>
       </div>
-      <div className="bg-[#e9e9e9] px-6 py-8">
-        <div className="grid gap-6 md:grid-cols-3">
+      <div className="relative bg-[#e3e3e3] px-6 py-8 sm:ml-10 sm:mr-0 sm:px-8 md:ml-10 lg:ml-10">
+        <div className="grid gap-8 md:grid-cols-3">
           {posts.slice(0, 3).map((post) => (
-            <Link key={post.id} href={`/whitepapers/${post.slug}`} className="grid grid-cols-[72px_1fr] items-center gap-4">
-              <div className="relative h-[62px] w-[72px] overflow-hidden bg-white">
+            <Link key={post.id} href={`/whitepapers/${post.slug}`} className="group grid grid-cols-[104px_1fr] items-center gap-4">
+              <div className="relative h-[104px] w-[104px] overflow-hidden bg-white">
                 <SafeImage src={getPostCardImageUrl(post)} alt={post.title} fill sizes="72px" className={getPostCardImageClass(post)} />
               </div>
               <div className="ui-font space-y-1">
-                <div className="text-[12px] font-bold uppercase text-[#0015AD]">{post.primaryCategory && typeof post.primaryCategory !== 'string' ? post.primaryCategory.name : 'Technology'}</div>
-                <div className="text-[16px] font-medium leading-[1.2] text-[#111]">{post.title}</div>
+                <div
+                  className="text-[16px] font-medium uppercase"
+                  style={{ color: getCategoryAccent(post.primaryCategory) }}
+                >
+                  {getCategoryName(post.primaryCategory)}
+                </div>
+                <div className="line-clamp-3 text-[18px] font-bold leading-[1.22] text-[#111] transition group-hover:text-[var(--accent-red)]">{post.title}</div>
               </div>
             </Link>
           ))}

@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { SafeImage } from '../../_components/SafeImage'
 import type { Post } from '@/lib/types/cms'
-import { formatDate, getCategoryName, getPostCardImageClass, getPostCardImageUrl, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
+import { formatDate, getCategoryName, getPostCardImageUrl, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
 
 const categoryStyles: Record<string, string> = {
   technology: 'text-[#0015AD]',
@@ -10,38 +10,65 @@ const categoryStyles: Record<string, string> = {
   marketing: 'text-[#00A01D]',
 }
 
+function getWebinarDateLabel(post: Post) {
+  const rawDate = post.webinarRegistration?.eventDateLabel || formatDate(post.publishedAt)
+  const cleanDate = rawDate.replace(/^coming\s+/i, '').trim()
+  const parsedDate = new Date(cleanDate)
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return rawDate
+  }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  parsedDate.setHours(0, 0, 0, 0)
+
+  if (parsedDate > today) return `Coming ${cleanDate}`
+  if (parsedDate.getTime() === today.getTime()) return `Today ${cleanDate}`
+  return cleanDate
+}
+
 export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
   const categoryClass = categoryStyles[category.toLowerCase()] || 'text-[#0015AD]'
   const presenterLabel = getWebinarSpeakerSummary(post)
+  const eventDate = getWebinarDateLabel(post)
 
   return (
-    <article className={`ui-font ${compact ? '' : 'w-full'}`}>
+    <article
+      className={`ui-font flex flex-col overflow-hidden border border-[#E0E0E0] bg-white ${
+        compact ? 'h-auto lg:h-[189px]' : 'h-auto lg:h-[394px]'
+      }`}
+    >
       <Link href={`/webinars/${post.slug}`} className="block">
-        <div className={`relative overflow-hidden ${compact ? 'h-[115px]' : 'h-[146px] sm:h-[170px]'}`}>
-          <SafeImage src={getPostCardImageUrl(post)} alt={post.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className={getPostCardImageClass(post)} />
-          {post.webinarRegistration?.eventDateLabel ? (
-            <div className="absolute inset-x-0 top-0 bg-black/25 px-3 py-1 text-center text-[10px] font-medium uppercase tracking-[0.03em] text-white sm:text-[12px]">
-              {post.webinarRegistration.eventDateLabel}
-            </div>
+        <div className={`relative w-full overflow-hidden bg-white ${compact ? 'h-[110px]' : 'h-[201px]'}`}>
+          <SafeImage src={getPostCardImageUrl(post)} alt={post.title} fill sizes={compact ? '(max-width: 1024px) 100vw, 467px' : '(max-width: 1024px) 100vw, 668px'} className="object-contain" />
+          <div className="absolute inset-x-0 top-0 truncate bg-black/35 px-3 py-1 text-center text-[10px] font-medium uppercase leading-[145%] tracking-[-0.005em] text-white">
+            {eventDate.replace(/^Coming\s+/i, '')}
+          </div>
+          {compact ? (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent" />
+              <div className="absolute inset-x-4 top-1/2 overflow-hidden text-ellipsis whitespace-nowrap -translate-y-1/2 text-center text-[13px] font-medium leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+                {post.title}
+              </div>
+            </>
           ) : null}
         </div>
       </Link>
-      <div className={`${compact ? 'pt-2' : 'pt-3'} space-y-1`}>
-        <div className={`text-[13px] font-bold uppercase ${categoryClass}`}>{category}</div>
-        <Link href={`/webinars/${post.slug}`} className={`${compact ? 'text-[14px]' : 'text-[18px]'} block font-medium leading-[1.2] text-[#111]`}>
+      <div className={`${compact ? 'px-1 pb-1 pt-1' : 'p-4'} flex min-w-0 flex-1 flex-col space-y-1`}>
+        <div className={`${compact ? 'text-[10px]' : 'text-[13px]'} truncate font-medium uppercase ${categoryClass}`}>{category}</div>
+        <Link href={`/webinars/${post.slug}`} className={`${compact ? 'text-[13px]' : 'text-[24px]'} block overflow-hidden text-ellipsis whitespace-nowrap font-medium leading-none text-[#111]`}>
           {post.title}
         </Link>
         {presenterLabel ? (
-          <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} text-[#808080]`}>
-            Speakers: {presenterLabel}
+          <div className={`${compact ? 'text-[10px]' : 'text-[19px]'} truncate text-[#111]`}>
+            Sponsored by: {presenterLabel}
           </div>
         ) : null}
-        {!compact ? (
-          <div className="text-[13px] text-[#808080]">
-            {formatDate(post.publishedAt)} {post.webinarRegistration?.eventDateLabel ? ` ${post.webinarRegistration.eventDateLabel}` : ''}
-          </div>
-        ) : null}
+        <div className={`${compact ? 'text-[10px]' : 'text-[19px]'} mt-auto truncate font-medium leading-none text-[#111]`}>
+          {eventDate}
+        </div>
       </div>
     </article>
   )
