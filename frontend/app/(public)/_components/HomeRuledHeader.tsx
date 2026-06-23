@@ -15,15 +15,15 @@ export function HomeRuledHeader({
 }) {
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
-      <div className="flex items-center gap-5">
-        <h2 className="headline-font shrink-0 text-[clamp(1.55rem,2.4vw,2.3rem)] font-extrabold text-[color:var(--text-strong)]">
+      <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+        <h2 className="headline-font min-w-0 max-w-[11ch] text-balance text-[clamp(1.28rem,6vw,2.3rem)] font-extrabold leading-[1.08] text-[color:var(--text-strong)] sm:max-w-none sm:shrink-0 sm:text-[clamp(1.55rem,2.4vw,2.3rem)]">
           {title}
         </h2>
         <span className="double-rule" aria-hidden="true" />
         {href ? (
           <Link
             href={href}
-            className="shrink-0 border-b border-[color:var(--text-strong)] text-[0.95rem] font-semibold leading-none text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
+            className="shrink-0 border-b border-[color:var(--text-strong)] text-[0.82rem] font-semibold leading-none text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] sm:text-[0.95rem]"
           >
             {actionLabel}
           </Link>
