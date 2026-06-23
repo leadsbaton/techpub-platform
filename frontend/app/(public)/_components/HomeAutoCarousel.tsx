@@ -81,7 +81,7 @@ export function HomeAutoCarousel({
 
       <div
         ref={scrollerRef}
-        className="no-scrollbar cursor-grab overflow-x-auto pb-2 active:cursor-grabbing"
+        className="no-scrollbar cursor-grab overflow-x-auto py-2 active:cursor-grabbing"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => {
           dragState.current.active = false

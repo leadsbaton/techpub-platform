@@ -75,7 +75,7 @@ export function HomeOverlayCard({
     return (
       <article className="flex h-[380px] w-[300px] flex-col gap-3">
         <Link href={href} className="group relative block">
-          <div className="relative h-[300px] w-[300px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
+          <div className="relative h-[270px] w-[300px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
             <SafeImage
               src={getPostCardImageUrl(post)}
               alt={post.title}
