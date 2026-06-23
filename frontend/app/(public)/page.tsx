@@ -8,6 +8,7 @@ import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeRuledHeader } from './_components/HomeRuledHeader'
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
+import type { Post } from '@/lib/types/cms'
 
 // Serve from the Data Cache between refreshes instead of hitting the CMS on
 // every view; content is at most LISTING_REVALIDATE seconds stale.
@@ -16,6 +17,34 @@ export const revalidate = 60
 export const metadata: Metadata = {
   title: 'Home',
   description: 'Explore the latest insights, white papers, and webinars from LeadsBaton TechPub.',
+}
+
+function uniquePosts(posts: Post[]) {
+  return Array.from(new Map(posts.map((post) => [post.id, post])).values())
+}
+
+function interleavePostTypes(groups: Post[][], limit: number, excludeId?: string) {
+  const output: Post[] = []
+  const seen = new Set<string>()
+  const maxLength = Math.max(...groups.map((group) => group.length), 0)
+
+  for (let index = 0; index < maxLength && output.length < limit; index += 1) {
+    groups.forEach((group) => {
+      const post = group[index]
+      if (!post || post.id === excludeId || seen.has(post.id) || output.length >= limit) return
+      seen.add(post.id)
+      output.push(post)
+    })
+  }
+
+  return output
+}
+
+function scoreTrendingPost(post: Post) {
+  const featuredScore = post.featured ? 2_000_000 : 0
+  const pinnedScore = post.pinned ? 1_000_000 : 0
+  const dateScore = post.publishedAt ? new Date(post.publishedAt).getTime() / 100_000_000 : 0
+  return featuredScore + pinnedScore + dateScore
 }
 
 export default async function HomePage() {
@@ -72,17 +101,15 @@ export default async function HomePage() {
   const whitepaperConfig = getContentTypeConfigByType('whitepaper', contentTypes)
   const insightConfig = getContentTypeConfigByType('insight', contentTypes)
 
-  const secondaryHeroPosts = [...whitepapers, ...webinars, ...insights]
+  const secondaryHeroPosts = interleavePostTypes(
+    [insights, whitepapers, webinars],
+    8,
+    heroPost.id,
+  )
+  const trendingPosts = uniquePosts([...insights, ...whitepapers, ...webinars])
     .filter((item) => item.id !== heroPost.id)
-    .slice(0, 4)
-  // Trending shows a 3-card row. Prefer insights (matching the design), but fall
-  // back to whitepapers/webinars so the row never renders with an empty column
-  // when only a couple of insights are published.
-  const trendingPosts = Array.from(
-    new Map(
-      [...insights, ...whitepapers, ...webinars].map((item) => [item.id, item]),
-    ).values(),
-  ).slice(0, 3)
+    .sort((a, b) => scoreTrendingPost(b) - scoreTrendingPost(a))
+    .slice(0, 3)
   const latestInsights = insights.slice(0, 7)
   const webinarLead = webinars[0] ?? null
   const webinarSupport = webinars.slice(1, 3)
@@ -102,9 +129,9 @@ export default async function HomePage() {
         <HomeRuledHeader title="Trending Now" />
         {/* Mobile: horizontal scroll carousel (no visible scrollbar). Desktop: 3-col grid. */}
         <div className="no-scrollbar overflow-x-auto pb-1 md:overflow-visible">
-          <div className="flex gap-5 md:grid md:grid-cols-3">
+          <div className="flex gap-4 md:grid md:grid-cols-3 md:gap-5">
             {trendingPosts.map((post) => (
-              <div key={post.id} className="w-[78%] shrink-0 sm:w-[46%] md:w-auto">
+              <div key={post.id} className="w-[336px] max-w-[82vw] shrink-0 md:w-full md:max-w-[388px] md:justify-self-center">
                 <HomeOverlayCard post={post} />
               </div>
             ))}

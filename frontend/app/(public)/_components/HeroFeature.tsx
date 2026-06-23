@@ -47,6 +47,10 @@ export function HeroFeature({
   webinarHref: string
   whitepaperHref: string
 }) {
+  const carouselPosts = secondaryPosts.length > 1
+    ? [...secondaryPosts, ...secondaryPosts]
+    : secondaryPosts
+
   return (
     <div>
       {/* Purple banner. Extra bottom padding on desktop leaves room for the card
@@ -114,11 +118,11 @@ export function HeroFeature({
           the purple banner (matching xl:pb above), so ~30% sits over the white page
           background below; on mobile they sit normally beneath the banner. */}
       <div className="relative z-10 -mt-[210px]">
-        <div className="no-scrollbar min-w-0 overflow-x-auto pb-2">
-          <div className="flex gap-3 pl-[max(16px,calc((100vw-972px)/2))] xl:gap-5">
-            {secondaryPosts.map((item, index) => (
+        <div className="home-hero-carousel no-scrollbar min-w-0 overflow-hidden pb-2">
+          <div className="home-hero-carousel-track flex w-max gap-3 pl-[max(16px,calc((100vw-972px)/2))] xl:gap-5">
+            {carouselPosts.map((item, index) => (
               <Link
-                key={item.id}
+                key={`${item.id}-${index}`}
                 href={getPostHref(item)}
                 className="group block h-[300px] w-[300px] shrink-0 overflow-hidden rounded-[14px] shadow-[0px_4px_4px_0px_#00000040]"
               >

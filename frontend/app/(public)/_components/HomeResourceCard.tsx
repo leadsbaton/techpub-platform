@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
-import { getCategoryAccent, getCategoryName, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { getCategoryAccent, getCategoryName, getPostCardButtonLabel, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 import { HomeVerticalBadge } from './HomeVerticalBadge'
 import { SafeImage } from './SafeImage'
 
@@ -10,6 +10,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
   const href = getPostHref(post)
   const category = getCategoryName(post.primaryCategory)
   const accent = getCategoryAccent(post.primaryCategory)
+  const actionLabel = getPostCardButtonLabel(post)
 
   return (
     <article className="flex h-[510px] flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-white shadow-[0px_6px_12px_0px_#00000008,0px_4px_8px_0px_#00000005]">
@@ -45,7 +46,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
             href={href}
             className="inline-flex items-center gap-2 text-base font-bold text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
           >
-            Download Now <span aria-hidden="true">-&gt;</span>
+            {actionLabel} <span aria-hidden="true">-&gt;</span>
           </Link>
         </div>
       </div>

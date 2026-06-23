@@ -127,6 +127,30 @@ textarea:focus-visible,
   display: none;
 }
 
+.home-hero-carousel-track {
+  animation: home-hero-carousel-scroll 38s linear infinite;
+}
+
+.home-hero-carousel:hover .home-hero-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes home-hero-carousel-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-carousel-track {
+    animation: none;
+  }
+}
+
 .nav-link {
   display: inline-flex;
   align-items: center;

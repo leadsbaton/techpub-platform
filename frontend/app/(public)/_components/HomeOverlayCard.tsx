@@ -8,6 +8,7 @@ import {
   getAuthorNames,
   getCategoryAccent,
   getCategoryName,
+  getPostCardButtonLabel,
   getPostCardImageClass,
   getPostCardImageUrl,
 } from '@/lib/utils/formatting'
@@ -66,16 +67,15 @@ export function HomeOverlayCard({
   const href = getPostHref(post)
   const isCompact = variant === 'compact'
   const isWebinar = variant === 'webinar'
-  const actionLabel =
-    post.type === 'webinar' ? 'Join' : post.type === 'whitepaper' ? 'Download' : 'Read'
+  const actionLabel = getPostCardButtonLabel(post)
   const category = getCategoryName(post.primaryCategory)
   const accent = getCategoryAccent(post.primaryCategory)
 
   if (!isCompact && !isWebinar) {
     return (
-      <article className="flex h-full flex-col">
+      <article className="flex h-full max-w-[388px] flex-col gap-4">
         <Link href={href} className="group relative block">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-[18px] bg-[color:var(--surface-muted)]">
+          <div className="relative aspect-[350/466] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
             <SafeImage
               src={getPostCardImageUrl(post)}
               alt={post.title}
@@ -87,10 +87,10 @@ export function HomeOverlayCard({
           <HomeVerticalBadge label={category} color={accent} />
         </Link>
 
-        <div className="flex flex-1 flex-col gap-4 pt-4">
+        <div className="flex flex-1 flex-col gap-3">
           <Link
             href={href}
-            className="headline-font text-[1rem] font-extrabold leading-[1.16] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] md:text-[1.04rem]"
+            className="ui-font text-[1rem] font-medium leading-[1.2] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] md:text-[1.04rem]"
           >
             {post.title}
           </Link>

@@ -365,6 +365,10 @@ export interface Post {
    */
   cardBannerFit?: ('cover' | 'contain') | null;
   /**
+   * Optional home/card button text. Leave empty to use Join, Download, or Read based on post type.
+   */
+  cardButtonLabel?: string | null;
+  /**
    * PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.
    */
   downloadAsset?: (string | null) | Media;
@@ -833,6 +837,7 @@ export interface PostsSelect<T extends boolean = true> {
   featuredImage?: T;
   cardBannerImage?: T;
   cardBannerFit?: T;
+  cardButtonLabel?: T;
   downloadAsset?: T;
   videoUrl?: T;
   externalUrl?: T;

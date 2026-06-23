@@ -231,6 +231,14 @@ export const Posts: CollectionConfig = {
                   },
                 },
                 {
+                  name: 'cardButtonLabel',
+                  type: 'text',
+                  admin: {
+                    description: 'Optional home/card button text. Leave empty to use Join, Download, or Read based on post type.',
+                    width: '50%',
+                  },
+                },
+                {
                   name: 'downloadAsset',
                   type: 'relationship',
                   relationTo: 'media',

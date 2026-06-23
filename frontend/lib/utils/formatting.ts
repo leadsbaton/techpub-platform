@@ -66,6 +66,14 @@ export function getPostCardImageClass(post: Pick<Post, 'cardBannerFit'>): string
   return getPostCardImageFit(post) === 'contain' ? 'object-contain' : 'object-cover'
 }
 
+export function getPostCardButtonLabel(post: Pick<Post, 'cardButtonLabel' | 'type'>): string {
+  const customLabel = post.cardButtonLabel?.trim()
+  if (customLabel) return customLabel
+  if (post.type === 'webinar') return 'Join'
+  if (post.type === 'whitepaper') return 'Download'
+  return 'Read'
+}
+
 export function hasMediaSource(media?: Media | string | null): boolean {
   return Boolean(getMediaUrl(media))
 }

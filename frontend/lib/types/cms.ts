@@ -126,6 +126,7 @@ export interface Post {
   featuredImage?: Media | string | null
   cardBannerImage?: Media | string | null
   cardBannerFit?: 'cover' | 'contain' | null
+  cardButtonLabel?: string | null
   downloadAsset?: Media | string | null
   featured?: boolean
   pinned?: boolean

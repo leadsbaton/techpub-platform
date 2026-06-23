@@ -343,9 +343,9 @@ export async function getHomePageData(revalidate: number = LIVE_REVALIDATE) {
     await Promise.all([
       getSiteSettings(),
       getPosts({ featured: true, limit: 1 }, revalidate),
-      getPosts({ type: 'insight', limit: 7 }, revalidate),
-      getPosts({ type: 'whitepaper', limit: 6 }, revalidate),
-      getPosts({ type: 'webinar', limit: 4 }, revalidate),
+      getPosts({ type: 'insight', limit: 8 }, revalidate),
+      getPosts({ type: 'whitepaper', limit: 8 }, revalidate),
+      getPosts({ type: 'webinar', limit: 8 }, revalidate),
       getContentTypes(6),
       getCategories(6),
     ])

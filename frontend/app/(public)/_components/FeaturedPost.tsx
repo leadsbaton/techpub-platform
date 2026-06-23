@@ -7,6 +7,7 @@ import {
   getAuthorNames,
   getCategoryName,
   getContentTypeLabel,
+  getPostCardButtonLabel,
   getPostCardImageClass,
   getPostCardImageUrl,
 } from '@/lib/utils/formatting'
@@ -15,6 +16,7 @@ import { SafeImage } from './SafeImage'
 export function FeaturedPost({ post }: { post: Post }) {
   const href = getPostHref(post)
   const browseHref = getRouteBaseForType(post.type)
+  const actionLabel = getPostCardButtonLabel(post)
 
   return (
     <section className="grid gap-8 rounded-[36px] bg-slate-950 px-6 py-6 text-white md:grid-cols-[1.15fr_0.85fr] md:px-8 md:py-8">
@@ -36,7 +38,7 @@ export function FeaturedPost({ post }: { post: Post }) {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href={href} className="rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-200">
-            Read article
+            {actionLabel}
           </Link>
           <Link href={browseHref} className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
             Explore {getPluralLabelForType(post.type)}
