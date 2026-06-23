@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { SafeImage } from '../../_components/SafeImage'
 import type { Post } from '@/lib/types/cms'
-import { formatDate, getCategoryName, getPostCardImageUrl, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
+import { getCategoryName, getPostCardImageUrl, getWebinarEventLabel, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
 
 const categoryStyles: Record<string, string> = {
   technology: 'text-[#0015AD]',
@@ -10,29 +10,11 @@ const categoryStyles: Record<string, string> = {
   marketing: 'text-[#00A01D]',
 }
 
-function getWebinarDateLabel(post: Post) {
-  const rawDate = post.webinarRegistration?.eventDateLabel || formatDate(post.publishedAt)
-  const cleanDate = rawDate.replace(/^coming\s+/i, '').trim()
-  const parsedDate = new Date(cleanDate)
-
-  if (Number.isNaN(parsedDate.getTime())) {
-    return rawDate
-  }
-
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  parsedDate.setHours(0, 0, 0, 0)
-
-  if (parsedDate > today) return `Coming ${cleanDate}`
-  if (parsedDate.getTime() === today.getTime()) return `Today ${cleanDate}`
-  return cleanDate
-}
-
 export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
   const categoryClass = categoryStyles[category.toLowerCase()] || 'text-[#0015AD]'
   const presenterLabel = getWebinarSpeakerSummary(post)
-  const eventDate = getWebinarDateLabel(post)
+  const eventDate = getWebinarEventLabel(post)
 
   return (
     <article
@@ -44,7 +26,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
         <div className={`relative w-full overflow-hidden bg-white ${compact ? 'h-[110px]' : 'h-[201px]'}`}>
           <SafeImage src={getPostCardImageUrl(post)} alt={post.title} fill sizes={compact ? '(max-width: 1024px) 100vw, 467px' : '(max-width: 1024px) 100vw, 668px'} className="object-contain" />
           <div className="absolute inset-x-0 top-0 truncate bg-black/35 px-3 py-1 text-center text-[10px] font-medium uppercase leading-[145%] tracking-[-0.005em] text-white">
-            {eventDate.replace(/^Coming\s+/i, '')}
+            {eventDate}
           </div>
           {compact ? (
             <>

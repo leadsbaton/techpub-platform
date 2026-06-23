@@ -6,7 +6,7 @@ import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { SafeImage } from '../../_components/SafeImage'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getImageUrl, getMediaDimensions, getWebinarPersonGroups } from '@/lib/utils/formatting'
+import { getImageUrl, getMediaDimensions, getWebinarPersonGroups, isUpcomingWebinar } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
 
 type Params = Promise<{ slug: string }>
@@ -35,6 +35,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   const peopleGroups = getWebinarPersonGroups(post)
   const heroDims = getMediaDimensions(post.featuredImage)
   const secondaryDims = getMediaDimensions(post.webinarSecondaryBanner)
+  const canRegister = post.webinarRegistration?.enabled !== false && isUpcomingWebinar(post)
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
@@ -91,16 +92,18 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
               </div>
             ) : null}
 
-            <div className="flex justify-center">
-              <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
-                {post.webinarRegistration?.ctaLabel || 'Register now'}
-              </Link>
-            </div>
+            {canRegister ? (
+              <div className="flex justify-center">
+                <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
+                  {post.webinarRegistration?.ctaLabel || 'Register now'}
+                </Link>
+              </div>
+            ) : null}
 
 
             {post.content ? (
               <div className="ui-font prose max-w-none text-[16px] leading-[145%] text-[#2d2d2d]">
-                <RichTextRenderer content={post.content} registerHref={`/webinars/${post.slug}/access`} />
+                <RichTextRenderer content={post.content} registerHref={canRegister ? `/webinars/${post.slug}/access` : undefined} />
               </div>
             ) : null}
 

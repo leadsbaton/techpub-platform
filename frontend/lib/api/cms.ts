@@ -345,7 +345,7 @@ export async function getHomePageData(revalidate: number = LIVE_REVALIDATE) {
       getPosts({ featured: true, limit: 1 }, revalidate),
       getPosts({ type: 'insight', limit: 8 }, revalidate),
       getPosts({ type: 'whitepaper', limit: 12 }, revalidate),
-      getPosts({ type: 'webinar', limit: 8 }, revalidate),
+      getPosts({ type: 'webinar', limit: 24 }, revalidate),
       getContentTypes(6),
       getCategories(6),
     ])

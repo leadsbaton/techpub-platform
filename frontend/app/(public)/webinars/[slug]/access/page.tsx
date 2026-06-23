@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { RankedSidebar } from '../../../_components/RankedSidebar'
 import { WebinarRegistrationForm } from '../../_components/WebinarRegistrationForm'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
+import { isUpcomingWebinar } from '@/lib/utils/formatting'
 
 type Params = Promise<{ slug: string }>
 
@@ -30,7 +31,7 @@ export default async function WebinarAccessPage({ params }: { params: Params }) 
     getContentTypes(12),
   ])
 
-  if (!post) notFound()
+  if (!post || post.webinarRegistration?.enabled === false || !isUpcomingWebinar(post)) notFound()
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">

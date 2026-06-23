@@ -171,6 +171,7 @@ export interface Post {
     deliveryUrl?: string | null
     openDeliveryInNewTab?: boolean | null
     eventDateLabel?: string | null
+    eventStartsAt?: string | null
   } | null
   cta?: PostCtaGroup | null
   seo?: Seo | null

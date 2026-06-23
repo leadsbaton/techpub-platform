@@ -3,10 +3,18 @@ import Link from 'next/link'
 
 import { SafeImage } from '../_components/SafeImage'
 import { WebinarCard } from './_components/WebinarCard'
-import { WebinarListingClient } from './_components/WebinarListingClient'
 import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getCategoryAccent, getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import {
+  compareWebinarsByEventDate,
+  getCategoryAccent,
+  getCategoryName,
+  getImageUrl,
+  getPostCardImageClass,
+  getPostCardImageUrl,
+  getWebinarEventDate,
+  isUpcomingWebinar,
+} from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -72,20 +80,29 @@ function CenterHeader({
   )
 }
 
-function ListingSection({
+function splitWebinars(posts: Post[]) {
+  const upcoming = posts.filter((post) => isUpcomingWebinar(post)).sort(compareWebinarsByEventDate)
+  const past = posts
+    .filter((post) => !isUpcomingWebinar(post))
+    .sort((a, b) => {
+      const bEvent = getWebinarEventDate(b)?.getTime()
+      const aEvent = getWebinarEventDate(a)?.getTime()
+      const bTime = bEvent ?? (b.publishedAt ? new Date(b.publishedAt).getTime() : 0)
+      const aTime = aEvent ?? (a.publishedAt ? new Date(a.publishedAt).getTime() : 0)
+      return bTime - aTime
+    })
+
+  return { upcoming, past }
+}
+
+function WebinarGridSection({
   title,
   posts,
-  page,
-  hasNextPage,
-  category,
-  query,
+  emptyMessage,
 }: {
   title: string
   posts: Post[]
-  page: number
-  hasNextPage: boolean
-  category?: string
-  query?: string
+  emptyMessage?: string
 }) {
   return (
     <section className="space-y-8">
@@ -93,13 +110,17 @@ function ListingSection({
         <h2 className="text-[22px] font-medium leading-[1.15] text-[#020202] sm:text-[30px]">{title}</h2>
         <div className="double-rule hidden md:block" />
       </div>
-      <WebinarListingClient
-        initialPosts={posts}
-        initialPage={page}
-        initialHasNextPage={hasNextPage}
-        selectedCategory={category}
-        query={query}
-      />
+      {posts.length ? (
+        <div className="grid gap-x-8 gap-y-10 md:grid-cols-2">
+          {posts.map((post) => (
+            <WebinarCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <div className="ui-font border border-[#E0E0E0] bg-white px-6 py-10 text-center text-[15px] font-medium text-[#666]">
+          {emptyMessage || 'No webinars found.'}
+        </div>
+      )}
     </section>
   )
 }
@@ -107,21 +128,26 @@ function ListingSection({
 function FeaturedWebinars({ posts }: { posts: Post[] }) {
   const lead = posts[0]
   const side = posts.slice(1, 3)
-  if (!lead) return null
 
   return (
     <section className="space-y-8">
       <CenterHeader title="Upcoming Webinars" href={buildFilterHref(undefined, undefined, 'all')} />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,668px)_minmax(0,467px)] lg:items-start">
-        <div className="space-y-3">
-          <WebinarCard post={lead} />
+      {lead ? (
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,668px)_minmax(0,467px)] lg:items-start">
+          <div className="space-y-3">
+            <WebinarCard post={lead} />
+          </div>
+          <div className="space-y-4">
+            {side.map((post) => (
+              <WebinarCard key={post.id} post={post} compact />
+            ))}
+          </div>
         </div>
-        <div className="space-y-4">
-          {side.map((post) => (
-            <WebinarCard key={post.id} post={post} compact />
-          ))}
+      ) : (
+        <div className="ui-font border border-[#E0E0E0] bg-white px-6 py-12 text-center text-[15px] font-medium text-[#666]">
+          No upcoming webinars right now. Browse past sessions below.
         </div>
-      </div>
+      )}
     </section>
   )
 }
@@ -171,49 +197,45 @@ export default async function WebinarsPage({
   const selectedCategory = categories.find((item) => item.slug === category)
 
   if (category && selectedCategory) {
-    const listing = await getPosts({ type: 'webinar', category, limit: 6 }, LISTING_REVALIDATE)
+    const listing = await getPosts({ type: 'webinar', category, limit: 100 }, LISTING_REVALIDATE)
+    const { upcoming, past } = splitWebinars(listing.docs)
+
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
           <CategoryBanner category={selectedCategory} />
-          <ListingSection
-            title={selectedCategory.name}
-            posts={listing.docs}
-            page={listing.page}
-            hasNextPage={listing.hasNextPage}
-            category={category}
-          />
+          <WebinarGridSection title="Upcoming Webinars" posts={upcoming} emptyMessage="No upcoming webinars in this category right now." />
+          <WebinarGridSection title="Past Sessions" posts={past} />
         </article>
       </div>
     )
   }
 
   if (q || view === 'all') {
-    const listing = await getPosts({ type: 'webinar', limit: 6, query: q }, LISTING_REVALIDATE)
+    const listing = await getPosts({ type: 'webinar', limit: 100, query: q }, LISTING_REVALIDATE)
+    const { upcoming, past } = splitWebinars(listing.docs)
+
     return (
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
-          <ListingSection
-            title="Upcoming Webinars"
-            posts={listing.docs}
-            page={listing.page}
-            hasNextPage={listing.hasNextPage}
-            query={q}
-          />
+          <WebinarGridSection title="Upcoming Webinars" posts={upcoming} emptyMessage="No upcoming webinars right now." />
+          <WebinarGridSection title="Past Sessions" posts={past} />
         </article>
       </div>
     )
   }
 
   const [featuredWebinars, dontMissWhitepapers] = await Promise.all([
-    getPosts({ type: 'webinar', limit: 6 }, LISTING_REVALIDATE),
+    getPosts({ type: 'webinar', limit: 24 }, LISTING_REVALIDATE),
     getPosts({ type: 'whitepaper', limit: 3 }, LISTING_REVALIDATE),
   ])
+  const { upcoming, past } = splitWebinars(featuredWebinars.docs)
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
       <article className="site-container space-y-14 py-8 sm:py-10">
-        <FeaturedWebinars posts={featuredWebinars.docs} />
+        <FeaturedWebinars posts={upcoming} />
+        <WebinarGridSection title="Past Sessions" posts={past.slice(0, 6)} />
         <DontMiss posts={dontMissWhitepapers.docs} />
       </article>
     </div>

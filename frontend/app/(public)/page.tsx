@@ -9,6 +9,7 @@ import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeRuledHeader } from './_components/HomeRuledHeader'
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
+import { compareWebinarsByEventDate, isUpcomingWebinar } from '@/lib/utils/formatting'
 import type { Post } from '@/lib/types/cms'
 
 // Serve from the Data Cache between refreshes instead of hitting the CMS on
@@ -134,22 +135,23 @@ export default async function HomePage() {
   const webinarConfig = getContentTypeConfigByType('webinar', contentTypes)
   const whitepaperConfig = getContentTypeConfigByType('whitepaper', contentTypes)
   const insightConfig = getContentTypeConfigByType('insight', contentTypes)
+  const upcomingWebinars = webinars.filter((post) => isUpcomingWebinar(post)).sort(compareWebinarsByEventDate)
 
   const secondaryHeroPosts = interleavePostTypes(
-    [insights, whitepapers, webinars],
+    [insights, whitepapers, upcomingWebinars],
     8,
     heroPost.id,
   )
   const trendingPosts = buildTrendingPosts({
     insights,
     whitepapers,
-    webinars,
+    webinars: upcomingWebinars,
     excludeId: heroPost.id,
     limit: 8,
   })
   const latestInsights = insights.slice(0, 7)
-  const webinarLead = webinars[0] ?? null
-  const webinarSupport = webinars.slice(1, 3)
+  const webinarLead = upcomingWebinars[0] ?? null
+  const webinarSupport = upcomingWebinars.slice(1, 3)
   const carouselTrackClassName =
     'pl-[max(12px,calc((100vw-1200px)/2))] pr-[max(12px,calc((100vw-1200px)/2))] sm:pl-[max(16px,calc((100vw-1200px)/2))] sm:pr-[max(16px,calc((100vw-1200px)/2))]'
   const mustReadWhitepapers = whitepapers.slice(0, 12)
@@ -217,19 +219,25 @@ export default async function HomePage() {
 
       <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
         <HomeRuledHeader title="Upcoming Webinars" />
-        <div className="grid gap-2 lg:grid-cols-[0.48fr_0.52fr]">
-          <div className="grid gap-2">
-            {webinarSupport[0] ? (
-              <HomeOverlayCard post={webinarSupport[0]} variant="webinar" compactSize="small" />
-            ) : null}
-            {webinarSupport[1] ? (
-              <HomeOverlayCard post={webinarSupport[1]} variant="webinar" compactSize="small" />
-            ) : null}
+        {webinarLead ? (
+          <div className="grid gap-2 lg:grid-cols-[0.48fr_0.52fr]">
+            <div className="grid gap-2">
+              {webinarSupport[0] ? (
+                <HomeOverlayCard post={webinarSupport[0]} variant="webinar" compactSize="small" />
+              ) : null}
+              {webinarSupport[1] ? (
+                <HomeOverlayCard post={webinarSupport[1]} variant="webinar" compactSize="small" />
+              ) : null}
+            </div>
+            <div className="min-h-[420px] lg:min-h-0">
+              <HomeOverlayCard post={webinarLead} variant="webinar" />
+            </div>
           </div>
-          <div className="min-h-[420px] lg:min-h-0">
-            {webinarLead ? <HomeOverlayCard post={webinarLead} variant="webinar" /> : null}
+        ) : (
+          <div className="ui-font border border-[var(--border-subtle)] bg-white px-6 py-10 text-center text-[color:var(--text-muted)]">
+            No upcoming webinars right now. Past sessions are available on the webinars page.
           </div>
-        </div>
+        )}
       </section>
 
       <section className="mt-14 space-y-6 overflow-hidden md:mt-16 md:space-y-7">

@@ -604,8 +604,19 @@ export const Posts: CollectionConfig = {
                       name: 'eventDateLabel',
                       type: 'text',
                       admin: {
-                        width: '50%',
-                        description: 'Optional date/time shown on webinar listing cards (e.g. "WED, DEC 10 — 11 AM PT"). Not shown on the detail page.',
+                        width: '25%',
+                        description: 'Display label shown on webinar cards (e.g. "Tuesday, June 26, 11 am PT / 2 pm ET").',
+                      },
+                    },
+                    {
+                      name: 'eventStartsAt',
+                      type: 'date',
+                      admin: {
+                        width: '25%',
+                        date: {
+                          pickerAppearance: 'dayAndTime',
+                        },
+                        description: 'Structured event date/time used to sort upcoming and past webinars.',
                       },
                     },
                   ],

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import {
-  formatDate,
   formatShortDate,
   getAuthorNames,
   getCategoryAccent,
@@ -11,6 +10,7 @@ import {
   getPostCardButtonLabel,
   getPostCardImageClass,
   getPostCardImageUrl,
+  getWebinarEventLabel,
 } from '@/lib/utils/formatting'
 import { HomeVerticalBadge } from './HomeVerticalBadge'
 import { SafeImage } from './SafeImage'
@@ -172,7 +172,7 @@ export function HomeOverlayCard({
               {post.title}
             </h3>
             <p className="mt-3 max-w-full text-[0.98rem] font-medium leading-6 text-white/90 md:text-[1.08rem]">
-              Oracle - {formatDate(post.publishedAt)} 11:00AM PT, 2:00PM ET
+              {getWebinarEventLabel(post)}
             </p>
             <span
               className="mt-4 inline-flex px-4 py-2 text-[0.95rem] font-extrabold uppercase tracking-[0.02em] text-white md:text-[1.05rem]"

@@ -25,6 +25,7 @@ type WebinarRegistrationSettings = {
   openDeliveryInNewTab?: boolean | null
   sponsor?: string | null
   eventDateLabel?: string | null
+  eventStartsAt?: string | null
   eventSummary?: string | null
   agendaPoints?: Array<{ point?: string | null }> | null
   speakers?: Array<{
@@ -46,7 +47,116 @@ type WebinarPost = {
   status?: string | null
   externalUrl?: string | null
   videoUrl?: string | null
+  content?: unknown
   webinarRegistration?: WebinarRegistrationSettings | null
+}
+
+const webinarMonthIndexes: Record<string, number> = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+}
+
+function getWebinarEventDate(label?: string | null, referenceDate = new Date()): Date | null {
+  if (!label?.trim()) return null
+
+  const match = label.match(
+    /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s+(\d{4}))?/i,
+  )
+  if (!match) return null
+
+  const month = webinarMonthIndexes[match[1].toLowerCase()]
+  const day = Number(match[2])
+  const year = match[3] ? Number(match[3]) : referenceDate.getFullYear()
+  if (month === undefined || !day || Number.isNaN(year)) return null
+
+  const eventDate = new Date(year, month, day)
+  return Number.isNaN(eventDate.getTime()) ? null : eventDate
+}
+
+function getTextFromRichTextNode(node: unknown): string {
+  if (!node || typeof node !== 'object') return ''
+
+  const value = node as { text?: unknown; children?: unknown }
+  const ownText = typeof value.text === 'string' ? value.text : ''
+  const childText = Array.isArray(value.children)
+    ? value.children.map(getTextFromRichTextNode).join(' ')
+    : ''
+
+  return `${ownText} ${childText}`.trim()
+}
+
+function getTextFromRichText(content: unknown): string {
+  if (!content || typeof content !== 'object') return ''
+
+  const root = (content as { root?: unknown }).root
+  if (!root || typeof root !== 'object') return ''
+
+  const children = (root as { children?: unknown }).children
+  return Array.isArray(children)
+    ? children.map(getTextFromRichTextNode).join(' ').replace(/\s+/g, ' ').trim()
+    : ''
+}
+
+function extractWebinarEventLabelFromContent(content: unknown): string | null {
+  const text = getTextFromRichText(content)
+  if (!text) return null
+
+  const datePattern =
+    /\b(?:(?:mon|tues|wednes|thurs|fri|satur|sun)day,\s*)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2}(?:st|nd|rd|th)?(?:,?\s+\d{4})?(?:,\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*[A-Z]{2}(?:\s*\/\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)(?:\s*[A-Z]{2})?)?)?/gi
+  const labels = Array.from(text.matchAll(datePattern), (match) => match[0].trim())
+  if (!labels.length) return null
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const upcoming = labels.find((label) => {
+    const eventDate = getWebinarEventDate(label)
+    if (!eventDate) return false
+    eventDate.setHours(0, 0, 0, 0)
+    return eventDate >= today
+  })
+
+  return upcoming || labels[labels.length - 1] || null
+}
+
+function isUpcomingWebinar(registration?: WebinarRegistrationSettings | null, content?: unknown, referenceDate = new Date()): boolean {
+  const structuredDate = registration?.eventStartsAt ? new Date(registration.eventStartsAt) : null
+  const eventDate =
+    structuredDate && !Number.isNaN(structuredDate.getTime())
+      ? structuredDate
+      : getWebinarEventDate(
+          registration?.eventDateLabel || extractWebinarEventLabelFromContent(content),
+          referenceDate,
+        )
+  if (!eventDate) return false
+
+  const today = new Date(referenceDate)
+  today.setHours(0, 0, 0, 0)
+  eventDate.setHours(0, 0, 0, 0)
+
+  return eventDate >= today
 }
 
 type SiteSettingsShape = {
@@ -148,6 +258,14 @@ export async function POST(request: NextRequest) {
     return jsonWithCors(
       request,
       { message: 'This webinar is configured for direct access and does not accept registrations.' },
+      { status: 400 },
+    )
+  }
+
+  if (!isUpcomingWebinar(post.webinarRegistration, post.content)) {
+    return jsonWithCors(
+      request,
+      { message: 'Registration is closed for this webinar.' },
       { status: 400 },
     )
   }

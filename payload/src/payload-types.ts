@@ -438,9 +438,13 @@ export interface Post {
     consentLabel?: string | null;
     successMessage?: string | null;
     /**
-     * Optional date/time shown on webinar listing cards (e.g. "WED, DEC 10 — 11 AM PT"). Not shown on the detail page.
+     * Display label shown on webinar cards (e.g. "Tuesday, June 26, 11 am PT / 2 pm ET").
      */
     eventDateLabel?: string | null;
+    /**
+     * Structured event date/time used to sort upcoming and past webinars.
+     */
+    eventStartsAt?: string | null;
   };
   /**
    * Choose each webinar person and set how they should appear on the public page: Speaker, Moderator, or Presenter.
@@ -892,6 +896,7 @@ export interface PostsSelect<T extends boolean = true> {
         consentLabel?: T;
         successMessage?: T;
         eventDateLabel?: T;
+        eventStartsAt?: T;
       };
   webinarPeople?:
     | T

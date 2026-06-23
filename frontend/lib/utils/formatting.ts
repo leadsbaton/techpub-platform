@@ -193,6 +193,126 @@ export function getWebinarSpeakerSummary(post: Post): string | null {
   return `${people[0]?.name || 'Speaker'} + ${people.length - 1} more`
 }
 
+type WebinarDateSource = Pick<Post, 'webinarRegistration' | 'content'>
+
+export function getWebinarEventLabel(post: WebinarDateSource): string {
+  return post.webinarRegistration?.eventDateLabel?.trim() || extractWebinarEventLabelFromContent(post.content) || 'Date TBD'
+}
+
+const webinarMonthIndexes: Record<string, number> = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+}
+
+function getTextFromRichTextNode(node: unknown): string {
+  if (!node || typeof node !== 'object') return ''
+
+  const value = node as { text?: unknown; children?: unknown }
+  const ownText = typeof value.text === 'string' ? value.text : ''
+  const childText = Array.isArray(value.children)
+    ? value.children.map(getTextFromRichTextNode).join(' ')
+    : ''
+
+  return `${ownText} ${childText}`.trim()
+}
+
+function getTextFromRichText(content: Post['content']): string {
+  return content?.root?.children?.map(getTextFromRichTextNode).join(' ').replace(/\s+/g, ' ').trim() || ''
+}
+
+function extractWebinarEventLabelFromContent(content: Post['content']): string | null {
+  const text = getTextFromRichText(content)
+  if (!text) return null
+
+  const datePattern =
+    /\b(?:(?:mon|tues|wednes|thurs|fri|satur|sun)day,\s*)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2}(?:st|nd|rd|th)?(?:,?\s+\d{4})?(?:,\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*[A-Z]{2}(?:\s*\/\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)(?:\s*[A-Z]{2})?)?)?/gi
+  const labels = Array.from(text.matchAll(datePattern), (match) => match[0].trim())
+  if (!labels.length) return null
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const upcoming = labels.find((label) => {
+    const eventDate = parseWebinarDateLabel(label)
+    if (!eventDate) return false
+    eventDate.setHours(0, 0, 0, 0)
+    return eventDate >= today
+  })
+
+  return upcoming || labels[labels.length - 1] || null
+}
+
+function parseWebinarDateLabel(label?: string | null, referenceDate = new Date()): Date | null {
+  if (!label) return null
+
+  const match = label.match(
+    /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s+(\d{4}))?/i,
+  )
+  if (!match) return null
+
+  const month = webinarMonthIndexes[match[1].toLowerCase()]
+  const day = Number(match[2])
+  const year = match[3] ? Number(match[3]) : referenceDate.getFullYear()
+  if (month === undefined || !day || Number.isNaN(year)) return null
+
+  const eventDate = new Date(year, month, day)
+  return Number.isNaN(eventDate.getTime()) ? null : eventDate
+}
+
+export function getWebinarEventDate(post: WebinarDateSource, referenceDate = new Date()): Date | null {
+  const structuredDate = post.webinarRegistration?.eventStartsAt
+    ? new Date(post.webinarRegistration.eventStartsAt)
+    : null
+
+  if (structuredDate && !Number.isNaN(structuredDate.getTime())) {
+    return structuredDate
+  }
+
+  return parseWebinarDateLabel(
+    post.webinarRegistration?.eventDateLabel?.trim() || extractWebinarEventLabelFromContent(post.content),
+    referenceDate,
+  )
+}
+
+export function isUpcomingWebinar(post: WebinarDateSource, referenceDate = new Date()): boolean {
+  const eventDate = getWebinarEventDate(post, referenceDate)
+  if (!eventDate) return false
+
+  const today = new Date(referenceDate)
+  today.setHours(0, 0, 0, 0)
+  eventDate.setHours(0, 0, 0, 0)
+
+  return eventDate >= today
+}
+
+export function compareWebinarsByEventDate(a: WebinarDateSource, b: WebinarDateSource): number {
+  const aDate = getWebinarEventDate(a)?.getTime() ?? Number.MAX_SAFE_INTEGER
+  const bDate = getWebinarEventDate(b)?.getTime() ?? Number.MAX_SAFE_INTEGER
+  return aDate - bDate
+}
+
 export function getContentTypeLabel(type: Post['type']): string {
   return getSingularLabelForType(type)
 }
