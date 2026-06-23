@@ -23,7 +23,7 @@ export function HomeRuledHeader({
         {href ? (
           <Link
             href={href}
-            className="shrink-0 border-b border-[color:var(--text-strong)] text-[0.82rem] font-semibold leading-none text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] sm:text-[0.95rem]"
+            className="shrink-0 border-b border-[color:var(--text-strong)] text-[0.82rem] font-medium leading-none text-[color:var(--text-strong)] transition hover:border-[var(--accent-red)] hover:text-[color:var(--accent-red)] sm:text-[0.95rem]"
           >
             {actionLabel}
           </Link>

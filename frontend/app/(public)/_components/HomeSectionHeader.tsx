@@ -15,7 +15,7 @@ export function HomeSectionHeader({
     <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
         <div className="section-heading">
-          <h2 className="headline-font text-[clamp(1.55rem,2.4vw,2.3rem)] font-extrabold tracking-[-0.03em] text-[color:var(--text-strong)]">
+          <h2 className="ui-font text-[clamp(1.55rem,2.4vw,2.3rem)] font-medium leading-none tracking-normal text-[#020202]">
             {title}
           </h2>
         </div>
@@ -28,7 +28,7 @@ export function HomeSectionHeader({
       {href ? (
         <Link
           href={href}
-          className="inline-flex shrink-0 items-center rounded-full border border-[var(--border-subtle)] bg-white px-4 py-2 text-[0.92rem] font-semibold text-[color:var(--text-strong)] transition hover:border-[var(--text-strong)]"
+          className="inline-flex shrink-0 items-center border-b border-[color:var(--text-strong)] text-[0.92rem] font-medium leading-none text-[color:var(--text-strong)] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)]"
         >
           {actionLabel}
         </Link>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { HomeRuledHeader } from '../../_components/HomeRuledHeader'
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { SafeImage } from '../../_components/SafeImage'
 import type { Category, Post } from '@/lib/types/cms'
@@ -33,7 +34,7 @@ function CategoryTab({ category }: { category: Category }) {
   return (
     <div className="border-b-2 pb-2" style={{ borderColor: getCategoryAccent(category) }}>
       <span
-        className="inline-flex rounded-[2px] px-4 py-2 text-[0.82rem] font-extrabold uppercase tracking-[0.08em] text-white"
+        className="inline-flex rounded-[2px] px-4 py-2 text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-white"
         style={{ backgroundColor: getCategoryAccent(category) }}
       >
         {category.name}
@@ -63,7 +64,7 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90" />
           <div
-            className="absolute bottom-4 left-4 inline-flex px-3 py-1.5 text-[0.68rem] font-extrabold uppercase text-white"
+            className="absolute bottom-4 left-4 inline-flex px-3 py-1.5 text-[0.68rem] font-semibold uppercase text-white"
             style={{ backgroundColor: accent }}
           >
             {category}
@@ -72,8 +73,8 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
         <h3
           className={`mt-4 text-balance text-white transition group-hover:text-white/82 ${
             large
-              ? 'headline-font text-[1.25rem] font-bold leading-[1.18] sm:text-[1.45rem] lg:text-[1.55rem]'
-              : 'text-[1rem] font-semibold leading-[1.18] sm:text-[1.05rem]'
+              ? 'ui-font text-[1.25rem] font-medium leading-[1.18] sm:text-[1.45rem] lg:text-[1.55rem]'
+              : 'ui-font text-[1rem] font-medium leading-[1.18] sm:text-[1.05rem]'
           }`}
         >
           {post.title}
@@ -125,7 +126,7 @@ function TopPickListItem({ post }: { post: Post }) {
         <p className="text-[0.82rem] text-[color:var(--text-muted)]">
           {formatShortDate(post.publishedAt)}
         </p>
-        <h4 className="mt-1 text-[1rem] font-bold leading-[1.25] text-[color:var(--text-strong)] transition group-hover:text-[var(--accent-red)]">
+        <h4 className="mt-1 text-[1rem] font-medium leading-[1.25] text-[color:var(--text-strong)] transition group-hover:text-[var(--accent-red)]">
           {post.title}
         </h4>
       </div>
@@ -149,7 +150,7 @@ function CategoryHero({
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/25" />
-        <h1 className="headline-font absolute inset-0 flex items-center justify-center px-6 text-center text-[2.2rem] font-extrabold uppercase tracking-[0.04em] text-white sm:text-[3rem] md:text-[3.8rem]">
+        <h1 className="ui-font absolute inset-0 flex items-center justify-center px-6 text-center text-[2.2rem] font-medium uppercase tracking-normal text-white sm:text-[3rem] md:text-[3.8rem]">
           {category.name}
         </h1>
       </div>
@@ -164,7 +165,7 @@ function CategoryListItem({ post }: { post: Post }) {
       className="grid items-center gap-5 border-b border-[var(--border-subtle)] py-5 sm:grid-cols-[1fr_120px]"
     >
       <div>
-        <h3 className="text-[1rem] font-bold leading-[1.4] text-[color:var(--text-strong)]">
+        <h3 className="text-[1rem] font-medium leading-[1.4] text-[color:var(--text-strong)]">
           {post.title}
         </h3>
         <p className="mt-2 text-[0.85rem] text-[color:var(--text-muted)]">
@@ -202,9 +203,9 @@ function LandingView({
         style={{ background: 'linear-gradient(180deg, #C70001 -3.96%, #000000 74.4%)' }}
       >
         <div className="site-container">
-          <div className="mb-8 flex items-center gap-4 sm:mb-10">
+          <div className="ui-font mb-8 flex items-center gap-4 sm:mb-10">
             <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
-            <h1 className="headline-font shrink-0 text-center text-[1.65rem] font-extrabold uppercase text-white sm:text-[2rem] md:text-[2.15rem]">
+            <h1 className="shrink-0 text-center text-[1.65rem] font-medium uppercase leading-none text-white sm:text-[2rem] md:text-[2.15rem]">
               Just In: Insights
             </h1>
             <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
@@ -223,18 +224,7 @@ function LandingView({
       </section>
 
       <section className="site-container mt-14 space-y-8 md:mt-16">
-        <div className="flex items-center gap-4">
-          <h2 className="headline-font shrink-0 text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
-            Top Picks
-          </h2>
-          <div className="h-px flex-1 bg-[var(--border-subtle)]" />
-          <Link
-            href="/insights?view=all"
-            className="text-[0.95rem] font-semibold text-[color:var(--text-strong)] underline underline-offset-4"
-          >
-            View all
-          </Link>
-        </div>
+        <HomeRuledHeader title="Top Picks" href="/insights?view=all" actionLabel="View all" />
 
         <div className="grid gap-10 lg:grid-cols-3">
           {topPickGroups.map(({ category, posts }) => (
@@ -249,7 +239,7 @@ function LandingView({
               <div className="pt-1 text-center">
                 <Link
                   href={`/insights?category=${category.slug}`}
-                  className="text-[0.95rem] font-semibold text-[color:var(--text-muted)] underline underline-offset-4"
+                  className="ui-font border-b border-[color:var(--text-muted)] text-[0.95rem] font-medium leading-none text-[color:var(--text-muted)] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)]"
                 >
                   View More
                 </Link>
@@ -290,7 +280,7 @@ function CategoryView({
             <div className="flex justify-center pt-10">
               <Link
                 href={`/insights?category=${category.slug}&page=${currentPage + 1}`}
-                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-medium text-white transition hover:bg-[var(--accent-red-dark)]"
               >
                 Load More
               </Link>
@@ -317,12 +307,12 @@ function InsightListRow({ post }: { post: Post }) {
     >
       <div>
         <span
-          className="text-[0.72rem] font-extrabold uppercase tracking-[0.08em]"
+          className="text-[0.72rem] font-semibold uppercase tracking-[0.08em]"
           style={{ color: accent }}
         >
           {category}
         </span>
-        <h3 className="mt-1.5 text-[1rem] font-bold leading-[1.4] text-[color:var(--text-strong)]">
+        <h3 className="mt-1.5 text-[1rem] font-medium leading-[1.4] text-[color:var(--text-strong)]">
           {post.title}
         </h3>
         <p className="mt-2 text-[0.85rem] text-[color:var(--text-muted)]">
@@ -355,11 +345,7 @@ function AllInsightsView({
 }) {
   return (
     <section className="site-container py-8 sm:py-10">
-      <div className="section-heading">
-        <h1 className="headline-font text-[1.9rem] font-extrabold text-[color:var(--text-strong)]">
-          Insights
-        </h1>
-      </div>
+      <HomeRuledHeader title="Insights" />
 
       <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
@@ -372,7 +358,7 @@ function AllInsightsView({
             <div className="flex justify-center pt-10">
               <Link
                 href={`/insights?view=all&page=${currentPage + 1}`}
-                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+                className="rounded-[8px] bg-[var(--accent-red)] px-10 py-3 text-sm font-medium text-white transition hover:bg-[var(--accent-red-dark)]"
               >
                 Load More
               </Link>
