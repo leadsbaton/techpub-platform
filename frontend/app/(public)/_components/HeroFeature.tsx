@@ -2,8 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
-import { getPostHref } from '@/lib/utils/contentTypes'
-import { getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { HomeHeroCarousel } from './HomeHeroCarousel'
 import { SafeImage } from './SafeImage'
 
 function EchoCopy() {
@@ -47,10 +46,6 @@ export function HeroFeature({
   webinarHref: string
   whitepaperHref: string
 }) {
-  const carouselPosts = secondaryPosts.length > 1
-    ? [...secondaryPosts, ...secondaryPosts]
-    : secondaryPosts
-
   return (
     <div>
       {/* Purple banner. Extra bottom padding on desktop leaves room for the card
@@ -118,34 +113,7 @@ export function HeroFeature({
           the purple banner (matching xl:pb above), so ~30% sits over the white page
           background below; on mobile they sit normally beneath the banner. */}
       <div className="relative z-10 -mt-[210px]">
-        <div className="home-hero-carousel no-scrollbar min-w-0 overflow-hidden pb-2">
-          <div className="home-hero-carousel-track flex w-max gap-3 pl-[max(16px,calc((100vw-972px)/2))] xl:gap-5">
-            {carouselPosts.map((item, index) => (
-              <Link
-                key={`${item.id}-${index}`}
-                href={getPostHref(item)}
-                className="group block h-[300px] w-[300px] shrink-0 overflow-hidden rounded-[14px] shadow-[0px_4px_4px_0px_#00000040]"
-              >
-                <div className="relative h-[300px] w-[300px] overflow-hidden rounded-[14px]">
-                  <SafeImage
-                    src={getPostCardImageUrl(item)}
-                    alt={item.title}
-                    fill
-                    priority={index < 3}
-                    sizes="(max-width: 1280px) 180px, 260px"
-                    className={`${getPostCardImageClass(item)} transition duration-300 group-hover:scale-[1.03]`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-3">
-                    <h3 className="line-clamp-3 text-[0.9rem] font-medium leading-5 text-white">
-                      {item.title}
-                    </h3>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <HomeHeroCarousel posts={secondaryPosts} />
       </div>
     </div>
   )
