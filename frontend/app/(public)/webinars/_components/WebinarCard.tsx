@@ -49,7 +49,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
           {compact ? (
             <>
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent" />
-              <div className="absolute inset-x-4 top-1/2 overflow-hidden text-ellipsis whitespace-nowrap -translate-y-1/2 text-center text-[13px] font-medium leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
+              <div className="absolute inset-x-4 top-1/2 overflow-hidden text-ellipsis whitespace-nowrap -translate-y-1/2 text-center text-[12px] font-medium leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]">
                 {post.title}
               </div>
             </>
@@ -58,7 +58,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
       </Link>
       <div className={`${compact ? 'px-1 pb-1 pt-1' : 'p-4'} flex min-w-0 flex-1 flex-col space-y-1`}>
         <div className={`${compact ? 'text-[10px]' : 'text-[13px]'} truncate font-medium uppercase ${categoryClass}`}>{category}</div>
-        <Link href={`/webinars/${post.slug}`} className={`${compact ? 'text-[13px]' : 'text-[24px]'} block overflow-hidden text-ellipsis whitespace-nowrap font-medium leading-none text-[#111]`}>
+        <Link href={`/webinars/${post.slug}`} className={`${compact ? 'text-[12px]' : 'text-[20px]'} block truncate font-medium leading-none text-[#111]`}>
           {post.title}
         </Link>
         {presenterLabel ? (
