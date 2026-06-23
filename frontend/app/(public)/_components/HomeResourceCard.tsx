@@ -32,7 +32,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
       <div className="flex flex-1 flex-col p-5">
         <Link
           href={href}
-          className="headline-font line-clamp-2 text-[1rem] font-extrabold leading-[1.22] text-[color:var(--text-strong)]"
+          className="ui-font line-clamp-2 text-[1rem] font-medium leading-[1.22] text-[color:var(--text-strong)]"
         >
           {post.title}
         </Link>
@@ -44,7 +44,7 @@ export function HomeResourceCard({ post }: { post: Post }) {
         <div className="mt-auto pt-4">
           <Link
             href={href}
-            className="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
           >
             {actionLabel} <span aria-hidden="true">-&gt;</span>
           </Link>

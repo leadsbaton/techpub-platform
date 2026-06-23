@@ -71,10 +71,10 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
                 />
               </div>
               <div className="space-y-2">
-                <h3 className="text-[1.1rem] font-extrabold leading-tight text-[color:var(--text-strong)]">
+                <h3 className="ui-font text-[1rem] font-medium leading-tight text-[color:var(--text-strong)]">
                   {category.name}
                 </h3>
-                <p className="line-clamp-2 text-[0.92rem] leading-6 text-[color:var(--text-muted)]">
+                <p className="line-clamp-2 text-[0.88rem] leading-6 text-[color:var(--text-muted)]">
                   {copyBySlug[category.slug] ||
                     category.description ||
                     'Explore the latest editorial coverage in this category.'}
@@ -101,10 +101,10 @@ export function HomeCategoryPanel({ categories }: { categories: Category[] }) {
               />
             </div>
             <div className="space-y-2">
-              <h3 className="text-[1.1rem] font-extrabold leading-tight text-[color:var(--text-strong)]">
+              <h3 className="ui-font text-[1rem] font-medium leading-tight text-[color:var(--text-strong)]">
                 {featured.name}
               </h3>
-              <p className="line-clamp-2 max-w-3xl text-[0.92rem] leading-6 text-[color:var(--text-muted)]">
+              <p className="line-clamp-2 max-w-3xl text-[0.88rem] leading-6 text-[color:var(--text-muted)]">
                 {copyBySlug[featured.slug] ||
                   featured.description ||
                   'Explore a focused stream of high-signal category coverage.'}

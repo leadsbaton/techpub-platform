@@ -15,7 +15,7 @@ export function HomeSectionHeader({
     <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
         <div className="section-heading">
-          <h2 className="ui-font text-[clamp(1.55rem,2.4vw,2.3rem)] font-medium leading-none tracking-normal text-[#020202]">
+          <h2 className="ui-font text-[clamp(1.35rem,2.2vw,2rem)] font-medium leading-none tracking-normal text-[#020202]">
             {title}
           </h2>
         </div>

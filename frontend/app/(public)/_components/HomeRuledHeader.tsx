@@ -16,7 +16,7 @@ export function HomeRuledHeader({
   return (
     <div className={`flex flex-col gap-3 ${className}`}>
       <div className="flex min-w-0 items-center gap-3 sm:gap-5">
-        <h2 className="ui-font min-w-0 max-w-[11ch] text-balance text-[clamp(1.28rem,6vw,2.25rem)] font-medium leading-none text-[#020202] sm:max-w-none sm:shrink-0 sm:text-[36px]">
+        <h2 className="ui-font min-w-0 max-w-[11ch] text-balance text-[clamp(1.2rem,5.4vw,2rem)] font-medium leading-none text-[#020202] sm:max-w-none sm:shrink-0 sm:text-[32px]">
           {title}
         </h2>
         <span className="double-rule" aria-hidden="true" />

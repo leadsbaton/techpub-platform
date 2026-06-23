@@ -98,13 +98,13 @@ export function HomeOverlayCard({
           <div className="mt-auto flex items-end justify-between gap-2">
             <Link
               href={href}
-              className="inline-flex min-w-[82px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-3 py-2 text-xs font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+              className="inline-flex min-w-[82px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-3 py-2 text-xs font-medium text-white transition hover:bg-[var(--accent-red-dark)]"
             >
               {actionLabel}
             </Link>
 
             <div className="min-w-0 text-right text-[0.7rem] text-[color:var(--text-muted)]">
-              <div className="truncate font-semibold text-[color:var(--text-strong)]">
+              <div className="truncate font-medium text-[color:var(--text-strong)]">
                 {getAuthorNames(post.authors)}
               </div>
               {post.type === 'webinar' ? (

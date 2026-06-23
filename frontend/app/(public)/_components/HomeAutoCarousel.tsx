@@ -7,11 +7,13 @@ export function HomeAutoCarousel({
   className = '',
   trackClassName = '',
   speed = 0.035,
+  autoScroll = true,
 }: {
   children: ReactNode
   className?: string
   trackClassName?: string
   speed?: number
+  autoScroll?: boolean
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const dragState = useRef({
@@ -22,11 +24,11 @@ export function HomeAutoCarousel({
   })
   const [isPaused, setIsPaused] = useState(false)
   const items = Children.toArray(children)
-  const carouselItems = items.length > 1 ? [...items, ...items] : items
+  const carouselItems = autoScroll && items.length > 1 ? [...items, ...items] : items
 
   useEffect(() => {
     const scroller = scrollerRef.current
-    if (!scroller || items.length <= 1) return undefined
+    if (!autoScroll || !scroller || items.length <= 1) return undefined
 
     let frameId = 0
     let previousTime = performance.now()
@@ -48,7 +50,7 @@ export function HomeAutoCarousel({
 
     frameId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frameId)
-  }, [isPaused, items.length, speed])
+  }, [autoScroll, isPaused, items.length, speed])
 
   function scrollByPage(direction: -1 | 1) {
     const scroller = scrollerRef.current

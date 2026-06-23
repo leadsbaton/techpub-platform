@@ -164,7 +164,7 @@ export default async function HomePage() {
 
       <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
         <HomeRuledHeader title="Trending Now" />
-        <HomeAutoCarousel trackClassName="px-0 sm:px-12 md:px-14" speed={0.032}>
+        <HomeAutoCarousel trackClassName="px-0 sm:px-12 md:px-14" autoScroll={false}>
           {trendingPosts.map((post) => (
             <HomeOverlayCard key={post.id} post={post} />
           ))}
@@ -235,7 +235,7 @@ export default async function HomePage() {
         <HomeAutoCarousel
           className="py-3"
           trackClassName="pl-[max(64px,calc((100vw-1200px)/2+48px))] pr-[max(64px,calc((100vw-1200px)/2+48px))]"
-          speed={0.03}
+          autoScroll={false}
         >
           {mustReadWhitepapers.map((post) => (
             <HomeResourceCard key={post.id} post={post} />

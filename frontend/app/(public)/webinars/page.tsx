@@ -36,7 +36,7 @@ function CategoryBanner({ category }: { category: Category }) {
         )}
         <div className="absolute inset-0 bg-black/5" />
         <div className="ui-font absolute inset-x-0 bottom-0 p-5 sm:p-7">
-          <h1 className="text-[34px] font-medium leading-none tracking-normal text-white sm:text-[58px]">
+          <h1 className="text-[30px] font-medium leading-none tracking-normal text-white sm:text-[50px]">
             {category.name.toUpperCase()}
           </h1>
         </div>
@@ -56,14 +56,14 @@ function CenterHeader({
     <div className="ui-font space-y-3">
       <div className="flex items-center gap-4 sm:gap-6">
         <div className="double-rule" />
-        <h2 className="min-w-0 text-center text-[24px] font-medium uppercase leading-[1.2] text-[#020202] sm:text-[36px]">
+        <h2 className="min-w-0 text-center text-[22px] font-medium uppercase leading-[1.15] text-[#020202] sm:text-[32px]">
           {title}
         </h2>
         <div className="double-rule" />
       </div>
       {href ? (
         <div className="flex justify-end">
-          <Link href={href} className="border-b border-[#020202] text-[16px] leading-none text-[#020202] sm:text-[20px]">
+          <Link href={href} className="border-b border-[#020202] text-[14px] font-medium leading-none text-[#020202] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:text-[16px]">
             View all
           </Link>
         </div>
@@ -90,7 +90,7 @@ function ListingSection({
   return (
     <section className="space-y-8">
       <div className="ui-font flex items-center gap-4">
-        <h2 className="text-[26px] font-medium leading-[1.2] text-[#020202] sm:text-[32px]">{title}</h2>
+        <h2 className="text-[22px] font-medium leading-[1.15] text-[#020202] sm:text-[30px]">{title}</h2>
         <div className="double-rule hidden md:block" />
       </div>
       <WebinarListingClient

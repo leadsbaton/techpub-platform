@@ -26,9 +26,9 @@ function SectionHeader({
 }) {
   return (
     <div className="ui-font flex items-center gap-4">
-      <h2 className="text-[24px] font-medium leading-[1.2] text-[#020202] sm:text-[32px]">{title}</h2>
+      <h2 className="text-[22px] font-medium leading-[1.15] text-[#020202] sm:text-[30px]">{title}</h2>
       <div className="double-rule hidden md:block" />
-      <Link href={href} className="ml-auto text-[15px] underline underline-offset-4 sm:text-[18px]">
+      <Link href={href} className="ml-auto border-b border-[#020202] text-[14px] font-medium leading-none text-[#020202] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:text-[16px]">
         View all
       </Link>
     </div>

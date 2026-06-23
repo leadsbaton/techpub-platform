@@ -150,7 +150,7 @@ function CategoryHero({
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/25" />
-        <h1 className="ui-font absolute inset-0 flex items-center justify-center px-6 text-center text-[2.2rem] font-medium uppercase tracking-normal text-white sm:text-[3rem] md:text-[3.8rem]">
+        <h1 className="ui-font absolute inset-0 flex items-center justify-center px-6 text-center text-[2rem] font-medium uppercase tracking-normal text-white sm:text-[2.7rem] md:text-[3.2rem]">
           {category.name}
         </h1>
       </div>
@@ -205,7 +205,7 @@ function LandingView({
         <div className="site-container">
           <div className="ui-font mb-8 flex items-center gap-4 sm:mb-10">
             <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
-            <h1 className="shrink-0 text-center text-[1.65rem] font-medium uppercase leading-none text-white sm:text-[2rem] md:text-[2.15rem]">
+            <h1 className="shrink-0 text-center text-[1.45rem] font-medium uppercase leading-none text-white sm:text-[1.85rem] md:text-[2rem]">
               Just In: Insights
             </h1>
             <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />

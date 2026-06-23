@@ -41,12 +41,12 @@ function SectionHeader({
 }) {
   return (
     <div className="ui-font flex items-center gap-4">
-      <h2 className="text-[26px] font-medium leading-[1.2] text-[#020202] sm:text-[32px]">{title}</h2>
+      <h2 className="text-[22px] font-medium leading-[1.15] text-[#020202] sm:text-[30px]">{title}</h2>
       <div className="double-rule hidden md:block" />
       {href ? (
         <Link
           href={href}
-          className="ml-auto whitespace-nowrap text-[16px] font-normal leading-6 text-[#020202] underline underline-offset-4 sm:text-[20px]"
+          className="ml-auto whitespace-nowrap border-b border-[#020202] text-[14px] font-medium leading-none text-[#020202] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:text-[16px]"
         >
           {actionLabel}
         </Link>
@@ -68,7 +68,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
     <section className="ui-font space-y-6">
       <div className="flex items-center gap-4 sm:gap-6">
         <div className="double-rule" />
-        <h2 className="min-w-0 text-center text-[24px] font-medium uppercase leading-[1.2] text-[#020202] sm:text-[36px]">
+        <h2 className="min-w-0 text-center text-[22px] font-medium uppercase leading-[1.15] text-[#020202] sm:text-[32px]">
           Trending Downloads
         </h2>
         <div className="double-rule" />
