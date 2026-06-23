@@ -12,7 +12,17 @@ type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
 type PostFormData = Partial<PostDocument> & {
   contentType?: string | { id?: string; key?: PostTypeKey } | null
   type?: PostTypeKey
+  webinarPeople?: {
+    person?: string | { id?: string } | null
+    role?: 'speaker' | 'moderator' | 'presenter' | null
+  }[] | null
   webinarSpeakerProfiles?: (string | { id?: string } | null)[] | null
+}
+
+function getRelationshipId(value: string | { id?: string } | null | undefined): string | null {
+  if (typeof value === 'string') return value
+  if (value && typeof value === 'object' && typeof value.id === 'string') return value.id
+  return null
 }
 
 export const Posts: CollectionConfig = {
@@ -152,7 +162,7 @@ export const Posts: CollectionConfig = {
                 },
                 {
                   name: 'webinarSpeakerProfiles',
-                  label: 'Speakers',
+                  label: 'Legacy Speakers',
                   type: 'relationship',
                   relationTo: 'authors',
                   hasMany: true,
@@ -603,6 +613,48 @@ export const Posts: CollectionConfig = {
               ],
             },
             {
+              name: 'webinarPeople',
+              label: 'Webinar People',
+              type: 'array',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'webinar',
+                description:
+                  'Choose each webinar person and set how they should appear on the public page: Speaker, Moderator, or Presenter.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'person',
+                      type: 'relationship',
+                      relationTo: 'authors',
+                      required: true,
+                      admin: {
+                        width: '60%',
+                        description: 'Pick a profile from Authors.',
+                      },
+                    },
+                    {
+                      name: 'role',
+                      type: 'select',
+                      required: true,
+                      defaultValue: 'speaker',
+                      options: [
+                        { label: 'Speaker', value: 'speaker' },
+                        { label: 'Moderator', value: 'moderator' },
+                        { label: 'Presenter', value: 'presenter' },
+                      ],
+                      admin: {
+                        width: '40%',
+                        description: 'Controls the heading shown on the webinar page.',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
               name: 'tags',
               type: 'relationship',
               relationTo: 'tags',
@@ -654,6 +706,24 @@ export const Posts: CollectionConfig = {
   hooks: {
     afterRead: [
       async ({ doc }) => {
+        if (
+          doc?.type === 'webinar' &&
+          (!Array.isArray(doc.webinarPeople) || doc.webinarPeople.length === 0) &&
+          Array.isArray(doc.webinarSpeakerProfiles) &&
+          doc.webinarSpeakerProfiles.length
+        ) {
+          return {
+            ...doc,
+            webinarPeople: doc.webinarSpeakerProfiles.map((person: unknown, index: number) => ({
+              person,
+              role:
+                doc.webinarSpeakerProfiles.length > 1 && index === doc.webinarSpeakerProfiles.length - 1
+                  ? 'moderator'
+                  : 'speaker',
+            })),
+          }
+        }
+
         if (doc?.type === 'webinar' && (!Array.isArray(doc.webinarSpeakerProfiles) || doc.webinarSpeakerProfiles.length === 0)) {
           return {
             ...doc,
@@ -696,28 +766,34 @@ export const Posts: CollectionConfig = {
         }
 
         if (nextData.type === 'webinar') {
+          if (nextData.webinarPeople !== undefined) {
+            const selectedProfiles = Array.isArray(nextData.webinarPeople)
+              ? nextData.webinarPeople
+                  .map((item) => getRelationshipId(item?.person))
+                  .filter((item): item is string => Boolean(item))
+              : []
+
+            nextData.authors = selectedProfiles
+            nextData.webinarSpeakerProfiles = selectedProfiles
+          }
+
           // Mirror the Speakers selection into `authors` so the two stay
           // consistent. Only act when this write actually includes the field
           // (undefined = field omitted in a partial update → leave authors
           // alone); an explicit empty array clears authors too, so reducing the
           // speaker list to none can't leave a stale `authors` behind (which the
           // afterRead back-fill would otherwise resurrect).
-          if (nextData.webinarSpeakerProfiles !== undefined) {
+          if (nextData.webinarPeople === undefined && nextData.webinarSpeakerProfiles !== undefined) {
             const selectedProfiles = Array.isArray(nextData.webinarSpeakerProfiles)
               ? nextData.webinarSpeakerProfiles
-                  .map((item) => {
-                    if (typeof item === 'string') return item
-                    if (item && typeof item === 'object' && 'id' in item) {
-                      return typeof item.id === 'string' ? item.id : null
-                    }
-                    return null
-                  })
+                  .map((item) => getRelationshipId(item))
                   .filter((item): item is string => Boolean(item))
               : []
 
             nextData.authors = selectedProfiles
           }
         } else {
+          nextData.webinarPeople = undefined
           nextData.webinarSpeakerProfiles = undefined
         }
 

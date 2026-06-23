@@ -442,6 +442,22 @@ export interface Post {
      */
     eventDateLabel?: string | null;
   };
+  /**
+   * Choose each webinar person and set how they should appear on the public page: Speaker, Moderator, or Presenter.
+   */
+  webinarPeople?:
+    | {
+        /**
+         * Pick a profile from Authors.
+         */
+        person: string | Author;
+        /**
+         * Controls the heading shown on the webinar page.
+         */
+        role: 'speaker' | 'moderator' | 'presenter';
+        id?: string | null;
+      }[]
+    | null;
   tags?: (string | Tag)[] | null;
   /**
    * Optional related content suggestions shown near this post.
@@ -876,6 +892,13 @@ export interface PostsSelect<T extends boolean = true> {
         consentLabel?: T;
         successMessage?: T;
         eventDateLabel?: T;
+      };
+  webinarPeople?:
+    | T
+    | {
+        person?: T;
+        role?: T;
+        id?: T;
       };
   tags?: T;
   relatedPosts?: T;

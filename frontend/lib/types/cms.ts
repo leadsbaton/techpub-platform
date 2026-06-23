@@ -131,6 +131,11 @@ export interface Post {
   featured?: boolean
   pinned?: boolean
   authors?: Array<Author | string> | null
+  webinarPeople?: Array<{
+    id?: string | null
+    person?: Author | string | null
+    role?: 'speaker' | 'moderator' | 'presenter' | null
+  }> | null
   primaryCategory?: Category | string | null
   tags?: Array<Tag | string> | null
   relatedPosts?: Array<Post | string> | null

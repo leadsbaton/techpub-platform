@@ -9,8 +9,7 @@ import type { Post } from '@/lib/types/cms'
 import {
   getImageUrl,
   getMediaDimensions,
-  getWebinarModerator,
-  getWebinarSpeakers,
+  getWebinarPersonGroups,
 } from '@/lib/utils/formatting'
 
 // Placeholder rich text shown until the editor adds content. Exercises the
@@ -122,13 +121,8 @@ function WhitepaperLayout({ post }: { post: Post }) {
 }
 
 function WebinarLayout({ post }: { post: Post }) {
-  const speakers = getWebinarSpeakers(post)
-  const moderator = getWebinarModerator(post)
+  const peopleGroups = getWebinarPersonGroups(post)
   const heroDims = getMediaDimensions(post.featuredImage)
-  const people = [
-    ...speakers.map((person) => ({ person, isModerator: false })),
-    ...(moderator ? [{ person: moderator, isModerator: true }] : []),
-  ]
 
   return (
     <div className="bg-white">
@@ -160,25 +154,28 @@ function WebinarLayout({ post }: { post: Post }) {
             </div>
           ) : null}
 
-          {people.length ? (
+          {peopleGroups.length ? (
             <section className="mt-2">
-              <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-center md:gap-12">
-                {people.map(({ person, isModerator }, index) => {
-                  const headingText = index === 0 ? 'Speakers' : isModerator ? 'Moderator' : null
-                  return (
-                    <div key={person.id} className="ui-font w-[180px] text-center">
-                      <h3 className={`mb-6 text-[15px] font-bold uppercase tracking-[0.06em] ${isModerator ? 'text-[var(--accent-red)]' : 'text-[#7f1d1d]'} ${headingText ? '' : 'hidden md:invisible md:block'}`}>
-                        {headingText || ' '}
-                      </h3>
-                      <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
-                        {person.photo ? <SafeImage src={getImageUrl(person.photo)} alt={person.name || 'Speaker'} fill sizes="128px" className="object-cover" /> : null}
-                      </div>
-                      <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
-                      {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
-                      {person.secondaryLine ? <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div> : null}
+              <div className="grid gap-10 md:grid-cols-3 md:items-start">
+                {peopleGroups.map((group) => (
+                  <div key={group.role} className="ui-font text-center">
+                    <h3 className={`mb-6 text-[15px] font-bold uppercase tracking-[0.06em] ${group.role === 'moderator' ? 'text-[var(--accent-red)]' : 'text-[#7f1d1d]'}`}>
+                      {group.label}
+                    </h3>
+                    <div className="flex flex-col items-center gap-8">
+                      {group.people.map((person) => (
+                        <div key={person.id} className="w-[180px] text-center">
+                          <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
+                            {person.photo ? <SafeImage src={getImageUrl(person.photo)} alt={person.name || group.label} fill sizes="128px" className="object-cover" /> : null}
+                          </div>
+                          <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
+                          {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
+                          {person.secondaryLine ? <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div> : null}
+                        </div>
+                      ))}
                     </div>
-                  )
-                })}
+                  </div>
+                ))}
               </div>
             </section>
           ) : null}

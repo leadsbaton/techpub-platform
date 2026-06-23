@@ -124,47 +124,73 @@ export type WebinarPerson = {
   photo?: Media | string | null
 }
 
+export type WebinarPersonRole = 'speaker' | 'moderator' | 'presenter'
+
+export type WebinarPersonGroup = {
+  role: WebinarPersonRole
+  label: string
+  people: WebinarPerson[]
+}
+
+function authorToWebinarPerson(author: Author): WebinarPerson {
+  return {
+    id: author.id,
+    name: author.name,
+    role: author.role,
+    secondaryLine: author.bio,
+    photo: author.avatar,
+  }
+}
+
 function getWebinarAuthors(post: Post): WebinarPerson[] {
-  return (
-    post.authors
-      ?.filter((author): author is Author => typeof author !== 'string')
-      .map((author) => ({
-        id: author.id,
-        name: author.name,
-        role: author.role,
-        secondaryLine: author.bio,
-        photo: author.avatar,
-      })) ?? []
-  )
+  return post.authors?.filter((author): author is Author => typeof author !== 'string').map(authorToWebinarPerson) ?? []
+}
+
+export function getWebinarPersonGroups(post: Post): WebinarPersonGroup[] {
+  const grouped: Record<WebinarPersonRole, WebinarPerson[]> = {
+    speaker: [],
+    moderator: [],
+    presenter: [],
+  }
+
+  post.webinarPeople?.forEach((item) => {
+    if (!item?.person || typeof item.person === 'string') return
+    const role = item.role === 'moderator' || item.role === 'presenter' ? item.role : 'speaker'
+    grouped[role].push(authorToWebinarPerson(item.person))
+  })
+
+  if (!grouped.speaker.length && !grouped.moderator.length && !grouped.presenter.length) {
+    const legacyAuthors = getWebinarAuthors(post)
+    if (legacyAuthors.length > 1) {
+      grouped.speaker = legacyAuthors.slice(0, -1)
+      grouped.moderator = legacyAuthors.slice(-1)
+    } else {
+      grouped.speaker = legacyAuthors
+    }
+  }
+
+  const groups: WebinarPersonGroup[] = [
+    { role: 'speaker', label: 'Speakers', people: grouped.speaker },
+    { role: 'moderator', label: 'Moderator', people: grouped.moderator },
+    { role: 'presenter', label: 'Presenters', people: grouped.presenter },
+  ]
+
+  return groups.filter((group) => group.people.length > 0)
 }
 
 export function getWebinarSpeakers(post: Post): WebinarPerson[] {
-  // Speakers = every selected webinar author except the last one (which is the
-  // moderator). A single selected author is shown as the sole speaker.
-  const webinarAuthors = getWebinarAuthors(post)
-
-  if (webinarAuthors.length > 1) {
-    return webinarAuthors.slice(0, -1)
-  }
-
-  return webinarAuthors
+  return getWebinarPersonGroups(post).find((group) => group.role === 'speaker')?.people ?? []
 }
 
 export function getWebinarModerator(post: Post): WebinarPerson | null {
-  // Moderator = the LAST selected webinar author (only when 2+ are chosen).
-  const webinarAuthors = getWebinarAuthors(post)
-  if (webinarAuthors.length > 1) {
-    return webinarAuthors[webinarAuthors.length - 1] || null
-  }
-
-  return null
+  return getWebinarPersonGroups(post).find((group) => group.role === 'moderator')?.people[0] ?? null
 }
 
 export function getWebinarSpeakerSummary(post: Post): string | null {
-  const speakers = getWebinarSpeakers(post)
-  if (!speakers.length) return null
-  if (speakers.length === 1) return speakers[0]?.name || null
-  return `${speakers[0]?.name || 'Speaker'} + ${speakers.length - 1} more`
+  const people = getWebinarPersonGroups(post).flatMap((group) => group.people)
+  if (!people.length) return null
+  if (people.length === 1) return people[0]?.name || null
+  return `${people[0]?.name || 'Speaker'} + ${people.length - 1} more`
 }
 
 export function getContentTypeLabel(type: Post['type']): string {
