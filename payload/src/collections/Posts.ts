@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import { ValidationError, type CollectionConfig } from 'payload'
 
 import { isAdmin, isAdminOrPublished, isAuthenticatedField } from '../access/cmsAccess'
 import { linkField } from '../fields/link'
@@ -12,6 +12,8 @@ type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
 type PostFormData = Partial<PostDocument> & {
   contentType?: string | { id?: string; key?: PostTypeKey } | null
   type?: PostTypeKey
+  webinarEventStartsAt?: string | null
+  webinarSessionStatus?: 'upcoming' | 'past' | 'unscheduled' | null
   webinarPeople?: {
     person?: string | { id?: string } | null
     role?: 'speaker' | 'moderator' | 'presenter' | null
@@ -25,11 +27,24 @@ function getRelationshipId(value: string | { id?: string } | null | undefined): 
   return null
 }
 
+function getWebinarSessionStatus(eventStartsAt?: string | null): 'upcoming' | 'past' | 'unscheduled' {
+  if (!eventStartsAt) return 'unscheduled'
+
+  const eventDate = new Date(eventStartsAt)
+  if (Number.isNaN(eventDate.getTime())) return 'unscheduled'
+
+  return eventDate.getTime() >= Date.now() ? 'upcoming' : 'past'
+}
+
+function getEventStartsAt(data?: PostFormData, originalDoc?: PostDocument): string | null {
+  return data?.webinarRegistration?.eventStartsAt ?? originalDoc?.webinarRegistration?.eventStartsAt ?? null
+}
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'primaryCategory', 'status', 'publishedAt'],
+    defaultColumns: ['title', 'type', 'webinarSessionStatus', 'webinarEventStartsAt', 'primaryCategory', 'status', 'publishedAt'],
     // "View on site" link to the published page. The in-admin live-preview
     // iframe and the dedicated Preview tab were removed to keep the editor focused
     // on entering content rather than previewing it.
@@ -610,13 +625,21 @@ export const Posts: CollectionConfig = {
                     },
                     {
                       name: 'eventStartsAt',
+                      label: 'Webinar Event Date',
                       type: 'date',
+                      validate: (value: unknown, { data }: { data?: PostFormData }) => {
+                        if (data?.type === 'webinar' && !value) {
+                          return 'Event date/time is required for webinars.'
+                        }
+
+                        return true
+                      },
                       admin: {
                         width: '25%',
                         date: {
                           pickerAppearance: 'dayAndTime',
                         },
-                        description: 'Structured event date/time used to sort upcoming and past webinars.',
+                        description: 'Required for webinars. Used to sort upcoming and past sessions.',
                       },
                     },
                   ],
@@ -696,6 +719,34 @@ export const Posts: CollectionConfig = {
       ],
     },
     {
+      name: 'webinarEventStartsAt',
+      label: 'Webinar Event Date',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        description: 'Mirrors the webinar event date for admin list filtering and sorting.',
+      },
+    },
+    {
+      name: 'webinarSessionStatus',
+      label: 'Webinar Session',
+      type: 'select',
+      options: [
+        { label: 'Upcoming', value: 'upcoming' },
+        { label: 'Past', value: 'past' },
+        { label: 'Unscheduled', value: 'unscheduled' },
+      ],
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Mirrors upcoming/past state for admin list filtering.',
+      },
+    },
+    {
       name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
@@ -715,6 +766,29 @@ export const Posts: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeValidate: [
+      ({ data, originalDoc, req }) => {
+        const nextData = data as PostFormData | undefined
+        const currentDoc = originalDoc as PostDocument | undefined
+        const postType = nextData?.type ?? currentDoc?.type
+
+        if (postType === 'webinar' && !getEventStartsAt(nextData, currentDoc)) {
+          throw new ValidationError({
+            collection: 'posts',
+            errors: [
+              {
+                path: 'webinarRegistration.eventStartsAt',
+                message: 'Event date/time is required for webinars.',
+              },
+            ],
+            id: currentDoc?.id,
+            req,
+          })
+        }
+
+        return data
+      },
+    ],
     afterRead: [
       async ({ doc }) => {
         if (
@@ -803,9 +877,18 @@ export const Posts: CollectionConfig = {
 
             nextData.authors = selectedProfiles
           }
+
+          const eventStartsAt =
+            nextData.webinarRegistration?.eventStartsAt ??
+            (originalDoc as PostDocument | undefined)?.webinarRegistration?.eventStartsAt ??
+            null
+          nextData.webinarEventStartsAt = eventStartsAt
+          nextData.webinarSessionStatus = getWebinarSessionStatus(eventStartsAt)
         } else {
           nextData.webinarPeople = undefined
           nextData.webinarSpeakerProfiles = undefined
+          nextData.webinarEventStartsAt = null
+          nextData.webinarSessionStatus = null
         }
 
         if (nextData.status === 'published' && !nextData.publishedAt) {

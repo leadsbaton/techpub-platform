@@ -442,7 +442,7 @@ export interface Post {
      */
     eventDateLabel?: string | null;
     /**
-     * Structured event date/time used to sort upcoming and past webinars.
+     * Required for webinars. Used to sort upcoming and past sessions.
      */
     eventStartsAt?: string | null;
   };
@@ -488,6 +488,14 @@ export interface Post {
     metaImage?: (string | null) | Media;
     noIndex?: boolean | null;
   };
+  /**
+   * Mirrors the webinar event date for admin list filtering and sorting.
+   */
+  webinarEventStartsAt?: string | null;
+  /**
+   * Mirrors upcoming/past state for admin list filtering.
+   */
+  webinarSessionStatus?: ('upcoming' | 'past' | 'unscheduled') | null;
   createdBy?: (string | null) | User;
   updatedBy?: (string | null) | User;
   updatedAt: string;
@@ -931,6 +939,8 @@ export interface PostsSelect<T extends boolean = true> {
         metaImage?: T;
         noIndex?: T;
       };
+  webinarEventStartsAt?: T;
+  webinarSessionStatus?: T;
   createdBy?: T;
   updatedBy?: T;
   updatedAt?: T;
