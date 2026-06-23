@@ -73,9 +73,9 @@ export function HomeOverlayCard({
 
   if (!isCompact && !isWebinar) {
     return (
-      <article className="flex h-full max-w-[388px] flex-col gap-4">
+      <article className="flex h-[380px] w-[300px] flex-col gap-3">
         <Link href={href} className="group relative block">
-          <div className="relative aspect-[350/466] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
+          <div className="relative h-[300px] w-[300px] overflow-hidden rounded-[16px] bg-[color:var(--surface-muted)]">
             <SafeImage
               src={getPostCardImageUrl(post)}
               alt={post.title}
@@ -90,21 +90,21 @@ export function HomeOverlayCard({
         <div className="flex flex-1 flex-col gap-3">
           <Link
             href={href}
-            className="ui-font text-[1rem] font-medium leading-[1.2] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)] md:text-[1.04rem]"
+            className="ui-font line-clamp-2 text-[0.92rem] font-medium leading-[1.16] text-[color:var(--text-strong)] transition hover:text-[color:var(--accent-red)]"
           >
             {post.title}
           </Link>
 
-          <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+          <div className="mt-auto flex items-end justify-between gap-2">
             <Link
               href={href}
-              className="inline-flex min-w-[88px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)] md:min-w-[96px]"
+              className="inline-flex min-w-[82px] items-center justify-center rounded-[10px] bg-[var(--accent-red)] px-3 py-2 text-xs font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
             >
               {actionLabel}
             </Link>
 
-            <div className="text-right text-[0.74rem] text-[color:var(--text-muted)] md:text-[0.78rem]">
-              <div className="font-semibold text-[color:var(--text-strong)]">
+            <div className="min-w-0 text-right text-[0.7rem] text-[color:var(--text-muted)]">
+              <div className="truncate font-semibold text-[color:var(--text-strong)]">
                 {getAuthorNames(post.authors)}
               </div>
               {post.type === 'webinar' ? (

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
+import { HomeAutoCarousel } from './_components/HomeAutoCarousel'
 import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
@@ -41,10 +42,43 @@ function interleavePostTypes(groups: Post[][], limit: number, excludeId?: string
 }
 
 function scoreTrendingPost(post: Post) {
-  const featuredScore = post.featured ? 2_000_000 : 0
-  const pinnedScore = post.pinned ? 1_000_000 : 0
+  const featuredScore = post.featured ? 3_000_000 : 0
+  const pinnedScore = post.pinned ? 2_000_000 : 0
+  const webinarBoost = post.type === 'webinar' ? 180_000 : 0
+  const whitepaperBoost = post.type === 'whitepaper' ? 120_000 : 0
+  const insightBoost = post.type === 'insight' ? 80_000 : 0
+  const categoryScore = typeof post.primaryCategory === 'object' && post.primaryCategory?.featured ? 70_000 : 0
+  const readingScore = post.readingTime ? Math.max(0, 20 - post.readingTime) * 500 : 0
   const dateScore = post.publishedAt ? new Date(post.publishedAt).getTime() / 100_000_000 : 0
-  return featuredScore + pinnedScore + dateScore
+  return featuredScore + pinnedScore + webinarBoost + whitepaperBoost + insightBoost + categoryScore + readingScore + dateScore
+}
+
+function buildTrendingPosts({
+  insights,
+  whitepapers,
+  webinars,
+  excludeId,
+  limit,
+}: {
+  insights: Post[]
+  whitepapers: Post[]
+  webinars: Post[]
+  excludeId?: string
+  limit: number
+}) {
+  const groups = [insights, whitepapers, webinars].map((group) =>
+    group
+      .filter((post) => post.id !== excludeId)
+      .sort((a, b) => scoreTrendingPost(b) - scoreTrendingPost(a)),
+  )
+
+  const mixed = interleavePostTypes(groups, limit, excludeId)
+  if (mixed.length >= limit) return mixed
+
+  return uniquePosts([...mixed, ...groups.flat()])
+    .filter((post) => post.id !== excludeId)
+    .sort((a, b) => scoreTrendingPost(b) - scoreTrendingPost(a))
+    .slice(0, limit)
 }
 
 export default async function HomePage() {
@@ -106,10 +140,13 @@ export default async function HomePage() {
     8,
     heroPost.id,
   )
-  const trendingPosts = uniquePosts([...insights, ...whitepapers, ...webinars])
-    .filter((item) => item.id !== heroPost.id)
-    .sort((a, b) => scoreTrendingPost(b) - scoreTrendingPost(a))
-    .slice(0, 3)
+  const trendingPosts = buildTrendingPosts({
+    insights,
+    whitepapers,
+    webinars,
+    excludeId: heroPost.id,
+    limit: 8,
+  })
   const latestInsights = insights.slice(0, 7)
   const webinarLead = webinars[0] ?? null
   const webinarSupport = webinars.slice(1, 3)
@@ -127,16 +164,11 @@ export default async function HomePage() {
 
       <section className="site-container mt-12 space-y-6 md:mt-14 md:space-y-7">
         <HomeRuledHeader title="Trending Now" />
-        {/* Mobile: horizontal scroll carousel (no visible scrollbar). Desktop: 3-col grid. */}
-        <div className="no-scrollbar overflow-x-auto pb-1 md:overflow-visible">
-          <div className="flex gap-4 md:grid md:grid-cols-3 md:gap-5">
-            {trendingPosts.map((post) => (
-              <div key={post.id} className="w-[336px] max-w-[82vw] shrink-0 md:w-full md:max-w-[388px] md:justify-self-center">
-                <HomeOverlayCard post={post} />
-              </div>
-            ))}
-          </div>
-        </div>
+        <HomeAutoCarousel trackClassName="px-12 md:px-14" speed={0.032}>
+          {trendingPosts.map((post) => (
+            <HomeOverlayCard key={post.id} post={post} />
+          ))}
+        </HomeAutoCarousel>
       </section>
 
       <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
@@ -200,18 +232,15 @@ export default async function HomePage() {
 
       <section className="mt-14 space-y-6 overflow-hidden md:mt-16 md:space-y-7">
         <HomeRuledHeader title="Must Read White Papers" className="site-container" />
-        <div className="no-scrollbar overflow-x-auto py-3">
-          <div className="flex gap-5">
-            {mustReadWhitepapers.map((post) => (
-              <div
-                key={post.id}
-                className="w-[82vw] shrink-0 first:ml-[max(16px,calc((100vw-1200px)/2))] last:mr-[max(16px,calc((100vw-1200px)/2))] sm:w-[48vw] lg:w-[31vw] xl:w-[390px]"
-              >
-                <HomeResourceCard post={post} />
-              </div>
-            ))}
-          </div>
-        </div>
+        <HomeAutoCarousel
+          className="py-3"
+          trackClassName="pl-[max(64px,calc((100vw-1200px)/2+48px))] pr-[max(64px,calc((100vw-1200px)/2+48px))]"
+          speed={0.03}
+        >
+          {mustReadWhitepapers.map((post) => (
+            <HomeResourceCard key={post.id} post={post} />
+          ))}
+        </HomeAutoCarousel>
       </section>
     </div>
   )
