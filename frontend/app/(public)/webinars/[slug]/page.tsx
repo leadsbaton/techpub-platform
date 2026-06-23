@@ -106,34 +106,30 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
             {peopleGroups.length ? (
               <section className="mt-2">
-                <div className="grid gap-10 md:grid-cols-3 md:items-start">
-                  {peopleGroups.map((group) => (
-                    <div key={group.role} className="ui-font text-center">
+                <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-center md:gap-12">
+                  {peopleGroups.flatMap((group) =>
+                    group.people.map((person, index) => (
+                      <div key={`${group.role}-${person.id}-${index}`} className="ui-font w-[180px] text-center">
                       <h3
                         className={`mb-6 text-[15px] font-bold uppercase tracking-[0.06em] ${
                           group.role === 'moderator' ? 'text-[var(--accent-red)]' : 'text-[#7f1d1d]'
-                        }`}
+                        } ${index === 0 ? '' : 'hidden md:invisible md:block'}`}
                       >
-                        {group.label}
+                        {index === 0 ? group.label : ' '}
                       </h3>
-                      <div className="flex flex-col items-center gap-8">
-                        {group.people.map((person) => (
-                          <div key={person.id} className="w-[180px] text-center">
-                            <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
-                              {person.photo ? (
-                                <SafeImage src={getImageUrl(person.photo)} alt={person.name || group.label} fill sizes="128px" className="object-cover" />
-                              ) : null}
-                            </div>
-                            <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
-                            {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
-                            {person.secondaryLine ? (
-                              <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div>
-                            ) : null}
-                          </div>
-                        ))}
+                      <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
+                        {person.photo ? (
+                          <SafeImage src={getImageUrl(person.photo)} alt={person.name || group.label} fill sizes="128px" className="object-cover" />
+                        ) : null}
                       </div>
+                      <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
+                      {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
+                      {person.secondaryLine ? (
+                        <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div>
+                      ) : null}
                     </div>
-                  ))}
+                    )),
+                  )}
                 </div>
               </section>
             ) : null}
