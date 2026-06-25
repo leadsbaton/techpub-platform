@@ -48,8 +48,8 @@ export function HeroFeature({
 }) {
   return (
     <div>
-      {/* ── MOBILE hero (< md) ── full-bleed circuit image with dark gradient */}
-      <section className="relative flex min-h-[600px] flex-col justify-end overflow-hidden md:hidden">
+      {/* ── MOBILE hero (< md) ── full-screen circuit image, text + CTAs at bottom */}
+      <section className="relative flex h-[calc(100dvh-88px)] min-h-[480px] flex-col justify-end overflow-hidden md:hidden">
         <Image
           src="/hero-circuit.png"
           alt=""
@@ -58,25 +58,25 @@ export function HeroFeature({
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-        <div className="relative z-10 px-5 pb-12">
-          <h1 className="headline-font mb-8 text-[2.5rem] font-extrabold uppercase leading-tight tracking-tight text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="relative z-10 px-5 pb-[max(2rem,env(safe-area-inset-bottom,1rem))] pt-4">
+          <h1 className="headline-font mb-6 text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-white">
             Explore,
             <br />
             Engage,
             <br />
             Elevate
           </h1>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <Link
               href={webinarHref}
-              className="rounded-lg bg-[var(--accent-red)] px-8 py-4 text-center text-sm font-bold text-white transition active:scale-95"
+              className="rounded-lg bg-[var(--accent-red)] px-6 py-[clamp(0.75rem,3vw,1rem)] text-center text-[clamp(0.8rem,3.5vw,1rem)] font-bold text-white transition active:scale-95"
             >
               Join Webinars
             </Link>
             <Link
               href={whitepaperHref}
-              className="rounded-lg border border-white bg-white px-8 py-4 text-center text-sm font-bold text-[#020202] transition active:scale-95"
+              className="rounded-lg border border-white bg-white px-6 py-[clamp(0.75rem,3vw,1rem)] text-center text-[clamp(0.8rem,3.5vw,1rem)] font-bold text-[#020202] transition active:scale-95"
             >
               Download White Papers
             </Link>
@@ -145,10 +145,10 @@ export function HeroFeature({
         </div>
       </section>
 
-      {/* Dynamic post cards. On desktop they are pulled up to overlap the bottom of
-          the purple banner (matching xl:pb above), so ~30% sits over the white page
-          background below; on mobile they sit normally beneath the hero. */}
-      <div className="relative z-10 md:-mt-[210px]">
+      {/* Dynamic post cards — desktop only. On mobile the carousel is hidden so
+          Trending Now appears directly after the hero. On desktop they overlap
+          the bottom of the purple banner (matching xl:pb above). */}
+      <div className="relative z-10 hidden md:block md:-mt-[210px]">
         <HomeHeroCarousel posts={secondaryPosts} />
       </div>
     </div>

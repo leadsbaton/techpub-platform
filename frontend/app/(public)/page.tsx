@@ -138,11 +138,9 @@ export default async function HomePage() {
   const insightConfig = getContentTypeConfigByType('insight', contentTypes)
   const upcomingWebinars = webinars.filter((post) => isUpcomingWebinar(post)).sort(compareWebinarsByEventDate)
 
-  const secondaryHeroPosts = interleavePostTypes(
-    [insights, whitepapers, upcomingWebinars],
-    8,
-    heroPost.id,
-  )
+  const secondaryHeroPosts = insights
+    .filter((p) => p.id !== heroPost.id)
+    .slice(0, 8)
   const trendingPosts = buildTrendingPosts({
     insights,
     whitepapers,
