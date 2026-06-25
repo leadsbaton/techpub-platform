@@ -7,6 +7,7 @@ import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeOverlayCard } from './_components/HomeOverlayCard'
 import { HomeResourceCard } from './_components/HomeResourceCard'
 import { HomeRuledHeader } from './_components/HomeRuledHeader'
+import { HomeWebinarSection } from './_components/HomeWebinarSection'
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 import { compareWebinarsByEventDate, isUpcomingWebinar } from '@/lib/utils/formatting'
@@ -217,28 +218,11 @@ export default async function HomePage() {
 
       <HomeCategoryPanel categories={categories} />
 
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <HomeRuledHeader title="Upcoming Webinars" />
-        {webinarLead ? (
-          <div className="grid gap-2 lg:grid-cols-[0.48fr_0.52fr]">
-            <div className="grid gap-2">
-              {webinarSupport[0] ? (
-                <HomeOverlayCard post={webinarSupport[0]} variant="webinar" compactSize="small" />
-              ) : null}
-              {webinarSupport[1] ? (
-                <HomeOverlayCard post={webinarSupport[1]} variant="webinar" compactSize="small" />
-              ) : null}
-            </div>
-            <div className="min-h-[420px] lg:min-h-0">
-              <HomeOverlayCard post={webinarLead} variant="webinar" />
-            </div>
-          </div>
-        ) : (
-          <div className="ui-font border border-[var(--border-subtle)] bg-white px-6 py-10 text-center text-[color:var(--text-muted)]">
-            No upcoming webinars right now. Past sessions are available on the webinars page.
-          </div>
-        )}
-      </section>
+      <HomeWebinarSection
+        webinarLead={webinarLead}
+        webinarSupport={webinarSupport}
+        allWebinars={upcomingWebinars}
+      />
 
       <section className="mt-14 space-y-6 overflow-hidden md:mt-16 md:space-y-7">
         <HomeRuledHeader title="Must Read White Papers" className="site-container" />

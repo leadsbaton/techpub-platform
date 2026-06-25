@@ -48,10 +48,46 @@ export function HeroFeature({
 }) {
   return (
     <div>
-      {/* Purple banner. Extra bottom padding on desktop leaves room for the card
-          row to overlap into it (the cards bridge the purple hero and the white
+      {/* ── MOBILE hero (< md) ── full-bleed circuit image with dark gradient */}
+      <section className="relative flex min-h-[600px] flex-col justify-end overflow-hidden md:hidden">
+        <Image
+          src="/hero-circuit.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+        <div className="relative z-10 px-5 pb-12">
+          <h1 className="headline-font mb-8 text-[2.5rem] font-extrabold uppercase leading-tight tracking-tight text-white">
+            Explore,
+            <br />
+            Engage,
+            <br />
+            Elevate
+          </h1>
+          <div className="flex flex-col gap-4">
+            <Link
+              href={webinarHref}
+              className="rounded-lg bg-[var(--accent-red)] px-8 py-4 text-center text-sm font-bold text-white transition active:scale-95"
+            >
+              Join Webinars
+            </Link>
+            <Link
+              href={whitepaperHref}
+              className="rounded-lg border border-white bg-white px-8 py-4 text-center text-sm font-bold text-[#020202] transition active:scale-95"
+            >
+              Download White Papers
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DESKTOP hero (≥ md) ── purple banner. Extra bottom padding leaves room
+          for the card row to overlap into it (cards bridge purple hero and white
           section below). */}
-      <section className="bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] pb-[230px] pt-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:pt-6 xl:pb-[250px]">
+      <section className="hidden bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] pb-[230px] pt-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:block md:pt-6 xl:pb-[250px]">
         <div className="site-container">
           <div className="mx-auto max-w-[972px] overflow-hidden rounded-[8px] px-0 py-3 sm:px-4 sm:py-5 md:px-0 xl:h-[377px] xl:py-0">
             <div className="grid grid-cols-[136px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[188px_minmax(0,1fr)] sm:gap-4 md:grid-cols-[258px_minmax(0,1fr)] xl:grid-cols-[258px_714px] xl:gap-0">
@@ -111,8 +147,8 @@ export function HeroFeature({
 
       {/* Dynamic post cards. On desktop they are pulled up to overlap the bottom of
           the purple banner (matching xl:pb above), so ~30% sits over the white page
-          background below; on mobile they sit normally beneath the banner. */}
-      <div className="relative z-10 -mt-[210px]">
+          background below; on mobile they sit normally beneath the hero. */}
+      <div className="relative z-10 md:-mt-[210px]">
         <HomeHeroCarousel posts={secondaryPosts} />
       </div>
     </div>
