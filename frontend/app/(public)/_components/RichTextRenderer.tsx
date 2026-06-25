@@ -228,6 +228,9 @@ function renderNode(node: LexicalNode, index: number, opts: RenderOptions): Reac
         </a>
       )
     }
+    case 'horizontalrule':
+    case 'horizontalRule':
+      return <hr key={`hr-${index}`} className="my-6 border-t border-[#d1d5db]" />
     case 'upload':
       return renderUploadNode(node)
     case 'linebreak':
