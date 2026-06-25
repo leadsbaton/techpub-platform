@@ -131,10 +131,20 @@ export interface Post {
   featured?: boolean
   pinned?: boolean
   authors?: Array<Author | string> | null
+  useContentSections?: boolean | null
   webinarPeople?: Array<{
     id?: string | null
     person?: Author | string | null
     role?: 'speaker' | 'moderator' | 'presenter' | null
+  }> | null
+  webinarSections?: Array<{
+    id?: string | null
+    content?: RichTextDocument | null
+    people?: Array<{
+      id?: string | null
+      person?: Author | string | null
+      role?: 'speaker' | 'moderator' | 'presenter' | null
+    }> | null
   }> | null
   primaryCategory?: Category | string | null
   tags?: Array<Tag | string> | null

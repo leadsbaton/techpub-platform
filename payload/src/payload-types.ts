@@ -301,43 +301,47 @@ export interface Author {
 export interface Post {
   id: string;
   /**
-   * Pick the post type first — this controls which fields appear below and the public route.
+   * Pick the post type first — controls which fields appear below and the public URL.
    */
   type: 'insight' | 'whitepaper' | 'webinar';
   /**
-   * Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.
+   * Draft is hidden from the public site. Published is live. Archived is stored but excluded from queries.
    */
   status: 'draft' | 'published' | 'archived';
   contentType?: (string | null) | ContentType;
   /**
-   * Public headline shown in cards, SEO, and the post detail page.
+   * Public headline — shown in cards, SEO title, and the detail page.
    */
   title: string;
   /**
-   * Estimated reading time in minutes.
+   * Read time (min)
    */
   readingTime?: number | null;
   /**
-   * Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.
+   * URL segment — auto-generated from title. Change only if you need a custom URL.
    */
   slug: string;
   /**
-   * Used for insight bylines.
+   * Required when publishing. Auto-set to now on first publish.
    */
-  authors?: (string | Author)[] | null;
+  publishedAt?: string | null;
   /**
-   * Optional. Pick webinar people from the author profiles — speaker(s) first; if you add 2 or more, the LAST one becomes the moderator automatically. Leave empty to hide the speakers row.
-   */
-  webinarSpeakerProfiles?: (string | Author)[] | null;
-  /**
-   * Main taxonomy used in UI filters like Finance, Marketing, and Technology.
+   * Main taxonomy used in UI filters (Finance, Marketing, Technology…).
    */
   primaryCategory: string | Category;
   /**
-   * Short summary used on listing pages and hero cards.
+   * Insight byline authors.
+   */
+  authors?: (string | Author)[] | null;
+  /**
+   * Short summary shown on listing pages, hero cards, and search results.
    */
   excerpt: string;
-  content: {
+  /**
+   * ON → build with up to 5 sections, each with its own rich text and speakers. OFF → use the single content field below.
+   */
+  useContentSections?: boolean | null;
+  content?: {
     root: {
       type: string;
       children: {
@@ -351,103 +355,9 @@ export interface Post {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   /**
-   * Main detail-page image. Cards can optionally use the Card Banner Image below.
-   */
-  featuredImage: string | Media;
-  /**
-   * Optional image used on home/listing/search cards. Leave empty to use the main image.
-   */
-  cardBannerImage?: (string | null) | Media;
-  /**
-   * Controls how the card banner image appears inside card rectangles.
-   */
-  cardBannerFit?: ('cover' | 'contain') | null;
-  /**
-   * Optional home/card button text. Leave empty to use Join, Download, or Read based on post type.
-   */
-  cardButtonLabel?: string | null;
-  /**
-   * PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.
-   */
-  downloadAsset?: (string | null) | Media;
-  /**
-   * Optional. Video/replay/registration link opened after someone registers. Leave empty to just collect registrations.
-   */
-  videoUrl?: string | null;
-  /**
-   * Optional link opened after the form is submitted. White papers: use this instead of uploading a PDF. Webinars: optional replay/registration link.
-   */
-  externalUrl?: string | null;
-  /**
-   * Hide the post title on the public detail page. The title is still used in admin, links, and metadata.
-   */
-  hideTitleOnDetail?: boolean | null;
-  /**
-   * Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.
-   */
-  webinarSecondaryBanner?: (string | null) | Media;
-  /**
-   * Optional label for the secondary banner when a second visual is used.
-   */
-  webinarSecondaryBannerAlt?: string | null;
-  featured?: boolean | null;
-  /**
-   * Pinned white papers can be surfaced in Trending Downloads and priority rails.
-   */
-  pinned?: boolean | null;
-  /**
-   * Required for published content. Defaults to now when you publish.
-   */
-  publishedAt?: string | null;
-  /**
-   * Controls the gated white paper form, delivery mode, and post-submit behavior.
-   */
-  leadCapture?: {
-    enabled?: boolean | null;
-    openDeliveryInNewTab?: boolean | null;
-    deliveryMode?: ('download' | 'read' | 'redirect') | null;
-    formTitle?: string | null;
-    submitLabel?: string | null;
-    formDescription?: string | null;
-    successMessage?: string | null;
-    newsletterLabel?: string | null;
-    consentLabel?: string | null;
-    /**
-     * Optional override destination after form submission. If empty, the white paper external URL or uploaded file is used.
-     */
-    deliveryUrl?: string | null;
-  };
-  /**
-   * Controls webinar registration form content, event copy, moderator override, and CTA behaviour.
-   */
-  webinarRegistration?: {
-    enabled?: boolean | null;
-    formTitle?: string | null;
-    ctaLabel?: string | null;
-    deliveryMode?: ('register' | 'watch' | 'download' | 'redirect') | null;
-    openDeliveryInNewTab?: boolean | null;
-    /**
-     * Optional override target after submission. Leave empty to use the webinar external URL or video URL.
-     */
-    deliveryUrl?: string | null;
-    formDescription?: string | null;
-    submitLabel?: string | null;
-    newsletterLabel?: string | null;
-    consentLabel?: string | null;
-    successMessage?: string | null;
-    /**
-     * Display label shown on webinar cards (e.g. "Tuesday, June 26, 11 am PT / 2 pm ET").
-     */
-    eventDateLabel?: string | null;
-    /**
-     * Required for webinars. Used to sort upcoming and past sessions.
-     */
-    eventStartsAt?: string | null;
-  };
-  /**
-   * Choose each webinar person and set how they should appear on the public page: Speaker, Moderator, or Presenter.
+   * Speakers, moderators, and presenters — shown on cards and the public page. Also used in the single-content view below.
    */
   webinarPeople?:
     | {
@@ -456,17 +366,138 @@ export interface Post {
          */
         person: string | Author;
         /**
-         * Controls the heading shown on the webinar page.
+         * Controls the label shown on the webinar page.
          */
         role: 'speaker' | 'moderator' | 'presenter';
         id?: string | null;
       }[]
     | null;
+  /**
+   * Up to 5 sections — each with its own rich text and people, separated by a divider on the public page. Only active when the toggle above is ON.
+   */
+  webinarSections?:
+    | {
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        people?:
+          | {
+              person: string | Author;
+              role: 'speaker' | 'moderator' | 'presenter';
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Main detail-page image.
+   */
+  featuredImage: string | Media;
+  /**
+   * Optional — used on cards. Falls back to Top Banner if empty.
+   */
+  cardBannerImage?: (string | null) | Media;
+  /**
+   * Optional second full-width banner shown below the main image on the webinar page.
+   */
+  webinarSecondaryBanner?: (string | null) | Media;
+  /**
+   * Card Banner display mode.
+   */
+  cardBannerFit?: ('cover' | 'contain') | null;
+  /**
+   * Card button text. Leave empty for auto (Join / Download / Read).
+   */
+  cardButtonLabel?: string | null;
+  /**
+   * Accessibility label for the secondary banner.
+   */
+  webinarSecondaryBannerAlt?: string | null;
+  /**
+   * PDF delivered after lead form. Use this OR the External URL below.
+   */
+  downloadAsset?: (string | null) | Media;
+  /**
+   * Video or replay link — opened after a successful registration.
+   */
+  videoUrl?: string | null;
+  /**
+   * External destination. White paper: redirect instead of uploading PDF. Webinar: optional additional link.
+   */
+  externalUrl?: string | null;
+  featured?: boolean | null;
+  /**
+   * Pin to Trending / priority rails.
+   */
+  pinned?: boolean | null;
+  /**
+   * Hide the title on the public detail page (still used in admin & metadata).
+   */
+  hideTitleOnDetail?: boolean | null;
+  /**
+   * Controls the gated white paper form and post-submit delivery.
+   */
+  leadCapture?: {
+    enabled?: boolean | null;
+    openDeliveryInNewTab?: boolean | null;
+    deliveryMode?: ('download' | 'read' | 'redirect') | null;
+    /**
+     * Optional URL opened after form submission. Overrides the PDF asset / external URL if set.
+     */
+    deliveryUrl?: string | null;
+    formTitle?: string | null;
+    submitLabel?: string | null;
+    formDescription?: string | null;
+    successMessage?: string | null;
+    newsletterLabel?: string | null;
+    consentLabel?: string | null;
+  };
+  /**
+   * Event scheduling, registration form copy, and post-submit delivery.
+   */
+  webinarRegistration?: {
+    /**
+     * Required. Determines upcoming vs past status automatically.
+     */
+    eventStartsAt?: string | null;
+    /**
+     * Human-readable label shown on cards — e.g. "Tuesday, June 26 · 11 am PT / 2 pm ET".
+     */
+    eventDateLabel?: string | null;
+    enabled?: boolean | null;
+    ctaLabel?: string | null;
+    formTitle?: string | null;
+    deliveryMode?: ('register' | 'watch' | 'download' | 'redirect') | null;
+    openDeliveryInNewTab?: boolean | null;
+    /**
+     * URL opened after submission. Leave empty to use the Video URL or External URL above.
+     */
+    deliveryUrl?: string | null;
+    formDescription?: string | null;
+    successMessage?: string | null;
+    submitLabel?: string | null;
+    newsletterLabel?: string | null;
+    consentLabel?: string | null;
+  };
   tags?: (string | Tag)[] | null;
   /**
-   * Optional related content suggestions shown near this post.
+   * Optional related content shown near this post.
    */
   relatedPosts?: (string | Post)[] | null;
+  webinarSpeakerProfiles?: (string | Author)[] | null;
   cta: {
     primary: {
       label: string;
@@ -489,7 +520,7 @@ export interface Post {
     noIndex?: boolean | null;
   };
   /**
-   * Mirrors the webinar event date for admin list filtering and sorting.
+   * Mirrors the event date for admin list filtering and sorting.
    */
   webinarEventStartsAt?: string | null;
   /**
@@ -857,55 +888,12 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   readingTime?: T;
   slug?: T;
-  authors?: T;
-  webinarSpeakerProfiles?: T;
-  primaryCategory?: T;
-  excerpt?: T;
-  content?: T;
-  featuredImage?: T;
-  cardBannerImage?: T;
-  cardBannerFit?: T;
-  cardButtonLabel?: T;
-  downloadAsset?: T;
-  videoUrl?: T;
-  externalUrl?: T;
-  hideTitleOnDetail?: T;
-  webinarSecondaryBanner?: T;
-  webinarSecondaryBannerAlt?: T;
-  featured?: T;
-  pinned?: T;
   publishedAt?: T;
-  leadCapture?:
-    | T
-    | {
-        enabled?: T;
-        openDeliveryInNewTab?: T;
-        deliveryMode?: T;
-        formTitle?: T;
-        submitLabel?: T;
-        formDescription?: T;
-        successMessage?: T;
-        newsletterLabel?: T;
-        consentLabel?: T;
-        deliveryUrl?: T;
-      };
-  webinarRegistration?:
-    | T
-    | {
-        enabled?: T;
-        formTitle?: T;
-        ctaLabel?: T;
-        deliveryMode?: T;
-        openDeliveryInNewTab?: T;
-        deliveryUrl?: T;
-        formDescription?: T;
-        submitLabel?: T;
-        newsletterLabel?: T;
-        consentLabel?: T;
-        successMessage?: T;
-        eventDateLabel?: T;
-        eventStartsAt?: T;
-      };
+  primaryCategory?: T;
+  authors?: T;
+  excerpt?: T;
+  useContentSections?: T;
+  content?: T;
   webinarPeople?:
     | T
     | {
@@ -913,8 +901,65 @@ export interface PostsSelect<T extends boolean = true> {
         role?: T;
         id?: T;
       };
+  webinarSections?:
+    | T
+    | {
+        content?: T;
+        people?:
+          | T
+          | {
+              person?: T;
+              role?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  featuredImage?: T;
+  cardBannerImage?: T;
+  webinarSecondaryBanner?: T;
+  cardBannerFit?: T;
+  cardButtonLabel?: T;
+  webinarSecondaryBannerAlt?: T;
+  downloadAsset?: T;
+  videoUrl?: T;
+  externalUrl?: T;
+  featured?: T;
+  pinned?: T;
+  hideTitleOnDetail?: T;
+  leadCapture?:
+    | T
+    | {
+        enabled?: T;
+        openDeliveryInNewTab?: T;
+        deliveryMode?: T;
+        deliveryUrl?: T;
+        formTitle?: T;
+        submitLabel?: T;
+        formDescription?: T;
+        successMessage?: T;
+        newsletterLabel?: T;
+        consentLabel?: T;
+      };
+  webinarRegistration?:
+    | T
+    | {
+        eventStartsAt?: T;
+        eventDateLabel?: T;
+        enabled?: T;
+        ctaLabel?: T;
+        formTitle?: T;
+        deliveryMode?: T;
+        openDeliveryInNewTab?: T;
+        deliveryUrl?: T;
+        formDescription?: T;
+        successMessage?: T;
+        submitLabel?: T;
+        newsletterLabel?: T;
+        consentLabel?: T;
+      };
   tags?: T;
   relatedPosts?: T;
+  webinarSpeakerProfiles?: T;
   cta?:
     | T
     | {

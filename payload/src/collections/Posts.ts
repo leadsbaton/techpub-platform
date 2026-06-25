@@ -12,6 +12,7 @@ type PostTypeKey = 'insight' | 'whitepaper' | 'webinar'
 type PostFormData = Partial<PostDocument> & {
   contentType?: string | { id?: string; key?: PostTypeKey } | null
   type?: PostTypeKey
+  useContentSections?: boolean | null
   webinarEventStartsAt?: string | null
   webinarSessionStatus?: 'upcoming' | 'past' | 'unscheduled' | null
   webinarPeople?: {
@@ -29,10 +30,8 @@ function getRelationshipId(value: string | { id?: string } | null | undefined): 
 
 function getWebinarSessionStatus(eventStartsAt?: string | null): 'upcoming' | 'past' | 'unscheduled' {
   if (!eventStartsAt) return 'unscheduled'
-
   const eventDate = new Date(eventStartsAt)
   if (Number.isNaN(eventDate.getTime())) return 'unscheduled'
-
   return eventDate.getTime() >= Date.now() ? 'upcoming' : 'past'
 }
 
@@ -45,15 +44,11 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'type', 'webinarSessionStatus', 'webinarEventStartsAt', 'primaryCategory', 'status', 'publishedAt'],
-    // "View on site" link to the published page. The in-admin live-preview
-    // iframe and the dedicated Preview tab were removed to keep the editor focused
-    // on entering content rather than previewing it.
     preview: (doc) => {
       const path = resolvePostPath({
         slug: typeof doc.slug === 'string' ? doc.slug : null,
         type: typeof doc.type === 'string' ? doc.type : null,
       })
-
       return path ? `${frontendURL}${path}` : frontendURL
     },
   },
@@ -70,6 +65,8 @@ export const Posts: CollectionConfig = {
         {
           label: 'Post Builder',
           fields: [
+
+            // ─── 1. Type & Status ──────────────────────────────────────────────
             {
               type: 'row',
               fields: [
@@ -83,8 +80,7 @@ export const Posts: CollectionConfig = {
                     { label: 'Webinar', value: 'webinar' },
                   ],
                   admin: {
-                    description:
-                      'Pick the post type first — this controls which fields appear below and the public route.',
+                    description: 'Pick the post type first — controls which fields appear below and the public URL.',
                     width: '50%',
                   },
                 },
@@ -99,24 +95,21 @@ export const Posts: CollectionConfig = {
                     { label: 'Archived', value: 'archived' },
                   ],
                   admin: {
-                    description:
-                      'Draft stays hidden from the public site. Published is visible on the frontend. Archived is stored but excluded from public queries.',
+                    description: 'Draft is hidden from the public site. Published is live. Archived is stored but excluded from queries.',
                     width: '50%',
                   },
                 },
               ],
             },
+            // Hidden — kept in sync with `type` by the beforeChange hook.
             {
-              // Auto-kept in sync with `type` (resolved in beforeChange) for any
-              // internal reference. Hidden so editors pick the type only once,
-              // via the select above.
               name: 'contentType',
               type: 'relationship',
               relationTo: 'content-types',
-              admin: {
-                hidden: true,
-              },
+              admin: { hidden: true },
             },
+
+            // ─── 2. Title & Reading Time ───────────────────────────────────────
             {
               type: 'row',
               fields: [
@@ -125,35 +118,70 @@ export const Posts: CollectionConfig = {
                   type: 'text',
                   required: true,
                   admin: {
-                    description: 'Public headline shown in cards, SEO, and the post detail page.',
-                    width: '70%',
+                    description: 'Public headline — shown in cards, SEO title, and the detail page.',
+                    width: '75%',
                   },
                 },
                 {
                   name: 'readingTime',
                   type: 'number',
                   admin: {
-                    description: 'Estimated reading time in minutes.',
-                    width: '30%',
+                    description: 'Read time (min)',
+                    width: '25%',
                   },
                 },
               ],
             },
-            {
-              name: 'slug',
-              type: 'text',
-              required: true,
-              unique: true,
-              hooks: {
-                beforeValidate: [slugHook('title')],
-              },
-              admin: {
-                description: 'Shareable URL segment. Auto-generated from title and adjusted if a duplicate already exists.',
-              },
-            },
+
+            // ─── 3. Slug & Publish Date ────────────────────────────────────────
             {
               type: 'row',
               fields: [
+                {
+                  name: 'slug',
+                  type: 'text',
+                  required: true,
+                  unique: true,
+                  hooks: {
+                    beforeValidate: [slugHook('title')],
+                  },
+                  admin: {
+                    description: 'URL segment — auto-generated from title. Change only if you need a custom URL.',
+                    width: '60%',
+                  },
+                },
+                {
+                  name: 'publishedAt',
+                  type: 'date',
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.status === 'published' && !value) {
+                      return 'Published posts require a publish date.'
+                    }
+                    return true
+                  },
+                  admin: {
+                    description: 'Required when publishing. Auto-set to now on first publish.',
+                    date: { pickerAppearance: 'dayAndTime' },
+                    width: '40%',
+                  },
+                },
+              ],
+            },
+
+            // ─── 4. Category & Authors ─────────────────────────────────────────
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'primaryCategory',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  required: true,
+                  admin: {
+                    description: 'Main taxonomy used in UI filters (Finance, Marketing, Technology…).',
+                    width: '50%',
+                  },
+                },
                 {
                   name: 'authors',
                   label: 'Authors',
@@ -164,496 +192,55 @@ export const Posts: CollectionConfig = {
                     if (siblingData.type === 'insight' && (!Array.isArray(value) || value.length === 0)) {
                       return 'Insights should have at least one author.'
                     }
-
                     return true
                   },
                   admin: {
-                    // Authors are only used for insight bylines. White papers and
-                    // webinars don't need them, so the field is hidden for those.
                     condition: (_, siblingData) => siblingData?.type === 'insight',
-                    description: 'Used for insight bylines.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'webinarSpeakerProfiles',
-                  label: 'Legacy Speakers',
-                  type: 'relationship',
-                  relationTo: 'authors',
-                  hasMany: true,
-                  // Optional — a webinar can be saved with no speakers. When 2+ are
-                  // chosen, the last one is shown as the moderator automatically.
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description:
-                      'Optional. Pick webinar people from the author profiles — speaker(s) first; if you add 2 or more, the LAST one becomes the moderator automatically. Leave empty to hide the speakers row.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'primaryCategory',
-                  type: 'relationship',
-                  relationTo: 'categories',
-                  required: true,
-                  admin: {
-                    description: 'Main taxonomy used in UI filters like Finance, Marketing, and Technology.',
+                    description: 'Insight byline authors.',
                     width: '50%',
                   },
                 },
               ],
             },
+
+            // ─── 5. Excerpt ────────────────────────────────────────────────────
             {
               name: 'excerpt',
               type: 'textarea',
               required: true,
               admin: {
-                description: 'Short summary used on listing pages and hero cards.',
+                description: 'Short summary shown on listing pages, hero cards, and search results.',
+              },
+            },
+
+            // ─── 6. Content (single block or sections) ─────────────────────────
+            {
+              name: 'useContentSections',
+              type: 'checkbox',
+              label: 'Use multiple Content Sections (instead of a single content block)',
+              defaultValue: false,
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'webinar',
+                description: 'ON → build with up to 5 sections, each with its own rich text and speakers. OFF → use the single content field below.',
               },
             },
             {
               name: 'content',
               type: 'richText',
-              required: true,
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'featuredImage',
-                  type: 'upload',
-                  relationTo: 'media',
-                  required: true,
-                  admin: {
-                    description: 'Main detail-page image. Cards can optionally use the Card Banner Image below.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'cardBannerImage',
-                  type: 'upload',
-                  relationTo: 'media',
-                  admin: {
-                    description: 'Optional image used on home/listing/search cards. Leave empty to use the main image.',
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'cardBannerFit',
-                  type: 'select',
-                  defaultValue: 'cover',
-                  options: [
-                    { label: 'Cover - crop to fill card', value: 'cover' },
-                    { label: 'Contain - fit whole image', value: 'contain' },
-                  ],
-                  admin: {
-                    description: 'Controls how the card banner image appears inside card rectangles.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'cardButtonLabel',
-                  type: 'text',
-                  admin: {
-                    description: 'Optional home/card button text. Leave empty to use Join, Download, or Read based on post type.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'downloadAsset',
-                  type: 'relationship',
-                  relationTo: 'media',
-                  // Gated asset: keep the download target out of public API
-                  // responses so it can't be scraped before completing the
-                  // lead-capture form. The whitepaper-leads POST route reads it
-                  // with overrideAccess and returns the URL after submission.
-                  access: {
-                    read: isAuthenticatedField,
-                  },
-                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (siblingData.type === 'whitepaper' && !value && !siblingData.externalUrl) {
-                      return 'Whitepaper posts need either a download asset or an external URL.'
-                    }
-
-                    return true
-                  },
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'whitepaper',
-                    description:
-                      'PDF to deliver after the form is submitted — upload a new file or pick one from the Media library. Use THIS for a downloadable PDF, or use the External URL field instead to redirect to any link.',
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'videoUrl',
-                  type: 'text',
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description: 'Optional. Video/replay/registration link opened after someone registers. Leave empty to just collect registrations.',
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'externalUrl',
-                  type: 'text',
-                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (siblingData.type === 'whitepaper' && !value && !siblingData.downloadAsset) {
-                      return 'Whitepaper posts need either an external URL or a download asset.'
-                    }
-
-                    return true
-                  },
-                  admin: {
-                    description:
-                      'Optional link opened after the form is submitted. White papers: use this instead of uploading a PDF. Webinars: optional replay/registration link.',
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'hideTitleOnDetail',
-                  type: 'checkbox',
-                  defaultValue: false,
-                  admin: {
-                    description: 'Hide the post title on the public detail page. The title is still used in admin, links, and metadata.',
-                    width: '33%',
-                  },
-                },
-                {
-                  name: 'webinarSecondaryBanner',
-                  type: 'upload',
-                  relationTo: 'media',
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description: 'Optional second full-width webinar banner shown below the main hero banner. Use the same wide aspect ratio for the cleanest layout.',
-                    width: '33%',
-                  },
-                },
-                {
-                  name: 'webinarSecondaryBannerAlt',
-                  type: 'text',
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.type === 'webinar',
-                    description: 'Optional label for the secondary banner when a second visual is used.',
-                    width: '33%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'featured',
-                  type: 'checkbox',
-                  defaultValue: false,
-                  admin: {
-                    width: '25%',
-                  },
-                },
-                {
-                  name: 'pinned',
-                  type: 'checkbox',
-                  defaultValue: false,
-                  admin: {
-                    width: '25%',
-                    description: 'Pinned white papers can be surfaced in Trending Downloads and priority rails.',
-                  },
-                },
-                {
-                  name: 'publishedAt',
-                  type: 'date',
-                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
-                    if (siblingData.status === 'published' && !value) {
-                      return 'Published posts require a publish date.'
-                    }
-
-                    return true
-                  },
-                  admin: {
-                    description: 'Required for published content. Defaults to now when you publish.',
-                    date: {
-                      pickerAppearance: 'dayAndTime',
-                    },
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              name: 'leadCapture',
-              type: 'group',
               admin: {
-                condition: (_, siblingData) => siblingData?.type === 'whitepaper',
-                description:
-                  'Controls the gated white paper form, delivery mode, and post-submit behavior.',
+                condition: (_, siblingData) =>
+                  siblingData?.type !== 'webinar' || !siblingData?.useContentSections,
               },
-              fields: [
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'enabled',
-                      type: 'checkbox',
-                      defaultValue: true,
-                      admin: {
-                        width: '25%',
-                      },
-                    },
-                    {
-                      name: 'openDeliveryInNewTab',
-                      type: 'checkbox',
-                      defaultValue: true,
-                      admin: {
-                        width: '25%',
-                      },
-                    },
-                    {
-                      name: 'deliveryMode',
-                      type: 'select',
-                      defaultValue: 'download',
-                      options: [
-                        { label: 'Download Now', value: 'download' },
-                        { label: 'Read Now', value: 'read' },
-                        { label: 'Redirect To URL', value: 'redirect' },
-                      ],
-                      admin: {
-                        width: '50%',
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'formTitle',
-                      type: 'text',
-                      defaultValue: 'Access this white paper',
-                      admin: {
-                        width: '50%',
-                      },
-                    },
-                    {
-                      name: 'submitLabel',
-                      type: 'text',
-                      defaultValue: 'Submit and continue',
-                      admin: {
-                        width: '50%',
-                      },
-                    },
-                  ],
-                },
-                {
-                  name: 'formDescription',
-                  type: 'textarea',
-                  defaultValue:
-                    'Complete the form below to unlock this white paper, save your request, and continue to the configured destination.',
-                },
-                {
-                  name: 'successMessage',
-                  type: 'textarea',
-                  defaultValue: 'Your request has been saved. Opening the white paper now.',
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'newsletterLabel',
-                      type: 'text',
-                      defaultValue: 'Tick this box to receive our newsletter.',
-                      admin: {
-                        width: '50%',
-                      },
-                    },
-                    {
-                      name: 'consentLabel',
-                      type: 'textarea',
-                      defaultValue:
-                        'By requesting this resource, you agree to our terms of use and privacy notice.',
-                      admin: {
-                        width: '50%',
-                      },
-                    },
-                  ],
-                },
-                {
-                  name: 'deliveryUrl',
-                  type: 'text',
-                  // Gated delivery target (highest priority in resolveDelivery).
-                  // Keep it out of public API responses so it can't be scraped
-                  // before the lead form is submitted; the whitepaper-leads POST
-                  // route reads it with overrideAccess after capturing the lead.
-                  access: {
-                    read: isAuthenticatedField,
-                  },
-                  admin: {
-                    description:
-                      'Optional override destination after form submission. If empty, the white paper external URL or uploaded file is used.',
-                  },
-                },
-              ],
             },
-            {
-              name: 'webinarRegistration',
-              type: 'group',
-              admin: {
-                condition: (_, siblingData) => siblingData?.type === 'webinar',
-                description:
-                  'Controls webinar registration form content, event copy, moderator override, and CTA behaviour.',
-              },
-              fields: [
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'enabled',
-                      type: 'checkbox',
-                      defaultValue: true,
-                      admin: { width: '25%' },
-                    },
-                    {
-                      name: 'formTitle',
-                      type: 'text',
-                      defaultValue: 'Register for this webinar',
-                      admin: { width: '35%' },
-                    },
-                    {
-                      name: 'ctaLabel',
-                      type: 'text',
-                      defaultValue: 'Register now',
-                      admin: { width: '40%' },
-                    },
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'deliveryMode',
-                      type: 'select',
-                      defaultValue: 'register',
-                      options: [
-                        { label: 'Register URL', value: 'register' },
-                        { label: 'Watch Video', value: 'watch' },
-                        { label: 'Download PDF', value: 'download' },
-                        { label: 'Redirect URL', value: 'redirect' },
-                      ],
-                      admin: { width: '35%' },
-                    },
-                    {
-                      name: 'openDeliveryInNewTab',
-                      type: 'checkbox',
-                      defaultValue: true,
-                      admin: { width: '20%' },
-                    },
-                    {
-                      name: 'deliveryUrl',
-                      type: 'text',
-                      // Gated delivery target (highest priority in resolveDelivery).
-                      // Hidden from public API responses; the webinar-registrations
-                      // POST route reads it with overrideAccess after the lead is
-                      // captured.
-                      access: {
-                        read: isAuthenticatedField,
-                      },
-                      admin: {
-                        width: '45%',
-                        description:
-                          'Optional override target after submission. Leave empty to use the webinar external URL or video URL.',
-                      },
-                    },
-                  ],
-                },
-                {
-                  name: 'formDescription',
-                  type: 'textarea',
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'submitLabel',
-                      type: 'text',
-                      defaultValue: 'Submit',
-                      admin: { width: '33%' },
-                    },
-                    {
-                      name: 'newsletterLabel',
-                      type: 'text',
-                      defaultValue: 'Tick this box to receive our newsletter',
-                      admin: { width: '33%' },
-                    },
-                    {
-                      name: 'consentLabel',
-                      type: 'textarea',
-                      defaultValue:
-                        'By requesting this resource, you agree to our terms of use. All data is protected by our Privacy Notice.',
-                      admin: { width: '34%' },
-                    },
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'successMessage',
-                      type: 'textarea',
-                      defaultValue: 'Your registration has been saved successfully.',
-                      admin: { width: '50%' },
-                    },
-                    {
-                      name: 'eventDateLabel',
-                      type: 'text',
-                      admin: {
-                        width: '25%',
-                        description: 'Display label shown on webinar cards (e.g. "Tuesday, June 26, 11 am PT / 2 pm ET").',
-                      },
-                    },
-                    {
-                      name: 'eventStartsAt',
-                      label: 'Webinar Event Date',
-                      type: 'date',
-                      validate: (value: unknown, { data }: { data?: PostFormData }) => {
-                        if (data?.type === 'webinar' && !value) {
-                          return 'Event date/time is required for webinars.'
-                        }
 
-                        return true
-                      },
-                      admin: {
-                        width: '25%',
-                        date: {
-                          pickerAppearance: 'dayAndTime',
-                        },
-                        description: 'Required for webinars. Used to sort upcoming and past sessions.',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
+            // ─── 7. Webinar People ────────────────────────────────────────────────
             {
               name: 'webinarPeople',
               label: 'Webinar People',
               type: 'array',
               admin: {
                 condition: (_, siblingData) => siblingData?.type === 'webinar',
-                description:
-                  'Choose each webinar person and set how they should appear on the public page: Speaker, Moderator, or Presenter.',
+                description: 'Speakers, moderators, and presenters — shown on cards and the public page. Also used in the single-content view below.',
               },
               fields: [
                 {
@@ -681,13 +268,458 @@ export const Posts: CollectionConfig = {
                       ],
                       admin: {
                         width: '40%',
-                        description: 'Controls the heading shown on the webinar page.',
+                        description: 'Controls the label shown on the webinar page.',
                       },
                     },
                   ],
                 },
               ],
             },
+
+            // ─── 8. Content Sections ──────────────────────────────────────────────
+            {
+              name: 'webinarSections',
+              label: 'Content Sections',
+              type: 'array',
+              maxRows: 5,
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'webinar',
+                description: 'Up to 5 sections — each with its own rich text and people, separated by a divider on the public page. Only active when the toggle above is ON.',
+                initCollapsed: true,
+              },
+              fields: [
+                {
+                  name: 'content',
+                  label: 'Section Content',
+                  type: 'richText',
+                },
+                {
+                  name: 'people',
+                  label: 'Section People',
+                  type: 'array',
+                  fields: [
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'person',
+                          type: 'relationship',
+                          relationTo: 'authors',
+                          required: true,
+                          admin: { width: '60%' },
+                        },
+                        {
+                          name: 'role',
+                          type: 'select',
+                          required: true,
+                          defaultValue: 'presenter',
+                          options: [
+                            { label: 'Speaker', value: 'speaker' },
+                            { label: 'Moderator', value: 'moderator' },
+                            { label: 'Presenter', value: 'presenter' },
+                          ],
+                          admin: { width: '40%' },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+
+            // ─── 9. Images — Top Banner · Card Banner · Secondary Banner ────────
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'featuredImage',
+                  label: 'Top Banner',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                  admin: {
+                    description: 'Main detail-page image.',
+                    width: '33%',
+                  },
+                },
+                {
+                  name: 'cardBannerImage',
+                  label: 'Card Banner',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    description: 'Optional — used on cards. Falls back to Top Banner if empty.',
+                    width: '33%',
+                  },
+                },
+                {
+                  name: 'webinarSecondaryBanner',
+                  label: 'Secondary Banner',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Optional second full-width banner shown below the main image on the webinar page.',
+                    width: '34%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'cardBannerFit',
+                  type: 'select',
+                  defaultValue: 'cover',
+                  options: [
+                    { label: 'Cover — crop to fill card', value: 'cover' },
+                    { label: 'Contain — fit whole image', value: 'contain' },
+                  ],
+                  admin: {
+                    description: 'Card Banner display mode.',
+                    width: '34%',
+                  },
+                },
+                {
+                  name: 'cardButtonLabel',
+                  type: 'text',
+                  admin: {
+                    description: 'Card button text. Leave empty for auto (Join / Download / Read).',
+                    width: '33%',
+                  },
+                },
+                {
+                  name: 'webinarSecondaryBannerAlt',
+                  label: 'Secondary Banner Alt Text',
+                  type: 'text',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Accessibility label for the secondary banner.',
+                    width: '33%',
+                  },
+                },
+              ],
+            },
+
+            // ─── 10. Assets & Links ────────────────────────────────────────────
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'downloadAsset',
+                  label: 'PDF Asset',
+                  type: 'relationship',
+                  relationTo: 'media',
+                  access: { read: isAuthenticatedField },
+                  validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                    if (siblingData.type === 'whitepaper' && !value && !siblingData.externalUrl) {
+                      return 'White papers need either a PDF asset or an External URL.'
+                    }
+                    return true
+                  },
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'whitepaper',
+                    description: 'PDF delivered after lead form. Use this OR the External URL below.',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'videoUrl',
+                  label: 'Video / Replay URL',
+                  type: 'text',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.type === 'webinar',
+                    description: 'Video or replay link — opened after a successful registration.',
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'externalUrl',
+              label: 'External URL',
+              type: 'text',
+              validate: (value: unknown, { siblingData }: { siblingData: PostFormData }) => {
+                if (siblingData.type === 'whitepaper' && !value && !siblingData.downloadAsset) {
+                  return 'White papers need either an External URL or a PDF asset.'
+                }
+                return true
+              },
+              admin: {
+                description: 'External destination. White paper: redirect instead of uploading PDF. Webinar: optional additional link.',
+              },
+            },
+
+            // ─── 11. Flags ─────────────────────────────────────────────────────
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'featured',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: { width: '33%' },
+                },
+                {
+                  name: 'pinned',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Pin to Trending / priority rails.',
+                    width: '33%',
+                  },
+                },
+                {
+                  name: 'hideTitleOnDetail',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Hide the title on the public detail page (still used in admin & metadata).',
+                    width: '34%',
+                  },
+                },
+              ],
+            },
+
+            // ─── 12. White Paper: Lead Capture ─────────────────────────────────
+            {
+              name: 'leadCapture',
+              type: 'group',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'whitepaper',
+                description: 'Controls the gated white paper form and post-submit delivery.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'enabled',
+                      label: 'Lead Form Enabled',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '20%' },
+                    },
+                    {
+                      name: 'openDeliveryInNewTab',
+                      label: 'Open in New Tab',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '20%' },
+                    },
+                    {
+                      name: 'deliveryMode',
+                      type: 'select',
+                      defaultValue: 'download',
+                      options: [
+                        { label: 'Download Now', value: 'download' },
+                        { label: 'Read Now', value: 'read' },
+                        { label: 'Redirect To URL', value: 'redirect' },
+                      ],
+                      admin: { width: '60%' },
+                    },
+                  ],
+                },
+                {
+                  name: 'deliveryUrl',
+                  label: 'Delivery URL Override',
+                  type: 'text',
+                  access: { read: isAuthenticatedField },
+                  admin: {
+                    description: 'Optional URL opened after form submission. Overrides the PDF asset / external URL if set.',
+                  },
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'formTitle',
+                      type: 'text',
+                      defaultValue: 'Access this white paper',
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'submitLabel',
+                      type: 'text',
+                      defaultValue: 'Submit and continue',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                {
+                  name: 'formDescription',
+                  type: 'textarea',
+                  defaultValue: 'Complete the form below to unlock this white paper.',
+                },
+                {
+                  name: 'successMessage',
+                  type: 'textarea',
+                  defaultValue: 'Your request has been saved. Opening the white paper now.',
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'newsletterLabel',
+                      type: 'text',
+                      defaultValue: 'Tick this box to receive our newsletter.',
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'consentLabel',
+                      type: 'textarea',
+                      defaultValue: 'By requesting this resource, you agree to our terms of use and privacy notice.',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+              ],
+            },
+
+            // ─── 13. Webinar: Registration ─────────────────────────────────────
+            {
+              name: 'webinarRegistration',
+              type: 'group',
+              admin: {
+                condition: (_, siblingData) => siblingData?.type === 'webinar',
+                description: 'Event scheduling, registration form copy, and post-submit delivery.',
+              },
+              fields: [
+                // Event date always at the top — required for all webinars
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'eventStartsAt',
+                      label: 'Event Date & Time',
+                      type: 'date',
+                      validate: (value: unknown, { data }: { data?: PostFormData }) => {
+                        if (data?.type === 'webinar' && !value) {
+                          return 'Event date/time is required for webinars.'
+                        }
+                        return true
+                      },
+                      admin: {
+                        width: '50%',
+                        date: { pickerAppearance: 'dayAndTime' },
+                        description: 'Required. Determines upcoming vs past status automatically.',
+                      },
+                    },
+                    {
+                      name: 'eventDateLabel',
+                      label: 'Display Date Label',
+                      type: 'text',
+                      admin: {
+                        width: '50%',
+                        description: 'Human-readable label shown on cards — e.g. "Tuesday, June 26 · 11 am PT / 2 pm ET".',
+                      },
+                    },
+                  ],
+                },
+                // Registration toggle & CTA
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'enabled',
+                      label: 'Registration Enabled',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '20%' },
+                    },
+                    {
+                      name: 'ctaLabel',
+                      label: 'CTA Button',
+                      type: 'text',
+                      defaultValue: 'Register now',
+                      admin: { width: '30%' },
+                    },
+                    {
+                      name: 'formTitle',
+                      label: 'Form Heading',
+                      type: 'text',
+                      defaultValue: 'Register for this webinar',
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                // Delivery
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'deliveryMode',
+                      type: 'select',
+                      defaultValue: 'register',
+                      options: [
+                        { label: 'Register Only (no link)', value: 'register' },
+                        { label: 'Watch Video', value: 'watch' },
+                        { label: 'Download PDF', value: 'download' },
+                        { label: 'Redirect URL', value: 'redirect' },
+                      ],
+                      admin: { width: '35%' },
+                    },
+                    {
+                      name: 'openDeliveryInNewTab',
+                      label: 'Open in New Tab',
+                      type: 'checkbox',
+                      defaultValue: true,
+                      admin: { width: '15%' },
+                    },
+                    {
+                      name: 'deliveryUrl',
+                      label: 'Delivery URL Override',
+                      type: 'text',
+                      access: { read: isAuthenticatedField },
+                      admin: {
+                        width: '50%',
+                        description: 'URL opened after submission. Leave empty to use the Video URL or External URL above.',
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'formDescription',
+                  label: 'Form Description',
+                  type: 'textarea',
+                },
+                {
+                  name: 'successMessage',
+                  label: 'Success Message',
+                  type: 'textarea',
+                  defaultValue: 'Your registration has been saved successfully.',
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'submitLabel',
+                      label: 'Submit Button',
+                      type: 'text',
+                      defaultValue: 'Submit',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'newsletterLabel',
+                      label: 'Newsletter Checkbox',
+                      type: 'text',
+                      defaultValue: 'Tick this box to receive our newsletter',
+                      admin: { width: '33%' },
+                    },
+                    {
+                      name: 'consentLabel',
+                      label: 'Consent Text',
+                      type: 'textarea',
+                      defaultValue: 'By requesting this resource, you agree to our terms of use. All data is protected by our Privacy Notice.',
+                      admin: { width: '34%' },
+                    },
+                  ],
+                },
+              ],
+            },
+
+            // ─── 14. Discovery ─────────────────────────────────────────────────
             {
               name: 'tags',
               type: 'relationship',
@@ -700,8 +732,18 @@ export const Posts: CollectionConfig = {
               relationTo: 'posts',
               hasMany: true,
               admin: {
-                description: 'Optional related content suggestions shown near this post.',
+                description: 'Optional related content shown near this post.',
               },
+            },
+
+            // ─── Legacy (hidden — afterRead hook uses this for back-compat) ─────
+            {
+              name: 'webinarSpeakerProfiles',
+              label: 'Legacy Speakers',
+              type: 'relationship',
+              relationTo: 'authors',
+              hasMany: true,
+              admin: { hidden: true },
             },
           ],
         },
@@ -718,6 +760,8 @@ export const Posts: CollectionConfig = {
         },
       ],
     },
+
+    // ─── Sidebar (read-only mirrors for admin list view) ──────────────────────
     {
       name: 'webinarEventStartsAt',
       label: 'Webinar Event Date',
@@ -725,10 +769,8 @@ export const Posts: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
-        description: 'Mirrors the webinar event date for admin list filtering and sorting.',
+        date: { pickerAppearance: 'dayAndTime' },
+        description: 'Mirrors the event date for admin list filtering and sorting.',
       },
     },
     {
@@ -750,19 +792,13 @@ export const Posts: CollectionConfig = {
       name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-      },
+      admin: { position: 'sidebar', readOnly: true },
     },
     {
       name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-      },
+      admin: { position: 'sidebar', readOnly: true },
     },
   ],
   hooks: {
@@ -831,11 +867,6 @@ export const Posts: CollectionConfig = {
           nextData.updatedBy = req.user.id
         }
 
-        // `type` is now chosen directly in the editor (a select), so the
-        // type-conditional fields/validators react immediately on create. Keep the
-        // hidden `contentType` relationship in sync — look up the content-type
-        // whose key matches the chosen type — so any internal reference stays
-        // populated.
         if (nextData.type) {
           const match = await req.payload.find({
             collection: 'content-types',
@@ -862,12 +893,6 @@ export const Posts: CollectionConfig = {
             nextData.webinarSpeakerProfiles = selectedProfiles
           }
 
-          // Mirror the Speakers selection into `authors` so the two stay
-          // consistent. Only act when this write actually includes the field
-          // (undefined = field omitted in a partial update → leave authors
-          // alone); an explicit empty array clears authors too, so reducing the
-          // speaker list to none can't leave a stale `authors` behind (which the
-          // afterRead back-fill would otherwise resurrect).
           if (nextData.webinarPeople === undefined && nextData.webinarSpeakerProfiles !== undefined) {
             const selectedProfiles = Array.isArray(nextData.webinarSpeakerProfiles)
               ? nextData.webinarSpeakerProfiles
@@ -898,9 +923,6 @@ export const Posts: CollectionConfig = {
         if (nextData.slug && typeof nextData.slug === 'string') {
           const baseSlug = nextData.slug
 
-          // Gather any existing posts whose slug is `baseSlug` or `baseSlug-N`
-          // (excluding this doc on update). `like` is a substring match, so we
-          // filter precisely in code afterwards.
           const candidates = await req.payload.find({
             collection: 'posts',
             depth: 0,
@@ -909,20 +931,8 @@ export const Posts: CollectionConfig = {
             pagination: false,
             where: {
               and: [
-                {
-                  slug: {
-                    like: baseSlug,
-                  },
-                },
-                ...(originalDoc?.id
-                  ? [
-                      {
-                        id: {
-                          not_equals: originalDoc.id,
-                        },
-                      },
-                    ]
-                  : []),
+                { slug: { like: baseSlug } },
+                ...(originalDoc?.id ? [{ id: { not_equals: originalDoc.id } }] : []),
               ],
             },
           })
@@ -933,10 +943,6 @@ export const Posts: CollectionConfig = {
               .filter((value): value is string => typeof value === 'string'),
           )
 
-          // Deterministic: keep baseSlug if free, otherwise append the smallest
-          // available -N suffix (-2, -3, ...). Same input always yields the same
-          // result. The DB `unique` index remains the backstop for the rare
-          // concurrent-write race.
           if (taken.has(baseSlug)) {
             let suffix = 2
             while (taken.has(`${baseSlug}-${suffix}`)) {
