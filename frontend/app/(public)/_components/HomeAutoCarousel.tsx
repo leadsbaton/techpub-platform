@@ -16,12 +16,6 @@ export function HomeAutoCarousel({
   autoScroll?: boolean
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
-  const dragState = useRef({
-    active: false,
-    dragged: false,
-    startX: 0,
-    startScrollLeft: 0,
-  })
   const [isPaused, setIsPaused] = useState(false)
   const items = Children.toArray(children)
   const carouselItems = autoScroll && items.length > 1 ? [...items, ...items] : items
@@ -37,9 +31,8 @@ export function HomeAutoCarousel({
       const elapsed = time - previousTime
       previousTime = time
 
-      if (!isPaused && !dragState.current.active) {
+      if (!isPaused) {
         scroller.scrollLeft += elapsed * speed
-
         if (scroller.scrollLeft >= scroller.scrollWidth / 2) {
           scroller.scrollLeft -= scroller.scrollWidth / 2
         }
@@ -83,56 +76,15 @@ export function HomeAutoCarousel({
 
       <div
         ref={scrollerRef}
-        className="no-scrollbar cursor-grab overflow-x-auto py-2 active:cursor-grabbing"
+        className="no-scrollbar overflow-x-auto py-2"
         onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => {
-          dragState.current.active = false
-          setIsPaused(false)
-        }}
+        onMouseLeave={() => setIsPaused(false)}
         onFocusCapture={() => setIsPaused(true)}
         onBlurCapture={() => setIsPaused(false)}
-        onClickCapture={(event) => {
-          if (dragState.current.dragged) {
-            event.preventDefault()
-            event.stopPropagation()
-            dragState.current.dragged = false
-          }
-        }}
-        onPointerDown={(event) => {
-          const scroller = scrollerRef.current
-          if (!scroller) return
-          dragState.current = {
-            active: true,
-            dragged: false,
-            startX: event.clientX,
-            startScrollLeft: scroller.scrollLeft,
-          }
-          setIsPaused(true)
-          scroller.setPointerCapture(event.pointerId)
-        }}
-        onPointerMove={(event) => {
-          const scroller = scrollerRef.current
-          const state = dragState.current
-          if (!scroller || !state.active) return
-
-          const delta = event.clientX - state.startX
-          if (Math.abs(delta) > 4) {
-            state.dragged = true
-          }
-          scroller.scrollLeft = state.startScrollLeft - delta
-        }}
-        onPointerUp={(event) => {
-          const scroller = scrollerRef.current
-          dragState.current.active = false
-          scroller?.releasePointerCapture(event.pointerId)
-        }}
-        onPointerCancel={() => {
-          dragState.current.active = false
-        }}
       >
         <div className={`flex w-max gap-5 ${trackClassName}`}>
           {carouselItems.map((item, index) => (
-            <div key={index} className="shrink-0 select-none">
+            <div key={index} className="shrink-0">
               {item}
             </div>
           ))}
