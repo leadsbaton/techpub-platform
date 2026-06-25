@@ -55,6 +55,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
   const [message, setMessage] = useState<string | null>(null)
   const [delivery, setDelivery] = useState<DeliveryResponse | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const formCopy = useMemo(
     () => ({
@@ -129,10 +130,8 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
 
       setMessage(data.message || post.leadCapture?.successMessage || 'Request saved successfully.')
       setDelivery(data.delivery || null)
-      // Clear the typed values so the form is ready for the next person and no
-      // personal data lingers on screen after submission.
       setForm(initialState)
-
+      setSubmitted(true)
       if (data.delivery?.url) {
         openDelivery(data.delivery)
       }
@@ -142,6 +141,33 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
       setSubmitting(false)
     }
   }
+
+  const successScreen = (
+    <div className="ui-font space-y-6 rounded-[8px] border border-[#d1fae5] bg-[#f0fdf4] px-6 py-8 text-[#020202]">
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#16a34a]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <h3 className="text-[20px] font-semibold text-[#15803d]">Request submitted!</h3>
+      </div>
+      <p className="text-[16px] leading-[1.6] text-[#166534]">
+        {message || 'Your request has been saved successfully.'}
+      </p>
+      {delivery?.url ? (
+        <button
+          type="button"
+          onClick={() => openDelivery(delivery)}
+          className="inline-flex bg-[#FC0203] px-8 py-3 text-[16px] font-medium text-white"
+        >
+          {delivery.mode === 'download' ? 'Download White Paper' : 'Open resource'}
+        </button>
+      ) : null}
+    </div>
+  )
+
+  if (submitted) return successScreen
 
   if (variant === 'figma') {
     return (
@@ -196,21 +222,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
           {submitting ? 'Submitting...' : formCopy.submitLabel}
         </button>
 
-        {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
         {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}
-
-        {/* Fallback link: the auto-open in openDelivery() runs after an await,
-            so browsers may block it as a non-user-gesture popup. This button
-            lets the user reach the resource manually. */}
-        {delivery?.url ? (
-          <button
-            type="button"
-            onClick={() => openDelivery(delivery)}
-            className="inline-flex border border-[#8f8f8f] px-8 py-2 text-[18px] font-medium text-[#020202] sm:ml-[196px]"
-          >
-            {delivery.mode === 'download' ? 'Download resource' : 'Open resource'}
-          </button>
-        ) : null}
       </form>
     )
   }
@@ -307,18 +319,7 @@ export function WhitepaperLeadForm({ post, variant = 'default' }: { post: Post; 
           >
             {submitting ? 'Submitting...' : formCopy.submitLabel}
           </button>
-          {delivery?.url ? (
-            <button
-              type="button"
-              onClick={() => openDelivery(delivery)}
-              className="rounded-full border border-[var(--border-subtle)] px-6 py-3 text-sm font-semibold text-[color:var(--text-strong)]"
-            >
-              Open resource
-            </button>
-          ) : null}
         </div>
-
-        {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
         {error ? <p className="text-sm text-[var(--accent-red)]">{error}</p> : null}
       </form>
     </div>
