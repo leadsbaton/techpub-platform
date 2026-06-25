@@ -19,13 +19,13 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
   return (
     <article className="ui-font flex flex-col overflow-hidden border border-[#E0E0E0] bg-white">
       <Link href={`/webinars/${post.slug}`} className="block">
-        <div className={`relative w-full overflow-hidden bg-[#f0f0f0] ${compact ? 'aspect-[16/8]' : 'aspect-video'}`}>
+        <div className={`relative w-full overflow-hidden bg-white ${compact ? 'aspect-[16/8]' : 'aspect-video'}`}>
           <SafeImage
             src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
             sizes={compact ? '(max-width: 1024px) 100vw, 467px' : '(max-width: 1024px) 100vw, 668px'}
-            className="object-cover transition-transform duration-300 hover:scale-[1.02]"
+            className="object-contain"
           />
         </div>
       </Link>
