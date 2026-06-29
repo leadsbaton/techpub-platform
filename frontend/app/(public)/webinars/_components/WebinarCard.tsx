@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { SafeImage } from '../../_components/SafeImage'
-import type { Post } from '@/lib/types/cms'
+import type { Media, Post } from '@/lib/types/cms'
 import { getCategoryName, getPostCardImageUrl, getWebinarEventLabel, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
 
 const categoryStyles: Record<string, string> = {
@@ -10,24 +10,46 @@ const categoryStyles: Record<string, string> = {
   marketing: 'text-[#00A01D]',
 }
 
+function getCardImageDims(post: Post): { width: number; height: number } | null {
+  const img = post.cardBannerImage || post.featuredImage
+  if (img && typeof img === 'object' && (img as Media).width && (img as Media).height) {
+    return { width: (img as Media).width!, height: (img as Media).height! }
+  }
+  return null
+}
+
 export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
   const categoryClass = categoryStyles[category.toLowerCase()] || 'text-[#0015AD]'
   const presenterLabel = getWebinarSpeakerSummary(post)
   const eventDate = getWebinarEventLabel(post)
+  const dims = getCardImageDims(post)
 
   return (
     <article className="ui-font flex flex-col overflow-hidden border border-[#E0E0E0] bg-white">
-      <Link href={`/webinars/${post.slug}`} className="block">
-        <div className={`relative w-full overflow-hidden bg-white ${compact ? 'aspect-[16/8]' : 'aspect-video'}`}>
+      <Link href={`/webinars/${post.slug}`} className="block w-full overflow-hidden bg-white">
+        {dims ? (
+          // Natural image proportions — height follows the actual uploaded image ratio
           <SafeImage
             src={getPostCardImageUrl(post)}
             alt={post.title}
-            fill
+            width={dims.width}
+            height={dims.height}
             sizes={compact ? '(max-width: 1024px) 100vw, 467px' : '(max-width: 1024px) 100vw, 668px'}
-            className="object-contain"
+            className="h-auto w-full object-contain"
           />
-        </div>
+        ) : (
+          // Fallback when image has no stored dimensions
+          <div className={`relative w-full overflow-hidden ${compact ? 'aspect-[16/7]' : 'aspect-[16/9]'}`}>
+            <SafeImage
+              src={getPostCardImageUrl(post)}
+              alt={post.title}
+              fill
+              sizes={compact ? '(max-width: 1024px) 100vw, 467px' : '(max-width: 1024px) 100vw, 668px'}
+              className="object-contain"
+            />
+          </div>
+        )}
       </Link>
       <div className={`${compact ? 'px-3 py-3' : 'px-5 py-4'} flex min-w-0 flex-1 flex-col gap-1.5`}>
         <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} font-medium uppercase ${categoryClass}`}>
