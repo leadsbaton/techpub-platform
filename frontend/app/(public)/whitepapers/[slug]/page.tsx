@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { RankedSidebar } from "../../_components/RankedSidebar";
 import { RichTextRenderer } from "../../_components/RichTextRenderer";
 import { SafeImage } from "../../_components/SafeImage";
+import { ReadingProgressBar } from "../../_components/ReadingProgressBar";
 import { getContentTypes, getPostBySlug, getPosts } from "@/lib/api/cms";
 import { buildPostMetadata } from "@/lib/utils/metadata";
 import { getImageUrl } from "@/lib/utils/formatting";
@@ -54,7 +55,9 @@ export default async function WhitepaperDetailPage({
         : "Open Resource";
 
   return (
-    <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
+    <>
+      <ReadingProgressBar />
+      <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
       <article className='site-container py-8 sm:py-10'>
         <section className='grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
           {/* Title at top; cover image + download button floated left so the body
@@ -113,6 +116,7 @@ export default async function WhitepaperDetailPage({
           </div>
         </section>
       </article>
-    </div>
+      </div>
+    </>
   );
 }

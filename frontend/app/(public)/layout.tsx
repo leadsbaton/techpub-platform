@@ -1,5 +1,7 @@
-import Footer from "./_components/Footer";
-import Header from "./_components/Header";
+import Footer from './_components/Footer'
+import Header from './_components/Header'
+import { ScrollToTop } from './_components/ScrollToTop'
+import { CookieConsent } from './_components/CookieConsent'
 
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,8 +9,10 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
       <Header />
       <main className="flex flex-1 flex-col [&>*]:grow">{children}</main>
       <Footer />
+      <ScrollToTop />
+      <CookieConsent />
     </div>
-  );
-};
+  )
+}
 
-export default PublicLayout;
+export default PublicLayout

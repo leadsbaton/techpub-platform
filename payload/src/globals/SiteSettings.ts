@@ -72,16 +72,20 @@ export const SiteSettings: GlobalConfig = {
       type: 'array',
       defaultValue: [
         {
-          platform: 'Instagram',
-          url: 'https://instagram.com/leadsbaton',
-        },
-        {
-          platform: 'LinkedIn',
-          url: 'https://linkedin.com/company/leadsbaton',
+          platform: 'Facebook',
+          url: 'https://www.facebook.com/profile.php?id=61566855997017&name=xhp_nt_',
         },
         {
           platform: 'X',
-          url: 'https://x.com/leadsbaton',
+          url: 'https://x.com/Leads_baton',
+        },
+        {
+          platform: 'LinkedIn',
+          url: 'https://www.linkedin.com/company/leadsbaton/posts/?feedView=all',
+        },
+        {
+          platform: 'Instagram',
+          url: 'https://www.instagram.com/leads_baton_/',
         },
       ],
       fields: [
@@ -141,58 +145,37 @@ export const SiteSettings: GlobalConfig = {
       type: 'array',
       defaultValue: [
         {
-          title: 'Learn more',
+          title: 'Quick Links',
           links: [
             {
               item: {
-                label: 'Insights',
+                label: 'Services',
                 type: 'custom',
-                url: '/insights',
+                url: 'https://leadsbaton.com/services/',
                 newTab: false,
               },
             },
             {
               item: {
-                label: 'White Papers',
+                label: 'Audience Data',
                 type: 'custom',
-                url: '/whitepapers',
+                url: 'https://leadsbaton.com/audience-data/',
                 newTab: false,
               },
             },
             {
               item: {
-                label: 'Webinars',
+                label: 'News & Articles',
                 type: 'custom',
-                url: '/webinars',
-                newTab: false,
-              },
-            },
-          ],
-        },
-        {
-          title: 'Support',
-          links: [
-            {
-              item: {
-                label: 'Contact',
-                type: 'custom',
-                url: '/contact',
+                url: 'https://leadsbaton.com/news-articles/',
                 newTab: false,
               },
             },
             {
               item: {
-                label: 'Support',
+                label: 'Contact Us',
                 type: 'custom',
-                url: '/support',
-                newTab: false,
-              },
-            },
-            {
-              item: {
-                label: 'Legal',
-                type: 'custom',
-                url: '/legal',
+                url: 'https://leadsbaton.com/contact-us/',
                 newTab: false,
               },
             },
@@ -234,6 +217,102 @@ export const SiteSettings: GlobalConfig = {
           name: 'submitLabel',
           type: 'text',
           defaultValue: 'Subscribe',
+        },
+      ],
+    },
+    {
+      name: 'footerContact',
+      type: 'group',
+      defaultValue: {
+        phone: '+971 52 713 3741',
+        addresses: [
+          {
+            address: 'Leads Baton, 244, 5th Avenue #2, New York, NY -10001 USA',
+          },
+          {
+            address:
+              'Sreevari Complex, 1st Floor, Suite No. 7, Opposite to Mahaveer Cygnet, Kogilu Main Road, Yelahanka, Bengaluru, Karnataka- 560064',
+          },
+          {
+            address: '#17, New Aggarwal Colony, D.N. College Road, Hisar, Haryana-125001',
+          },
+          {
+            address:
+              'Leads Baton FZ-LLC, FDEK7867, Compass Building, Al Shohada Road, Al Hamra Industrial Zone-FZ Ras Al Khaimah, United Arab Emirates',
+          },
+        ],
+        emails: [],
+      },
+      admin: {
+        description: 'Contact information displayed in the footer.',
+      },
+      fields: [
+        {
+          name: 'phone',
+          type: 'text',
+        },
+        {
+          name: 'addresses',
+          type: 'array',
+          maxRows: 4,
+          fields: [
+            {
+              name: 'address',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'emails',
+          type: 'array',
+          maxRows: 3,
+          fields: [
+            {
+              name: 'email',
+              type: 'email',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'hours',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'footerCopyright',
+      type: 'text',
+      defaultValue: 'Copyright © 2026 Leadsbaton. All rights reserved.',
+    },
+    {
+      name: 'footerPolicyLinks',
+      type: 'array',
+      defaultValue: [
+        {
+          label: 'Privacy Policy',
+          href: 'https://leadsbaton.com/privacy-policy/',
+        },
+        {
+          label: 'CCPA',
+          href: 'https://leadsbaton.com/ccpa/',
+        },
+        {
+          label: "Don't Sell My Personal Information",
+          href: 'https://leadsbaton.com/dont-sell-my-personal-information/',
+        },
+      ],
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'href',
+          type: 'text',
+          required: true,
         },
       ],
     },

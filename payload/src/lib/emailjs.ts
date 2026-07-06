@@ -22,10 +22,12 @@ export function getEmailJsConfigStatus() {
 
 export async function sendEmailJsTemplate(
   templateParams: EmailJsPayload,
+  templateIdOverride?: string,
 ): Promise<{ sent: boolean; reason?: string }> {
   const { configured, serviceId, templateId, publicKey, privateKey } = getEmailJsConfigStatus()
+  const effectiveTemplateId = templateIdOverride || templateId
 
-  if (!configured || !serviceId || !templateId || !publicKey) {
+  if (!configured || !serviceId || !effectiveTemplateId || !publicKey) {
     return { sent: false, reason: 'missing_credentials' }
   }
 
@@ -40,7 +42,7 @@ export async function sendEmailJsTemplate(
       },
       body: JSON.stringify({
         service_id: serviceId,
-        template_id: templateId,
+        template_id: effectiveTemplateId,
         user_id: publicKey,
         ...(privateKey ? { accessToken: privateKey } : {}),
         template_params: templateParams,

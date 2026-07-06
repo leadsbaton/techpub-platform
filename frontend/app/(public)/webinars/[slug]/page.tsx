@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { SafeImage } from '../../_components/SafeImage'
+import { ReadingProgressBar } from '../../_components/ReadingProgressBar'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl, getMediaDimensions, getWebinarPersonGroups, isUpcomingWebinar } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
@@ -38,7 +39,9 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
   const canRegister = post.webinarRegistration?.enabled !== false && isUpcomingWebinar(post)
 
   return (
-    <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
+    <>
+      <ReadingProgressBar />
+      <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
       <article className="site-container py-8 sm:py-10">
         <section className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
@@ -180,6 +183,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
           </div>
         </section>
       </article>
-    </div>
+      </div>
+    </>
   )
 }

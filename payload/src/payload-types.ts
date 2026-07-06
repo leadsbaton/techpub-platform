@@ -612,6 +612,10 @@ export interface Subscriber {
   status: 'subscribed' | 'unsubscribed';
   source?: string | null;
   notes?: string | null;
+  /**
+   * UUID token for tokenized unsubscribe links. Auto-generated on subscription.
+   */
+  unsubscribeToken?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1057,6 +1061,7 @@ export interface SubscribersSelect<T extends boolean = true> {
   status?: T;
   source?: T;
   notes?: T;
+  unsubscribeToken?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1200,6 +1205,33 @@ export interface SiteSetting {
     submitLabel?: string | null;
   };
   /**
+   * Contact information displayed in the footer.
+   */
+  footerContact?: {
+    phone?: string | null;
+    addresses?:
+      | {
+          address: string;
+          id?: string | null;
+        }[]
+      | null;
+    emails?:
+      | {
+          email: string;
+          id?: string | null;
+        }[]
+      | null;
+    hours?: string | null;
+  };
+  footerCopyright?: string | null;
+  footerPolicyLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Reference-only labels for environment-based integrations used by the frontend and API routes.
    */
   systemIntegrations?: {
@@ -1287,6 +1319,32 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         submitLabel?: T;
+      };
+  footerContact?:
+    | T
+    | {
+        phone?: T;
+        addresses?:
+          | T
+          | {
+              address?: T;
+              id?: T;
+            };
+        emails?:
+          | T
+          | {
+              email?: T;
+              id?: T;
+            };
+        hours?: T;
+      };
+  footerCopyright?: T;
+  footerPolicyLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
       };
   systemIntegrations?:
     | T

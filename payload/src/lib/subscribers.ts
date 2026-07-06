@@ -1,4 +1,7 @@
+import { randomUUID } from 'crypto'
 import type { Payload, RequiredDataFromCollectionSlug } from 'payload'
+
+import type { Subscriber } from '@/payload-types'
 
 type SubscriberData = RequiredDataFromCollectionSlug<'subscribers'>
 
@@ -13,10 +16,13 @@ type SubscriberData = RequiredDataFromCollectionSlug<'subscribers'>
  * updates it instead — so the operation is idempotent under concurrency.
  */
 export async function createOrUpdateSubscriber(payload: Payload, data: SubscriberData) {
+  const token = randomUUID()
+  const dataWithToken = { ...data, unsubscribeToken: token }
+
   try {
     return await payload.create({
       collection: 'subscribers',
-      data,
+      data: dataWithToken,
       overrideAccess: true,
     })
   } catch (error) {
@@ -34,10 +40,15 @@ export async function createOrUpdateSubscriber(payload: Payload, data: Subscribe
     })
 
     if (existing.docs[0]) {
+      const existingSubscriber = existing.docs[0] as Subscriber
+      const existingToken = existingSubscriber.unsubscribeToken
       return payload.update({
         collection: 'subscribers',
         id: existing.docs[0].id,
-        data,
+        data: {
+          ...data,
+          unsubscribeToken: existingToken || token,
+        },
         overrideAccess: true,
       })
     }

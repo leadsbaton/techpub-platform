@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/* css-lint-disable unknownAtRules */
 @plugin "daisyui" {
   themes: light --default;
 }
@@ -178,6 +179,29 @@ textarea:focus-visible,
   100% {
     transform: translateX(100%);
   }
+}
+
+/* Card hover lift effect: subtle translate + shadow on hover */
+.card-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+/* Image zoom on card hover: apply to the div containing the image */
+.img-zoom-wrap {
+  overflow: hidden;
+}
+
+.img-zoom-wrap img {
+  transition: transform 400ms ease;
+}
+
+.img-zoom-wrap:hover img {
+  transform: scale(1.04);
 }
 
 /* Rich-text content styling. Tailwind's preflight strips list bullets, heading

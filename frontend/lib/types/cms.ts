@@ -103,6 +103,17 @@ export interface SiteSettings {
     description?: string | null
     submitLabel?: string | null
   }
+  footerContact?: {
+    phone?: string | null
+    addresses?: Array<{ address: string }> | null
+    emails?: Array<{ email: string }> | null
+    hours?: string | null
+  } | null
+  footerCopyright?: string | null
+  footerPolicyLinks?: Array<{
+    label: string
+    href: string
+  }> | null
   systemIntegrations?: {
     emailProvider?: string | null
     emailCredentialNote?: string | null

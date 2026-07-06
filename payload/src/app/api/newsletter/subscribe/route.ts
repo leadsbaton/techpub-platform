@@ -4,7 +4,9 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { jsonWithCors, optionsWithCors } from '@/lib/cors'
 import { consumeRateLimit, getClientIp } from '@/lib/rateLimit'
+import { sendEmailJsTemplate } from '@/lib/emailjs'
 import { createOrUpdateSubscriber } from '@/lib/subscribers'
+import type { Subscriber } from '@/payload-types'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const WINDOW_MS = 15 * 60 * 1000
@@ -100,13 +102,26 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await createOrUpdateSubscriber(payload, {
+  const subscriber = await createOrUpdateSubscriber(payload, {
     email,
     firstName,
     lastName,
     source,
     status: 'subscribed',
   })
+
+  // Send welcome email (non-blocking, never fail the subscribe response)
+  const token = (subscriber as Subscriber).unsubscribeToken
+  if (token) {
+    const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const unsubscribeUrl = `${frontendUrl}/unsubscribe?token=${encodeURIComponent(token)}`
+    void sendEmailJsTemplate({
+      to_email: email,
+      subscriber_name: firstName || email,
+      unsubscribe_url: unsubscribeUrl,
+      source: 'welcome_email',
+    }, process.env.EMAILJS_WELCOME_TEMPLATE_ID)
+  }
 
   return jsonWithCors(
     request,

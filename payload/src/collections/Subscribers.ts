@@ -48,5 +48,15 @@ export const Subscribers: CollectionConfig = {
       name: 'notes',
       type: 'textarea',
     },
+    {
+      name: 'unsubscribeToken',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        readOnly: true,
+        description: 'UUID token for tokenized unsubscribe links. Auto-generated on subscription.',
+      },
+    },
   ],
 }
