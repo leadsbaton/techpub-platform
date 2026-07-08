@@ -30,6 +30,9 @@ function DocumentIcon({ className = 'h-5 w-5' }: { className?: string }) {
   )
 }
 
+const heroDescription =
+  'A curated sanctuary for technical clarity. Access high-signal research, industry-leading white papers, and expert-led webinars designed for the sophisticated professional.'
+
 /* ═══════════════════════════════════════════════════════════════════
    LIGHT THEME HERO - RESPONSIVE MOBILE & DESKTOP
    Mobile: Centered, stacked, full-width background
@@ -75,15 +78,6 @@ export function HeroFeature({
 
         {/* Mobile Content - Centered */}
         <div className="relative z-10 mx-auto flex w-full max-w-[22rem] flex-col items-center text-center">
-          {/* TechPub Label */}
-          <div className="mb-5 flex items-center justify-center gap-3">
-            <span className="h-px w-6 bg-[var(--accent-red)]" />
-            <p className="ui-font text-xs font-semibold text-[var(--accent-red)] tracking-widest uppercase">
-              TechPub Insights
-            </p>
-            <span className="h-px w-6 bg-[var(--accent-red)]" />
-          </div>
-
           {/* Headline - 3 lines */}
           <h1 className="ui-font mb-5 text-4xl font-extrabold leading-[1.08] text-gray-900">
             Explore.
@@ -95,11 +89,7 @@ export function HeroFeature({
 
           {/* Description */}
           <p className="ui-font mb-7 text-balance text-sm leading-6 text-gray-600 sm:text-base">
-            Precise analysis for the modern technologist.
-            <br />
-            Low noise, high signal insights
-            <br />
-            for engineering leaders.
+            {heroDescription}
           </p>
 
           {/* CTA Buttons - Full width stacked */}
@@ -169,14 +159,6 @@ export function HeroFeature({
         {/* Desktop Content - Left side */}
         <div className="site-container relative z-10 w-full">
           <div className="max-w-3xl">
-            {/* TechPub Insights Label */}
-            <div className="mb-6 flex items-center gap-3">
-              <span className="h-px w-8 bg-[var(--accent-red)]" />
-              <p className="ui-font text-xs sm:text-sm font-semibold text-[var(--accent-red)] tracking-widest uppercase">
-                TechPub Insights
-              </p>
-            </div>
-
             {/* Headline */}
             <h1 className="ui-font mb-6 text-5xl font-extrabold leading-[1.1] text-gray-900 md:text-6xl lg:text-[64px]">
               Explore, Engage,
@@ -186,7 +168,7 @@ export function HeroFeature({
 
             {/* Description */}
             <p className="ui-font text-base sm:text-lg text-gray-600 mb-10 sm:mb-12 max-w-2xl leading-relaxed">
-              A curated sanctuary for technical clarity. Access high-signal research, industry-leading white papers, and expert-led webinars designed for the sophisticated professional.
+              {heroDescription}
             </p>
 
             {/* CTA Buttons */}
