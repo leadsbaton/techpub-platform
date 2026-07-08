@@ -115,7 +115,7 @@ export function NavClient({ siteName, links }: NavClientProps) {
                   </Link>
 
                   {dropdownEnabled && openDropdown === normalizedHref ? (
-                    <div className="absolute left-1/2 top-full z-30 w-[min(360px,calc(100vw-32px))] -translate-x-1/2 pt-2">
+                    <div className="absolute left-1/2 top-full z-30 w-[min(280px,calc(100vw-32px))] -translate-x-1/2 pt-2">
                       <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white p-2 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
                         <div className="max-h-[min(420px,calc(100vh-140px))] space-y-1 overflow-y-auto overscroll-contain pr-1">
                           {categoryLinks.map((category) => (
@@ -123,7 +123,7 @@ export function NavClient({ siteName, links }: NavClientProps) {
                               key={`${normalizedHref}-${category.id}`}
                               href={getCategoryFilterHref(normalizedHref, category.slug)}
                               title={category.name}
-                              className="block overflow-hidden break-words rounded-xl px-3 py-2.5 text-[14px] font-medium leading-5 text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
+                              className="block overflow-hidden break-words rounded-xl px-3 py-2.5 text-[13px] font-medium leading-5 text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
                             >
                               {category.name}
                             </Link>
