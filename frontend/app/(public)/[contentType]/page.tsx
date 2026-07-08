@@ -8,7 +8,7 @@ import { PostCard } from '../_components/PostCard'
 import { RichTextRenderer } from '../_components/RichTextRenderer'
 import { SafeImage } from '../_components/SafeImage'
 import {
-  getCategoriesForType,
+  getCategories,
   getContentTypes,
   getPageBySlug,
   getPosts,
@@ -333,7 +333,7 @@ export default async function Page({
   if (config) {
     const [data, categories] = await Promise.all([
       getPosts({ type: config.key, page, limit: 9, query: q, category }),
-      getCategoriesForType(config.key, 12),
+      getCategories(50),
     ])
 
     return (

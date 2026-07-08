@@ -72,16 +72,22 @@ async function fetchPayloadWithOptions<T>(
   revalidate = 60,
   init?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...init,
-    ...(revalidate > 0
-      ? { next: { revalidate } }
-      : { cache: 'no-store' as const }),
-    headers: {
-      Accept: 'application/json',
-      ...(init?.headers || {}),
-    },
-  })
+  let response: Response
+
+  try {
+    response = await fetch(`${API_URL}${endpoint}`, {
+      ...init,
+      ...(revalidate > 0
+        ? { next: { revalidate } }
+        : { cache: 'no-store' as const }),
+      headers: {
+        Accept: 'application/json',
+        ...(init?.headers || {}),
+      },
+    })
+  } catch {
+    throw new Error(`Payload API unavailable at ${API_URL}`)
+  }
 
   if (!response.ok) {
     throw new Error(`Payload request failed: ${response.status}`)
@@ -219,12 +225,15 @@ export async function getPreviewPostBySlug(
   }
 }
 
-export async function getCategories(limit = 12): Promise<Category[]> {
+export async function getCategories(
+  limit = 50,
+  revalidate: number = LIVE_REVALIDATE,
+): Promise<Category[]> {
   const query = buildQuery({ limit, depth: 2, sort: '-featured,name' })
   try {
     const data = await fetchPayload<PayloadListResponse<Category>>(
       `/api/categories?${query}`,
-      300,
+      revalidate,
     )
     return data.docs
   } catch {
@@ -234,27 +243,31 @@ export async function getCategories(limit = 12): Promise<Category[]> {
 
 export async function getCategoriesForType(
   type: Post['type'],
-  limit = 12,
+  limit = 50,
   revalidate: number = LIVE_REVALIDATE,
 ): Promise<Category[]> {
   const categoryMap = new Map<string, Category>()
   let page = 1
 
-  while (page <= 5 && categoryMap.size < limit) {
-    const posts = await getPosts({ type, page, limit: 24 }, revalidate)
+  try {
+    while (page <= 5 && categoryMap.size < limit) {
+      const posts = await getPosts({ type, page, limit: 24 }, revalidate)
 
-    posts.docs.forEach((post) => {
-      const category = getPrimaryCategoryDoc(post)
-      if (category && !categoryMap.has(category.slug)) {
-        categoryMap.set(category.slug, category)
+      posts.docs.forEach((post) => {
+        const category = getPrimaryCategoryDoc(post)
+        if (category && !categoryMap.has(category.slug)) {
+          categoryMap.set(category.slug, category)
+        }
+      })
+
+      if (!posts.hasNextPage) {
+        break
       }
-    })
 
-    if (!posts.hasNextPage) {
-      break
+      page += 1
     }
-
-    page += 1
+  } catch {
+    return []
   }
 
   return Array.from(categoryMap.values())
@@ -347,14 +360,8 @@ export async function getHomePageData(revalidate: number = LIVE_REVALIDATE) {
       getPosts({ type: 'whitepaper', limit: 12 }, revalidate),
       getPosts({ type: 'webinar', limit: 24 }, revalidate),
       getContentTypes(6),
-      getCategories(6),
+      getCategories(50),
     ])
-
-  const [insightCategories, whitepaperCategories, webinarCategories] = await Promise.all([
-    getCategoriesForType('insight', 6, revalidate),
-    getCategoriesForType('whitepaper', 6, revalidate),
-    getCategoriesForType('webinar', 6, revalidate),
-  ])
 
   return {
     settings,
@@ -370,9 +377,9 @@ export async function getHomePageData(revalidate: number = LIVE_REVALIDATE) {
     contentTypes,
     categories,
     categoriesByType: {
-      insight: insightCategories,
-      whitepaper: whitepaperCategories,
-      webinar: webinarCategories,
+      insight: categories,
+      whitepaper: categories,
+      webinar: categories,
     },
   }
 }

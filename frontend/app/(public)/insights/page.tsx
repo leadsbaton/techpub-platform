@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { InsightsListingLayout } from './_components/InsightsListingLayout'
-import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
+import { getCategories, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 
 // Cache fetches between refreshes; the page still renders per-request for its
 // search/category params, but the CMS isn't hit on every view.
@@ -33,7 +33,7 @@ export default async function InsightsPage({
       },
       LISTING_REVALIDATE,
     ),
-    getCategoriesForType('insight', 9, LISTING_REVALIDATE),
+    getCategories(50),
     getPosts({ type: 'whitepaper', limit: 6 }, LISTING_REVALIDATE),
   ])
 

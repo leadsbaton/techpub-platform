@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { SafeImage } from '../_components/SafeImage'
 import { WebinarCard } from './_components/WebinarCard'
-import { getCategoriesForType, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
+import { getCategories, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
 import {
   compareWebinarsByEventDate,
@@ -193,7 +193,7 @@ export default async function WebinarsPage({
   searchParams: Promise<{ category?: string; q?: string; view?: string }>
 }) {
   const { category, q, view } = await searchParams
-  const categories = await getCategoriesForType('webinar', 12, LISTING_REVALIDATE)
+  const categories = await getCategories(50)
   const selectedCategory = categories.find((item) => item.slug === category)
 
   if (category && selectedCategory) {

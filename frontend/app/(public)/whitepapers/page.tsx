@@ -5,7 +5,7 @@ import { RankedSidebar } from '../_components/RankedSidebar'
 import { SafeImage } from '../_components/SafeImage'
 import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
-import { getCategoriesForType, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
+import { getCategories, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
 import { getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
@@ -205,7 +205,7 @@ export default async function WhitepapersPage({
   searchParams: Promise<{ category?: string; q?: string; view?: string }>
 }) {
   const { category, q, view } = await searchParams
-  const categories = await getCategoriesForType('whitepaper', 12, LISTING_REVALIDATE)
+  const categories = await getCategories(50)
   const selectedCategory = categories.find((item) => item.slug === category)
   const contentTypes = await getContentTypes(12)
   const webinars = await getPosts({ type: 'webinar', limit: 6 }, LISTING_REVALIDATE)

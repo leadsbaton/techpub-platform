@@ -62,6 +62,7 @@ export function NavClient({ siteName, links }: NavClientProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
 
   return (
     <>
@@ -114,14 +115,15 @@ export function NavClient({ siteName, links }: NavClientProps) {
                   </Link>
 
                   {dropdownEnabled && openDropdown === normalizedHref ? (
-                    <div className="absolute left-1/2 top-full z-30 w-56 -translate-x-1/2 pt-2">
-                      <div className="rounded-[22px] border border-[var(--border-subtle)] bg-white p-3 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
-                        <div className="space-y-1">
+                    <div className="absolute left-1/2 top-full z-30 w-[min(360px,calc(100vw-32px))] -translate-x-1/2 pt-2">
+                      <div className="rounded-[18px] border border-[var(--border-subtle)] bg-white p-2 shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
+                        <div className="max-h-[min(420px,calc(100vh-140px))] space-y-1 overflow-y-auto overscroll-contain pr-1">
                           {categoryLinks.map((category) => (
                             <Link
                               key={`${normalizedHref}-${category.id}`}
                               href={getCategoryFilterHref(normalizedHref, category.slug)}
-                              className="block rounded-xl px-3 py-2 text-[15px] font-medium text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
+                              title={category.name}
+                              className="block overflow-hidden break-words rounded-xl px-3 py-2.5 text-[14px] font-medium leading-5 text-[color:var(--text-strong)] transition hover:bg-[var(--surface-muted)]"
                             >
                               {category.name}
                             </Link>
@@ -150,7 +152,13 @@ export function NavClient({ siteName, links }: NavClientProps) {
               aria-expanded={mobileOpen}
               aria-controls="mobile-navigation"
               className="grid h-12 w-12 place-items-center rounded-full border border-[var(--border-subtle)] text-[color:var(--text-strong)] lg:hidden"
-              onClick={() => setMobileOpen((value) => !value)}
+              onClick={() => {
+                setMobileOpen((value) => {
+                  const next = !value
+                  if (!next) setMobileExpanded(null)
+                  return next
+                })
+              }}
             >
               <MenuIcon open={mobileOpen} />
             </button>
@@ -175,26 +183,72 @@ export function NavClient({ siteName, links }: NavClientProps) {
                 link.dropdownEnabled && normalizedHref !== '/' && categoryLinks.length > 1,
               )
               const active = isActive(pathname, normalizedHref)
+              const expanded = mobileExpanded === normalizedHref
 
               return (
-                <div key={`mobile-${normalizedHref}`} className="border-b border-[var(--border-subtle)] px-1 py-3 last:border-b-0">
-                  <Link
-                    href={normalizedHref}
-                    className={`flex items-center justify-between text-[1.05rem] font-semibold ${active ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'}`}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <span>{link.label}</span>
-                    {dropdownEnabled ? <ChevronDownIcon /> : null}
-                  </Link>
-
+                <div
+                  key={`mobile-${normalizedHref}`}
+                  className={`rounded-2xl border px-3 py-2 transition ${
+                    expanded || active
+                      ? 'border-[var(--accent-red)] bg-red-50/50'
+                      : 'border-transparent'
+                  }`}
+                >
                   {dropdownEnabled ? (
-                    <div className="mt-3 grid gap-1 border-t border-[var(--border-subtle)] pt-3">
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-controls={`mobile-categories-${link.label.replace(/\s+/g, '-').toLowerCase()}`}
+                      className={`flex w-full items-center justify-between gap-3 py-2 text-left text-[1.05rem] font-semibold ${
+                        active || expanded
+                          ? 'text-[color:var(--accent-red)]'
+                          : 'text-[color:var(--text-strong)]'
+                      }`}
+                      onClick={() =>
+                        setMobileExpanded((value) =>
+                          value === normalizedHref ? null : normalizedHref,
+                        )
+                      }
+                    >
+                      <span className="min-w-0 break-words">{link.label}</span>
+                      <span
+                        className={`shrink-0 transition-transform duration-200 ${
+                          expanded ? 'rotate-180' : ''
+                        }`}
+                      >
+                        <ChevronDownIcon />
+                      </span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={normalizedHref}
+                      className={`flex items-center justify-between gap-3 py-2 text-[1.05rem] font-semibold ${
+                        active ? 'text-[color:var(--accent-red)]' : 'text-[color:var(--text-strong)]'
+                      }`}
+                      onClick={() => {
+                        setMobileOpen(false)
+                        setMobileExpanded(null)
+                      }}
+                    >
+                      <span className="min-w-0 break-words">{link.label}</span>
+                    </Link>
+                  )}
+
+                  {dropdownEnabled && expanded ? (
+                    <div
+                      id={`mobile-categories-${link.label.replace(/\s+/g, '-').toLowerCase()}`}
+                      className="mt-2 grid max-h-[45vh] gap-1 overflow-y-auto overscroll-contain border-t border-[var(--border-subtle)] pt-3"
+                    >
                       {categoryLinks.map((category) => (
                         <Link
                           key={`mobile-${normalizedHref}-${category.id}`}
                           href={getCategoryFilterHref(normalizedHref, category.slug)}
-                          className="rounded-xl px-3 py-2 text-sm font-medium text-[color:var(--text-soft)] hover:bg-[var(--surface-muted)]"
-                          onClick={() => setMobileOpen(false)}
+                          title={category.name}
+                          className="break-words rounded-xl px-3 py-2 text-sm font-medium leading-5 text-[color:var(--text-soft)] hover:bg-[var(--surface-muted)]"
+                          onClick={() => {
+                            setMobileOpen(false)
+                            setMobileExpanded(null)
+                          }}
                         >
                           {category.name}
                         </Link>

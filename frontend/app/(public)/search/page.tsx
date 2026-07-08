@@ -34,7 +34,7 @@ export default async function SearchPage({
       sort,
       limit: 9,
     }),
-    getCategories(20),
+    getCategories(50),
     getContentTypes(12),
   ])
 
