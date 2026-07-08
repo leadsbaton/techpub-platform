@@ -2,155 +2,239 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Category, Post } from '@/lib/types/cms'
-import { HomeHeroCarousel } from './HomeHeroCarousel'
-import { SafeImage } from './SafeImage'
 
-function EchoCopy() {
+function ArrowRightIcon({ className = 'h-5 w-5' }: { className?: string }) {
   return (
-    <div className="grid grid-cols-[1.18fr_0.74fr_0.74fr] items-end gap-2 text-white sm:grid-cols-[1.28fr_0.76fr_0.76fr] sm:gap-3">
-      <div className="headline-font text-[1rem] font-extrabold leading-[1] sm:text-[1.50rem] xl:text-[2rem]">
-        Explore,
-        <br />
-        Engage,
-        <br />
-        Elevate
-      </div>
-      <div className="headline-font pb-0.5 text-[0.75rem] font-bold leading-[1] text-white/92 sm:pb-1 sm:text-[1rem] xl:text-[1.5rem]">
-        Explore,
-        <br />
-        Engage,
-        <br />
-        Elevate
-      </div>
-      <div className="headline-font pb-0.5 text-[0.5rem] font-bold leading-[1] text-white/92 sm:pb-1 sm:text-[0.75rem] xl:text-[1rem]">
-        Explore,
-        <br />
-        Engage,
-        <br />
-        Elevate
-      </div>
-    </div>
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={`fill-none stroke-current stroke-[2.5] ${className}`}
+    >
+      <path d="M5 12h14" strokeLinecap="round" />
+      <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   )
 }
 
+function DocumentIcon({ className = 'h-5 w-5' }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={`fill-none stroke-current stroke-[2.2] ${className}`}
+    >
+      <path d="M7 3h7l4 4v14H7z" strokeLinejoin="round" />
+      <path d="M14 3v5h5" strokeLinejoin="round" />
+      <path d="M10 13h6M10 17h6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT THEME HERO - RESPONSIVE MOBILE & DESKTOP
+   Mobile: Centered, stacked, full-width background
+   Desktop: Split layout (content left, image right)
+   ═══════════════════════════════════════════════════════════════════ */
+
 export function HeroFeature({
-  secondaryPosts,
-  webinarHref,
   whitepaperHref,
 }: {
-  // `post`/`categories` kept for call-site compatibility; the hero artwork is now
-  // fixed (hero-circuit.png + hero-laptop.png), not derived from a post.
   post?: Post
-  secondaryPosts: Post[]
+  secondaryPosts?: Post[]
   categories?: Category[]
   webinarHref: string
   whitepaperHref: string
 }) {
   return (
     <div>
-      {/* ── MOBILE hero (< md) ── full-screen circuit image, text + CTAs at bottom */}
-      <section className="relative flex h-[calc(100dvh-88px)] min-h-[480px] flex-col justify-end overflow-hidden md:hidden">
-        <Image
-          src="/hero-circuit.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+      {/* ═══════════════════════════════════════════════════════════════
+          MOBILE VIEW - Centered, stacked layout
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative flex min-h-[calc(100svh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-white px-6 py-8 sm:px-8 sm:py-10 lg:hidden">
+        {/* Mobile Background - Centered, fits screen width */}
+        <div className="pointer-events-none absolute inset-0 z-0 flex h-full w-full items-center justify-center opacity-25">
+          <Image
+            src="/hero-tech-innovation.png"
+            alt="Tech Innovation"
+            width={500}
+            height={500}
+            className="h-auto w-full max-w-[460px] object-contain"
+            priority
+          />
+        </div>
+
+        {/* Shimmer Overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 z-1"
+          style={{
+            background: 'linear-gradient(45deg, transparent 0%, rgba(188, 1, 0, 0.08) 45%, rgba(188, 1, 0, 0.12) 50%, rgba(188, 1, 0, 0.08) 55%, transparent 100%)',
+            backgroundSize: '200% 200%',
+            animation: 'shimmer 8s infinite linear',
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-        <div className="relative z-10 px-5 pb-[max(2rem,env(safe-area-inset-bottom,1rem))] pt-4">
-          <h1 className="headline-font mb-6 text-[clamp(2rem,10vw,3rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-white">
-            Explore,
+
+        {/* Mobile Content - Centered */}
+        <div className="relative z-10 mx-auto flex w-full max-w-[22rem] flex-col items-center text-center">
+          {/* TechPub Label */}
+          <div className="mb-5 flex items-center justify-center gap-3">
+            <span className="h-px w-6 bg-[var(--accent-red)]" />
+            <p className="ui-font text-xs font-semibold text-[var(--accent-red)] tracking-widest uppercase">
+              TechPub Insights
+            </p>
+            <span className="h-px w-6 bg-[var(--accent-red)]" />
+          </div>
+
+          {/* Headline - 3 lines */}
+          <h1 className="ui-font mb-5 text-4xl font-extrabold leading-[1.08] text-gray-900">
+            Explore.
             <br />
-            Engage,
+            Engage.
             <br />
-            Elevate
+            Elevate.
           </h1>
-          <div className="flex flex-col gap-3">
+
+          {/* Description */}
+          <p className="ui-font mb-7 text-balance text-sm leading-6 text-gray-600 sm:text-base">
+            Precise analysis for the modern technologist.
+            <br />
+            Low noise, high signal insights
+            <br />
+            for engineering leaders.
+          </p>
+
+          {/* CTA Buttons - Full width stacked */}
+          <div className="flex flex-col gap-3 w-full">
             <Link
-              href={webinarHref}
-              className="rounded-lg bg-[var(--accent-red)] px-6 py-[clamp(0.75rem,3vw,1rem)] text-center text-[clamp(0.8rem,3.5vw,1rem)] font-bold text-white transition active:scale-95"
+              href="/insights"
+              className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent-red)] px-6 py-4 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-lg active:scale-[0.98]"
             >
-              Join Webinars
+              Browse Insights
+              <ArrowRightIcon className="h-[18px] w-[18px]" />
             </Link>
             <Link
               href={whitepaperHref}
-              className="rounded-lg border border-white bg-white px-6 py-[clamp(0.75rem,3vw,1rem)] text-center text-[clamp(0.8rem,3.5vw,1rem)] font-bold text-[#020202] transition active:scale-95"
+              className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg border border-gray-900 bg-white/80 px-6 py-4 text-sm font-semibold text-gray-900 shadow-sm transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
             >
-              Download White Papers
+
+              View White Papers
+
+              <DocumentIcon className="h-[18px] w-[18px]" />
             </Link>
           </div>
         </div>
+
+        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-gray-500">
+          <span className="ui-font text-[10px] font-semibold uppercase tracking-[0.22em]">
+            Scroll to analyze
+          </span>
+          <span className="h-10 w-px bg-gradient-to-b from-[var(--accent-red)] to-transparent" />
+        </div>
       </section>
 
-      {/* ── DESKTOP hero (≥ md) ── purple banner. Extra bottom padding leaves room
-          for the card row to overlap into it (cards bridge purple hero and white
-          section below). */}
-      <section className="hidden bg-[linear-gradient(180deg,var(--hero-purple)_0%,var(--hero-purple-dark)_100%)] pb-[230px] pt-4 text-white shadow-[0_28px_70px_rgba(68,16,125,0.22)] md:block md:pt-6 xl:pb-[250px]">
-        <div className="site-container">
-          <div className="mx-auto max-w-[972px] overflow-hidden rounded-[8px] px-0 py-3 sm:px-4 sm:py-5 md:px-0 xl:h-[377px] xl:py-0">
-            <div className="grid grid-cols-[136px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[188px_minmax(0,1fr)] sm:gap-4 md:grid-cols-[258px_minmax(0,1fr)] xl:grid-cols-[258px_714px] xl:gap-0">
-              {/* Left: fixed circuit image + Explore/Engage/Elevate. */}
-              <div className="relative z-10 flex flex-col gap-3 pt-0 sm:gap-4 md:pt-10 xl:w-[361px] xl:pt-10">
-                <div className="block max-w-[136px] overflow-hidden rounded-[8px] sm:max-w-[188px] md:max-w-[220px] xl:max-w-none">
-                  <div className="relative aspect-[1.12/0.74] overflow-hidden rounded-[8px] xl:h-[222px] xl:w-[361px] xl:aspect-auto">
-                    <Image
-                      src="/hero-circuit.png"
-                      alt=""
-                      fill
-                      priority
-                      sizes="210px"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
+      {/* ═══════════════════════════════════════════════════════════════
+          DESKTOP VIEW - Split layout (content left, image right)
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="group relative hidden min-h-[80vh] items-center overflow-hidden bg-white py-24 lg:flex">
+        {/* Desktop Background - Right side */}
+        <div
+          className="pointer-events-none absolute right-0 top-1/2 z-0 h-full w-1/2 -translate-y-1/2 overflow-hidden opacity-75 transition-transform duration-700 ease-out group-hover:-translate-x-5 group-hover:scale-[1.035]"
+          style={{
+            maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 12%, rgba(0,0,0,0.72) 72%, rgba(0,0,0,0) 100%)',
+            WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 12%, rgba(0,0,0,0.72) 72%, rgba(0,0,0,0) 100%)',
+          }}
+        >
+          <div className="absolute right-[8%] top-1/2 h-[58%] w-[58%] -translate-y-1/2 rounded-full bg-[var(--accent-red)]/12 blur-3xl" />
+          <Image
+            src="/hero-tech-innovation.png"
+            alt="Tech Innovation"
+            fill
+            className="hero-illustration-float object-contain object-right"
+            priority
+          />
+        </div>
 
-                <div className="max-w-[136px] pt-1 sm:max-w-[188px] md:max-w-[220px] xl:max-w-[361px]">
-                  <EchoCopy />
-                </div>
-              </div>
+        {/* Shimmer Beam Animation */}
+        <div
+          className="absolute -left-1/2 -top-1/2 z-[1] h-[220%] w-[220%] pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(135deg, transparent 0%, transparent 43%, rgba(188, 1, 0, 0.05) 47%, rgba(188, 1, 0, 0.18) 50%, rgba(188, 1, 0, 0.05) 53%, transparent 57%, transparent 100%)',
+            animation: 'shimmerBeam 5s infinite ease-in-out',
+          }}
+        />
 
-              {/* Right: fixed laptop image with the CTA buttons. */}
-              <div className="relative -ml-6 overflow-hidden rounded-[8px] sm:-ml-8 md:-ml-10 xl:ml-0">
-                <div className="relative h-[168px] overflow-hidden rounded-[8px] sm:h-[220px] md:h-[285px] xl:h-[364px] xl:w-[714px]">
-                  <SafeImage
-                    src="/hero-laptop.png"
-                    alt=""
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 960px"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                </div>
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-[2] bg-gradient-to-r from-white via-white/90 via-[52%] to-white/35 pointer-events-none" />
 
-                <div className="absolute inset-x-0 bottom-2 flex flex-row items-center justify-center gap-1.5 px-2 sm:bottom-4 sm:gap-2 md:bottom-5 md:gap-3">
-                  <Link
-                    href={webinarHref}
-                    className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center rounded-[7px] border border-[var(--accent-red-dark)] bg-[var(--accent-red)] px-2 py-1.5 text-center text-[0.62rem] font-bold text-white shadow-[0_8px_20px_rgba(255,42,31,0.28)] transition hover:bg-[var(--accent-red-dark)] sm:min-h-10 sm:flex-none sm:px-4 sm:py-2 sm:text-[0.82rem] md:min-h-11 md:px-5 md:text-sm"
-                  >
-                    Join Webinars
-                  </Link>
-                  <Link
-                    href={whitepaperHref}
-                    className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center rounded-[7px] border border-white bg-white px-2 py-1.5 text-center text-[0.62rem] font-bold text-[color:var(--accent-red)] shadow-[0_8px_20px_rgba(255,255,255,0.18)] transition hover:bg-white/90 sm:min-h-10 sm:flex-none sm:px-4 sm:py-2 sm:text-[0.82rem] md:min-h-11 md:px-5 md:text-sm"
-                  >
-                    Download White Papers
-                  </Link>
-                </div>
-              </div>
+        {/* Desktop Content - Left side */}
+        <div className="site-container relative z-10 w-full">
+          <div className="max-w-3xl">
+            {/* TechPub Insights Label */}
+            <div className="mb-6 flex items-center gap-3">
+              <span className="h-px w-8 bg-[var(--accent-red)]" />
+              <p className="ui-font text-xs sm:text-sm font-semibold text-[var(--accent-red)] tracking-widest uppercase">
+                TechPub Insights
+              </p>
+            </div>
+
+            {/* Headline */}
+            <h1 className="ui-font mb-6 text-5xl font-extrabold leading-[1.1] text-gray-900 md:text-6xl lg:text-[64px]">
+              Explore, Engage,
+              <br />
+              <span className="font-semibold italic text-[var(--accent-red)]">Elevate</span>
+            </h1>
+
+            {/* Description */}
+            <p className="ui-font text-base sm:text-lg text-gray-600 mb-10 sm:mb-12 max-w-2xl leading-relaxed">
+              A curated sanctuary for technical clarity. Access high-signal research, industry-leading white papers, and expert-led webinars designed for the sophisticated professional.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start w-full sm:w-auto">
+              <Link
+                href="/insights"
+                className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent-red)] px-6 py-4 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-lg active:scale-[0.98] sm:w-auto sm:px-8 sm:text-base"
+              >
+                Browse Insights
+                <ArrowRightIcon />
+              </Link>
+              <Link
+                href={whitepaperHref}
+                className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg border border-gray-900 bg-white/80 px-6 py-4 text-sm font-semibold text-gray-900 shadow-sm transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] sm:w-auto sm:px-8 sm:text-base"
+              >
+                View White Papers
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Dynamic post cards — desktop only. On mobile the carousel is hidden so
-          Trending Now appears directly after the hero. On desktop they overlap
-          the bottom of the purple banner (matching xl:pb above). */}
-      <div className="relative z-10 hidden md:block md:-mt-[210px]">
-        <HomeHeroCarousel posts={secondaryPosts} />
-      </div>
+      {/* Shimmer animation keyframes */}
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: -100% -100%; }
+          100% { background-position: 100% 100%; }
+        }
+        @keyframes shimmerBeam {
+          0% { transform: translate3d(-38%, -38%, 0); opacity: 0; }
+          14% { opacity: 0.65; }
+          72% { opacity: 0.65; }
+          100% { transform: translate3d(38%, 38%, 0); opacity: 0; }
+        }
+        @keyframes heroIllustrationFloat {
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(-10px, -8px, 0) scale(1.015); }
+        }
+        .hero-illustration-float {
+          animation: heroIllustrationFloat 9s ease-in-out infinite;
+          will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-illustration-float {
+            animation: none;
+          }
+        }
+      `}</style>
     </div>
   )
 }
