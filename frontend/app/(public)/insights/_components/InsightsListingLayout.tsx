@@ -7,7 +7,6 @@ import type { Category, Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import {
   formatShortDate,
-  getCategoryAccent,
   getCategoryName,
   getImageUrl,
   getPostCardImageClass,
@@ -32,11 +31,8 @@ function groupByCategory(posts: Post[], categories: Category[]) {
 
 function CategoryTab({ category }: { category: Category }) {
   return (
-    <div className="border-b-2 pb-2" style={{ borderColor: getCategoryAccent(category) }}>
-      <span
-        className="inline-flex rounded-[2px] px-4 py-2 text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-white"
-        style={{ backgroundColor: getCategoryAccent(category) }}
-      >
+    <div className="border-b-2 border-[var(--accent-red)] pb-2">
+      <span className="content-label">
         {category.name}
       </span>
     </div>
@@ -50,7 +46,7 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
     return (
       <Link href={getPostHref(post)} className="group block border-b border-[#e5e7eb] py-6 first:pt-0 last:border-b-0 lg:py-7">
         <article>
-          <span className="inline-flex rounded-[3px] bg-[#eef2f7] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+          <span className="content-label">
             {category}
           </span>
           <h3 className="mt-3 line-clamp-2 text-[20px] font-semibold leading-[1.18] text-[#070022] transition group-hover:text-[var(--accent-red)]">
@@ -79,11 +75,11 @@ function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
           />
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <span className="inline-flex rounded-[3px] bg-[#eef2f7] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+          <span className="content-label">
             {category}
           </span>
           {post.readingTime ? (
-            <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+            <span className="content-label">
               {post.readingTime} min read
             </span>
           ) : null}
@@ -224,7 +220,9 @@ function LandingView({
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.9fr)_minmax(320px,0.9fr)] lg:items-start">
-            <div>{justInLead ? <JustInCard post={justInLead} large /> : null}</div>
+            <div className="border-b border-[#e5e7eb] pb-8 lg:border-b-0 lg:pb-0">
+              {justInLead ? <JustInCard post={justInLead} large /> : null}
+            </div>
 
             <div className="lg:pt-1">
               {justInSide.map((post) => (
@@ -310,7 +308,6 @@ function CategoryView({
 
 function InsightListRow({ post }: { post: Post }) {
   const category = getCategoryName(post.primaryCategory)
-  const accent = getCategoryAccent(post.primaryCategory)
 
   return (
     <Link
@@ -318,10 +315,7 @@ function InsightListRow({ post }: { post: Post }) {
       className="grid items-center gap-5 border-b border-[var(--border-subtle)] py-5 sm:grid-cols-[1fr_120px]"
     >
       <div>
-        <span
-          className="text-[0.72rem] font-semibold uppercase tracking-[0.08em]"
-          style={{ color: accent }}
-        >
+        <span className="content-label">
           {category}
         </span>
         <h3 className="mt-1.5 text-[1rem] font-medium leading-[1.4] text-[color:var(--text-strong)]">

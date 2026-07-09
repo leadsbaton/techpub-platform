@@ -65,7 +65,7 @@ export function HomeTrendingCard({ post }: { post: Post }) {
   return (
     <Link href={href} className="group block w-[316px] sm:w-[390px]">
       <article className="flex min-h-[250px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)]">
-        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--accent-red)]">
+        <div className="content-label">
           {typeLabel(post)}
         </div>
         <h3 className="mt-5 line-clamp-2 text-[19px] font-semibold leading-[1.18] text-[#111] transition group-hover:text-[var(--accent-red)]">
@@ -77,7 +77,7 @@ export function HomeTrendingCard({ post }: { post: Post }) {
           </p>
         ) : null}
         <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-          <span className="max-w-[220px] truncate rounded-[3px] bg-[#ddd9d9] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-[#444655]">
+          <span className="content-label max-w-[220px] truncate">
             {category}
           </span>
           <ArrowRightIcon className="h-5 w-5 shrink-0 transition group-hover:translate-x-1" />
@@ -103,7 +103,7 @@ export function HomeLatestInsightCard({ post }: { post: Post }) {
             className={`${getPostCardImageClass(post)} transition-transform duration-500 group-hover:scale-105`}
           />
         </div>
-        <div className="mt-4 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+        <div className="content-label mt-4">
           {category}
         </div>
         <h3 className="mt-2 line-clamp-2 text-[15px] font-medium leading-[1.3] text-[#111] transition group-hover:text-[var(--accent-red)]">
@@ -124,7 +124,7 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
 
   return (
     <article className="flex min-h-[330px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:w-[380px]">
-      <div className="w-fit rounded-full bg-[var(--accent-red)]/8 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+      <div className="content-label">
         {getWebinarEventLabel(post)}
       </div>
       <Link
@@ -182,7 +182,7 @@ export function HomeWhitepaperRow({ post }: { post: Post }) {
           ) : null}
         </div>
         <div className="text-left sm:text-right">
-          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+          <div className="content-label">
             Published
           </div>
           <div className="mt-1 text-sm text-[#444]">{formatDate(post.publishedAt)}</div>

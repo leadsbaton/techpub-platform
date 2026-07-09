@@ -45,7 +45,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
         )}
       </Link>
       <div className={`${compact ? 'px-3 py-3' : 'px-5 py-4'} flex min-w-0 flex-1 flex-col gap-1.5`}>
-        <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} font-medium uppercase text-[var(--accent-red)]`}>
+        <div className="content-label">
           {category}
         </div>
         <Link

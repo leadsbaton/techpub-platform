@@ -69,8 +69,8 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
       {feature ? (
         <Link href={`/whitepapers/${feature.slug}`} className="group block">
           <article className="grid overflow-hidden rounded-[4px] border border-[var(--border-subtle)] bg-white transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] md:grid-cols-[1.05fr_0.95fr]">
-            <div className="flex min-h-[300px] flex-col items-start justify-center p-7 sm:p-10">
-              <span className="rounded-full bg-[var(--accent-red-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+            <div className="order-2 flex min-h-[300px] flex-col items-start justify-center p-7 sm:p-10 md:order-1">
+              <span className="content-label">
                 Featured Release
               </span>
               <h3 className="mt-6 max-w-xl text-[26px] font-bold leading-[1.12] text-[var(--text-strong)] sm:text-[34px]">
@@ -86,7 +86,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 <span aria-hidden="true">↓</span>
               </span>
             </div>
-            <div className="relative min-h-[260px] bg-[var(--surface-muted)] md:min-h-[390px]">
+            <div className="relative order-1 min-h-[260px] bg-[var(--surface-muted)] md:order-2 md:min-h-[390px]">
               <SafeImage
                 src={getPostCardImageUrl(feature)}
                 alt={feature.title}
@@ -103,7 +103,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
         {supportingPosts.slice(0, 2).map((post) => (
           <Link key={post.id} href={`/whitepapers/${post.slug}`} className="group block">
             <article className="flex min-h-[250px] flex-col rounded-[4px] border border-[var(--border-subtle)] bg-white p-7 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] sm:p-9">
-              <span className="w-fit rounded-full bg-[var(--accent-red-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+              <span className="content-label">
                 {getImageCategory(post)}
               </span>
               <h3 className="mt-6 line-clamp-3 text-[22px] font-semibold leading-[1.22] text-[var(--text-strong)] transition group-hover:text-[var(--accent-red)] sm:text-[26px]">

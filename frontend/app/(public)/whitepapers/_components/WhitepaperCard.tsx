@@ -21,9 +21,7 @@ export function WhitepaperCard({ post }: { post: Post }) {
             className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent px-4 pb-6 pt-20">
-            <span
-              className="inline-flex h-[42px] min-w-[102px] items-center justify-center bg-[var(--accent-red)] px-3 text-center text-[18px] font-bold uppercase leading-none tracking-[-0.02em] text-white"
-            >
+            <span className="content-label">
               {category}
             </span>
           </div>
