@@ -97,7 +97,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
             {canRegister ? (
               <div className="flex justify-center">
-                <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
+                <Link href={`/webinars/${post.slug}/access`} className="ui-font rounded-[10px] bg-[var(--accent-red)] px-8 py-3 text-[20px] font-medium text-white">
                   {post.webinarRegistration?.ctaLabel || 'Register now'}
                 </Link>
               </div>

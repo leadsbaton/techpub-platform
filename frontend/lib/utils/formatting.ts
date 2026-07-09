@@ -101,12 +101,9 @@ export function getCategoryName(category?: Category | string | null): string {
   return typeof category === 'string' ? category : category.name
 }
 
-export function getCategoryAccent(category?: Category | string | null): string {
-  const name = getCategoryName(category).toLowerCase()
-  if (name.includes('tech')) return '#1238d6'
-  if (name.includes('finance')) return '#ff2a1f'
-  if (name.includes('marketing')) return '#12a639'
-  return '#1f2937'
+export function getCategoryAccent(_category?: Category | string | null): string {
+  void _category
+  return 'var(--accent-red)'
 }
 
 export function getAuthorNames(authors?: Array<Author | string> | null): string {

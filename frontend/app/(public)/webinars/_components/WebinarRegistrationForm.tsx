@@ -150,7 +150,7 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
           <button
             type="button"
             onClick={() => openDelivery(delivery)}
-            className="inline-flex bg-[#FC0203] px-8 py-3 text-[16px] font-medium text-white"
+            className="inline-flex bg-[var(--accent-red)] px-8 py-3 text-[16px] font-medium text-white"
           >
             {delivery.mode === 'watch' ? 'Watch now' : delivery.mode === 'download' ? 'Download resource' : 'Open resource'}
           </button>
@@ -206,7 +206,7 @@ export function WebinarRegistrationForm({ post }: { post: Post }) {
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex bg-[#FC0203] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70 sm:ml-[196px]"
+        className="inline-flex bg-[var(--accent-red)] px-8 py-2 text-[20px] font-medium text-white disabled:opacity-70 sm:ml-[196px]"
       >
         {submitting ? 'Submitting...' : copy.submitLabel}
       </button>

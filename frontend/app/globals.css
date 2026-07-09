@@ -14,11 +14,13 @@
   --text-soft: #343434;
   --text-muted: #7a7a7a;
   --border-subtle: rgba(19, 19, 19, 0.1);
-  --accent-red: #ff2a1f;
-  --accent-red-dark: #e41e14;
-  --category-tech: #1238d6;
-  --category-finance: #ff2a1f;
-  --category-marketing: #12a639;
+  --accent-red: #ff0000;
+  --accent-red-dark: #d60000;
+  --accent-red-soft: rgba(255, 0, 0, 0.08);
+  --accent-red-shadow: 0 4px 20px rgba(255, 0, 0, 0.08);
+  --category-tech: var(--accent-red);
+  --category-finance: var(--accent-red);
+  --category-marketing: var(--accent-red);
   --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
   --hero-purple: #42106f;
   --hero-purple-dark: #2f0a53;

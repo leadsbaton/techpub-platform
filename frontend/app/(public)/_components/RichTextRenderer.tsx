@@ -35,7 +35,7 @@ type LexicalNode = {
 // the editor only stores the key (e.g. "red"), not the underlying color.
 const TEXT_STATE_CSS: Record<string, Record<string, React.CSSProperties>> = {
   color: {
-    red: { color: '#FC0203' },
+    red: { color: 'var(--accent-red)' },
     black: { color: '#111111' },
     gray: { color: '#6B7280' },
     blue: { color: '#1D4ED8' },
@@ -128,7 +128,7 @@ function linkifyRegister(text: string, href: string, keyPrefix: string): React.R
   while ((match = REGISTER_RE.exec(text)) !== null) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index))
     parts.push(
-      <Link key={`${keyPrefix}-reg-${i}`} href={href} className="font-bold text-[#FC0203] no-underline hover:underline">
+      <Link key={`${keyPrefix}-reg-${i}`} href={href} className="font-bold text-[var(--accent-red)] no-underline hover:underline">
         {match[0]}
       </Link>,
     )

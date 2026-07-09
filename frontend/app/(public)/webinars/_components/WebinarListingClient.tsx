@@ -82,7 +82,7 @@ export function WebinarListingClient({
             type="button"
             onClick={loadMore}
             disabled={isPending}
-            className="ui-font rounded-[8px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white disabled:opacity-70"
+            className="ui-font rounded-[8px] bg-[var(--accent-red)] px-8 py-3 text-[20px] font-medium text-white disabled:opacity-70"
           >
             {isPending ? 'Loading...' : 'Load More'}
           </button>

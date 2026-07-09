@@ -203,9 +203,12 @@ export default async function HomePage() {
 
       <section className="site-container mt-14 space-y-6 md:mt-16">
         <div className="flex items-center">
-          <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
+          <Link
+            href={whitepaperConfig.routeBase}
+            className="ui-font text-[26px] font-semibold leading-tight text-[#111] transition hover:text-[var(--accent-red)] md:text-[32px]"
+          >
             Must Read White Papers
-          </h2>
+          </Link>
         </div>
 
         <div className="space-y-4">
@@ -222,7 +225,7 @@ export default async function HomePage() {
               href={whitepaperConfig.routeBase}
               className="inline-flex h-11 items-center justify-center rounded border border-[var(--accent-red)] px-6 text-sm font-bold text-[var(--accent-red)] transition hover:bg-[var(--accent-red)] hover:text-white"
             >
-              View more white papers
+              View more White Papers
             </Link>
           </div>
         ) : null}

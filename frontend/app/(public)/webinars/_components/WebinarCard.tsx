@@ -4,12 +4,6 @@ import { SafeImage } from '../../_components/SafeImage'
 import type { Media, Post } from '@/lib/types/cms'
 import { getCategoryName, getPostCardImageUrl, getWebinarEventLabel, getWebinarSpeakerSummary } from '@/lib/utils/formatting'
 
-const categoryStyles: Record<string, string> = {
-  technology: 'text-[#0015AD]',
-  finance: 'text-[#FC0203]',
-  marketing: 'text-[#00A01D]',
-}
-
 function getCardImageDims(post: Post): { width: number; height: number } | null {
   const img = post.cardBannerImage || post.featuredImage
   if (img && typeof img === 'object' && (img as Media).width && (img as Media).height) {
@@ -20,7 +14,6 @@ function getCardImageDims(post: Post): { width: number; height: number } | null 
 
 export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
-  const categoryClass = categoryStyles[category.toLowerCase()] || 'text-[#0015AD]'
   const presenterLabel = getWebinarSpeakerSummary(post)
   const eventDate = getWebinarEventLabel(post)
   const dims = getCardImageDims(post)
@@ -52,7 +45,7 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
         )}
       </Link>
       <div className={`${compact ? 'px-3 py-3' : 'px-5 py-4'} flex min-w-0 flex-1 flex-col gap-1.5`}>
-        <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} font-medium uppercase ${categoryClass}`}>
+        <div className={`${compact ? 'text-[11px]' : 'text-[13px]'} font-medium uppercase text-[var(--accent-red)]`}>
           {category}
         </div>
         <Link

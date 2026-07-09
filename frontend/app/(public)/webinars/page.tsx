@@ -40,7 +40,7 @@ function CategoryBanner({ category }: { category: Category }) {
         {category.image ? (
           <SafeImage src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--text-strong)_0%,var(--accent-red-dark)_100%)]" />
         )}
         <div className="absolute inset-0 bg-black/5" />
         <div className="ui-font absolute inset-x-0 bottom-0 p-5 sm:p-7">
@@ -157,8 +157,8 @@ function DontMiss({ posts }: { posts: Post[] }) {
 
   return (
     <section className="relative pt-2">
-      <div className="absolute left-0 top-2 hidden h-[255px] w-[356px] bg-[#FC0203] sm:block" />
-      <div className="relative bg-[#FC0203] px-8 py-7 text-white sm:w-[356px] sm:px-10">
+      <div className="absolute left-0 top-2 hidden h-[255px] w-[356px] bg-[var(--accent-red)] sm:block" />
+      <div className="relative bg-[var(--accent-red)] px-8 py-7 text-white sm:w-[356px] sm:px-10">
         <h2 className="ui-font text-[24px] font-bold uppercase leading-none sm:text-[32px]">
           Don&apos;t Miss
         </h2>

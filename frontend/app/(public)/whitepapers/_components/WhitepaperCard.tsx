@@ -5,17 +5,9 @@ import type { Post } from '@/lib/types/cms'
 import { getPostHref } from '@/lib/utils/contentTypes'
 import { formatDate, getAuthorNames, getCategoryName, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
 
-const categoryStyles: Record<string, string> = {
-  technology: 'bg-[#0015AD]',
-  finance: 'bg-[#FC0203]',
-  marketing: 'bg-[#00A01D]',
-}
-
 export function WhitepaperCard({ post }: { post: Post }) {
   const href = getPostHref(post)
   const category = getCategoryName(post.primaryCategory)
-  const categoryKey = category.toLowerCase()
-  const categoryClass = categoryStyles[categoryKey] || 'bg-[#0015AD]'
 
   return (
     <article className="ui-font group w-full max-w-[320px]">
@@ -30,7 +22,7 @@ export function WhitepaperCard({ post }: { post: Post }) {
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent px-4 pb-6 pt-20">
             <span
-              className={`inline-flex h-[42px] min-w-[102px] items-center justify-center px-3 text-center text-[18px] font-bold uppercase leading-none tracking-[-0.02em] text-white ${categoryClass}`}
+              className="inline-flex h-[42px] min-w-[102px] items-center justify-center bg-[var(--accent-red)] px-3 text-center text-[18px] font-bold uppercase leading-none tracking-[-0.02em] text-white"
             >
               {category}
             </span>

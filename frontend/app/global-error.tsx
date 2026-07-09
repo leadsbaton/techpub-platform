@@ -36,7 +36,7 @@ export default function GlobalError({
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.18em',
-              color: '#ff2a1f',
+              color: '#ff0000',
               margin: 0,
             }}
           >
@@ -60,7 +60,7 @@ export default function GlobalError({
               border: 'none',
               cursor: 'pointer',
               borderRadius: '9999px',
-              background: '#ff2a1f',
+              background: '#ff0000',
               color: '#ffffff',
               padding: '0.75rem 1.5rem',
               fontSize: '0.875rem',

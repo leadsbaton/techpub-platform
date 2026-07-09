@@ -45,41 +45,57 @@ function CategoryTab({ category }: { category: Category }) {
 
 function JustInCard({ post, large = false }: { post: Post; large?: boolean }) {
   const category = getCategoryName(post.primaryCategory)
-  const accent = getCategoryAccent(post.primaryCategory)
+
+  if (!large) {
+    return (
+      <Link href={getPostHref(post)} className="group block border-b border-[#e5e7eb] py-6 first:pt-0 last:border-b-0 lg:py-7">
+        <article>
+          <span className="inline-flex rounded-[3px] bg-[#eef2f7] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+            {category}
+          </span>
+          <h3 className="mt-3 line-clamp-2 text-[20px] font-semibold leading-[1.18] text-[#070022] transition group-hover:text-[var(--accent-red)]">
+            {post.title}
+          </h3>
+          {post.excerpt ? (
+            <p className="mt-2 line-clamp-2 text-[14px] leading-6 text-[#555]">
+              {post.excerpt}
+            </p>
+          ) : null}
+        </article>
+      </Link>
+    )
+  }
 
   return (
-    <Link href={getPostHref(post)} className="group block h-full">
-      <article className="flex h-full flex-col">
-        <div
-          className={`relative overflow-hidden rounded-[6px]  ${
-            large ? 'aspect-[1.28/0.9] lg:aspect-[1.12/0.88]' : 'aspect-[1.58/0.9]'
-          }`}
-        >
+    <Link href={getPostHref(post)} className="group block">
+      <article>
+        <div className="relative aspect-[16/9] overflow-hidden bg-[#eef2f7]">
           <SafeImage
             src={getPostCardImageUrl(post)}
             alt={post.title}
             fill
-            sizes={large ? '(max-width: 1024px) 100vw, 45vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
+            sizes="(max-width: 1024px) 100vw, 58vw"
             className={`${getPostCardImageClass(post)} transition duration-500 group-hover:scale-[1.04]`}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90" />
-          <div
-            className="absolute bottom-4 left-4 inline-flex px-3 py-1.5 text-[0.68rem] font-semibold uppercase text-white"
-            style={{ backgroundColor: accent }}
-          >
-            {category}
-          </div>
         </div>
-        <h3
-          className={`mt-4 text-balance text-white transition group-hover:text-white/82 ${
-            large
-              ? 'ui-font text-[1.25rem] font-medium leading-[1.18] sm:text-[1.45rem] lg:text-[1.55rem]'
-              : 'ui-font text-[1rem] font-medium leading-[1.18] sm:text-[1.05rem]'
-          }`}
-        >
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <span className="inline-flex rounded-[3px] bg-[#eef2f7] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+            {category}
+          </span>
+          {post.readingTime ? (
+            <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#14213d]">
+              {post.readingTime} min read
+            </span>
+          ) : null}
+        </div>
+        <h3 className="mt-5 text-[28px] font-semibold leading-[1.15] text-[#070022] transition group-hover:text-[var(--accent-red)] md:text-[34px]">
           {post.title}
         </h3>
-        <p className="mt-2 text-sm font-medium text-white/82">{formatShortDate(post.publishedAt)}</p>
+        {post.excerpt ? (
+          <p className="mt-4 max-w-3xl text-[15px] leading-6 text-[#555] md:text-[16px]">
+            {post.excerpt}
+          </p>
+        ) : null}
       </article>
     </Link>
   )
@@ -198,23 +214,19 @@ function LandingView({
 
   return (
     <>
-      <section
-        className="py-10 sm:py-12 md:py-14"
-        style={{ background: 'linear-gradient(180deg, #C70001 -3.96%, #000000 74.4%)' }}
-      >
-        <div className="site-container">
-          <div className="ui-font mb-8 flex items-center gap-4 sm:mb-10">
-            <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
-            <h1 className="shrink-0 text-center text-[1.45rem] font-medium uppercase leading-none text-white sm:text-[1.85rem] md:text-[2rem]">
+      <section className="site-container py-10 sm:py-12 md:py-14">
+        <div>
+          <div className="ui-font mb-8 flex items-center justify-between gap-4 sm:mb-10">
+            <h1 className="text-[1.45rem] font-extrabold uppercase leading-none text-[#070022] sm:text-[1.85rem] md:text-[2rem]">
               Just In: Insights
             </h1>
-            <div className="double-rule [&::after]:border-white/70 [&::before]:border-white/70" />
+            <span className="h-8 w-8 rounded-[9px] border border-[#cfd4dc]" aria-hidden="true" />
           </div>
 
-          <div className="grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:items-stretch">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.9fr)_minmax(320px,0.9fr)] lg:items-start">
             <div>{justInLead ? <JustInCard post={justInLead} large /> : null}</div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="lg:pt-1">
               {justInSide.map((post) => (
                 <JustInCard key={post.id} post={post} />
               ))}

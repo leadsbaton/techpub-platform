@@ -58,61 +58,68 @@ function SectionHeader({
 function TrendingDownloads({ posts }: { posts: Post[] }) {
   if (!posts.length) return null
 
-  const categoryColors: Record<string, string> = {
-    technology: 'bg-[#0015AD]',
-    finance: 'bg-[#FC0203]',
-    marketing: 'bg-[#00A01D]',
-  }
+  const [feature, ...supportingPosts] = posts
 
   return (
-    <section className="ui-font space-y-6">
-      <div className="flex items-center gap-4 sm:gap-6">
-        <div className="double-rule" />
-        <h2 className="min-w-0 text-center text-[22px] font-medium uppercase leading-[1.15] text-[#020202] sm:text-[32px]">
-          Trending Downloads
-        </h2>
-        <div className="double-rule" />
-      </div>
-      <div className="grid gap-[10px] md:grid-cols-[1.95fr_1fr_0.96fr]">
-        {posts.slice(0, 3).map((post, index) => {
-          const category = getImageCategory(post)
-          const categoryColor = categoryColors[category.toLowerCase()] || 'bg-[#0015AD]'
+    <section className="ui-font space-y-7">
+      <h2 className="text-[30px] font-bold leading-tight text-[var(--text-strong)] sm:text-[44px]">
+        Trending Downloads
+      </h2>
 
-          return (
-            <Link
-              key={post.id}
-              href={`/whitepapers/${post.slug}`}
-              className={`group relative block overflow-hidden bg-black ${
-                index === 0 ? 'h-[220px] sm:h-[320px] md:h-[475px]' : 'h-[220px] md:h-[475px]'
-              }`}
-            >
-              <SafeImage
-                src={getPostCardImageUrl(post)}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-105`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent" />
-              <div
-                className={`absolute right-0 top-0 flex w-[28px] items-center justify-center ${
-                  index === 0 ? 'h-[130px] sm:h-[162px]' : 'h-[130px] sm:h-[198px]'
-                } ${categoryColor}`}
-              >
-                <span className="vertical-badge text-[18px] font-bold uppercase tracking-[-0.02em] text-white">
-                  {category}
-                </span>
-              </div>
-              {index === 0 ? (
-                <div className="absolute bottom-0 left-0 max-w-[290px] p-4 text-white">
-                  <h3 className="text-[16px] font-medium leading-[145%] tracking-[-0.005em] sm:text-[18px]">
-                    {post.title}
-                  </h3>
-                </div>
+      {feature ? (
+        <Link href={`/whitepapers/${feature.slug}`} className="group block">
+          <article className="grid overflow-hidden rounded-[4px] border border-[var(--border-subtle)] bg-white transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] md:grid-cols-[1.05fr_0.95fr]">
+            <div className="flex min-h-[300px] flex-col items-start justify-center p-7 sm:p-10">
+              <span className="rounded-full bg-[var(--accent-red-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+                Featured Release
+              </span>
+              <h3 className="mt-6 max-w-xl text-[26px] font-bold leading-[1.12] text-[var(--text-strong)] sm:text-[34px]">
+                {feature.title}
+              </h3>
+              {feature.excerpt ? (
+                <p className="mt-5 max-w-xl text-[15px] leading-7 text-[var(--text-soft)] sm:text-[17px]">
+                  {feature.excerpt}
+                </p>
               ) : null}
-            </Link>
-          )
-        })}
+              <span className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-[4px] border border-[var(--accent-red)] px-8 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)] transition group-hover:bg-[var(--accent-red)] group-hover:text-white">
+                Download Asset
+                <span aria-hidden="true">↓</span>
+              </span>
+            </div>
+            <div className="relative min-h-[260px] bg-[var(--surface-muted)] md:min-h-[390px]">
+              <SafeImage
+                src={getPostCardImageUrl(feature)}
+                alt={feature.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className={`${getPostCardImageClass(feature)} transition-transform duration-500 group-hover:scale-105`}
+              />
+            </div>
+          </article>
+        </Link>
+      ) : null}
+
+      <div className="grid gap-8 md:grid-cols-2">
+        {supportingPosts.slice(0, 2).map((post) => (
+          <Link key={post.id} href={`/whitepapers/${post.slug}`} className="group block">
+            <article className="flex min-h-[250px] flex-col rounded-[4px] border border-[var(--border-subtle)] bg-white p-7 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] sm:p-9">
+              <span className="w-fit rounded-full bg-[var(--accent-red-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
+                {getImageCategory(post)}
+              </span>
+              <h3 className="mt-6 line-clamp-3 text-[22px] font-semibold leading-[1.22] text-[var(--text-strong)] transition group-hover:text-[var(--accent-red)] sm:text-[26px]">
+                {post.title}
+              </h3>
+              {post.excerpt ? (
+                <p className="mt-4 line-clamp-3 text-[14px] leading-6 text-[var(--text-soft)] sm:text-[15px]">
+                  {post.excerpt}
+                </p>
+              ) : null}
+              <span className="mt-auto flex justify-end border-t border-[var(--border-subtle)] pt-5 text-[22px] leading-none text-[var(--accent-red)] transition group-hover:translate-x-1">
+                →
+              </span>
+            </article>
+          </Link>
+        ))}
       </div>
     </section>
   )
@@ -125,7 +132,7 @@ function CategoryBanner({ category }: { category: Category }) {
         {category.image ? (
           <SafeImage src={getImageUrl(category.image)} alt={category.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px" className="object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_45%,#ff2a1f_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--text-strong)_0%,var(--accent-red-dark)_100%)]" />
         )}
         <div className="absolute inset-0 bg-black/5" />
         <div className="ui-font absolute inset-x-0 bottom-0 p-5 sm:p-7">

@@ -143,7 +143,7 @@ function WebinarLayout({ post }: { post: Post }) {
           </div>
 
           <div className="flex justify-center">
-            <span className="ui-font rounded-[10px] bg-[#FC0203] px-8 py-3 text-[20px] font-medium text-white">
+            <span className="ui-font rounded-[10px] bg-[var(--accent-red)] px-8 py-3 text-[20px] font-medium text-white">
               {post.webinarRegistration?.ctaLabel || 'Register now'}
             </span>
           </div>
