@@ -176,7 +176,6 @@ export default async function HomePage() {
       <HomeRowScroller
         title="Latest Insights"
         href={insightConfig.routeBase}
-        actionLabel="View all"
         className="mt-14 md:mt-16"
       >
         {latestInsights.length ? (
@@ -191,7 +190,6 @@ export default async function HomePage() {
       <HomeRowScroller
         title="Upcoming Webinars"
         href={webinarConfig.routeBase}
-        actionLabel="View all"
         className="mt-14 md:mt-16"
       >
         {upcomingWebinars.length ? (

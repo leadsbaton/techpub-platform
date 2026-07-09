@@ -23,13 +23,11 @@ export function HomeRowScroller({
   title,
   children,
   href,
-  actionLabel = 'View all',
   className = '',
 }: {
   title: string
   children: ReactNode
   href?: string
-  actionLabel?: string
   className?: string
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -46,18 +44,19 @@ export function HomeRowScroller({
   return (
     <section className={`site-container space-y-6 ${className}`}>
       <div className="flex items-center gap-3">
-        <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
-          {title}
-        </h2>
+        {href ? (
+          <Link
+            href={href}
+            className="ui-font text-[26px] font-semibold leading-tight text-[#111] transition hover:text-[var(--accent-red)] md:text-[32px]"
+          >
+            {title}
+          </Link>
+        ) : (
+          <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
+            {title}
+          </h2>
+        )}
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          {href ? (
-            <Link
-              href={href}
-              className="inline-flex items-center gap-1 border-b border-[#111] pb-0.5 text-xs font-semibold text-[#111] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:text-sm"
-            >
-              {actionLabel}
-            </Link>
-          ) : null}
           <button
             type="button"
             aria-label={`Previous ${title}`}
