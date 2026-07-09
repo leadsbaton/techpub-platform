@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { type ReactNode, useRef, useState } from 'react'
+import { type ReactNode, useRef } from 'react'
 
 function ArrowIcon({ direction }: { direction: 'left' | 'right' }) {
   return (
@@ -33,12 +33,10 @@ export function HomeRowScroller({
   className?: string
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
-  const [isPaused, setIsPaused] = useState(false)
 
   function scrollByPage(direction: -1 | 1) {
     const scroller = scrollerRef.current
     if (!scroller) return
-    setIsPaused(true)
     scroller.scrollBy({
       left: direction * Math.min(scroller.clientWidth * 0.86, 900),
       behavior: 'smooth',
@@ -47,19 +45,19 @@ export function HomeRowScroller({
 
   return (
     <section className={`site-container space-y-6 ${className}`}>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
           {title}
         </h2>
-        {href ? (
-          <Link
-            href={href}
-            className="ml-auto hidden border-b border-[#111] text-sm font-medium text-[#111] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:inline-flex"
-          >
-            {actionLabel}
-          </Link>
-        ) : null}
-        <div className={href ? 'flex gap-2' : 'ml-auto flex gap-2'}>
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+          {href ? (
+            <Link
+              href={href}
+              className="inline-flex items-center gap-1 border-b border-[#111] pb-0.5 text-xs font-semibold text-[#111] transition hover:border-[var(--accent-red)] hover:text-[var(--accent-red)] sm:text-sm"
+            >
+              {actionLabel}
+            </Link>
+          ) : null}
           <button
             type="button"
             aria-label={`Previous ${title}`}
@@ -82,7 +80,6 @@ export function HomeRowScroller({
       <div
         ref={scrollerRef}
         className="no-scrollbar overflow-x-auto pb-3"
-        data-paused={isPaused}
       >
         <div className="flex w-max gap-6">{children}</div>
       </div>

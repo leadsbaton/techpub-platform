@@ -204,15 +204,7 @@ export default async function HomePage() {
       </HomeRowScroller>
 
       <section className="site-container mt-14 space-y-6 md:mt-16">
-        <div className="flex items-center gap-3">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="h-6 w-6 fill-none stroke-[var(--accent-red)] stroke-[2]"
-          >
-            <path d="M7 3h10v18H7z" strokeLinejoin="round" />
-            <path d="M10 8h4M10 12h4M10 16h3" strokeLinecap="round" />
-          </svg>
+        <div className="flex items-center">
           <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
             Must Read White Papers
           </h2>

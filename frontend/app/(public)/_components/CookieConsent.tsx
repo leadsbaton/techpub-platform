@@ -35,12 +35,15 @@ function loadGA() {
 }
 
 export function CookieConsent() {
-  const [consent, setConsent] = useState<ConsentState | null>(() => {
-    if (typeof window === 'undefined') return null
-    const stored = localStorage.getItem(CONSENT_KEY) as ConsentState | null
-    return stored ?? 'pending'
-  })
+  const [consent, setConsent] = useState<ConsentState | null>(null)
   const [showDetails, setShowDetails] = useState(false)
+
+  useLayoutEffect(() => {
+    queueMicrotask(() => {
+      const stored = localStorage.getItem(CONSENT_KEY) as ConsentState | null
+      setConsent(stored ?? 'pending')
+    })
+  }, [])
 
   useLayoutEffect(() => {
     if (consent === 'accepted') {
@@ -62,6 +65,10 @@ export function CookieConsent() {
   function reopenPreferences() {
     setConsent('pending')
     setShowDetails(true)
+  }
+
+  if (consent === null) {
+    return null
   }
 
   if (consent !== 'pending') {

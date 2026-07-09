@@ -5,6 +5,7 @@ import { getPostHref } from '@/lib/utils/contentTypes'
 import {
   formatDate,
   getCategoryName,
+  hasMediaSource,
   getPostCardImageClass,
   getPostCardImageUrl,
   getWebinarEventLabel,
@@ -63,7 +64,7 @@ export function HomeTrendingCard({ post }: { post: Post }) {
 
   return (
     <Link href={href} className="group block w-[316px] sm:w-[390px]">
-      <article className="flex min-h-[230px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)]">
+      <article className="flex min-h-[250px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)]">
         <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--accent-red)]">
           {typeLabel(post)}
         </div>
@@ -92,7 +93,7 @@ export function HomeLatestInsightCard({ post }: { post: Post }) {
 
   return (
     <Link href={href} className="group block w-[230px] sm:w-[274px]">
-      <article>
+      <article className="min-h-[286px]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#dfe5ee] bg-[#f8fafc]">
           <SafeImage
             src={getPostCardImageUrl(post)}
@@ -108,6 +109,11 @@ export function HomeLatestInsightCard({ post }: { post: Post }) {
         <h3 className="mt-2 line-clamp-2 text-[15px] font-medium leading-[1.3] text-[#111] transition group-hover:text-[var(--accent-red)]">
           {post.title}
         </h3>
+        {post.excerpt ? (
+          <p className="mt-2 line-clamp-2 text-[12px] leading-5 text-[#666]">
+            {post.excerpt}
+          </p>
+        ) : null}
       </article>
     </Link>
   )
@@ -117,7 +123,7 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
   const href = getPostHref(post)
 
   return (
-    <article className="flex min-h-[292px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:w-[380px]">
+    <article className="flex min-h-[330px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:w-[380px]">
       <div className="w-fit rounded-full bg-[var(--accent-red)]/8 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent-red)]">
         {getWebinarEventLabel(post)}
       </div>
@@ -134,7 +140,7 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
       ) : null}
       <Link
         href={href}
-        className="mt-auto inline-flex h-11 w-full items-center justify-center gap-2 rounded bg-[var(--accent-red)] px-4 text-sm font-bold text-white transition hover:bg-[var(--accent-red-dark)]"
+        className="mt-8 inline-flex h-11 w-full items-center justify-center gap-2 rounded border border-[var(--accent-red)] bg-white px-4 text-sm font-bold text-[var(--accent-red)] transition hover:bg-[var(--accent-red)] hover:text-white"
       >
         Register Now
         <ArrowRightIcon className="h-4 w-4" />
@@ -145,12 +151,25 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
 
 export function HomeWhitepaperRow({ post }: { post: Post }) {
   const href = getPostHref(post)
+  const hasImage = hasMediaSource(post.cardBannerImage) || hasMediaSource(post.featuredImage)
 
   return (
     <Link href={href} className="group block">
       <article className="grid gap-5 rounded-lg border border-[#dfe5ee] bg-white p-5 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:grid-cols-[64px_1fr_auto_auto] sm:items-center">
-        <div className="grid h-16 w-16 place-items-center rounded bg-[var(--accent-red)] text-white shadow-sm">
-          <DocumentIcon />
+        <div className="relative h-16 w-16 overflow-hidden rounded bg-[#f8fafc] text-[var(--accent-red)] text-white shadow-sm">
+          {hasImage ? (
+            <SafeImage
+              src={getPostCardImageUrl(post)}
+              alt={post.title}
+              fill
+              sizes="64px"
+              className={getPostCardImageClass(post)}
+            />
+          ) : (
+            <div className="grid h-full w-full place-items-center bg-[var(--accent-red)] text-white">
+              <DocumentIcon />
+            </div>
+          )}
         </div>
         <div className="min-w-0">
           <h3 className="line-clamp-2 text-[17px] font-semibold leading-6 text-[#111] transition group-hover:text-[var(--accent-red)]">
