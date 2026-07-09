@@ -2,12 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
-import { HomeAutoCarousel } from './_components/HomeAutoCarousel'
 import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
-import { HomeOverlayCard } from './_components/HomeOverlayCard'
-import { HomeResourceCard } from './_components/HomeResourceCard'
-import { HomeRuledHeader } from './_components/HomeRuledHeader'
-import { HomeWebinarSection } from './_components/HomeWebinarSection'
+import { HomeRowScroller } from './_components/HomeRowScroller'
+import {
+  HomeLatestInsightCard,
+  HomeSectionEmpty,
+  HomeTrendingCard,
+  HomeWebinarMiniCard,
+  HomeWhitepaperRow,
+} from './_components/HomeStitchCards'
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 import { compareWebinarsByEventDate, isUpcomingWebinar } from '@/lib/utils/formatting'
@@ -148,15 +151,12 @@ export default async function HomePage() {
     excludeId: heroPost.id,
     limit: 8,
   })
-  const latestInsights = insights.slice(0, 7)
-  const webinarLead = upcomingWebinars[0] ?? null
-  const webinarSupport = upcomingWebinars.slice(1, 3)
-  const carouselTrackClassName =
-    'pl-[max(12px,calc((100vw-1200px)/2))] pr-[max(12px,calc((100vw-1200px)/2))] sm:pl-[max(16px,calc((100vw-1200px)/2))] sm:pr-[max(16px,calc((100vw-1200px)/2))]'
-  const mustReadWhitepapers = whitepapers.slice(0, 12)
+  const latestInsights = insights.slice(0, 12)
+  const mustReadWhitepapers = whitepapers.slice(0, 4)
+  const hasMoreWhitepapers = whitepapers.length > mustReadWhitepapers.length
 
   return (
-    <div className="pb-20 pt-0">
+    <div className="bg-white pb-20 pt-0">
       <HeroFeature
         post={heroPost}
         secondaryPosts={secondaryHeroPosts}
@@ -165,74 +165,77 @@ export default async function HomePage() {
         whitepaperHref={whitepaperConfig.routeBase}
       />
 
-      <section className="mt-12 space-y-6 overflow-hidden md:mt-14 md:space-y-7">
-        <HomeRuledHeader title="Trending Now" className="site-container" />
-        <HomeAutoCarousel className="py-3" trackClassName={carouselTrackClassName} autoScroll={false}>
-          {trendingPosts.map((post) => (
-            <HomeOverlayCard key={post.id} post={post} carouselSize="tall" />
-          ))}
-        </HomeAutoCarousel>
-      </section>
+      <HomeRowScroller title="Trending Now" className="mt-14 md:mt-16">
+        {trendingPosts.length ? (
+          trendingPosts.map((post) => <HomeTrendingCard key={post.id} post={post} />)
+        ) : (
+          <HomeSectionEmpty label="No trending content is available right now." />
+        )}
+      </HomeRowScroller>
 
-      <section className="site-container mt-14 space-y-6 md:mt-16 md:space-y-7">
-        <HomeRuledHeader
-          title="Explore our Latest Insights"
-          subtitle="Insight that inspires, informs, and ignites change"
-          href={insightConfig.routeBase}
-          actionLabel="View All"
-        />
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="space-y-6">
-            {latestInsights[0] ? (
-              <HomeOverlayCard post={latestInsights[0]} variant="compact" compactSize="large" />
-            ) : null}
-            {latestInsights[3] ? (
-              <HomeOverlayCard post={latestInsights[3]} variant="compact" compactSize="large" />
-            ) : null}
-          </div>
-
-          <div className="space-y-6">
-            {latestInsights[1] ? (
-              <HomeOverlayCard post={latestInsights[1]} variant="compact" compactSize="small" />
-            ) : null}
-            {latestInsights[4] ? (
-              <HomeOverlayCard post={latestInsights[4]} variant="compact" compactSize="small" />
-            ) : null}
-            {latestInsights[5] ? (
-              <HomeOverlayCard post={latestInsights[5]} variant="compact" compactSize="small" />
-            ) : null}
-          </div>
-
-          <div className="space-y-6">
-            {latestInsights[2] ? (
-              <HomeOverlayCard post={latestInsights[2]} variant="compact" compactSize="small" />
-            ) : null}
-            {latestInsights[6] ? (
-              <HomeOverlayCard post={latestInsights[6]} variant="compact" compactSize="large" />
-            ) : null}
-          </div>
-        </div>
-      </section>
+      <HomeRowScroller
+        title="Latest Insights"
+        href={insightConfig.routeBase}
+        actionLabel="View all"
+        className="mt-14 md:mt-16"
+      >
+        {latestInsights.length ? (
+          latestInsights.map((post) => <HomeLatestInsightCard key={post.id} post={post} />)
+        ) : (
+          <HomeSectionEmpty label="No latest insights are available right now." />
+        )}
+      </HomeRowScroller>
 
       <HomeCategoryPanel categories={categories} />
 
-      <HomeWebinarSection
-        webinarLead={webinarLead}
-        webinarSupport={webinarSupport}
-        allWebinars={upcomingWebinars}
-      />
+      <HomeRowScroller
+        title="Upcoming Webinars"
+        href={webinarConfig.routeBase}
+        actionLabel="View all"
+        className="mt-14 md:mt-16"
+      >
+        {upcomingWebinars.length ? (
+          upcomingWebinars.slice(0, 12).map((post) => (
+            <HomeWebinarMiniCard key={post.id} post={post} />
+          ))
+        ) : (
+          <HomeSectionEmpty label="No upcoming webinars right now." />
+        )}
+      </HomeRowScroller>
 
-      <section className="mt-14 space-y-6 overflow-hidden md:mt-16 md:space-y-7">
-        <HomeRuledHeader title="Must Read White Papers" className="site-container" />
-        <HomeAutoCarousel
-          className="py-3"
-          trackClassName={carouselTrackClassName}
-          autoScroll={false}
-        >
-          {mustReadWhitepapers.map((post) => (
-            <HomeResourceCard key={post.id} post={post} />
-          ))}
-        </HomeAutoCarousel>
+      <section className="site-container mt-14 space-y-6 md:mt-16">
+        <div className="flex items-center gap-3">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            className="h-6 w-6 fill-none stroke-[var(--accent-red)] stroke-[2]"
+          >
+            <path d="M7 3h10v18H7z" strokeLinejoin="round" />
+            <path d="M10 8h4M10 12h4M10 16h3" strokeLinecap="round" />
+          </svg>
+          <h2 className="ui-font text-[26px] font-semibold leading-tight text-[#111] md:text-[32px]">
+            Must Read White Papers
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          {mustReadWhitepapers.length ? (
+            mustReadWhitepapers.map((post) => <HomeWhitepaperRow key={post.id} post={post} />)
+          ) : (
+            <HomeSectionEmpty label="No white papers are available right now." />
+          )}
+        </div>
+
+        {hasMoreWhitepapers ? (
+          <div className="flex justify-center pt-2">
+            <Link
+              href={whitepaperConfig.routeBase}
+              className="inline-flex h-11 items-center justify-center rounded border border-[var(--accent-red)] px-6 text-sm font-bold text-[var(--accent-red)] transition hover:bg-[var(--accent-red)] hover:text-white"
+            >
+              View more white papers
+            </Link>
+          </div>
+        ) : null}
       </section>
     </div>
   )
