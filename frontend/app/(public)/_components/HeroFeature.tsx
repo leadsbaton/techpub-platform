@@ -53,7 +53,7 @@ export function HeroFeature({
       {/* ═══════════════════════════════════════════════════════════════
           MOBILE VIEW - Centered, stacked layout
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative flex min-h-[calc(100svh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-white px-6 py-8 sm:px-8 sm:py-10 lg:hidden">
+      <section className="relative flex min-h-[calc(100svh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-white px-6 pb-20 pt-10 sm:px-8 sm:pb-24 sm:pt-12 lg:hidden">
         {/* Mobile Background - Centered, fits screen width */}
         <div className="pointer-events-none absolute inset-0 z-0 flex h-full w-full items-center justify-center opacity-25">
           <Image
@@ -77,7 +77,7 @@ export function HeroFeature({
         />
 
         {/* Mobile Content - Centered */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[22rem] flex-col items-center text-center">
+        <div className="relative z-10 mx-auto flex w-full max-w-[22rem] translate-y-8 flex-col items-center text-center sm:translate-y-10">
           {/* Headline - 3 lines */}
           <h1 className="ui-font mb-5 text-4xl font-extrabold leading-[1.08] text-gray-900">
             Explore.
@@ -157,7 +157,7 @@ export function HeroFeature({
         <div className="absolute inset-0 z-[2] bg-gradient-to-r from-white via-white/90 via-[52%] to-white/35 pointer-events-none" />
 
         {/* Desktop Content - Left side */}
-        <div className="site-container relative z-10 w-full">
+        <div className="site-container relative z-10 w-full translate-y-10 xl:translate-y-12">
           <div className="max-w-3xl">
             {/* Headline */}
             <h1 className="ui-font mb-6 text-5xl font-extrabold leading-[1.1] text-gray-900 md:text-6xl lg:text-[64px]">
