@@ -40,6 +40,7 @@ const heroDescription =
    ═══════════════════════════════════════════════════════════════════ */
 
 export function HeroFeature({
+  webinarHref,
   whitepaperHref,
 }: {
   post?: Post
@@ -95,10 +96,10 @@ export function HeroFeature({
           {/* CTA Buttons - Full width stacked */}
           <div className="flex flex-col gap-3 w-full">
             <Link
-              href="/insights"
+              href={webinarHref}
               className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent-red)] px-6 py-4 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-lg active:scale-[0.98]"
             >
-              Browse Insights
+              Join Webinar
               <ArrowRightIcon className="h-[18px] w-[18px]" />
             </Link>
             <Link
@@ -106,7 +107,7 @@ export function HeroFeature({
               className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg border border-gray-900 bg-white/80 px-6 py-4 text-sm font-semibold text-gray-900 shadow-sm transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
             >
 
-              View White Papers
+              Download White Papers
 
               <DocumentIcon className="h-[18px] w-[18px]" />
             </Link>
@@ -174,17 +175,17 @@ export function HeroFeature({
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start w-full sm:w-auto">
               <Link
-                href="/insights"
+                href={webinarHref}
                 className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent-red)] px-6 py-4 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-lg active:scale-[0.98] sm:w-auto sm:px-8 sm:text-base"
               >
-                Browse Insights
+                Join Webinar
                 <ArrowRightIcon />
               </Link>
               <Link
                 href={whitepaperHref}
                 className="ui-font flex min-h-14 w-full items-center justify-center gap-2 rounded-lg border border-gray-900 bg-white/80 px-6 py-4 text-sm font-semibold text-gray-900 shadow-sm transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] sm:w-auto sm:px-8 sm:text-base"
               >
-                View White Papers
+                Download White Papers
               </Link>
             </div>
           </div>
