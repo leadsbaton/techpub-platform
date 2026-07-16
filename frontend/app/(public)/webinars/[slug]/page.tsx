@@ -33,7 +33,8 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
   if (!post) notFound()
 
-  const peopleGroups = getWebinarPersonGroups(post)
+  const isPastWebinar = !isUpcomingWebinar(post)
+  const peopleGroups = isPastWebinar ? [] : getWebinarPersonGroups(post)
   const heroDims = getMediaDimensions(post.featuredImage)
   const secondaryDims = getMediaDimensions(post.webinarSecondaryBanner)
   const canRegister = post.webinarRegistration?.enabled !== false && isUpcomingWebinar(post)
@@ -108,7 +109,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
             {(post.useContentSections || (post.webinarSections?.length ?? 0) > 0) ? (
               <div className="space-y-0">
                 {(post.webinarSections ?? []).map((section, i) => {
-                  const sectionPeopleGroups = getWebinarPersonGroups({ webinarPeople: section.people ?? [] } as Parameters<typeof getWebinarPersonGroups>[0])
+                  const sectionPeopleGroups = isPastWebinar ? [] : getWebinarPersonGroups({ webinarPeople: section.people ?? [] } as Parameters<typeof getWebinarPersonGroups>[0])
                   return (
                     <div key={section.id ?? i}>
                       {i > 0 && <hr className="my-8 border-t border-[#d1d5db]" />}

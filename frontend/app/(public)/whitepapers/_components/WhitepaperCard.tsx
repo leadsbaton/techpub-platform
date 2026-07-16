@@ -12,7 +12,7 @@ export function WhitepaperCard({ post }: { post: Post }) {
   return (
     <article className="ui-font group w-full max-w-[320px]">
       <Link href={href} className="block">
-        <div className="relative h-[360px] overflow-hidden bg-[#ececec] sm:h-[445px]">
+        <div className="relative h-[180px] overflow-hidden bg-[#ececec] sm:h-[222px]">
           <SafeImage
             src={getPostCardImageUrl(post)}
             alt={post.title}

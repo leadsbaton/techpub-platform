@@ -14,10 +14,10 @@
   --text-soft: #343434;
   --text-muted: #7a7a7a;
   --border-subtle: rgba(19, 19, 19, 0.1);
-  --accent-red: #ff0000;
-  --accent-red-dark: #d60000;
-  --accent-red-soft: rgba(255, 0, 0, 0.08);
-  --accent-red-shadow: 0 4px 20px rgba(255, 0, 0, 0.08);
+  --accent-red: #BC0100;
+  --accent-red-dark: #980100;
+  --accent-red-soft: rgba(188, 1, 0, 0.08);
+  --accent-red-shadow: 0 4px 20px rgba(188, 1, 0, 0.08);
   --category-tech: var(--accent-red);
   --category-finance: var(--accent-red);
   --category-marketing: var(--accent-red);

@@ -106,7 +106,7 @@ export default async function ContactPage() {
             </p>
             <Link
               href="#newsletter"
-              className="mt-4 inline-block rounded-lg bg-[var(--accent-red)] px-6 py-2 font-semibold text-white hover:bg-[#cc0000] transition-colors"
+              className="mt-4 inline-block rounded-lg bg-[var(--accent-red)] px-6 py-2 font-semibold text-white transition-colors hover:bg-[var(--accent-red-dark)]"
             >
               Subscribe Now
             </Link>

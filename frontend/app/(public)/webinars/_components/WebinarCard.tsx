@@ -12,7 +12,15 @@ function getCardImageDims(post: Post): { width: number; height: number } | null 
   return null
 }
 
-export function WebinarCard({ post, compact = false }: { post: Post; compact?: boolean }) {
+export function WebinarCard({
+  post,
+  compact = false,
+  past = false,
+}: {
+  post: Post
+  compact?: boolean
+  past?: boolean
+}) {
   const category = getCategoryName(post.primaryCategory)
   const presenterLabel = getWebinarSpeakerSummary(post)
   const eventDate = getWebinarEventLabel(post)
@@ -45,23 +53,23 @@ export function WebinarCard({ post, compact = false }: { post: Post; compact?: b
         )}
       </Link>
       <div className={`${compact ? 'px-3 py-3' : 'px-5 py-4'} flex min-w-0 flex-1 flex-col gap-1.5`}>
-        <div className="content-label">
-          {category}
-        </div>
+        {past ? null : <div className="content-label">{category}</div>}
         <Link
           href={`/webinars/${post.slug}`}
           className={`${compact ? 'line-clamp-2 text-[13px]' : 'line-clamp-3 text-[18px]'} font-medium leading-[1.3] text-[#111] transition hover:text-[var(--accent-red)]`}
         >
           {post.title}
         </Link>
-        {presenterLabel ? (
+        {!past && presenterLabel ? (
           <div className={`${compact ? 'text-[11px]' : 'text-[14px]'} line-clamp-1 text-[#555]`}>
-            Sponsored by: {presenterLabel}
+            Speakers: {presenterLabel}
           </div>
         ) : null}
-        <div className={`${compact ? 'text-[11px]' : 'text-[14px]'} font-medium leading-[1.3] text-[#333]`}>
-          {eventDate}
-        </div>
+        {past ? null : (
+          <div className={`${compact ? 'text-[11px]' : 'text-[14px]'} font-medium leading-[1.3] text-[#333]`}>
+            {eventDate}
+          </div>
+        )}
       </div>
     </article>
   )

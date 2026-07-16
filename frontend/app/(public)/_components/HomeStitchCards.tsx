@@ -64,8 +64,8 @@ export function HomeTrendingCard({ post }: { post: Post }) {
 
   return (
     <Link href={href} className="group block w-[316px] sm:w-[390px]">
-      <article className="flex min-h-[250px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)]">
-        <div className="content-label">
+      <article className="flex min-h-[250px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--accent-red)]">
           {typeLabel(post)}
         </div>
         <h3 className="mt-5 line-clamp-2 text-[19px] font-semibold leading-[1.18] text-[#111] transition group-hover:text-[var(--accent-red)]">
@@ -123,7 +123,7 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
   const href = getPostHref(post)
 
   return (
-    <article className="flex min-h-[330px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:w-[380px]">
+    <article className="flex min-h-[330px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] sm:w-[380px]">
       <div className="content-label">
         {getWebinarEventLabel(post)}
       </div>
@@ -155,7 +155,7 @@ export function HomeWhitepaperRow({ post }: { post: Post }) {
 
   return (
     <Link href={href} className="group block">
-      <article className="grid gap-5 rounded-lg border border-[#dfe5ee] bg-white p-5 transition hover:border-[var(--accent-red)] hover:shadow-[0_4px_20px_rgba(188,1,0,0.08)] sm:grid-cols-[64px_1fr_auto_auto] sm:items-center">
+      <article className="grid gap-5 rounded-lg border border-[#dfe5ee] bg-white p-5 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] sm:grid-cols-[64px_1fr_auto_auto] sm:items-center">
         <div className="relative h-16 w-16 overflow-hidden rounded bg-[#f8fafc] text-[var(--accent-red)] text-white shadow-sm">
           {hasImage ? (
             <SafeImage

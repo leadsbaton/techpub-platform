@@ -132,7 +132,7 @@ function SocialIcon({ platform, url }: { platform: string; url: string }) {
     linkedin: 'bg-[#0077b5]',
     x: 'bg-black',
     twitter: 'bg-black',
-    youtube: 'bg-[#ff0000]',
+    youtube: 'bg-[var(--accent-red)]',
   }
   const colorClass = colorMap[normalized] ?? 'bg-[#2f2f2f]'
 
