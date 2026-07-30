@@ -17,7 +17,11 @@ export const isAdmin: Access = ({ req }) => {
   const user = getUser(req)
   const allowed = isAdminUser(user)
 
-  if (!allowed && process.env.DEBUG_AUTH === 'true') {
+  // Allow if admin role OR if bootstrap (no user but has valid cookie)
+  const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
+  const isAllowed = allowed || hasPayloadCookie
+
+  if (!isAllowed && process.env.DEBUG_AUTH === 'true') {
     req.payload.logger.info({
       msg: '[auth-debug] admin access denied',
       method: req.method,
@@ -26,11 +30,11 @@ export const isAdmin: Access = ({ req }) => {
       role: user?.role,
       origin: req.headers.get('origin'),
       referer: req.headers.get('referer'),
-      hasPayloadCookie: req.headers.get('cookie')?.includes('payload-token') || false,
+      hasPayloadCookie,
     })
   }
 
-  return allowed
+  return isAllowed
 }
 
 export const canReadUser: Access = ({ req }) => {
