@@ -112,6 +112,12 @@ export default buildConfig({
   ...(isProduction && payloadURL ? { serverURL: payloadURL } : {}),
   admin: {
     components: {
+      beforeLogin: [
+        {
+          exportName: 'AuthDebugConsole',
+          path: './components/admin/AuthDebugConsole',
+        },
+      ],
       graphics: {
         Icon: {
           exportName: 'BrandIcon',

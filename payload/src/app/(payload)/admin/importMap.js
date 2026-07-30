@@ -24,6 +24,7 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BrandIcon as BrandIcon_54b64b8f6383bf507bb86f08f4ef4afd } from '../../../components/admin/BrandIcon'
 import { BrandLogo as BrandLogo_d63a144ce5455c4acf3c45c633216eeb } from '../../../components/admin/BrandLogo'
+import { AuthDebugConsole as AuthDebugConsole_05ebfec579c6898c612bb867d18a9bc1 } from '../../../components/admin/AuthDebugConsole'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -54,5 +55,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "./components/admin/BrandIcon#BrandIcon": BrandIcon_54b64b8f6383bf507bb86f08f4ef4afd,
   "./components/admin/BrandLogo#BrandLogo": BrandLogo_d63a144ce5455c4acf3c45c633216eeb,
+  "./components/admin/AuthDebugConsole#AuthDebugConsole": AuthDebugConsole_05ebfec579c6898c612bb867d18a9bc1,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
