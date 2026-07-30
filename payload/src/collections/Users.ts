@@ -23,6 +23,7 @@ export const Users: CollectionConfig = {
     lockTime: 15 * 60 * 1000, // 15 minutes
   },
   access: {
+    admin: ({ req }) => String(req.user?.role || '').toLowerCase() === 'admin',
     create: canBootstrapFirstAdmin,
     delete: isAdmin,
     read: canReadUser,
