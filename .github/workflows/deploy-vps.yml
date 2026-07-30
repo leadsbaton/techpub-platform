@@ -25,5 +25,5 @@ jobs:
             cd payload
             npm install
             npm run build
-            pm2 restart techpub || pm2 start npm --name "techpub" -- start
+            pm2 restart techpub --update-env || pm2 start npm --name "techpub" -- start
             pm2 save
