@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 import { canBootstrapFirstAdmin, canSetUserRole, isAdmin } from '../access/cmsAccess'
 
+const publicPayloadURL = process.env.PAYLOAD_PUBLIC_URL || process.env.PAYLOAD_PUBLIC_SERVERURL || ''
+const shouldUseSecureCookies = publicPayloadURL.startsWith('https://')
+
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
@@ -10,7 +13,7 @@ export const Users: CollectionConfig = {
   auth: {
     cookies: {
       sameSite: 'Lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: shouldUseSecureCookies,
     },
     useSessions: true,
     // Throttle brute-force password guessing on /api/users/login. After

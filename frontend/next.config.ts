@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.onrender.com' : 'http://localhost:5000')
+const apiURL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'http://187.127.213.19:5000' : 'http://localhost:5000')
+const parsedApiURL = new URL(apiURL)
 const allowedImageHosts = [
   'picsum.photos',
-  new URL(apiURL).hostname,
+  parsedApiURL.hostname,
 ].filter(Boolean)
 
 const nextConfig: NextConfig = {
@@ -13,9 +14,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       ...allowedImageHosts.map((hostname) => ({
-        protocol: (hostname === 'localhost' ? 'http' : 'https') as 'http' | 'https',
+        protocol: (parsedApiURL.protocol.replace(':', '') || 'https') as 'http' | 'https',
         hostname,
-        ...(hostname === 'localhost' ? { port: '5000' } : {}),
+        ...(hostname === parsedApiURL.hostname && parsedApiURL.port ? { port: parsedApiURL.port } : {}),
         pathname: '/**',
       })),
       // Supabase Storage (in case media ever resolves to a direct bucket URL).
