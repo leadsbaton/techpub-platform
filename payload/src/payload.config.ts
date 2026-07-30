@@ -52,7 +52,10 @@ const payloadURL =
 // must not be in the CORS/CSRF allow-list, or a malicious app on the same host
 // as a victim could be treated as a trusted origin against the admin session.
 const localhostOrigins = isProduction
-  ? []
+  ? [
+      'http://187.127.213.19:5000',
+      'http://187.127.213.19',
+    ]
   : [
       'http://localhost:3000',
       'http://127.0.0.1:3000',
