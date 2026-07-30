@@ -39,6 +39,7 @@ export const isAdmin: Access = ({ req }) => {
 
 export const canReadUser: Access = ({ req }) => {
   const user = getUser(req)
+  const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
 
   if (isAdminUser(user)) {
     return true
@@ -52,8 +53,6 @@ export const canReadUser: Access = ({ req }) => {
     }
   }
 
-  const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
-
   if (hasPayloadCookie) {
     return true
   }
@@ -63,6 +62,8 @@ export const canReadUser: Access = ({ req }) => {
       msg: '[auth-debug] user read denied',
       method: req.method,
       path: req.url,
+      userID: user?.id,
+      role: user?.role,
       origin: req.headers.get('origin'),
       referer: req.headers.get('referer'),
       hasPayloadCookie,
