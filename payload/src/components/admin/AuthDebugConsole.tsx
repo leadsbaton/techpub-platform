@@ -119,9 +119,15 @@ export function AuthDebugConsole() {
           let body: unknown = null
 
           try {
-            body = await clonedResponse.json()
-          } catch {
-            body = await clonedResponse.text()
+            const text = await clonedResponse.text()
+
+            try {
+              body = JSON.parse(text)
+            } catch {
+              body = text.slice(0, 500)
+            }
+          } catch (error) {
+            body = error instanceof Error ? error.message : 'Unable to read response body'
           }
 
           console.info('[auth-debug] response', {
