@@ -65,6 +65,14 @@ const localhostOrigins = isProduction
 const allowedOrigins = Array.from(
   new Set([frontendURL, payloadURL, ...localhostOrigins].filter(Boolean)),
 )
+// Payload's cookie auth rejects server-rendered admin requests when CSRF is
+// configured and the request has no Origin/Sec-Fetch-Site header. That happens
+// on the current plain HTTP VPS IP deployment, so rely on SameSite=Lax cookies
+// there. Re-enable CSRF automatically once the API is served from HTTPS.
+const csrfOrigins =
+  process.env.PAYLOAD_DISABLE_CSRF === 'true' || payloadURL.startsWith('http://')
+    ? []
+    : allowedOrigins
 
 // Object storage for media (Supabase Storage or any S3-compatible service).
 // When configured, uploads go to a SHARED bucket so local and production see the
@@ -147,7 +155,7 @@ export default buildConfig({
     },
   },
   cors: allowedOrigins,
-  csrf: allowedOrigins,
+  csrf: csrfOrigins,
   collections: [
     Users,
     Media,
