@@ -21,26 +21,21 @@ jobs:
           port: 22
           script: |
             set -e
-            cd /var/www/techpub/payload
-
-            # Create .env with required variables
-            cat > .env << 'EOF'
-DEBUG_AUTH=true
-PAYLOAD_PUBLIC_URL=http://187.127.213.19:5000
-PAYLOAD_DISABLE_CSRF=true
-NODE_ENV=production
-PORT=5000
-EOF
-
             cd /var/www/techpub
             git pull origin main
             cd payload
+
+            # Create .env with required variables
+            echo "DEBUG_AUTH=true" > .env
+            echo "PAYLOAD_PUBLIC_URL=http://187.127.213.19:5000" >> .env
+            echo "PAYLOAD_DISABLE_CSRF=true" >> .env
+            echo "NODE_ENV=production" >> .env
+            echo "PORT=5000" >> .env
+
             npm install
-            npm run build
-            test -f .next/BUILD_ID
             pm2 delete techpub || true
             sleep 2
-            pm2 start "npm start" --name "techpub" --cwd /var/www/techpub/payload
+            pm2 start "npm run dev" --name "techpub" --cwd /var/www/techpub/payload --no-autorestart
             pm2 save
-            sleep 3
-            pm2 logs techpub --lines 20
+            sleep 5
+            pm2 status
