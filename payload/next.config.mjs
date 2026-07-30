@@ -12,7 +12,7 @@ const nextConfig = {
   // admin at http://127.0.0.1:5000 (instead of localhost) fails the HMR handshake
   // and the admin app never hydrates — a blank/black screen. Add your LAN IP here
   // too if you open the dev admin from another device. Dev-only; no prod effect.
-  allowedDevOrigins: ['localhost', '127.0.0.1'],
+  allowedDevOrigins: ['localhost', '127.0.0.1', '187.127.213.19'],
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
