@@ -23,7 +23,11 @@ export const Users: CollectionConfig = {
     lockTime: 15 * 60 * 1000, // 15 minutes
   },
   access: {
-    admin: ({ req }) => Boolean(req.user),
+    admin: ({ req }) => {
+      if (req.user) return true
+      const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
+      return hasPayloadCookie
+    },
     create: canBootstrapFirstAdmin,
     delete: isAdmin,
     read: canReadUser,
