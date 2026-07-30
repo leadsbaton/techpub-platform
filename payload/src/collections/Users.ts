@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { canBootstrapFirstAdmin, canSetUserRole, isAdmin } from '../access/cmsAccess'
+import { canBootstrapFirstAdmin, canReadUser, canSetUserRole, isAdmin } from '../access/cmsAccess'
 
 const publicPayloadURL = process.env.PAYLOAD_PUBLIC_URL || process.env.PAYLOAD_PUBLIC_SERVERURL || ''
 const shouldUseSecureCookies = publicPayloadURL.startsWith('https://')
@@ -25,7 +25,7 @@ export const Users: CollectionConfig = {
   access: {
     create: canBootstrapFirstAdmin,
     delete: isAdmin,
-    read: isAdmin,
+    read: canReadUser,
     update: isAdmin,
   },
   fields: [
@@ -77,8 +77,9 @@ export const Users: CollectionConfig = {
           return
         }
 
-        const meResponse = response as { user?: { id?: string | number; email?: string; role?: string } }
-        const user = meResponse?.user
+        type DebugUser = { id?: string | number; email?: string; role?: string }
+        const meResponse = response as DebugUser & { user?: DebugUser }
+        const user = meResponse.user || meResponse
 
         req.payload.logger.info({
           msg: '[auth-debug] me result',

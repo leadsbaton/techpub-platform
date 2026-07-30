@@ -33,6 +33,35 @@ export const isAdmin: Access = ({ req }) => {
   return allowed
 }
 
+export const canReadUser: Access = ({ req }) => {
+  const user = getUser(req)
+
+  if (isAdminUser(user)) {
+    return true
+  }
+
+  if (user?.id) {
+    return {
+      id: {
+        equals: user.id,
+      },
+    }
+  }
+
+  if (process.env.DEBUG_AUTH === 'true') {
+    req.payload.logger.info({
+      msg: '[auth-debug] user read denied',
+      method: req.method,
+      path: req.url,
+      origin: req.headers.get('origin'),
+      referer: req.headers.get('referer'),
+      hasPayloadCookie: req.headers.get('cookie')?.includes('payload-token') || false,
+    })
+  }
+
+  return false
+}
+
 // Field-level read access: only authenticated CMS users may read the field.
 // Used to keep gated delivery assets (e.g. the whitepaper download) out of
 // public API responses. The gated POST routes use `overrideAccess: true`, so
