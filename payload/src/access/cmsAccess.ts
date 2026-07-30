@@ -49,12 +49,8 @@ export const canReadUser: Access = ({ req }) => {
   }
 
   const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
-  const requestPath = req.url || ''
 
-  if (
-    hasPayloadCookie &&
-    (requestPath.includes('/admin') || requestPath.includes('/api/users/me'))
-  ) {
+  if (hasPayloadCookie) {
     return true
   }
 
