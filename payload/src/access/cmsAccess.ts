@@ -13,7 +13,25 @@ export function isAdminUser(user: CMSUser): boolean {
   return String(user?.role || '').toLowerCase() === 'admin'
 }
 
-export const isAdmin: Access = ({ req }) => isAdminUser(getUser(req))
+export const isAdmin: Access = ({ req }) => {
+  const user = getUser(req)
+  const allowed = isAdminUser(user)
+
+  if (!allowed && process.env.DEBUG_AUTH === 'true') {
+    req.payload.logger.info({
+      msg: '[auth-debug] admin access denied',
+      method: req.method,
+      path: req.url,
+      userID: user?.id,
+      role: user?.role,
+      origin: req.headers.get('origin'),
+      referer: req.headers.get('referer'),
+      hasPayloadCookie: req.headers.get('cookie')?.includes('payload-token') || false,
+    })
+  }
+
+  return allowed
+}
 
 // Field-level read access: only authenticated CMS users may read the field.
 // Used to keep gated delivery assets (e.g. the whitepaper download) out of

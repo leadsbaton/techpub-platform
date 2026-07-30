@@ -53,6 +53,44 @@ export const Users: CollectionConfig = {
     },
   ],
   hooks: {
+    afterLogin: [
+      ({ req, user }) => {
+        if (process.env.DEBUG_AUTH !== 'true') {
+          return
+        }
+
+        req.payload.logger.info({
+          msg: '[auth-debug] login succeeded',
+          userID: user.id,
+          email: 'email' in user ? user.email : undefined,
+          role: 'role' in user ? user.role : undefined,
+          origin: req.headers.get('origin'),
+          referer: req.headers.get('referer'),
+          publicPayloadURL,
+          secureCookie: shouldUseSecureCookies,
+        })
+      },
+    ],
+    afterMe: [
+      ({ req, response }) => {
+        if (process.env.DEBUG_AUTH !== 'true') {
+          return
+        }
+
+        const meResponse = response as { user?: { id?: string | number; email?: string; role?: string } }
+        const user = meResponse?.user
+
+        req.payload.logger.info({
+          msg: '[auth-debug] me result',
+          userID: user?.id,
+          email: user && 'email' in user ? user.email : undefined,
+          role: user && 'role' in user ? user.role : undefined,
+          origin: req.headers.get('origin'),
+          referer: req.headers.get('referer'),
+          hasPayloadCookie: req.headers.get('cookie')?.includes('payload-token') || false,
+        })
+      },
+    ],
     beforeValidate: [
       ({ data }) => {
         const nextData = { ...(data || {}) } as Record<string, unknown>
