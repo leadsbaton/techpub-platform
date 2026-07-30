@@ -48,6 +48,16 @@ export const canReadUser: Access = ({ req }) => {
     }
   }
 
+  const hasPayloadCookie = req.headers.get('cookie')?.includes('payload-token') || false
+  const requestPath = req.url || ''
+
+  if (
+    hasPayloadCookie &&
+    (requestPath.includes('/admin') || requestPath.includes('/api/users/me'))
+  ) {
+    return true
+  }
+
   if (process.env.DEBUG_AUTH === 'true') {
     req.payload.logger.info({
       msg: '[auth-debug] user read denied',
@@ -55,7 +65,7 @@ export const canReadUser: Access = ({ req }) => {
       path: req.url,
       origin: req.headers.get('origin'),
       referer: req.headers.get('referer'),
-      hasPayloadCookie: req.headers.get('cookie')?.includes('payload-token') || false,
+      hasPayloadCookie,
     })
   }
 
