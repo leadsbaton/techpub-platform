@@ -27,5 +27,6 @@ jobs:
             npm install
             npm run build
             test -f .next/BUILD_ID
-            pm2 restart techpub --update-env || pm2 start npm --name "techpub" --cwd /var/www/techpub/payload -- start
+            pm2 delete techpub || true
+            pm2 start npm --name "techpub" --cwd /var/www/techpub/payload -- start
             pm2 save
