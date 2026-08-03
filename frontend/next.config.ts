@@ -8,9 +8,9 @@ const allowedImageHosts = [
 ].filter(Boolean)
 
 const nextConfig: NextConfig = {
-  // There is a second (empty) package-lock.json one level up, so Turbopack would
-  // otherwise infer the repo root as the workspace and fail to resolve packages
-  // that only live in frontend/node_modules (e.g. @swc/helpers).
+  // Pin the workspace root to this directory. Anything above it has no
+  // node_modules, so letting Next infer the root (e.g. from a stray lockfile
+  // higher up) breaks resolution of tailwindcss, @swc/helpers, etc.
   turbopack: {
     root: __dirname,
   },
