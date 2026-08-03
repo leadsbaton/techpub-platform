@@ -169,6 +169,7 @@ function ListingSection({
   query,
   webinars,
   contentTypes,
+  hideCardCategory = false,
 }: {
   title: string
   posts: Post[]
@@ -178,6 +179,7 @@ function ListingSection({
   query?: string
   webinars: Post[]
   contentTypes: Awaited<ReturnType<typeof getContentTypes>>
+  hideCardCategory?: boolean
 }) {
   return (
     <section className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -189,6 +191,7 @@ function ListingSection({
           initialHasNextPage={hasNextPage}
           selectedCategory={category}
           query={query}
+          hideCategory={hideCardCategory}
         />
       </div>
 
@@ -232,6 +235,7 @@ export default async function WhitepapersPage({
             category={category}
             webinars={webinars.docs}
             contentTypes={contentTypes}
+            hideCardCategory
           />
         </article>
       </div>

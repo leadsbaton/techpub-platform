@@ -55,16 +55,20 @@ function ClockIcon() {
   )
 }
 
+// `hideCategory` is used on category-scoped pages, where the page heading already
+// names the category and repeating it on every card is noise.
 export function HomeOverlayCard({
   post,
   variant = 'default',
   compactSize = 'large',
   carouselSize = 'default',
+  hideCategory = false,
 }: {
   post: Post
   variant?: 'default' | 'compact' | 'webinar'
   compactSize?: 'large' | 'small'
   carouselSize?: 'default' | 'tall'
+  hideCategory?: boolean
 }) {
   const href = getPostHref(post)
   const isCompact = variant === 'compact'
@@ -96,7 +100,7 @@ export function HomeOverlayCard({
               className={`${getPostCardImageClass(post)} transition-transform duration-300 group-hover:scale-[1.03]`}
             />
           </div>
-          <HomeVerticalBadge label={category} color={accent} />
+          {hideCategory ? null : <HomeVerticalBadge label={category} color={accent} />}
         </Link>
 
         <div className="flex flex-1 flex-col gap-3">
@@ -174,12 +178,14 @@ export function HomeOverlayCard({
             <p className="mt-3 max-w-full text-[0.98rem] font-medium leading-6 text-white/90 md:text-[1.08rem]">
               {getWebinarEventLabel(post)}
             </p>
-            <span
-              className="mt-4 inline-flex px-4 py-2 text-[0.95rem] font-extrabold uppercase tracking-[0.02em] text-white md:text-[1.05rem]"
-              style={{ backgroundColor: accent }}
-            >
-              {category}
-            </span>
+            {hideCategory ? null : (
+              <span
+                className="mt-4 inline-flex px-4 py-2 text-[0.95rem] font-extrabold uppercase tracking-[0.02em] text-white md:text-[1.05rem]"
+                style={{ backgroundColor: accent }}
+              >
+                {category}
+              </span>
+            )}
           </div>
         </article>
       </Link>
@@ -210,14 +216,16 @@ export function HomeOverlayCard({
           }}
         />
         <div className="absolute inset-x-0 bottom-0 p-4 text-white md:p-5">
-          <span
-            className="inline-flex rounded-[3px] px-3 py-2 text-[0.78rem] font-extrabold uppercase leading-none text-white md:text-[0.9rem]"
-            style={{ backgroundColor: accent }}
-          >
-            {category}
-          </span>
+          {hideCategory ? null : (
+            <span
+              className="inline-flex rounded-[3px] px-3 py-2 text-[0.78rem] font-extrabold uppercase leading-none text-white md:text-[0.9rem]"
+              style={{ backgroundColor: accent }}
+            >
+              {category}
+            </span>
+          )}
           <h3
-            className={`mt-2 max-w-[25ch] font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${
+            className={`${hideCategory ? '' : 'mt-2'} max-w-[25ch] font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${
               isSmallCompact
                 ? 'line-clamp-2 text-[1rem] leading-5 md:text-[1.08rem] md:leading-6'
                 : 'line-clamp-2 text-[1.08rem] leading-6 md:text-[1.18rem] md:leading-7'

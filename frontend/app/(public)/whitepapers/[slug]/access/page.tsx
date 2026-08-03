@@ -54,7 +54,7 @@ export default async function WhitepaperAccessPage({ params }: { params: Params 
                 {post.title}
               </h1>
               <p className="ui-font text-[18px] font-medium text-[#020202]">
-                Thank you for your interest in DBTA Downloads/Webinars!
+                Thank you for your interest in our resources!
               </p>
               {post.leadCapture?.formDescription ? (
                 <p className="ui-font max-w-[720px] text-[15px] leading-[1.6] text-[#4d4d4d]">

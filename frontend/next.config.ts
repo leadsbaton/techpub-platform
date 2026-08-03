@@ -8,9 +8,15 @@ const allowedImageHosts = [
 ].filter(Boolean)
 
 const nextConfig: NextConfig = {
+  // There is a second (empty) package-lock.json one level up, so Turbopack would
+  // otherwise infer the repo root as the workspace and fail to resolve packages
+  // that only live in frontend/node_modules (e.g. @swc/helpers).
+  turbopack: {
+    root: __dirname,
+  },
   // Trust these hosts for dev (HMR + RSC) so the site also works when opened at
   // http://127.0.0.1:3000 or from another device on the LAN. Dev-only.
-  allowedDevOrigins: ['localhost', '127.0.0.1'],
+  allowedDevOrigins: ['localhost', '127.0.0.1', '187.127.213.19'],
   images: {
     remotePatterns: [
       ...allowedImageHosts.map((hostname) => ({

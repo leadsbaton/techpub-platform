@@ -12,14 +12,18 @@ function getCardImageDims(post: Post): { width: number; height: number } | null 
   return null
 }
 
+// `hideCategory` is used on category-scoped pages, where the page heading already
+// names the category and repeating it on every card is noise.
 export function WebinarCard({
   post,
   compact = false,
   past = false,
+  hideCategory = false,
 }: {
   post: Post
   compact?: boolean
   past?: boolean
+  hideCategory?: boolean
 }) {
   const category = getCategoryName(post.primaryCategory)
   const presenterLabel = getWebinarSpeakerSummary(post)
@@ -53,7 +57,7 @@ export function WebinarCard({
         )}
       </Link>
       <div className={`${compact ? 'px-3 py-3' : 'px-5 py-4'} flex min-w-0 flex-1 flex-col gap-1.5`}>
-        {past ? null : <div className="content-label">{category}</div>}
+        {past || hideCategory ? null : <div className="content-label">{category}</div>}
         <Link
           href={`/webinars/${post.slug}`}
           className={`${compact ? 'line-clamp-2 text-[13px]' : 'line-clamp-3 text-[18px]'} font-medium leading-[1.3] text-[#111] transition hover:text-[var(--accent-red)]`}

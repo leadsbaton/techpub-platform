@@ -99,11 +99,13 @@ function WebinarGridSection({
   posts,
   emptyMessage,
   pastSessions = false,
+  hideCardCategory = false,
 }: {
   title: string
   posts: Post[]
   emptyMessage?: string
   pastSessions?: boolean
+  hideCardCategory?: boolean
 }) {
   return (
     <section className="space-y-8">
@@ -114,7 +116,7 @@ function WebinarGridSection({
       {posts.length ? (
         <div className="grid gap-x-8 gap-y-10 md:grid-cols-2">
           {posts.map((post) => (
-            <WebinarCard key={post.id} post={post} past={pastSessions} />
+            <WebinarCard key={post.id} post={post} past={pastSessions} hideCategory={hideCardCategory} />
           ))}
         </div>
       ) : (
@@ -205,8 +207,13 @@ export default async function WebinarsPage({
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
         <article className="site-container space-y-8 py-8 sm:py-10">
           <CategoryBanner category={selectedCategory} />
-          <WebinarGridSection title="Upcoming Webinars" posts={upcoming} emptyMessage="No upcoming webinars in this category right now." />
-          <WebinarGridSection title="Past Sessions" posts={past} pastSessions />
+          <WebinarGridSection
+            title="Upcoming Webinars"
+            posts={upcoming}
+            emptyMessage="No upcoming webinars in this category right now."
+            hideCardCategory
+          />
+          <WebinarGridSection title="Past Sessions" posts={past} pastSessions hideCardCategory />
         </article>
       </div>
     )

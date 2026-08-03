@@ -33,12 +33,14 @@ export function WhitepaperListingClient({
   initialHasNextPage,
   selectedCategory,
   query,
+  hideCategory = false,
 }: {
   initialPosts: Post[]
   initialPage: number
   initialHasNextPage: boolean
   selectedCategory?: string
   query?: string
+  hideCategory?: boolean
 }) {
   const [posts, setPosts] = useState(initialPosts)
   const [page, setPage] = useState(initialPage)
@@ -86,7 +88,7 @@ export function WhitepaperListingClient({
     <div className="space-y-8">
       <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
         {posts.map((post) => (
-          <WhitepaperCard key={post.id} post={post} />
+          <WhitepaperCard key={post.id} post={post} hideCategory={hideCategory} />
         ))}
       </div>
 

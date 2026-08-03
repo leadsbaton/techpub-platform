@@ -88,7 +88,7 @@ export default async function CategoryPage({
           <SectionHeader title="Insights" href={buildTypeHref('insight', category.slug)} />
           <div className="grid gap-5 md:grid-cols-3">
             {insights.docs.map((post) => (
-              <HomeOverlayCard key={post.id} post={post} variant="compact" compactSize="small" />
+              <HomeOverlayCard key={post.id} post={post} variant="compact" compactSize="small" hideCategory />
             ))}
           </div>
         </section>
@@ -97,7 +97,7 @@ export default async function CategoryPage({
           <SectionHeader title="White Papers" href={buildTypeHref('whitepaper', category.slug)} />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {whitepapers.docs.map((post) => (
-              <WhitepaperCard key={post.id} post={post} />
+              <WhitepaperCard key={post.id} post={post} hideCategory />
             ))}
           </div>
         </section>
@@ -106,7 +106,7 @@ export default async function CategoryPage({
           <SectionHeader title="Webinars" href={buildTypeHref('webinar', category.slug)} />
           <div className="grid gap-6 md:grid-cols-3">
             {webinars.docs.map((post) => (
-              <WebinarCard key={post.id} post={post} />
+              <WebinarCard key={post.id} post={post} hideCategory />
             ))}
           </div>
         </section>
