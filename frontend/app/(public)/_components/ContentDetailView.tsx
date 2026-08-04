@@ -179,7 +179,7 @@ function WhitepaperLayout({ post, contentTypes, railItems }: { post: Post; conte
 
 function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentTypes: ContentType[]; railItems: Post[] }) {
   const primaryAction = buildPrimaryAction(post)
-  const speakerSummary = getWebinarSpeakerSummary(post) || 'Speakers listed on the webinar page'
+  const speakerSummary = getWebinarSpeakerSummary(post)
 
   return (
     <article className="site-container space-y-8 py-10">
@@ -217,7 +217,7 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
 
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
         <div className="min-w-0 space-y-6 rounded-[32px] bg-white p-6 shadow-[var(--shadow-soft)] md:p-8">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className={`grid gap-4 ${speakerSummary ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
             <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">
               <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Event Type</div>
               <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{getContentTypeConfigByType(post.type, contentTypes).singularLabel}</div>
@@ -226,10 +226,12 @@ function WebinarLayout({ post, contentTypes, railItems }: { post: Post; contentT
               <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Category</div>
               <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{getCategoryName(post.primaryCategory)}</div>
             </div>
-            <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Speakers</div>
-              <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{speakerSummary}</div>
-            </div>
+            {speakerSummary ? (
+              <div className="rounded-[22px] border border-[var(--border-subtle)] bg-[var(--surface)] p-5">
+                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Speakers</div>
+                <div className="mt-2 text-lg font-semibold text-[color:var(--text-strong)]">{speakerSummary}</div>
+              </div>
+            ) : null}
           </div>
           <div className="prose max-w-none">
             <RichTextRenderer content={post.content} />

@@ -156,7 +156,15 @@ export function getWebinarPersonGroups(post: Post): WebinarPersonGroup[] {
     grouped[role].push(authorToWebinarPerson(item.person))
   })
 
-  if (!grouped.speaker.length && !grouped.moderator.length && !grouped.presenter.length) {
+  // Speakers are optional. An empty `webinarPeople` array means the editor deliberately
+  // published without them, so only reach for the legacy author list when the field is
+  // absent altogether (posts written before webinarPeople existed).
+  if (
+    !Array.isArray(post.webinarPeople) &&
+    !grouped.speaker.length &&
+    !grouped.moderator.length &&
+    !grouped.presenter.length
+  ) {
     const legacyAuthors = getWebinarAuthors(post)
     if (legacyAuthors.length > 1) {
       grouped.speaker = legacyAuthors.slice(0, -1)

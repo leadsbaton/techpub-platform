@@ -55,8 +55,9 @@ const guideByType = {
     route: '/webinars/[slug]',
     checklist: [
       'Set the main banner image first. It renders as the full-width top webinar hero. You can also add a second banner image as an optional second strip below it.',
-      'Use the Speakers field to pick the webinar people from the author profiles. If you choose 2 or more people, the last selected person becomes the moderator automatically and the others stay in the speakers row.',
-      'Use the moderator fields only when you want to override the automatic moderator from the last selected author.',
+      'Webinar People is optional. Add rows only when the event has named people, picking each profile from Authors and setting its role. Leave the list empty and the speakers row is hidden on cards and the detail page.',
+      'Only the first person of each role shows the SPEAKERS / MODERATOR heading. The rest keep an invisible heading of the same height so every photo lines up in one row.',
+      'Turn on "Hide title on detail page" when the banner image already carries the title.',
       'Set CTA label, event date label, summary, agenda points, and rich text content with lists, bold, italic, and links exactly as they should appear.',
       'Use preview to check the centered title/button area, banner stack, content section, and the speaker/moderator row layout.',
       'Use either an external registration URL or a video URL for the final destination. Webinar form entries are saved in the shared submissions collection.',

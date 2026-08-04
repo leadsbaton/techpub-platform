@@ -4,6 +4,7 @@ import { useLivePreview } from '@payloadcms/live-preview-react'
 
 import { RichTextRenderer } from '@/app/(public)/_components/RichTextRenderer'
 import { SafeImage } from '@/app/(public)/_components/SafeImage'
+import { WebinarPeopleRow } from '@/app/(public)/_components/WebinarPeopleRow'
 import { API_URL } from '@/lib/api/config'
 import type { Post } from '@/lib/types/cms'
 import {
@@ -156,23 +157,7 @@ function WebinarLayout({ post }: { post: Post }) {
 
           {peopleGroups.length ? (
             <section className="mt-2">
-              <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-center md:gap-12">
-                {peopleGroups.flatMap((group) =>
-                  group.people.map((person, index) => (
-                    <div key={`${group.role}-${person.id}-${index}`} className="ui-font w-[180px] text-center">
-                      <h3 className={`mb-6 text-[15px] font-bold uppercase tracking-[0.06em] ${group.role === 'moderator' ? 'text-[var(--accent-red)]' : 'text-[#7f1d1d]'} ${index === 0 ? '' : 'hidden md:invisible md:block'}`}>
-                        {index === 0 ? group.label : ' '}
-                    </h3>
-                      <div className="relative mx-auto h-[112px] w-[112px] overflow-hidden rounded-full bg-[#ddd] shadow-[0_8px_20px_rgba(0,0,0,0.1)] md:h-[128px] md:w-[128px]">
-                        {person.photo ? <SafeImage src={getImageUrl(person.photo)} alt={person.name || group.label} fill sizes="128px" className="object-cover" /> : null}
-                      </div>
-                      <div className="mt-3 text-[15px] font-semibold text-[#111]">{person.name}</div>
-                      {person.role ? <div className="mt-1 text-[13px] leading-[1.45] text-[#6a6a6a]">{person.role}</div> : null}
-                      {person.secondaryLine ? <div className="text-[13px] leading-[1.45] text-[#6a6a6a]">{person.secondaryLine}</div> : null}
-                    </div>
-                  )),
-                )}
-              </div>
+              <WebinarPeopleRow groups={peopleGroups} />
             </section>
           ) : null}
         </div>

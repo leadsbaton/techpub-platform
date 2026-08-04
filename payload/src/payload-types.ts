@@ -357,7 +357,7 @@ export interface Post {
     [k: string]: unknown;
   } | null;
   /**
-   * Speakers, moderators, and presenters — shown on cards and the public page. Also used in the single-content view below.
+   * Optional. Speakers, moderators, and presenters — shown on cards and the public page. Leave empty when the webinar has no named people; the speakers row is then hidden everywhere.
    */
   webinarPeople?:
     | {
@@ -444,7 +444,7 @@ export interface Post {
    */
   pinned?: boolean | null;
   /**
-   * Hide the title on the public detail page (still used in admin & metadata).
+   * Turn on when the banner image already contains the title. The heading is dropped from the public detail page but still used in admin, search, and metadata.
    */
   hideTitleOnDetail?: boolean | null;
   /**

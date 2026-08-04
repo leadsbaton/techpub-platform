@@ -236,11 +236,12 @@ export const Posts: CollectionConfig = {
             // ─── 7. Webinar People ────────────────────────────────────────────────
             {
               name: 'webinarPeople',
-              label: 'Webinar People',
+              label: 'Webinar People (optional)',
               type: 'array',
               admin: {
                 condition: (_, siblingData) => siblingData?.type === 'webinar',
-                description: 'Speakers, moderators, and presenters — shown on cards and the public page. Also used in the single-content view below.',
+                description:
+                  'Optional. Speakers, moderators, and presenters — shown on cards and the public page. Leave empty when the webinar has no named people; the speakers row is then hidden everywhere.',
               },
               fields: [
                 {
@@ -472,10 +473,12 @@ export const Posts: CollectionConfig = {
                 },
                 {
                   name: 'hideTitleOnDetail',
+                  label: 'Hide title on detail page',
                   type: 'checkbox',
                   defaultValue: false,
                   admin: {
-                    description: 'Hide the title on the public detail page (still used in admin & metadata).',
+                    description:
+                      'Turn on when the banner image already contains the title. The heading is dropped from the public detail page but still used in admin, search, and metadata.',
                     width: '34%',
                   },
                 },
