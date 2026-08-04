@@ -15,5 +15,5 @@
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === 'production'
-    ? 'http://187.127.213.19:5000'
+    ? 'https://cms.lbtechpub.com'
     : 'http://localhost:5000')

@@ -22,7 +22,13 @@ jobs:
           script: |
             set -e
             cd /var/www/techpub
-            git pull origin main
+            # The CMS runs in dev mode, which regenerates payload/src/payload-types.ts
+            # on boot and leaves the tree dirty. `git pull` then aborts as soon as a
+            # commit touches that file, so mirror origin/main outright instead of
+            # merging into it. Only tracked files are affected: .env and media/ are
+            # gitignored and survive untouched.
+            git fetch origin main
+            git reset --hard origin/main
             cd payload
 
             # Update .env with deployment-specific variables (preserve existing secrets)
@@ -32,7 +38,11 @@ jobs:
             grep -v "^PAYLOAD_PUBLIC_URL=\|^PAYLOAD_DISABLE_CSRF=\|^DEBUG_AUTH=" .env > .env.tmp || true
             mv .env.tmp .env
             echo "DEBUG_AUTH=true" >> .env
-            echo "PAYLOAD_PUBLIC_URL=http://187.127.213.19:5000" >> .env
+            # Must be the canonical HTTPS origin the admin is actually browsed at.
+            # Pointing this at the plain-HTTP IP made every absolute URL the admin
+            # generated mixed content once the panel was opened over HTTPS, and kept
+            # the domain out of payload.config.ts's CORS allow-list.
+            echo "PAYLOAD_PUBLIC_URL=https://cms.lbtechpub.com" >> .env
             echo "PAYLOAD_DISABLE_CSRF=true" >> .env
 
             npm install

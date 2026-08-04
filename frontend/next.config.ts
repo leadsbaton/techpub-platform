@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'http://187.127.213.19:5000' : 'http://localhost:5000')
+const apiURL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? 'https://cms.lbtechpub.com' : 'http://localhost:5000')
 const parsedApiURL = new URL(apiURL)
 const allowedImageHosts = [
   'picsum.photos',

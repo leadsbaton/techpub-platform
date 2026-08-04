@@ -11,8 +11,13 @@ const nextConfig = {
   // Trust these hosts for dev (HMR WebSocket + RSC). Without this, visiting the
   // admin at http://127.0.0.1:5000 (instead of localhost) fails the HMR handshake
   // and the admin app never hydrates — a blank/black screen. Add your LAN IP here
-  // too if you open the dev admin from another device. Dev-only; no prod effect.
-  allowedDevOrigins: ['localhost', '127.0.0.1', '187.127.213.19'],
+  // too if you open the dev admin from another device.
+  //
+  // NOT dev-only in practice: the VPS runs `next dev` under pm2 (see
+  // .github/workflows/deploy-vps.yml), so every public hostname the admin is
+  // reached by must be listed here — including the HTTPS domain in front of the
+  // reverse proxy, or that domain gets the same black screen.
+  allowedDevOrigins: ['localhost', '127.0.0.1', '187.127.213.19', 'cms.lbtechpub.com'],
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
