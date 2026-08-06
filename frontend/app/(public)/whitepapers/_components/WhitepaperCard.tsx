@@ -17,10 +17,9 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
   const href = getPostHref(post)
   const category = getCategoryName(post.primaryCategory)
   // "Contain" banners are logos and cover art, not photography. Forcing them into a
-  // fixed-height box scaled them up until they filled it, so the frame read as a box
-  // with bars rather than as artwork. They now render at their own aspect ratio,
-  // inset and height-capped. "Cover" banners keep the fixed crop, which keeps photo
-  // grids even.
+  // full-bleed box scaled them up until they filled it, bars and all. They now sit in
+  // a portrait frame sized to the artwork, centred on a white card. "Cover" banners
+  // keep the fixed crop, which keeps photo grids even.
   const fit = getPostCardImageFit(post)
   const dims = getMediaDimensions(post.cardBannerImage || post.featuredImage)
   const useNaturalRatio = fit === 'contain' && Boolean(dims)
@@ -28,27 +27,26 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
   return (
     <article className="ui-font group w-full max-w-[320px]">
       <Link href={href} className="block">
-        {/* Outline rather than a tinted panel: the uploaded covers are logos with
-            their own white background baked into the PNG, so any fill behind them
-            showed as a white rectangle floating on a coloured field. A border frames
-            the artwork without competing with it. */}
         <div
-          className={`relative overflow-hidden border border-[#111] bg-white ${
-            useNaturalRatio ? 'px-10 pb-8 pt-7' : 'h-[180px] sm:h-[222px]'
+          className={`relative overflow-hidden bg-white ${
+            useNaturalRatio ? 'flex items-center justify-center px-8 pb-8 pt-7' : 'h-[180px] sm:h-[222px]'
           }`}
         >
           {useNaturalRatio ? (
-            // Inset by the container's padding and height-capped, so a wide logo
-            // reads as artwork sitting on the card rather than filling it edge to
-            // edge. object-contain keeps the ratio inside whichever limit bites.
-            <SafeImage
-              src={getPostCardImageUrl(post)}
-              alt={post.title}
-              width={dims!.width}
-              height={dims!.height}
-              sizes="(max-width: 768px) 60vw, 240px"
-              className="mx-auto h-auto max-h-[130px] w-full object-contain transition-transform duration-300 group-hover:scale-105"
-            />
+            // A portrait frame sized to the artwork, not to the card. Bordering the
+            // full-width panel instead made the card read as a box with a logo lost
+            // inside it; this reads as cover art. The frame carries the border, so
+            // the surrounding card stays plain white.
+            <div className="flex aspect-[3/4] w-[150px] items-center justify-center overflow-hidden border border-[#c9c9c9] bg-white p-3">
+              <SafeImage
+                src={getPostCardImageUrl(post)}
+                alt={post.title}
+                width={dims!.width}
+                height={dims!.height}
+                sizes="150px"
+                className="h-auto max-h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           ) : (
             <SafeImage
               src={getPostCardImageUrl(post)}
@@ -59,7 +57,14 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
             />
           )}
           {hideCategory ? null : (
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent px-4 pb-6 pt-20">
+            // The dark scrim exists to keep the label legible over photography. On a
+            // white card behind a framed logo it has nothing to darken and just reads
+            // as a grey smudge, so it is limited to the cover crop.
+            <div
+              className={`absolute inset-x-0 bottom-0 px-4 pb-6 ${
+                useNaturalRatio ? 'pt-0' : 'bg-gradient-to-t from-black/30 via-black/0 to-transparent pt-20'
+              }`}
+            >
               <span className="content-label">
                 {category}
               </span>
