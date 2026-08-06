@@ -139,7 +139,9 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '- TechPub CMS',
-      icons: [{ rel: 'icon', type: 'image/png', url: '/leads-baton-logo.png' }],
+      // Square crop of the LB mark. Browsers letterbox a non-square favicon into
+      // the tab, which is what made the full 3584x2832 lockup unreadable there.
+      icons: [{ rel: 'icon', type: 'image/png', url: '/leads-baton-mark.png' }],
     },
     // Native Live Preview (the eye-icon split view). NOTE: Payload hard-disables
     // this on the CREATE view (Document view forces `&& operation !== 'create'`),
