@@ -28,6 +28,19 @@
 
 html {
   background: var(--page-bg);
+  /* Full-bleed sections use `left-1/2 w-screen -translate-x-1/2` to break out of
+     .site-container. `w-screen` is 100vw, and 100vw INCLUDES the vertical
+     scrollbar — so on desktop, where the scrollbar is a classic ~15px gutter,
+     those sections end up ~15px wider than the usable viewport and overhang
+     half that on each side. That, not any single page, is the horizontal
+     scrollbar.
+
+     `clip` rather than `hidden` on purpose: `hidden` turns the root into a
+     scroll container, which silently breaks `position: sticky` — the sidebars
+     on the webinar and white paper detail pages depend on it. `clip` trims the
+     overhang without creating a scroll container, and is the only value that
+     may pair with a visible overflow-y. */
+  overflow-x: clip;
 }
 
 body {

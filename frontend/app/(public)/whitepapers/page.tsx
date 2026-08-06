@@ -76,11 +76,14 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
               <span className="content-label">
                 Featured Release
               </span>
-              <h3 className="mt-6 max-w-xl text-[26px] font-bold leading-[1.12] text-[var(--text-strong)] sm:text-[34px]">
+              {/* No max-width: the 3fr column is already the intended measure, and
+                  capping at max-w-xl (576px) left a dead gap between the copy and
+                  the artwork on wide screens. */}
+              <h3 className="mt-6 text-[26px] font-bold leading-[1.12] text-[var(--text-strong)] sm:text-[34px]">
                 {feature.title}
               </h3>
               {feature.excerpt ? (
-                <p className="mt-5 max-w-xl text-[15px] leading-7 text-[var(--text-soft)] sm:text-[17px]">
+                <p className="mt-5 text-[15px] leading-7 text-[var(--text-soft)] sm:text-[17px]">
                   {feature.excerpt}
                 </p>
               ) : null}
@@ -89,13 +92,13 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 <span aria-hidden="true">↓</span>
               </span>
             </div>
-            {/* Logo-style covers render as a normally-flowed, size-capped image so
-                padding actually holds them in. `fill` cannot do that: an absolutely
-                positioned child sizes to its container's PADDING box, so p-6 had no
-                effect and the artwork ran to the card edge. Photographic covers still
-                bleed edge to edge via fill + object-cover. */}
+            {/* Logo-style covers render as a normally-flowed, size-capped image on a
+                light grey panel, so padding actually holds them in. `fill` cannot do
+                that: an absolutely positioned child sizes to its container's PADDING
+                box, so p-6 had no effect and the artwork ran to the card edge.
+                Photographic covers still bleed edge to edge via fill + object-cover. */}
             {getPostCardImageFit(feature) === 'contain' ? (
-              <div className="order-1 flex items-center justify-center bg-white p-6 md:order-2">
+              <div className="order-1 flex items-center justify-center bg-[#F5F5F5] p-6 md:order-2">
                 <SafeImage
                   src={getPostCardImageUrl(feature)}
                   alt={feature.title}

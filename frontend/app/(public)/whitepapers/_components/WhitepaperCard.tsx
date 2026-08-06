@@ -16,11 +16,11 @@ import {
 export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hideCategory?: boolean }) {
   const href = getPostHref(post)
   const category = getCategoryName(post.primaryCategory)
-  // "Contain" banners are logos and cover art, not photography. Cropping them to a
-  // fixed-height box left grey pillarbox bars either side of the artwork — the card
-  // read as a box containing an image rather than as the image. So contain banners
-  // render at their own aspect ratio and the card ends where the artwork ends.
-  // "Cover" banners keep the fixed crop, which is what keeps photo grids even.
+  // "Contain" banners are logos and cover art, not photography. Forcing them into a
+  // fixed-height box scaled them up until they filled it, so the frame read as a box
+  // with bars rather than as artwork. They now render at their own aspect ratio,
+  // inset and height-capped, on a light grey panel that reads as a deliberate
+  // backdrop. "Cover" banners keep the fixed crop, which keeps photo grids even.
   const fit = getPostCardImageFit(post)
   const dims = getMediaDimensions(post.cardBannerImage || post.featuredImage)
   const useNaturalRatio = fit === 'contain' && Boolean(dims)
@@ -30,7 +30,7 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
       <Link href={href} className="block">
         <div
           className={`relative overflow-hidden ${
-            useNaturalRatio ? 'bg-white px-10 pb-8 pt-7' : 'h-[180px] bg-[#ececec] sm:h-[222px]'
+            useNaturalRatio ? 'bg-[#F5F5F5] px-10 pb-8 pt-7' : 'h-[180px] bg-[#F5F5F5] sm:h-[222px]'
           }`}
         >
           {useNaturalRatio ? (
