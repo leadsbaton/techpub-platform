@@ -19,8 +19,8 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
   // "Contain" banners are logos and cover art, not photography. Forcing them into a
   // fixed-height box scaled them up until they filled it, so the frame read as a box
   // with bars rather than as artwork. They now render at their own aspect ratio,
-  // inset and height-capped, on a light grey panel that reads as a deliberate
-  // backdrop. "Cover" banners keep the fixed crop, which keeps photo grids even.
+  // inset and height-capped. "Cover" banners keep the fixed crop, which keeps photo
+  // grids even.
   const fit = getPostCardImageFit(post)
   const dims = getMediaDimensions(post.cardBannerImage || post.featuredImage)
   const useNaturalRatio = fit === 'contain' && Boolean(dims)
@@ -28,9 +28,13 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
   return (
     <article className="ui-font group w-full max-w-[320px]">
       <Link href={href} className="block">
+        {/* Outline rather than a tinted panel: the uploaded covers are logos with
+            their own white background baked into the PNG, so any fill behind them
+            showed as a white rectangle floating on a coloured field. A border frames
+            the artwork without competing with it. */}
         <div
-          className={`relative overflow-hidden ${
-            useNaturalRatio ? 'bg-[#F5F5F5] px-10 pb-8 pt-7' : 'h-[180px] bg-[#F5F5F5] sm:h-[222px]'
+          className={`relative overflow-hidden border border-[#111] bg-white ${
+            useNaturalRatio ? 'px-10 pb-8 pt-7' : 'h-[180px] sm:h-[222px]'
           }`}
         >
           {useNaturalRatio ? (
