@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 
 import { ContentDetailView } from '../../_components/ContentDetailView'
+import { JsonLd } from '../../_components/JsonLd'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
-import { getContentTypeConfigByRoute } from '@/lib/utils/contentTypes'
+import { getContentTypeConfigByRoute, getPostHref } from '@/lib/utils/contentTypes'
+import { buildArticleJsonLd } from '@/lib/utils/jsonLd'
 
 export default async function Page({
   params,
@@ -48,10 +50,13 @@ export default async function Page({
       : (await getPosts({ type: config.key, limit: 7 })).docs
 
   return (
-    <ContentDetailView
-      post={post}
-      contentTypes={contentTypes}
-      railItems={fallbackFeed}
-    />
+    <>
+      <JsonLd data={buildArticleJsonLd(post, getPostHref(post, contentTypes))} />
+      <ContentDetailView
+        post={post}
+        contentTypes={contentTypes}
+        railItems={fallbackFeed}
+      />
+    </>
   )
 }

@@ -1,6 +1,8 @@
 import { Epilogue, Inter, Manrope } from 'next/font/google'
 import type { Metadata } from 'next'
 
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site'
+
 import './globals.css'
 
 const epilogue = Epilogue({
@@ -22,36 +24,34 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.NODE_ENV === 'production'
-        ? 'https://techpub-platform.vercel.app'
-        : 'http://localhost:3000'),
-  ),
+  metadataBase: new URL(SITE_URL),
+  // Tells Google which URL is the real one for every page, so the live domain is
+  // what gets indexed rather than any preview or IP host serving the same content.
+  alternates: {
+    canonical: '/',
+  },
   title: {
-    default: 'LeadsBaton TechPub',
-    template: '%s | LeadsBaton TechPub',
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'Editorial platform for insights, white papers, webinars, and category-led discovery.',
-  applicationName: 'LeadsBaton TechPub',
-  icons: {
-    icon: '/leads-baton-logo.png',
-    shortcut: '/leads-baton-logo.png',
-    apple: '/leads-baton-logo.png',
-  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  // No `icons` key on purpose. Setting it here overrides Next's file convention,
+  // and the old value pointed at the full 3584x2832 logo — Google only shows a
+  // site's favicon when it is square, so it fell back to the generic globe.
+  // app/icon.png and app/apple-icon.png are square crops of the LB mark and are
+  // picked up automatically.
   openGraph: {
-    title: 'LeadsBaton TechPub',
-    description:
-      'Editorial platform for insights, white papers, webinars, and category-led discovery.',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     type: 'website',
-    siteName: 'LeadsBaton TechPub',
+    siteName: SITE_NAME,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LeadsBaton TechPub',
-    description:
-      'Editorial platform for insights, white papers, webinars, and category-led discovery.',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
   },
 }
 

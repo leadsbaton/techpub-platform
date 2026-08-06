@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { HeroFeature } from './_components/HeroFeature'
+import { JsonLd } from './_components/JsonLd'
 import { HomeCategoryPanel } from './_components/HomeCategoryPanel'
 import { HomeRowScroller } from './_components/HomeRowScroller'
 import {
@@ -14,6 +15,7 @@ import {
 import { getHomePageData, LISTING_REVALIDATE } from '@/lib/api/cms'
 import { getContentTypeConfigByType } from '@/lib/utils/contentTypes'
 import { compareWebinarsByEventDate, isUpcomingWebinar } from '@/lib/utils/formatting'
+import { buildWebsiteJsonLd } from '@/lib/utils/jsonLd'
 import type { Post } from '@/lib/types/cms'
 
 // Serve from the Data Cache between refreshes instead of hitting the CMS on
@@ -157,6 +159,7 @@ export default async function HomePage() {
 
   return (
     <div className="bg-white pb-20 pt-0">
+      <JsonLd data={buildWebsiteJsonLd()} />
       <HeroFeature
         post={heroPost}
         secondaryPosts={secondaryHeroPosts}

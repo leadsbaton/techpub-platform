@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { JsonLd } from '../../_components/JsonLd'
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { SafeImage } from '../../_components/SafeImage'
@@ -8,6 +9,7 @@ import { ReadingProgressBar } from '../../_components/ReadingProgressBar'
 import { getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
+import { buildArticleJsonLd } from '@/lib/utils/jsonLd'
 
 export async function generateMetadata({
   params,
@@ -45,6 +47,7 @@ export default async function InsightDetailPage({
 
   return (
     <>
+      <JsonLd data={buildArticleJsonLd(post, `/insights/${post.slug}`)} />
       <ReadingProgressBar />
       <article className="site-container py-10">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">

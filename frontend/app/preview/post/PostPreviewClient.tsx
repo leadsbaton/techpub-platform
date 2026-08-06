@@ -96,22 +96,25 @@ function WhitepaperLayout({ post }: { post: Post }) {
             <h1 className="text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]">{post.title}</h1>
           )}
 
-          <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
-            <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white">
-              <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 640px) 240px, 230px" className="object-cover" />
+          {/* Mirrors the live whitepaper page: 1/4 image column, 3/4 text column,
+              grid rather than float so copy never wraps back under the image. */}
+          <div className={`grid grid-cols-1 gap-6 sm:grid-cols-4 sm:items-start sm:gap-8 ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
+            <div className="mx-auto w-full max-w-[240px] sm:mx-0 sm:max-w-none">
+              <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white">
+                <SafeImage src={getImageUrl(post.featuredImage)} alt={post.title} fill sizes="(max-width: 640px) 240px, 25vw" className="object-cover" />
+              </div>
+              <div className="mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-4 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white">
+                {actionLabel}
+              </div>
             </div>
-            <div className="mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-6 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white">
-              {actionLabel}
-            </div>
+
+            {post.content ? (
+              <div className="prose max-w-none break-words sm:col-span-3">
+                <RichTextRenderer content={post.content} />
+              </div>
+            ) : null}
           </div>
 
-          {post.content ? (
-            <div className="prose mt-5 max-w-none break-words sm:mt-6">
-              <RichTextRenderer content={post.content} />
-            </div>
-          ) : null}
-
-          <div className="clear-both" />
           <div className="mt-8 flex justify-center">
             <span className="inline-flex text-[18px] font-semibold uppercase tracking-[0.02em] text-[var(--accent-red)]">{actionLabel}</span>
           </div>

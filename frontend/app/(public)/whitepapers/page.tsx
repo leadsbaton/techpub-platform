@@ -7,7 +7,7 @@ import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
 import { getCategories, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageFit, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -68,8 +68,10 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
 
       {feature ? (
         <Link href={`/whitepapers/${feature.slug}`} className="group block">
-          <article className="grid overflow-hidden rounded-[4px] border border-[var(--border-subtle)] bg-white transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] md:grid-cols-[1.05fr_0.95fr]">
-            <div className="order-2 flex min-h-[300px] flex-col items-start justify-center p-7 sm:p-10 md:order-1">
+          {/* 3/4 copy, 1/4 artwork. The old near-even split gave a logo-style cover
+              a half-width canvas it could never fill, so it sat marooned in grey. */}
+          <article className="grid overflow-hidden rounded-[4px] border border-[var(--border-subtle)] bg-white transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] md:grid-cols-[3fr_1fr]">
+            <div className="order-2 flex min-h-[280px] flex-col items-start justify-center p-7 sm:p-10 md:order-1">
               <span className="content-label">
                 Featured Release
               </span>
@@ -86,12 +88,18 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 <span aria-hidden="true">↓</span>
               </span>
             </div>
-            <div className="relative order-1 min-h-[260px] bg-[var(--surface-muted)] md:order-2 md:min-h-[390px]">
+            {/* Cover art sits on white so nothing reads as a grey box around it;
+                photographic covers still bleed to the edges via object-cover. */}
+            <div
+              className={`relative order-1 min-h-[200px] md:order-2 md:min-h-[280px] ${
+                getPostCardImageFit(feature) === 'contain' ? 'bg-white p-6' : 'bg-[var(--surface-muted)]'
+              }`}
+            >
               <SafeImage
                 src={getPostCardImageUrl(feature)}
                 alt={feature.title}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 25vw"
                 className={`${getPostCardImageClass(feature)} transition-transform duration-500 group-hover:scale-105`}
               />
             </div>

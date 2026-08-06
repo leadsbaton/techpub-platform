@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { JsonLd } from '../../_components/JsonLd'
 import { RankedSidebar } from '../../_components/RankedSidebar'
 import { RichTextRenderer } from '../../_components/RichTextRenderer'
 import { SafeImage } from '../../_components/SafeImage'
@@ -10,6 +11,7 @@ import { WebinarPeopleRow } from '../../_components/WebinarPeopleRow'
 import { getContentTypes, getPostBySlug, getPosts } from '@/lib/api/cms'
 import { getImageUrl, getMediaDimensions, getWebinarPersonGroups, isUpcomingWebinar } from '@/lib/utils/formatting'
 import { buildPostMetadata } from '@/lib/utils/metadata'
+import { buildArticleJsonLd } from '@/lib/utils/jsonLd'
 
 type Params = Promise<{ slug: string }>
 
@@ -42,6 +44,7 @@ export default async function WebinarDetailPage({ params }: { params: Params }) 
 
   return (
     <>
+      <JsonLd data={buildArticleJsonLd(post, `/webinars/${post.slug}`)} />
       <ReadingProgressBar />
       <div className="relative left-1/2 w-screen -translate-x-1/2 bg-white">
       <article className="site-container py-8 sm:py-10">

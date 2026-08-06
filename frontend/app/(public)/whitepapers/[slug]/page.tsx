@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "../../_components/JsonLd";
 import { RankedSidebar } from "../../_components/RankedSidebar";
 import { RichTextRenderer } from "../../_components/RichTextRenderer";
 import { SafeImage } from "../../_components/SafeImage";
 import { ReadingProgressBar } from "../../_components/ReadingProgressBar";
 import { getContentTypes, getPostBySlug, getPosts } from "@/lib/api/cms";
 import { buildPostMetadata } from "@/lib/utils/metadata";
+import { buildArticleJsonLd } from "@/lib/utils/jsonLd";
 import { getImageUrl } from "@/lib/utils/formatting";
 
 type Params = Promise<{ slug: string }>;
@@ -56,13 +58,17 @@ export default async function WhitepaperDetailPage({
 
   return (
     <>
+      <JsonLd data={buildArticleJsonLd(post, `/whitepapers/${post.slug}`)} />
       <ReadingProgressBar />
       <div className='relative left-1/2 w-screen -translate-x-1/2 bg-white'>
       <article className='site-container py-8 sm:py-10'>
         <section className='grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_320px]'>
-          {/* Title at top; cover image + download button floated left so the body
-              content fills the row beside AND below it; a centered text CTA closes
-              the article. Mobile flows as: title -> image -> button -> content -> CTA. */}
+          {/* Title at top; below it a two-column row — cover image + download button
+              in a 1/4 column, body copy in the 3/4 column beside it. Deliberately a
+              grid rather than a float: a float lets the last paragraph curl back
+              underneath the image once the text outruns it, which is exactly what
+              this layout must not do. Mobile stacks: title -> image -> button ->
+              content -> CTA. */}
           <div className='ui-font min-w-0'>
             {post.hideTitleOnDetail ? null : (
               <h1 className='text-[26px] font-medium leading-[1.2] text-[#111] sm:text-[32px]'>
@@ -70,31 +76,31 @@ export default async function WhitepaperDetailPage({
               </h1>
             )}
 
-            <div className={`mx-auto w-full max-w-[240px] sm:float-left sm:mx-0 sm:mr-8 sm:mb-5 sm:w-[230px] ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
-              <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
-                <SafeImage
-                  src={getImageUrl(post.featuredImage)}
-                  alt={post.title}
-                  fill
-                  sizes='(max-width: 640px) 240px, 230px'
-                  className='object-cover'
-                />
+            <div className={`grid grid-cols-1 gap-6 sm:grid-cols-4 sm:items-start sm:gap-8 ${post.hideTitleOnDetail ? 'mt-0 sm:mt-0' : 'mt-5 sm:mt-6'}`}>
+              <div className='mx-auto w-full max-w-[240px] sm:mx-0 sm:max-w-none'>
+                <div className='relative aspect-[3/4] w-full overflow-hidden border border-[var(--border-subtle)] bg-white'>
+                  <SafeImage
+                    src={getImageUrl(post.featuredImage)}
+                    alt={post.title}
+                    fill
+                    sizes='(max-width: 640px) 240px, 25vw'
+                    className='object-cover'
+                  />
+                </div>
+                <Link
+                  href={`/whitepapers/${post.slug}/access`}
+                  className='mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-4 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)]'
+                >
+                  {actionLabel}
+                </Link>
               </div>
-              <Link
-                href={`/whitepapers/${post.slug}/access`}
-                className='mt-4 flex w-full items-center justify-center bg-[var(--accent-red)] px-6 py-3 text-center text-[15px] font-semibold uppercase tracking-[0.02em] text-white transition hover:bg-[var(--accent-red-dark)]'
-              >
-                {actionLabel}
-              </Link>
+
+              {post.content ? (
+                <div className='prose max-w-none break-words sm:col-span-3'>
+                  <RichTextRenderer content={post.content} />
+                </div>
+              ) : null}
             </div>
-
-            {post.content ? (
-              <div className='prose mt-5 max-w-none break-words sm:mt-6'>
-                <RichTextRenderer content={post.content} />
-              </div>
-            ) : null}
-
-            <div className='clear-both' />
 
             <div className='mt-8 flex justify-center'>
               <Link

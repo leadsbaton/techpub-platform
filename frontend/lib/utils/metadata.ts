@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 
 import type { Post } from '@/lib/types/cms'
+import { SITE_URL } from '@/lib/site'
 import { getMediaUrl } from '@/lib/utils/formatting'
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.NODE_ENV === 'production' ? 'https://techpub-platform.vercel.app' : 'http://localhost:3000')
 
 export function buildPostMetadata(post: Post, pathname: string): Metadata {
   const title = post.seo?.metaTitle || post.title
