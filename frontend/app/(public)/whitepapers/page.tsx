@@ -92,13 +92,13 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 <span aria-hidden="true">↓</span>
               </span>
             </div>
-            {/* Logo-style covers render as a normally-flowed, size-capped image so
-                padding actually holds them in. `fill` cannot do that: an absolutely
-                positioned child sizes to its container's PADDING box, so p-6 had no
-                effect and the artwork ran to the card edge. Photographic covers still
-                bleed edge to edge via fill + object-cover. */}
+            {/* Logo-style covers render as a normally-flowed, size-capped image on a
+                light grey panel, so padding actually holds them in. `fill` cannot do
+                that: an absolutely positioned child sizes to its container's PADDING
+                box, so p-6 had no effect and the artwork ran to the card edge.
+                Photographic covers still bleed edge to edge via fill + object-cover. */}
             {getPostCardImageFit(feature) === 'contain' ? (
-              <div className="order-1 flex items-center justify-center bg-white p-6 md:order-2">
+              <div className="order-1 flex items-center justify-center bg-[#F5F5F5] p-6 md:order-2">
                 <SafeImage
                   src={getPostCardImageUrl(feature)}
                   alt={feature.title}

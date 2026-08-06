@@ -204,6 +204,27 @@ export function getWebinarEventLabel(post: WebinarDateSource): string {
   return post.webinarRegistration?.eventDateLabel?.trim() || extractWebinarEventLabelFromContent(post.content) || 'Date TBD'
 }
 
+/**
+ * Day and date without the clock time — "Tuesday, August 25th" out of
+ * "Tuesday, August 25th, 11:00 am PT / 2:00 pm ET".
+ *
+ * For narrow screens, where the dual-timezone tail wraps to three lines and buries
+ * the part a reader actually scans for. The label is free text an editor types, so
+ * this cuts at the first clock time and falls back to the full label whenever there
+ * is nothing recognisable to cut — never returning an empty string.
+ */
+export function getWebinarShortEventLabel(post: WebinarDateSource): string {
+  const label = getWebinarEventLabel(post)
+  const timeMatch = label.match(/\d{1,2}(:\d{2})?\s*(a\.?m\.?|p\.?m\.?)\b/i)
+
+  if (!timeMatch || timeMatch.index === undefined) return label
+
+  // Trim the separator left dangling by the cut (", " in the example above).
+  const dayAndDate = label.slice(0, timeMatch.index).replace(/[\s,;:|/–—-]+$/, '').trim()
+
+  return dayAndDate || label
+}
+
 const webinarMonthIndexes: Record<string, number> = {
   jan: 0,
   january: 0,

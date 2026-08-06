@@ -9,6 +9,7 @@ import {
   getPostCardImageClass,
   getPostCardImageUrl,
   getWebinarEventLabel,
+  getWebinarShortEventLabel,
 } from '@/lib/utils/formatting'
 import { SafeImage } from './SafeImage'
 
@@ -125,7 +126,8 @@ export function HomeWebinarMiniCard({ post }: { post: Post }) {
   return (
     <article className="flex min-h-[330px] w-[316px] flex-col rounded-lg border border-[#dfe5ee] bg-white p-6 transition hover:border-[var(--accent-red)] hover:shadow-[var(--accent-red-shadow)] sm:w-[380px]">
       <div className="content-label">
-        {getWebinarEventLabel(post)}
+        <span className="sm:hidden">{getWebinarShortEventLabel(post)}</span>
+        <span className="hidden sm:inline">{getWebinarEventLabel(post)}</span>
       </div>
       <Link
         href={href}
@@ -182,7 +184,7 @@ export function HomeWhitepaperRow({ post }: { post: Post }) {
           ) : null}
         </div>
         <div className="text-left sm:text-right">
-          <div className="content-label">
+          <div className="content-label content-label-bare-mobile">
             Published
           </div>
           <div className="mt-1 text-sm text-[#444]">{formatDate(post.publishedAt)}</div>

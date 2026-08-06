@@ -189,6 +189,21 @@ textarea:focus-visible,
   color: var(--accent-red);
 }
 
+/* Drops the chip's plate on phones, leaving just the coloured text. Narrow cards
+   stack their rows, so the filled rectangle stops reading as a tag beside content
+   and starts reading as a stray block.
+
+   This has to be real CSS rather than a `max-sm:` utility: .content-label is
+   unlayered, and unlayered rules beat Tailwind's layered utilities whatever the
+   specificity, so the utility would silently lose. */
+@media (max-width: 639px) {
+  .content-label-bare-mobile {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .panel-card {
   border: 1px solid var(--border-subtle);
   background: var(--surface-strong);
