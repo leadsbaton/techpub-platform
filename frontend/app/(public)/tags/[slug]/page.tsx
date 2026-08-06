@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Pagination } from '../../_components/Pagination'
@@ -5,6 +6,26 @@ import { PostCard } from '../../_components/PostCard'
 import { getPosts, getTagBySlug } from '@/lib/api/cms'
 
 export const dynamic = 'force-dynamic'
+
+// Without this the page inherited the site-wide default title, so every tag page
+// looked identical to Google — a set of near-duplicate entries competing with
+// each other instead of each ranking for its own topic.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const tag = await getTagBySlug(slug)
+
+  if (!tag) return { title: 'Tag' }
+
+  return {
+    title: tag.name,
+    description: tag.description || `Insights, white papers, and webinars tagged ${tag.name}.`,
+    alternates: { canonical: `/tags/${tag.slug}` },
+  }
+}
 
 export default async function TagPage({
   params,

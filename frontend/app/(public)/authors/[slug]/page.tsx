@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Pagination } from '../../_components/Pagination'
@@ -5,6 +6,25 @@ import { PostCard } from '../../_components/PostCard'
 import { getAuthorBySlug, getPosts } from '@/lib/api/cms'
 
 export const dynamic = 'force-dynamic'
+
+// Without this every author page inherited the site-wide default title, making
+// them indistinguishable to Google rather than each ranking for its own name.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const author = await getAuthorBySlug(slug)
+
+  if (!author) return { title: 'Author' }
+
+  return {
+    title: author.name,
+    description: author.bio || `Articles, white papers, and webinars from ${author.name}.`,
+    alternates: { canonical: `/authors/${author.slug}` },
+  }
+}
 
 export default async function AuthorPage({
   params,

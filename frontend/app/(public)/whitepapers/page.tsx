@@ -7,7 +7,7 @@ import { WhitepaperCard } from './_components/WhitepaperCard'
 import { WhitepaperListingClient } from './_components/WhitepaperListingClient'
 import { getCategories, getContentTypes, getPosts, LISTING_REVALIDATE } from '@/lib/api/cms'
 import type { Category, Post } from '@/lib/types/cms'
-import { getCategoryName, getImageUrl, getPostCardImageClass, getPostCardImageFit, getPostCardImageUrl } from '@/lib/utils/formatting'
+import { getCategoryName, getImageUrl, getMediaDimensions, getPostCardImageFit, getPostCardImageUrl } from '@/lib/utils/formatting'
 
 // Cache CMS fetches between refreshes instead of hitting the backend per view.
 export const revalidate = 60
@@ -59,6 +59,7 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
   if (!posts.length) return null
 
   const [feature, ...supportingPosts] = posts
+  const featureDims = feature ? getMediaDimensions(feature.cardBannerImage || feature.featuredImage) : null
 
   return (
     <section className="ui-font space-y-7">
@@ -88,21 +89,33 @@ function TrendingDownloads({ posts }: { posts: Post[] }) {
                 <span aria-hidden="true">↓</span>
               </span>
             </div>
-            {/* Cover art sits on white so nothing reads as a grey box around it;
-                photographic covers still bleed to the edges via object-cover. */}
-            <div
-              className={`relative order-1 min-h-[200px] md:order-2 md:min-h-[280px] ${
-                getPostCardImageFit(feature) === 'contain' ? 'bg-white p-6' : 'bg-[var(--surface-muted)]'
-              }`}
-            >
-              <SafeImage
-                src={getPostCardImageUrl(feature)}
-                alt={feature.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 25vw"
-                className={`${getPostCardImageClass(feature)} transition-transform duration-500 group-hover:scale-105`}
-              />
-            </div>
+            {/* Logo-style covers render as a normally-flowed, size-capped image so
+                padding actually holds them in. `fill` cannot do that: an absolutely
+                positioned child sizes to its container's PADDING box, so p-6 had no
+                effect and the artwork ran to the card edge. Photographic covers still
+                bleed edge to edge via fill + object-cover. */}
+            {getPostCardImageFit(feature) === 'contain' ? (
+              <div className="order-1 flex items-center justify-center bg-white p-6 md:order-2">
+                <SafeImage
+                  src={getPostCardImageUrl(feature)}
+                  alt={feature.title}
+                  width={featureDims?.width ?? 320}
+                  height={featureDims?.height ?? 240}
+                  sizes="(max-width: 768px) 60vw, 20vw"
+                  className="h-auto w-full max-w-[190px] object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            ) : (
+              <div className="relative order-1 min-h-[200px] bg-[var(--surface-muted)] md:order-2 md:min-h-[280px]">
+                <SafeImage
+                  src={getPostCardImageUrl(feature)}
+                  alt={feature.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            )}
           </article>
         </Link>
       ) : null}

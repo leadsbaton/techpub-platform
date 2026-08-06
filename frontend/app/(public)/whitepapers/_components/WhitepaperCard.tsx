@@ -30,17 +30,20 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
       <Link href={href} className="block">
         <div
           className={`relative overflow-hidden ${
-            useNaturalRatio ? 'bg-white' : 'h-[180px] bg-[#ececec] sm:h-[222px]'
+            useNaturalRatio ? 'bg-white px-10 pb-8 pt-7' : 'h-[180px] bg-[#ececec] sm:h-[222px]'
           }`}
         >
           {useNaturalRatio ? (
+            // Inset by the container's padding and height-capped, so a wide logo
+            // reads as artwork sitting on the card rather than filling it edge to
+            // edge. object-contain keeps the ratio inside whichever limit bites.
             <SafeImage
               src={getPostCardImageUrl(post)}
               alt={post.title}
               width={dims!.width}
               height={dims!.height}
-              sizes="(max-width: 768px) 100vw, 320px"
-              className="h-auto w-full object-contain transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 60vw, 240px"
+              className="mx-auto h-auto max-h-[130px] w-full object-contain transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <SafeImage
@@ -60,14 +63,14 @@ export function WhitepaperCard({ post, hideCategory = false }: { post: Post; hid
           )}
         </div>
       </Link>
-      <div className="space-y-3 pt-4">
+      <div className="space-y-2 pt-4">
         <Link
           href={href}
-          className="block text-[18px] font-medium leading-[145%] tracking-[-0.005em] text-[#000] transition hover:text-[var(--accent-red)]"
+          className="block text-[15px] font-medium leading-[1.4] tracking-[-0.005em] text-[#000] transition hover:text-[var(--accent-red)]"
         >
           {post.title}
         </Link>
-        <div className="text-[16px] font-medium leading-[145%] tracking-[-0.005em] text-[#808080]">
+        <div className="text-[13px] font-medium leading-[1.4] tracking-[-0.005em] text-[#808080]">
           {formatDate(post.publishedAt)}
         </div>
       </div>
